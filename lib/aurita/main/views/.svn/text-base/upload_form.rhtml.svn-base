@@ -1,0 +1,30 @@
+<!--
+        <object width="390" height="250">
+          <param name="movie" value="/aurita/fileUpload.swf"></param>
+          <param name="wmode" value="transparent"></param>
+          <param name="FlashVars" value="media_folder_id=<%= media_folder_id %>&user_group_id=<%= user_group_id %>&pass=<%= pass %>"></param>
+          <embed src="/aurita/fileUpload.swf" FlashVars="media_folder_id=<%= media_folder_id %>&user_group_id=<%= user_group_id %>&pass=<%= pass %>" type="application/x-shockwave-flash" wmode="transparent" width="390" height="250"></embed>
+        </object>
+-->
+
+<% 
+  form.enctype  = 'multipart/form-data'
+  form.method   = 'POST'
+  form.target   = 'asset_upload_frame' unless form.target
+# form.onsubmit = 'Aurita.submit_upload_form(this); return false;' unless form.onsubmit
+%>
+
+<div class="form_box">
+  
+  <div id="form_content">
+    <%= form.string %>
+  </div>
+
+  <div class="form_button_bar" id="<%= form.dom_id %>_buttons">
+    <%= gui.button(:class => :submit, :type => :submit, :icon => :ok, 
+                   :onclick => js.Aurita.submit_upload_form(form.dom_id)) { tl(:ok) } %>
+    <%= gui.button(:class => :cancel, :icon => :cancel, 
+                   :onclick => js.Aurita.cancel_form(form.dom_id)) { tl(:cancel) } %>
+  </div>
+
+</div>

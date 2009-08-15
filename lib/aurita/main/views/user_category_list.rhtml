@@ -1,0 +1,9 @@
+
+<h1><%= tl(:your_categories) %></h1>
+<% categories.each do |category| %>
+
+  <div style="background-color: #dedede; height: 20px; width: 170px; padding: 6px; margin-bottom: 3px; margin-right: 3px; float: left; ">
+    <%= gui.link_to(category, :controller => 'Category') { category.category_name } %><br />
+  </div>
+
+<% end %>

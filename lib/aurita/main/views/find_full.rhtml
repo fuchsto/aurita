@@ -1,0 +1,14 @@
+<% if components.length > 0 then %>
+
+
+<h1>Ergebnisse der Volltextsuche</h2>
+
+  <% components.each do |component| %>
+   <%= component.string %>
+  <% end %>
+
+<% else %>
+
+  Die Volltextsuche lieferte keine &Uuml;bereinstimmungen. 
+
+<% end %>

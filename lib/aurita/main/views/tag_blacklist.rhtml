@@ -1,0 +1,23 @@
+
+<h2><%= tl(:ignored_tags) %></h2>
+
+<div id="new_blacklist_entry_form">
+<button class="submit" onclick="Cuba.load({ element: 'new_blacklist_entry_form', action: 'Tag_Blacklist/add' }); ">
+  <%= tl(:new_tag_blacklist_entry) %>
+</button>
+</div>
+
+<hr />
+
+<% tags.each do |entry| %>
+
+<div style="float: left; width: 150px; height: 20px; "> 
+  <span class="link" onclick="Cuba.load({ element: 'dispatcher', action: 'Tag_Blacklist/perform_delete/tag=<%= entry.tag %>' }); 
+                              Cuba.load({ element: 'app_main_content', action: 'Tag_Blacklist/edit' }); " >x</span> 
+  <%= entry.tag %>
+</div>
+
+<% end %>
+
+<div style="clear: both; "></div>
+

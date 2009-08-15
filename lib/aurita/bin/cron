@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby
+
+
+require('aurita')
+Aurita.import :base, :plugin_register
+require('iconv')
+
+def usage
+  puts 'Usage: '
+  puts '    cron.rb <project_name> hourly | daily'
+  puts ''
+  puts 'On Unix systems, you should edit your crontab using '
+  puts '    crontab -e'
+  puts 'and add the following entries: '
+  puts ''
+  puts '00  23   *  *  *  aurita/bin/cron <project name> daily'
+  puts '00  */1  *  *  *  aurita/bin/cron <project name> hourly'
+end
+
+begin
+Aurita.load_project ARGV[0] 
+rescue ::Exception => e
+  STDERR.puts "    Unable to load project #{ARGV[0].inspect}"
+  STDERR.puts e.message if ARGV[0] 
+  usage()
+  exit
+end
+
+Aurita.bootstrap
+# Run as admin
+Aurita::Main.import_model :user_profile
+Aurita.session.user = User_Profile.load(:user_group_id => '100')
+
+module Aurita
+module Main
+
+case ARGV[1] 
+when 'hourly' then
+  Aurita::Plugin_Register.call(Aurita::Hook.cron.hourly, nil)
+when 'daily'  then
+  Aurita::Plugin_Register.call(Aurita::Hook.cron.daily, nil)
+else
+  usage()
+end
+
+end
+end

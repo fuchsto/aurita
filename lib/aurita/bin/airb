@@ -1,0 +1,4 @@
+#!/bin/bash
+
+irb -r /usr/share/svnwc/aurita/lib/irb/console.rb
+

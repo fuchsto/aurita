@@ -1,0 +1,28 @@
+<% 
+  username_autocompleter.label = tl(:recommend_to_users) 
+%>
+
+<div class="form_box">
+
+  <% form_for(:model  => Content_Recommendation, 
+              :action => :perform_add, 
+              :id     => :content_recommendation_editor,
+              :name   => :content_recommendation_editor) do |f| 
+  %>
+    <%= f.hidden(:name => :content_id, :value => content.content_id) %>
+    <%= f.hidden(:name => :type,       :value => content_type) %>
+
+    <%= f.custom(username_autocompleter) %>
+    <%= f.textarea(:name => :message, :style => "height: 50px;", :label => tl(:comment)) %>
+
+    <div class="form_button_bar">
+      <%= gui.button(:type => 'button', :icon => 'ok', :class => 'submit', 
+                     :onclick => "Aurita.submit_form('content_recommendation_editor'); ") { tl(:submit) } %>
+
+      <%= gui.button(:type => 'button', :icon => 'cancel', :class => 'cancel', 
+                     :onclick => "Aurita.cancel_form('content_recommendation_editor');") { tl(:cancel) } %>
+    </div>
+
+  <% end %>
+
+</div>

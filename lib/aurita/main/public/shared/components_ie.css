@@ -1,0 +1,63 @@
+.context_menu_entry img { 
+  background-color: #cfcfcf; 
+  padding: 4px; 
+  margin: -2px 2px -3px -6px; 
+}
+.context_menu_entry_label { 
+  font-family: Verdana, Arial, Helvetica; 
+  font-size: 11px; 
+  position: relative; 
+}
+.context_menu_entry { 
+  display: block; 
+  width: 251px; 
+  margin: 0px; 
+  padding: 0px; 
+  padding-bottom: 1px; 
+}
+.context_menu_header { 
+  width: 253px; 
+  font-family: Verdana, Arial, Helvetica; 
+}
+
+#context_menu { 
+  position: absolute; 
+} 
+#autocomplete_media { 
+  width: 180px; 
+  display: inline; 
+  float: right; 
+  margin: 0px; 
+  padding: 1px; 
+  padding-top: 2px; 
+  padding-left: 4px; 
+  height: 15px; 
+}
+.context_menu_entry img { 
+  margin: -1px 4px -4px -8px; 
+}
+
+.box_hierarchy_entry_level_1 .label { 
+  padding-left: 11px; 
+  background-color: #cfcfcf; 
+}
+.box_hierarchy_entry_level_2 .label { 
+  padding-left: 22px; 
+  background-color: #c4c4c4; 
+}
+.box_hierarchy_entry_level_3 .label { 
+  padding-left: 33px; 
+  background-color: #c0c0c0; 
+}
+.box_hierarchy_entry_level_4 .label { 
+  padding-left: 44px; 
+  background-color: #b6b6b6; 
+}
+.box_hierarchy_entry_level_5 .label { 
+  padding-left: 55; 
+  background-color: #b6b6b6; 
+}
+.box_hierarchy_entry_level_6 .label { 
+  padding-left: 66; 
+  background-color: #b6b6b6; 
+}

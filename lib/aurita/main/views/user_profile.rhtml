@@ -1,0 +1,21 @@
+
+
+<div class="section_header">
+  <div class="section_header_left">
+    <h2><%= user_profile.forename %> <%= user_profile.surname %></h2>
+  </div>
+</div>
+
+<div style="clear: both;"></div>
+
+<div class="section_content">
+
+  <% components.each do |component| 
+      component.attrib[:class] = 'topic user_profile_box'
+  %>
+    <%= component.string %>
+  <% end %>
+
+  <div style="clear: both;"></div>
+</div>
+

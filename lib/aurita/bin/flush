@@ -1,0 +1,59 @@
+#!/bin/bash
+
+
+red='\e[0;31m'
+RED='\e[1;31m'
+blue='\e[0;34m'
+BLUE='\e[1;34m'
+cyan='\e[0;36m'
+CYAN='\e[1;36m'
+NC='\e[0m' # No Color
+
+if [ $EUID -eq 0 ]; then
+  CMDPREF=''
+else
+  CMDPREF=sudo 
+fi
+
+function test_success {
+  if [ $? -eq 0 ]; then
+    echo -e "${CYAN} [ OK ]${NC}"
+  else
+    echo -e "${RED} [ FAIL ]${NC}"
+  fi
+}
+
+echo -ne "Deleting cache ...\t\t"
+$CMDPREF find /tmp/ -name 'lore_cache__*' -exec rm -f {} \; >/dev/null
+test_success
+
+echo -ne "Stopping lighttpd ...\t\t"
+# $CMDPREF /etc/init.d/lighttpd stop >/dev/null 2>&1
+test_success
+
+echo -ne "Stopping daemons ...\t\t"
+# $CMDPREF rm -f /tmp/ruby-fastcgi-aurita-$1*
+# ps aux | grep lighttpd | grep -v 'vim' | awk '{print $2}' | xargs kill -9  >/dev/null 2>&1
+ps aux | grep dispatch_runner | grep $1 | grep -v 'vim' | awk '{print $2}' | xargs kill -9  >/dev/null 2>&1
+sleep 0
+test_success
+
+echo -ne "Flushing logs ... \t\t"
+$CMDPREF echo "" > /var/log/lore/query.log
+$CMDPREF echo "" > /var/log/aurita/run.log
+$CMDPREF echo "" > /var/log/aurita/sys.log
+test_success
+
+echo -ne "Setting permissions ... \t"
+$CMDPREF chown -R www-data:www-data /var/log/aurita
+$CMDPREF chmod -R 777 /var/log/aurita
+$CMDPREF chown -R www-data:www-data /var/log/lore
+$CMDPREF chmod -R 777 /var/log/lore
+$CMDPREF chown -R www-data:www-data /tmp/lore_cache.log
+$CMDPREF chmod -R 777 /tmp/lore_cache.log
+test_success
+
+echo -ne "Restarting daemons ... \t\t"
+$CMDPREF /etc/init.d/lighttpd start >/var/log/aurita/run.log 2>&1
+test_success
+

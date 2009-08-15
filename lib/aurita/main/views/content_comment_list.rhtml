@@ -1,0 +1,47 @@
+
+    <% if Aurita.user.is_registered? then %>
+      <% form_for(:model => Content_Comment, :action => :perform_add, :id => :content_comment_form) do |f| %>
+        <%= f.hidden(:name => :user_group_id, :value => Aurita.user.user_group_id) %>
+        <%= f.hidden(:name => :content_id, :value => content.content_id) %>
+        <%= f.textarea(:name => :message, :class => :comment, :force_closing_tag => true, :label => tl(:add_comment)) %>
+      <% end %>
+      <%= gui.button(:class => 'submit', :icon => 'add', 
+                     :onclick => "save_all_editors(); Aurita.submit_form('content_comment_form'); $('content_comment_form').innerHTML = '...'; ") { 
+            tl(:send)
+          } 
+      %>
+    <% end %>
+
+    <ul class="comment_list">
+
+    <% 
+       odd = false
+       entries.each do |entry| 
+       odd = !odd
+    %>
+      <li id="content_comment_<%= entry.content_comment_id %>" class="<%= 'odd' if odd %>">
+        <img src="/aurita/assets/tiny/asset_<%= entry.picture_asset_id %>.jpg" style="float: left; width: 50px; margin-bottom: 3px; margin-right: 5px; " />
+        <div style="padding: 5px; ">
+          <strong>	 
+            <%= gui.link_to(:controller => 'User_Group', :action => :show, :user_group_id => entry.user_group_id) { entry.user_group_name } %>
+          </strong> (<%= gui.datetime(entry.time) %>) 
+          <% if entry.user_group_id == Aurita.user.user_group_id || Aurita.user.is_admin? then %>
+            <span class="link" onclick="Cuba.confirmable_action({ action: 'Content_Comment/perform_delete/content_comment_id=<%= entry.content_comment_id %>', 
+                                                                  message: '<%= tl(:confirm_delete_comment) %>', 
+                                                                  onconfirm: function() { Element.toggle('content_comment_<%= entry.content_comment_id %>'); } }); ">
+              <img src="/aurita/images/icons/comment_delete.gif" />
+            </span>
+
+          <% end %>
+
+          <br /> 
+          <%= entry.message %>
+
+        </div>
+        <div style="clear: both"></div>
+      </li>
+    <% end %>
+
+    </ul>
+
+

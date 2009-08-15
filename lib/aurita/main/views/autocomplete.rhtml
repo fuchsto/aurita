@@ -1,0 +1,65 @@
+<div class="main_autocomplete_box">
+
+  <nobr>
+      <span id="indicator_"><img src="/aurita/images/search.gif" /></span>
+      <span id="indicator" style="display: none; "><img src="/aurita/images/search_loading.gif" /></span>
+      <input type="text" id="autocomplete" name="key" class="autocomplete" />
+  </nobr>
+  <div id="autocomplete_choices" class="autocomplete" ></div>
+
+</div>
+
+<script language="Javascript">
+  
+  function show_article(text, li)
+  {
+    generic_id = text.id; 
+    req_parts = generic_id.split('__'); 
+
+    if(generic_id.match('find_all__')) {	
+      tag = generic_id.replace('find_all__','');
+      Cuba.set_hashcode('find_all--'+tag); 
+    }
+    else if(generic_id.match('find_full__')) {	
+      tag = generic_id.replace('find_full__','');
+      Cuba.set_hashcode('find_full--'+tag); 
+    }
+    else { 
+      if(req_parts[0] == 'url') { 
+        req_url = req_parts[1]; 
+        window.open(req_url);
+        return; 
+      }
+      else { 
+        if(req_parts[2]) { 
+          req_url = (req_parts[0] + '::' + req_parts[1] + '/show/id=' + req_parts[2]); 
+          Cuba.load({ action: req_url }); 
+        }
+        else { 
+          req_url = (req_parts[0] + '/show/id=' + req_parts[1]); 
+          Cuba.load({ action: req_url }); 
+        }
+      } 
+    }
+  }
+
+  function fix_rollout(element, query) { 
+    Element.setStyle('autocomplete_choices', { width: '420px', top: '25px', left: '-242px' }); 
+    return query; 
+  }
+  
+  new Ajax.Autocompleter("autocomplete", 
+                         "autocomplete_choices", 
+                         "/aurita/dispatch_runner.fcgi", 
+                         { 
+                           minChars: 2, 
+                           updateElement: show_article, 
+                           indicator: 'indicator', 
+                           tokens: [], 
+                           frequency: 0.5, 
+                           callback: fix_rollout, 
+                           parameters: 'controller=Autocomplete&action=all&mode=none'
+                         }
+  );
+  
+</script>

@@ -1,0 +1,8 @@
+
+	<% buttons.each do |button| %>
+
+	  <%= button %>
+	
+	<% end %>
+
+	

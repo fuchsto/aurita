@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby1.9
+
+# Usage: 
+#
+#    aurita <project name> <console module name>
+#
+require('aurita')
+Aurita.import 'lib/console_runner'
+
+Lore.enable_logging
+Lore.enable_query_log
+Lore.logfile = STDERR
+Aurita::Configuration.run_log_path = STDERR
+Aurita::Configuration.sys_log_path = STDERR
+    
+
+Aurita::Console::Runner.new(ARGV).run

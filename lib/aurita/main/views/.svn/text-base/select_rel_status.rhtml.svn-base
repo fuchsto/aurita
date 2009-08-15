@@ -1,0 +1,9 @@
+<div>
+
+  <select name="<%= attrib_name %>" class="lore">
+    <option <%= if attrib_value == 'DONTTELL' then 'selected' end %> value="DONTTELL">Sag ich nicht</option>
+    <option <%= if attrib_value == 'YES' then 'selected' end %> value="YES">In Beziehung</option>
+    <option <%= if attrib_value == 'NO' then 'selected' end %> value="NO">Single</option>
+  </select>
+
+</div

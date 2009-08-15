@@ -1,0 +1,80 @@
+#!/usr/bin/env ruby
+
+require('aurita')
+require('actionmailer')
+Aurita.import_plugin_module :wiki, :media_asset_importer
+
+raw_mail = ''
+
+class Mail_Importer < ActionMailer::Base
+
+  def receive(email)
+
+    project = :default
+    asset   = false
+    user_message = false
+    
+    begin
+
+      Aurita.load_project project.to_sym
+      Aurita::Main.import_model :user_profile
+      Aurita::Main.import_model :user_category
+      Aurita::Main.import_model :content_category
+      Aurita.import_plugin_model :messaging, :user_message
+      Aurita.import_plugin_model :wiki, :media_asset
+
+      user = User_Profile.find(1).with(User_Profile.email_home == email.from.first).entity if email.from.first
+      user_message = Messaging::User_Message.create(:user_group_id => user.user_group_id, 
+                                                    :user_group_id_from => 5, 
+                                                    :title => email.subject.to_s.to_html, 
+                                                    :read => 'f', 
+                                                    :message => email.body.to_s.to_html)
+      if email.has_attachments? then
+        for attachment in email.attachments
+          Aurita.log("File: #{attachment.original_filename}")
+          asset = Wiki::Media_Asset.create(:mime => attachment.content_type, 
+                                           :title => attachment.original_filename.to_s.split('.')[0..-2].join('.'), 
+                                           :tags => attachment.original_filename, 
+                                           :media_folder_id => user.home_dir.media_asset_folder_id, 
+                                           :extension => attachment.original_filename.to_s.split('.').last, 
+                                           :original_filename => attachment.original_filename.to_s, 
+                                           :description => '', 
+                                           :user_group_id => user.user_group_id)
+          Aurita.log("Media asset: #{asset.media_asset_id}")
+          asset.add_category(user.category)
+          Aurita.log("Category: #{user.category.category_id}")
+          Wiki::Media_Asset_Importer.new(asset).import_local_file(attachment)
+          Aurita.log('Imported attachment. ')
+        end
+      end
+
+    rescue ::Exception => e
+      user_message.delete if user_message
+      asset.delete if asset
+      raise e
+    end
+  end
+
+end
+
+begin
+
+  Aurita.log('Importing Mail')
+  File.open("/tmp/aurita_mail_pa", "w") { |f|
+    f.write STDIN.read
+  }
+
+
+#  STDIN.read.each_line { |l|
+  File.open("/tmp/aurita_mail_pa", "r").read.each_line { |l|
+    raw_mail << l
+  }
+
+  Mail_Importer.receive(raw_mail)
+
+rescue ::Exception => excep
+  Aurita.log("Error in aurita mail import: #{excep.message}")
+  excep.backtrace.each { |l|
+    Aurita.log l
+  }
+end

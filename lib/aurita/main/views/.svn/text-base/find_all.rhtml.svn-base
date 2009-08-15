@@ -1,0 +1,8 @@
+
+<% if components.first.nil? then %>
+  <%= tl(:no_matching_content_found) %>
+<% end %>
+
+<% components.each do |component| %>
+  <%= component.string %>
+<% end %>

@@ -1,0 +1,24 @@
+
+<div class="section_header">
+  <div class="section_header_right">
+	  <a href="#" onclick="Cuba.load({ element: 'app_main_content', action: 'User_Profile/update/user_group_id=<%= user.user_group_id %>' }); ">
+      <%= gui.icon_tag(:edit_button) %>
+    </a> 
+  </div>
+  <div class="section_header_left">
+    <h2><%= user_profile.forename %> <%= user_profile.surname %></h2>
+  </div>
+  <div style="clear: both; "></div>
+</div>
+
+<div class="section_content">
+
+<% components.each do |component| 
+    component.attrib[:class] = 'topic user_profile_box'
+%>
+  <%= component.string %>
+<% end %>
+
+
+  <div style="clear: both; "></div>
+</div>

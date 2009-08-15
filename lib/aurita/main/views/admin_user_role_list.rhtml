@@ -1,0 +1,10 @@
+
+<h3><%= tl(:roles) %></h3>
+
+<% form_for(:model => User_Role, :action => :perform_add, :instance => user, :id => :user_role_form) do |f| %>
+  <%= f.custom(:element => User_Role_Selection_List_Field, 
+               :name    => :role_id, 
+               :user    => user) %>
+  <button type="button" class="submit varwidth" onclick="Aurita.submit_form('user_role_form')">+</button> 
+<% end %>
+

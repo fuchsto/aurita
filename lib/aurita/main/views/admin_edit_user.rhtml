@@ -1,0 +1,81 @@
+
+<div class="form_box">
+
+  <h2 style="margin: 0px; padding-top: 0px; padding-left: 1px; "><%= user.user_group_name %></h2> 
+
+<% if user.user_group_id.to_i > 10 then %>
+
+  <br />
+
+  <% form_for(:model => User_Login_Data, :instance => user, :action => :perform_update, :id => :user_login_data_form) do |f| %>
+    <%= f.text(:name => :login, :value => user.user_group_name, :label => tl(:login_name), :required => true) %>
+    <%= f.text(:name => :forename, :value => user.forename, :label => tl(:forename), :required => true) %>
+    <%= f.text(:name => :surname, :value => user.surname, :label => tl(:surname), :required => true) %>
+    <%= f.text(:name => :tags, :value => user.tags, :label => tl(:tags), :required => true) %>
+    <%= f.text(:name => :division, :value => user.division, :label => tl(:division), :required => false) %>
+    <%= f.password(:name => :pass, :label => tl(:new_pass_optional)) %>
+    <%= f.password(:name => :pass_confirm, :label => tl(:new_pass_optional_confirm)) %>
+    <button class="submit" type="button" onClick="Aurita.submit_form('user_login_data_form');">ok</button>
+  <% end %>
+
+<% end %>
+
+</div>
+<br />
+
+<div class="form_box">
+  <div id="user_category_list">
+    <%= user_categories %>
+  </div>
+</div>
+<br />
+
+<div class="form_box">
+  <div id="user_role_list">
+    <%= user_roles %>
+  </div>
+</div>
+<br />
+
+<div class="form_box">
+  <div id="user_role_list">
+    <% if user.locked == 't' then %>
+      <h2><%= tl(:activate_user) %></h2>
+      <br />
+      <%= tl(:unlock_user_hints) %>
+      <br />
+      <br />
+      <% form_for(:model => User_Login_Data, :instance => user, :action => :perform_unlock, :id => :unlock_user_form) do |f| %>
+      <button class="green" type="button" onClick="Aurita.submit_form('unlock_user_form');">
+        <%= tl(:activate_user) %>
+      </button>
+      <% end %>
+
+    <% else %>
+      <h2><%= tl(:deactivate_user) %></h2>
+      <br />
+      <%= tl(:lock_user_hints) %>
+      <br />
+      <br />
+      <% form_for(:model => User_Login_Data, :instance => user, :action => :perform_lock, :id => :lock_user_form) do |f| %>
+      <button class="red" type="button" onClick="Aurita.submit_form('lock_user_form');">
+        <%= tl(:deactivate_user) %>
+      </button>
+      <% end %>
+
+    <% end %>
+  </div>
+</div>
+
+<div class="form_box">
+  <div id="user_role_list">
+    <h2><%= tl(:delete_user) %></h2>
+    <%= tl(:delete_user_hints) %>
+    <br />
+    <br />
+    <button class="critical" type="button" onClick="Cuba.load({ action: 'User_Login_Data/delete/user_group_id=<%= user.user_group_id %>' }); ">
+      <%= tl(:delete_user) %>
+    </button>
+  </div>
+</div>
+

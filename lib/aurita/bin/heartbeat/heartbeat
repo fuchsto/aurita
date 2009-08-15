@@ -1,0 +1,199 @@
+#!/usr/bin/env ruby
+
+=begin
+Cronjob:
+crontab -e
+
+MAILTO=cuba # Fuer eventuelle Ausgaben nach STDERR Mailadresse angeben
+
+*/4 * * * * /usr/bin/env ruby !!!PATH_TO!!!/heartbeat.rb
+
+=end
+
+require 'net/smtp'
+require 'timeout' 
+require 'yaml' 
+require 'open-uri'
+
+# load configuration
+
+require File.dirname(__FILE__) + '/heartbeat-config.rb'
+
+class InvalidResponseError < StandardError
+  def initialize message
+    @message = message
+  end
+
+  def to_s
+    return "Invalid response: #{@message}"
+  end
+end
+
+class Heartbeat
+  def initialize
+    @errors = []
+  end
+
+  def send_error_mail subject, message
+    from_name   = "Serverueberwachung"
+    from_email  = "system@wortundform.de"
+    to          = MAILTO_ADDRESS
+    helo_domain = 'wortundform.com'
+    smtp_server = 'smtp.1und1.de'
+    user        = 'm35038722-14'
+    password    = 'eskimo06'
+
+    mail = ''
+    mail << 'From: ' << "#{from_name} <#{from_email}>" << "\r\n"
+    mail << 'To: ' << (to.join(', ') rescue to) << "\r\n"
+    mail << 'Subject: ' << subject << "\r\n"
+    mail << "\r\n" # headers end here
+    mail << message
+
+    smtp = Net::SMTP.new(smtp_server)
+    smtp.esmtp = true
+    smtp.start(helo_domain, user, password, :login) do |smtp|
+      smtp.send_message mail.to_s, from_email, to
+    end
+  end
+
+  # restarts lighttpd, returns output
+  #
+
+  def restart_server
+    @restart_time = Time.now
+
+    env_term = ENV['TERM'].to_s.dup # save TERM
+    ENV['TERM'] = 'xdumb'
+    @restart_output = `#{RESTART_CODE}`
+    @restart_success = $?.success?
+    ENV['TERM'] = env_term # restore TERM
+  end
+
+  def report_failure
+    message = <<END
+Der Webserver "#{MY_NAME}" reagiert nicht. Beim Zugriff auf den Server wurden folgende Fehler registriert:
+
+#{@errors.join("\n")}
+
+Der Server wurde um #{@restart_time} neu gestartet. Die Ausgabe des Neustartbefehls war:
+
+#{@restart_output.chomp}
+END
+
+    if not @restart_success
+      message << "\nACHTUNG: Der Neustart war nicht erfolgreich!\n"
+    end
+
+    send_error_mail "Server reagiert nicht: #{MY_NAME}", message
+    STDERR.puts "Message to be sent:", message
+  end
+
+  def try_server
+    test = ServerTest.new
+    test.run
+  end
+
+  def check_server
+    attempts = 5
+    timeout_in_seconds = 15
+    wait_before_retrying = 2
+
+    begin 
+    Timeout::timeout(timeout_in_seconds) { 
+      try_server
+    } 
+    rescue Timeout::Error, OpenURI::HTTPError, Errno::ECONNREFUSED, InvalidResponseError => bang
+      @errors << bang.to_s
+
+      attempts -= 1 
+      if attempts > 0 
+        sleep wait_before_retrying and retry 
+      else 
+        raise 
+      end 
+    end
+  end
+end
+
+class ServerTest
+  def initialize
+    @patterns = CHECK_STRINGS
+    @url = CHECK_URL
+  end
+
+  def run
+    errors = []
+
+    STDERR.puts "Trying #{@url}"
+    html = nil
+    open(@url) { |f|
+      html = f.read
+    }
+
+    @patterns.each { |to_match, description|
+      if ! html.include? to_match
+        errors << description
+      end
+    }
+
+    raise InvalidResponseError, errors.join(", ") if not errors.empty?
+
+    STDERR.puts "All ok."
+  end
+end
+
+class Throttle
+  def self.throttle? filename
+    max_invocations_per_day = MAX_INVOCATIONS_PER_DAY
+
+    throttle = nil
+    date = Time.now.strftime('%Y-%m-%d')
+
+    begin
+      last_invocation, num_invocations = YAML::load_file(filename)
+
+      if date == last_invocation && num_invocations >= max_invocations_per_day
+        return true
+      end
+    rescue Errno::ENOENT
+      STDERR.puts "yaml not found or invalid"
+    end
+
+    if num_invocations.nil? or date != last_invocation
+      num_invocations = 0
+    end
+
+    File.open( filename, 'w' ) do |out|
+      YAML::dump [date, num_invocations+1], out
+    end
+
+    false
+  end
+
+end
+
+if defined? LOG_FILE
+  logfile = open(LOG_FILE,"a")
+  STDERR.reopen logfile
+end
+
+STDERR.puts "--------------------------------"
+STDERR.puts "START heartbeat.rb: #{Time.now}"
+begin
+  heartbeat = Heartbeat.new
+
+  heartbeat.check_server
+rescue Timeout::Error, OpenURI::HTTPError, Errno::ECONNREFUSED, InvalidResponseError => bang
+  # Sperre, damit nicht zu oft neu gestartet wird
+
+  STDERR.puts "No heartbeat."
+  if Throttle.throttle? THROTTLE_FILE
+    STDERR.puts "Too many restart attempts, giving up."
+  else
+    STDERR.puts "Restarting."
+    heartbeat.restart_server
+    heartbeat.report_failure
+  end
+end
+STDERR.puts "END heartbeat.rb: #{Time.now}"

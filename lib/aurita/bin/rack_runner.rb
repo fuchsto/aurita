@@ -1,3 +1,4 @@
+#/usr/bin/env ruby
 
 module URI
   module REGEXP
@@ -32,5 +33,5 @@ class Aurita_Application
   end
 end
 
-Rack::Handler::Mongrel.run Aurita_Application.new, :Port => 80
+Rack::Handler::Mongrel.run Aurita_Application.new, :Port => 3000
 

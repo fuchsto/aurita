@@ -12,10 +12,9 @@ Aurita.import(:base, :bits, :cgi)
 Aurita.import(:base, :plugin_register)
 Aurita.import_module :decorators, :default
 
-require('lore/exception/invalid_klass_parameters')
-require('lore/validation/reason')
+require('lore/exceptions/validation_failure')
 require('lore/validation/parameter_validator')
-require('lore/connection')
+require('lore')
 
 begin 
   require 'zlib' 

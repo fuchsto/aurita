@@ -215,7 +215,7 @@ module Main
         cc.join(Content_Category).using(:category_id) { |c| 
           c.where(c.content_id == content_id) 
         } 
-      }
+      }.to_a
       @categories = [ Category.load(:category_id => '1') ] unless @categories
       @categories
     end

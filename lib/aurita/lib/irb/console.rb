@@ -47,6 +47,9 @@ Aurita::Console::Console_Args.project = ARGV[0]
 def load_project(project_name)
   Aurita::Console::Console_Args.project = project_name
   Aurita.load_project project_name
+end
+
+def bootstrap
   Aurita.bootstrap
 end
 
@@ -54,6 +57,16 @@ def disable_logging
   Lore.disable_logging
   Aurita::Configuration.run_log_path = false
   Aurita::Configuration.sys_log_path = false
+end
+alias disable_log disable_logging
+
+def enable_logging
+  Lore.enable_logging
+  Lore.enable_query_log
+  Lore.logfile = STDERR
+  Lore.query_logfile = STDERR
+  Aurita::Configuration.run_log_path = STDERR
+  Aurita::Configuration.sys_log_path = STDERR
 end
 
 def set_user_id(uid)

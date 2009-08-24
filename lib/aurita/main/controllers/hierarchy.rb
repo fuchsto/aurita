@@ -64,9 +64,9 @@ module Main
     def after_modification(hierarchy)
       category = hierarchy.category
       if category == 'GENERAL' then
-        exec_js("Cuba.load({ element: 'app_left_column', action: 'App_General/left/' })")
+        exec_js("Aurita.load({ element: 'app_left_column', action: 'App_General/left/' })")
       elsif category == 'MY_PLACE' then
-        exec_js("Cuba.load({ element: 'app_left_column', action: 'App_My_Place/left/' })")
+        exec_js("Aurita.load({ element: 'app_left_column', action: 'App_My_Place/left/' })")
       end
     end
 
@@ -76,7 +76,8 @@ module Main
       hierarchy_boxes(params[:perspective])
     end
 
-    def hierarchy_boxes(category) 
+    def hierarchy_boxes(category=nil) 
+      category ||= 'GENERAL'
       hierarchy_list = []
       count = 0
       Hierarchy.all_with((Hierarchy.category == category) & (Hierarchy.accessible)).each { |h|

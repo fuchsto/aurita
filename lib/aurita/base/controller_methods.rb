@@ -7,6 +7,9 @@ module Aurita
 
   module Base_Controller_Methods
 
+    # See Ruby's CGI.rb status header specifications 
+    # (those do not respect HTTP specifications). 
+    #
     HTTP_STATUS_CODES = { 302 => 'REDIRECT', 
                           200 => 'FOUND', 
                           400 => 'NOT_FOUND' }
@@ -251,7 +254,9 @@ module Aurita
       @klass_instance = nil
     end # def }}}
 
-    def invalidate_cache() # :nodoc:
+    # Invalidates all caches for this controller's model. 
+    #
+    def invalidate_cache() 
       @klass.invalidate_all()
     end
 
@@ -292,7 +297,6 @@ module Aurita
     end
 
     # Ajax redirect. 
-    #
     #
     def redirect_to(params={})
       params[:controller] = controller_name() unless params[:controller]
@@ -457,24 +461,28 @@ module Aurita
 
     public
 
-    # Renders GUI::Form instance into HTML part of response 
-    # using method Base_Controller.form_string. 
+    # Decorates GUI::Form instance with GUI::Async_Form_Decorator 
+    # and shifts resulting element into HTML part of response. 
+    # Optional parameters are passed to constructor of decorator. 
     # Example: 
     #
     #   form = add_form
-    #   render_form(form, :template => :special_template)
+    #   render_form(form, :decorator_param => :value)
     #
     def render_form(form, params={})
-
-      @response[:html] << GUI::Async_Form_Decorator.new(form)
-      return
-
-    # WAS: 
-      @response[:html] << form_string(form, params)
+      element = GUI::Async_Form_Decorator.new(form, params)
+      @response[:html] << element
+      element
     end
 
-    def decorate_form(form)
-      GUI::Async_Form_Decorator.new(form)
+    # Like #render_form, but only returns decorated form, 
+    # without attaching to controller's @response object. 
+    # Short for 
+    #
+    #   GUI::Async_Form_Decorator.new(form, params)
+    #
+    def decorate_form(form, params={})
+      GUI::Async_Form_Decorator.new(form, params)
     end
 
     # Set custom form generator klass. 
@@ -482,20 +490,6 @@ module Aurita
     def use_form_generator(fg_klass)
       @@form_generator = fg_klass
     end
-
-    # DEPRECATED! Should be replaced by just returning 
-    # a form instance wherever found! 
-    #
-    # Renders form instance to a string using method 
-    # Base_Controller.view_string. 
-    def form_string(form, params={})
-    # {{{
-      template   = params[:template] 
-      template ||= :form_section if params[:title]
-      template ||= :form 
-      params[:form] = form
-      view_string(template, params)
-    end # }}}
 
     # Helper method for form generator (default: Aurita::GUI::Form_Generator, 
     # set in Aurita::Main::Base_Controller). 

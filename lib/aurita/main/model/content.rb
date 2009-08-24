@@ -223,9 +223,14 @@ module Main
     # Returns first category of this Content instance, or 
     # category with id 1 (no category). 
     def category
-      category = categories().first
-      category = Category.load(:category_id => '1') unless category
-      category
+      @category ||= Category.select { |cc| 
+        cc.join(Content_Category).using(:category_id) { |c| 
+          c.where(c.content_id == content_id) 
+          c.limit(1)
+        } 
+      }.first
+      @category ||= Category.load(:category_id => '1') unless @category
+      return @category
     end
 
     # Returns category ids mapped to this Content instance via Content_Category 

@@ -1,9 +1,0 @@
-
-<select class="lore" id="<%= element_id %>" name="<%= attrib_name %>">
-  <option value="PRIVATE" <%= 'selected' if @attrib_value.to_s == 'PRIVATE' %>>
-    <%= Lang['access_private'] %>
-  </option>
-  <option value="PUBLIC" <%= 'selected' if @attrib_value.to_s == 'PUBLIC' %>>
-    <%= Lang['access_public'] %>
-  </option>
-</select>

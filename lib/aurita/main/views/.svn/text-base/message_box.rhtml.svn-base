@@ -1,6 +1,0 @@
-<div style="width: 230px; padding: 10px; text-align: center;  ">
-	<%= message %>
-</div>
-<div style="margin: 4px; text-align: center; width: 250px; ">
-  <input type="button" class="lore_small_button" style="width: 80px; " onclick="context_menu_close(); " value="ok" />
-</div>

@@ -10,5 +10,4 @@ require('rubygems')
 require('pp')
 require('rio')
 require('lore')
-require('lore/symbol')
 

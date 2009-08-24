@@ -48,7 +48,7 @@ module Aurita
         @session_entity = Session_Key.get("'#{@session_id}'").first
         if @session_entity then
           @@logger.log('Got session entity from DB')
-          @session_entity[:time_mod] = Aurita::Datetime.now(:sql)
+          @session_entity.time_mod = Aurita::Datetime.now(:sql)
           @session_entity.commit
         else
           @@logger.log('No session entity in DB')

@@ -1,8 +1,0 @@
-<div>
-<font style="color: #990000;">
-	<%= message %>
-</font>
-</div>
-<div style="margin-top: 7px; text-align: center; ">
-  <input type="button" class="lore_small_button" style="width: 80px; " onclick="Cuba.message_box.close(); " value="ok" />
-</div>

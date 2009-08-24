@@ -6,6 +6,7 @@ module Aurita
 module Main
 
   class Content < Aurita::Model
+    table :content, :public
   end
 
   class Tag_Index < Aurita::Model

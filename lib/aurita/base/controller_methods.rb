@@ -1,5 +1,5 @@
 
-require('lore/types')
+require('lore')
 require('aurita/base/exceptions')
 Aurita.import_module :gui, :form_generator
 
@@ -161,32 +161,19 @@ module Aurita
     def update_instance(inst=nil)
     # {{{
       inst         ||= load_instance
-      instance_attr  = inst.class.get_attribute_array
+      instance_attr  = inst.class.get_fields_flat
       ignored_params = [:action, :mode, :controller, :_session, :_request]
-      explicit_attr  = @klass.get_explicit()
       log('Known attributes: ' << instance_attr.inspect)
       @params.each_pair { |param_name, param_value| 
         if param_name.to_s != '' && !(ignored_params.include?(param_name.to_sym)) then
-
+          param_name = param_name.to_sym
           # only update attributes (that is: Skip primary keys)
-          if(instance_attr.include?(param_name)) then
-            inst.set_attribute_value(param_name, param_value)
-            log('Setting ' << param_name.to_s << ' : ' << param_value.to_s)
-          elsif(instance_attr.include?(param_name.to_sym)) then
-            inst.set_attribute_value(param_name.to_sym, param_value)
+          if instance_attr.include?(param_name)  then
+            inst[param_name] = param_value
             log('Setting ' << param_name.to_s << ' : ' << param_value.to_s)
           elsif(instance_attr.include?(param_name.to_s.split('.').last)) then
             log('Setting ' << param_name.to_s << ' : ' << param_value.to_s)
             inst.set_attribute_value(param_name, param_value)
-          # Add non-empty explicit attributes: 
-          elsif(param_value && param_value != '') then
-            explicit_attr.each_pair { |table, attribs|
-              if attribs.include? param_name ||
-                 (attribs.include? param_name.to_s.split('.').at(-1)) && 
-                 (table == param_name.to_s.split('.')[0..1].join('.')) then
-                  inst.set_attribute_value(param_name, param_value) if param_value.to_s != ''
-              end
-            }
           end
         end
       }
@@ -558,7 +545,7 @@ module Aurita
       }
 
       if instance then
-        instance.abs_attr.each { |table, args| 
+        instance.attribute_values.each { |table, args| 
           args.each { |name, value|
             form_values["#{table}.#{name}"] = value
           }
@@ -567,7 +554,7 @@ module Aurita
           keys.each { |key|
             pkey_field_name = "#{table}.#{key}"
             form.add(GUI::Hidden_Field.new(:name     => pkey_field_name, 
-                                           :value    => instance.abs_attr[table][key], 
+                                           :value    => instance.attribute_values[table][key], 
                                            :required => true))
           }
         }

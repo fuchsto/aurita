@@ -234,7 +234,7 @@ class Aurita::Base_Controller
          Aurita.log('Guards passed')
          result = __send__(method, *args) 
          Aurita.log('Call finished')
-      rescue Lore::Exception::Invalid_Klass_Parameters => ikp
+      rescue Lore::Exceptions::Validation_Failure => ikp
         Aurita.log('Invalid_Klass_Parameter in call_guarded')
         ikp.log()
         notify_invalid_params(ikp)
@@ -640,10 +640,8 @@ public
       klass ||= @klass 
       return unless klass
       id_values = []
-      klass.get_own_primary_keys.each { |keys|
-        keys.each { |key|
-          id_values << param(key.to_sym) if param(key.to_sym) 
-        }
+      klass.get_own_primary_keys.each { |key|
+        id_values << param(key.to_sym) if param(key.to_sym) 
       }
       @instance_id = id_values.first 
     # @instance_id = id_values

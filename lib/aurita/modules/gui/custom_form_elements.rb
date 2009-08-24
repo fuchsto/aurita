@@ -222,7 +222,11 @@ JS
       end
       
       options = option_labels
-      options.fields = option_values
+      begin
+        options.fields = option_values.map { |v| v.to_s }
+      rescue ::Exception => e
+        raise ::Exception.new("Failed arrayfields values: #{option_values.inspect}")
+      end
       
       params.delete(:user)
       params.delete(:content)

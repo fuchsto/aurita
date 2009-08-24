@@ -83,9 +83,9 @@ module Main
         map = Hierarchy_Map.new(Hierarchy_Entry.all_with(Hierarchy_Entry.hierarchy_id == h.hierarchy_id).entities)
         dec = Hierarchy_Entries_Default_Decorator.new(map)
         if dec.string || Aurita.user.is_registered? then
-          box = Accordion_Box.new(:type => :hierarchy, 
-                                  :class => :topic, 
-                                  :id => 'hierarchy_' << h.hierarchy_id, 
+          box = Accordion_Box.new(:type   => :hierarchy, 
+                                  :class  => :topic, 
+                                  :id     => "hierarchy_#{h.hierarchy_id}", 
                                   :params => { :hierarchy_id => h.hierarchy_id } )
           box.header = h.header
           box.body   = dec.string

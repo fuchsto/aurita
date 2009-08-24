@@ -1,7 +1,0 @@
-<div>
-	<%= message %>
-</div>
-<div style="margin-top: 7px; text-align: center; ">
-  <input type="button" class="lore_small_button" style="width: 80px; " onclick="Cuba.confirm_action(); " value="ok" />
-  <input type="button" class="lore_small_button" style="width: 80px; " onclick="Cuba.cancel_action(); " value="abbrechen" />
-</div>

@@ -12,10 +12,9 @@ Aurita.import(:base, :plugin_register)
 Aurita.import_module :session
 Aurita.import_module :decorators, :default
 
-require('lore/exception/invalid_klass_parameters')
-require('lore/validation/reason')
+require('lore/exceptions/validation_failure')
 require('lore/validation/parameter_validator')
-require('lore/connection')
+require('lore')
 
 begin 
   require 'zlib' 
@@ -158,7 +157,7 @@ include Observable
 
       @mode = response[:mode] if response && response[:mode]
       @mode = :default unless @mode
-      response[:mode] = @mode.intern 
+      response[:mode] = @mode.to_sym
         
       if @failed then
         Aurita::Plugin_Register.call(Hook.__send__(@controller.downcase.gsub('::','__')).__send__(action + '_failed'), controller_instance)

@@ -37,7 +37,7 @@ module GUI
     def initialize(entities=[], params={})
       @entities     = entities
       @attributes   = params[:attributes]
-      @attributes ||= entities.first.class.get_attribute_names() if entities.first
+      @attributes ||= entities.first.class.get_fields_flat() if entities.first
       @row_class    = Entity_Table_Row
       if params[:headers] == :auto then
         @headers = @attributes.dup

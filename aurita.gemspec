@@ -5,14 +5,12 @@ spec = Gem::Specification.new { |s|
 
   s.name = 'aurita' 
   s.rubyforge_project = 'aurita'
-  s.summary = 'Dead-simple object-oriented creation of HTML elements, including forms, tables and many more. '
+  s.summary = 'Aurita is a resource- and plugin-based application 
+               framework that simplifies realization of rich internet applications. '
   s.description = <<-EOF
-Aurita::GUI provides an intuitive and flexible API for object-oriented creation 
-of primitive and complex HTML elements, such as tables and forms. 
-It is a core module of the Aurita application framework, but it can be used 
-as stand-alone library in any context (such as rails). 
-As there seems to be a lack of ruby form generators, i decided to release this 
-part of Aurita in a single gem with no dependencies on aurita itself. 
+    Aurita is a resource- and plugin-based application framework that simplifies 
+    realization of rich internet applications. An aurita application can be 
+    everything from a todo list up to a distributed community portal.
   EOF
   s.version = '0.7.0'
   s.author  = 'Tobias Fuchs'

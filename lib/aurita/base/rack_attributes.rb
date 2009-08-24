@@ -2,7 +2,6 @@
 require('stringio')
 require('tempfile')
 Aurita.import('base/attributes')
-require('lore/exception/ambiguous_attribute')
 
 module Aurita
 

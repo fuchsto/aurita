@@ -6,9 +6,9 @@ module Aurita
   class Configuration
 
     $KCODE = 'UTF-8'
-    @@app_base_path      = '/usr/share/svnwc/'
+    @@app_base_path      = '/usr/share/gitwc/'
     @@admin_emails       = [ 'root@localhost' ]
-    @@base_path          = @@app_base_path + 'aurita_git/lib/aurita/'
+    @@base_path          = @@app_base_path + 'aurita/lib/aurita/'
     @@projects_base_path = @@app_base_path + 'aurita_projects/'
     @@plugins_path       = @@app_base_path + 'aurita_plugins/'
 

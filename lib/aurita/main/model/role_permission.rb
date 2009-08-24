@@ -22,7 +22,7 @@ module Main
     # Returns true if user is registered, false otherwise (guest user 
     # with user_group_id '0'). 
     def is_registered?
-      ((!user_group_id.nil?) && (user_group_id != '0'))
+      ((!user_group_id.nil?) && (user_group_id != 0))
     end
 
     # Whether this user is allowed to perform a specific operation. 

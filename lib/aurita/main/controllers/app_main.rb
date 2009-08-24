@@ -2,7 +2,7 @@
 require('aurita/controller')
 require('aurita-gui/javascript')
 Aurita.import_module :gui, :context_menu
-Aurita.import_module :gui, :page_section
+Aurita.import_module :gui, :helpers
 Aurita::Main.import_model :hierarchy_entry
 Aurita::Main.import_model :hierarchy
 Aurita::Main.import_model :user_online
@@ -183,7 +183,7 @@ module Main
         end
       }
       return unless count > 0
-      return Page_Section.new(:header => tl(:recent_changes)) { result } 
+      return Page.new(:header => tl(:recent_changes)) { result } 
     end
 
     def tag_index
@@ -200,12 +200,12 @@ module Main
       user = User_Login_Data.resolve_user(user_string, pass_string)
       
       if user then
-        log('Login accepted: ' << user.user_group_id)
+        log { "Login accepted: #{user.user_group_id}" }
         pstor_key = Aurita.session.set_user_login_cookie(user.login, 
                                                          user.pass, 
                                                          user.user_group_id, 
                                                          param(:sticky).to_s == '0')
-        log('Login successful: ' << user.user_group_id + ', ' << pstor_key.session_id)
+        log { "Login successful: #{user.user_group_id}, #{pstor_key.session_id}" }
         puts "({'session_id': '#{pstor_key.session_id}'})"
       else
         puts '0'

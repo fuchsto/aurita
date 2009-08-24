@@ -258,7 +258,8 @@ module Main
                                                   :name => User_Profile.theme.to_s)
       pass.value   = ''
       form.add(pass_confirm)
-      render_form(form, :title => instance.user_group_name)
+      form = decorate_form(form) 
+      Page.new(:header => instance.user_group_name) { form }
     end
 
     def perform_update

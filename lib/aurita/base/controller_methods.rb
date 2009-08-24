@@ -465,6 +465,11 @@ module Aurita
     #   render_form(form, :template => :special_template)
     #
     def render_form(form, params={})
+
+      @response[:html] << GUI::Async_Form_Decorator.new(form)
+      return
+
+    # WAS: 
       @response[:html] << form_string(form, params)
     end
 
@@ -524,12 +529,13 @@ module Aurita
       klass    ||= @klass
 
       custom_elements = {}
+      log { "Custom Form Elements: #{custom_form_elements.inspect}" }
       custom_form_elements.each_pair { |clause, value|
         clause_parts = clause.to_s.split('.')
         table  = clause_parts[0..1].join('.')
         attrib = clause_parts[2]
         custom_elements[table] = Hash.new unless custom_elements[table]
-        custom_elements[table][attrib] = value
+        custom_elements[table][attrib.to_sym] = value
       }
       view = @@form_generator.new(klass)
       view.labels = Lang[plugin_name]

@@ -6,6 +6,7 @@ module Aurita
 module GUI
 
   class Page < Widget
+  include I18N_Helpers
 
     attr_accessor :header, :tools, :content
 

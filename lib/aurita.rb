@@ -118,7 +118,7 @@ module Aurita
 
   def self.project_loaded?
     begin
-      return @@project.is_a? Aurita::Project
+      return @@project.is_a?(Aurita::Project)
     rescue ::Exception => ignore
     end
     return false

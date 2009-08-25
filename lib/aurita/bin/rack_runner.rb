@@ -18,6 +18,9 @@ Aurita.load_project ARGV[0].to_sym
 Aurita.bootstrap
 Aurita.import :rack_dispatcher
 
+port   = ARGV[1]
+port ||= 3000
+
 Aurita::Configuration.run_log_path = false
 Aurita::Configuration.sys_log_path = false
 Lore.disable_logging
@@ -33,5 +36,5 @@ class Aurita_Application
   end
 end
 
-Rack::Handler::Mongrel.run Aurita_Application.new, :Port => 3000
+Rack::Handler::Mongrel.run Aurita_Application.new, :Port => port
 

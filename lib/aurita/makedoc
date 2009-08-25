@@ -1,5 +1,0 @@
-#!/bin/bash
-
-rm -Rf doc; 
-rdoc -NSp -x main -x bin -x setup -x test -x tmp -x env.rb -x lib -x config.rb -x config.dist.rb -m README.rb
-

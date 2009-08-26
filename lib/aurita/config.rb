@@ -12,8 +12,8 @@ module Aurita
     @@projects_base_path = @@app_base_path + 'aurita_projects/'
     @@plugins_path       = @@app_base_path + 'aurita_plugins/'
 
-    @@sys_log_path = false
-    @@run_log_path = false
+    @@sys_log_path = '/var/log/aurita/sys.log'
+    @@run_log_path = '/var/log/aurita/sys.log'
 
     def self.base_path
       @@base_path

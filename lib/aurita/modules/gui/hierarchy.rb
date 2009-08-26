@@ -8,9 +8,10 @@ module Aurita
 module GUI
 
   class Hierarchy_Element < Element
-    attr_accessor :model_instance, :label, :onclick, :string, :class
+    attr_accessor :model_instance, :label, :onclick, :class
     # Model instance has to include behaviour "Aurita::GUI::Hierarchy_Element_Behaviour"
     def initialize(model_instance)
+      @tag     = :li
       @model_instance = model_instance
       @class   = 'hierarchy_entry'
       @label   = model_instance.entry_label.to_s
@@ -20,10 +21,15 @@ module GUI
       @string  = false
     end
     def string
-      return @string if @string
+    # return @string if @string
       entry_params = { :class => @class, :onclick => @onclick } 
-      @string = HTML.li(entry_params) { "<img src=\"/aurita/images/icons/#{icon}.gif\" /> " << @label }
+      @icon ||= :blank
+      @string = HTML.li(entry_params) { "<img src=\"/aurita/images/icons/#{@icon}.gif\" /> #{@label}" }
       return @string
+    end
+
+    def inspect
+      string()
     end
   end
 
@@ -46,7 +52,8 @@ module GUI
       for entry in entries do 
         pid = entry.parent_id # Has to be provided by model instance
         @entry_map[pid] = Array.new unless @entry_map[pid]
-        @entry_map[pid] << Hierarchy_Element.new(entry)
+        map_element = Hierarchy_Element.new(entry)
+        @entry_map[pid] << map_element
       end
       model_inst = @entry_map.values.first.first.model_instance if @entry_map.values.first
       @entry_model = model_inst.class if model_inst
@@ -73,7 +80,7 @@ module GUI
   
     def initialize(hierarchy_map)
       @entry_map = hierarchy_map
-      @string = recurse('0')
+      @string = recurse(0)
       @dom_id = 'sortable_hierarchy'
     end
 
@@ -81,6 +88,7 @@ module GUI
       return '' unless @entry_map[parent_id] 
       string = ''
       for e in @entry_map[parent_id] do
+
 #       entry = plugin_get(Hook.main.hierarchy.entry_decorator, :entry => e)
         entry_id = e.model_instance.pkey_value
 
@@ -105,6 +113,7 @@ module GUI
   
       if !e.allow_access?(Aurita.user) then
         return HTML.span.not_accessible { e.label } if Aurita.user.is_registered? 
+        return ''
       end
 
       onclick = "Cuba.load({ action: '#{CGI.escape(e.interface).gsub('%2F','/').gsub('%3D','=')}' }); "

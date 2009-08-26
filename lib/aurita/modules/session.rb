@@ -186,7 +186,7 @@ module Aurita
   #   Aurita.session.user = User_Group.load(:user_group_id => 1000)
   #
   class Batch_Session < Session
-    def initialize
+    def initialize(req=nil)
     end
     def get_user_login_cookie
     end

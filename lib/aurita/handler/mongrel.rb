@@ -4,9 +4,10 @@ require 'stringio'
 require 'rack'
 require 'rack/content_length'
 require 'rack/chunked'
+require 'rack/session/memcache'
 require 'aurita'
 
-Aurita.import :rack_dispatcher
+Aurita.import 'handler/rack_dispatcher'
  
 module Aurita
 module Handler
@@ -15,12 +16,51 @@ module Handler
 
     @@dispatcher = Aurita::Rack_Dispatcher.new()
 
+    private
+
+    # Rewrite from 
+    #
+    #   <host>/aurita/Foo/bar[/param1=value&param2=value]
+    #
+    # to
+    #
+    #   <host>/aurita/?controller=Foo&action=bar[&param_1=value&param_2=value]
+    #
+    def rewrite_url(request)
+      uri = request['REQUEST_URI']
+      if !uri.include?('?') then
+        uri_p = uri.split('/')
+        if uri_p.length >= 4 && uri_p[1] == 'aurita' then
+          host       = uri_p[0]
+          controller = uri_p[2]
+          action     = uri_p[3]
+          get_params = uri_p[4]
+          query = "controller=#{controller}&action=#{action}&#{get_params}"
+          path  = "/aurita/run?#{query}"
+          uri   = "#{host}#{path}"
+          request['REQUEST_URI']  = uri
+          request['REQUEST_PATH'] = path
+          request['QUERY_STRING'] = query
+        end
+      end
+    end
+
+    public
+
     # Rack dispatch routine. 
     # Expects request env params, returns 
     # [ status, response header, response body ] 
     # of Aurita::Rack_Dispatcher instance. 
     def call(env)
+      # Apply rewrites *before* creating Rack::Request from it: 
+      rewrite_url(env) 
+      STDERR.puts 'REWRITE ================================================='
+      env.each_pair { |k,v|
+        STDERR.puts "REWRITE #{k} - #{v.inspect}"
+      }
       request    = Rack::Request.new(env)
+      STDERR.puts "PARAMS: #{request.params.inspect}"
+      STDERR.write(request['rack.errors'].read) if request['rack.errors']
       @@dispatcher.dispatch(request)
 
       [ @@dispatcher.status, @@dispatcher.response_header, @@dispatcher.response_body ]
@@ -37,8 +77,18 @@ module Handler
   #
   class Mongrel < ::Mongrel::HttpHandler
 
-    def initialize()
-      @app = Rack::Chunked.new(Rack::ContentLength.new(Aurita::Handler::Aurita_Application.new))
+    def initialize
+      app = Aurita::Handler::Aurita_Application.new
+      begin
+        app = Rack::Session::Memcache.new(app, 
+                                          :domain => Aurita.project.domain, 
+                                          :expire_after => 2592000)
+      rescue ::Exception => no_memcache
+        app = Rack::Session::Pool.new(app, 
+                                      :domain => Aurita.project.domain, 
+                                      :expire_after => 2592000)
+      end
+      @app = Rack::Chunked.new(Rack::ContentLength.new(app))
     end
     
     def process(request, response)
@@ -53,7 +103,7 @@ module Handler
 
       env.update({ "rack.version"      => [1,0],
                    "rack.input"        => rack_input,
-                   "rack.errors"       => $stderr,
+                   "rack.errors"       => STDERR,
                    "rack.multithread"  => true,
                    "rack.multiprocess" => false, # ???
                    "rack.run_once"     => false,

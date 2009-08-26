@@ -1,6 +1,7 @@
 
 require('stringio')
 require('tempfile')
+require('rack/request')
 Aurita.import('base/attributes')
 
 module Aurita
@@ -17,13 +18,17 @@ module Aurita
     #
     # Usage: 
     #
-    #   params = Attributes.new(Model_Klass, cgi_instance)
+    #   params = Attributes.new(Model_Klass, request)
     # or:    
     #   params = Attributes.new(Model_Klass, hash)
     #
+    # A request object has to provide method #params, 
+    # returning key/value hash of all request params 
+    # (such as GET and POST)
+    #
     def initialize(request) 
     # {{{
-      super(request.params)
+      super(request)
     end # def }}}
 
   end # class

@@ -63,7 +63,7 @@ module Aurita
     @@logger = Aurita::Log::Class_Logger.new('Attributes')
   
     # Initialize by passing a model klass that will use this 
-    # Attribute instance, as well as CGI request object or 
+    # Attribute instance, as well as request object or 
     # key/value Hash. 
     #
     # Usage: 
@@ -79,8 +79,8 @@ module Aurita
       @value_cache    = Hash.new
       touch
 
-      if(attrib_hash.instance_of? Hash) then   attribs = attrib_hash
-      else                                     attribs = attrib_hash.params
+      if(attrib_hash.instance_of? Hash) then attribs = attrib_hash
+      else                                   attribs = attrib_hash.params
       end
       
       # write all attributes (unfiltered) to attrib pool: 
@@ -225,8 +225,9 @@ module Aurita
     end
 
     def inspect()
-      r = ''
+      r = '{'
       @attributes.each { |k,v| r << "#{k.to_s} : #{v.to_s[0..30]}\n" }
+      r << '}'
       r
     end
 

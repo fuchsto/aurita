@@ -5,7 +5,7 @@ require('stringio')
 require('observer')
 
 Aurita.import(:base, :rack_attributes)
-Aurita.import(:base, :rack_session)
+Aurita.import(:modules, :rack_session)
 Aurita.import(:base, :exceptions)
 Aurita.import(:base, :log, :class_logger)
 Aurita.import(:base, :bits, :cgi)
@@ -66,25 +66,15 @@ include Observable
     @dispatch_time     = 0.0
     @request           = request
     @params            = Aurita::Rack_Attributes.new(request)
+    @session           = Aurita::Rack_Session.new(request)
     @mode              = params[:mode]
     @controller        = params[:controller]
     @action            = params[:action]
-    @failed            = false
-    @session           = Aurita::Rack_Session.new(request)
     @params[:_request] = @request
     @params[:_session] = @session
+    @failed            = false
     @status            = 200
 
-    if !@controller then
-      uri = request.env['REQUEST_URI']
-      if !uri.include?('?') then
-        uri_p = uri.split('/')
-        if uri_p[1] == 'aurita' then
-          @controller = uri_p[2]
-          @action     = uri_p[3]
-        end
-      end
-    end
     @controller ||= 'App_Main'
     @action     ||= 'start'
     @mode       ||= 'default'
@@ -92,11 +82,11 @@ include Observable
     Thread.current['request'] = @params
 
     @response_header = {}
-    @response_header['connection']          = 'close' 
-    @response_header['Accept-Charset']      = 'utf-8' 
-    @response_header['type']                = 'text/html; charset=utf-8' 
-    @response_header['expires']             = (Time.now - (1 * 24 * 60 * 60)).to_s
-    @response_header['pragma']              = 'No-cache'
+    @response_header['connection']     = 'close' 
+    @response_header['Accept-Charset'] = 'utf-8' 
+    @response_header['type']           = 'text/html; charset=utf-8' 
+    @response_header['expires']        = (Time.now - (1 * 24 * 60 * 60)).to_s
+    @response_header['pragma']         = 'No-cache'
 
     Lore::Connection.reset_query_count()
     Lore::Connection.reset_result_row_count()

@@ -53,6 +53,11 @@ module Aurita
     @session
   end
 
+  def self.session=(session)
+    Thread.current['request'][:_session] = session
+    @session = session
+  end
+
   # Retreive DB record of the user holding the 
   # current session. 
   # In case user is logged in, this returns the 

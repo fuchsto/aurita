@@ -137,7 +137,7 @@ class Aurita::Base_Controller
     @@logger.log(message, level, &block)
   end
   def log(message=nil, level=nil, &block)
-    @logger.log(message, level, &block)
+    @@logger.log(message, level, &block)
   end
 
   # Send a plugin hook signal that will not be answered with 

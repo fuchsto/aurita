@@ -1,0 +1,79 @@
+#!/bin/bash
+
+
+red='\e[0;31m'
+RED='\e[1;31m'
+blue='\e[0;34m'
+BLUE='\e[1;34m'
+cyan='\e[0;36m'
+CYAN='\e[1;36m'
+NC='\e[0m' # No Color
+
+AURITA_BIN_PATH='/usr/share/gitwc/aurita/lib/aurita/bin'
+AURITA_CONF_PATH='/usr/share/gitwc/aurita/conf'
+
+if [ $EUID -eq 0 ]; then
+  CMDPREF=''
+else
+  CMDPREF=sudo 
+fi
+
+function test_success {
+  if [ $? -eq 0 ]; then
+    echo -e "${CYAN} [ OK ]${NC}"
+  else
+    echo -e "${RED} [ FAIL ]${NC}"
+  fi
+}
+function test_kill {
+  if [ $? -eq 0 ]; then
+    echo -e "${CYAN} [ OK ]${NC}"
+  else
+    echo -e "${RED} [ NONE ]${NC}"
+  fi
+}
+
+echo -ne "Deleting cache ...\t\t\t\t\t\t"
+$CMDPREF find /tmp/ -name 'lore_cache__*' -exec rm -f {} \; >/dev/null
+test_success
+
+if [ "$2" = '-a' ]; then
+echo -ne "Stopping lighttpd  ... \t\t\t\t\t\t"
+ps aux | grep 'lighttpd_mongrel.conf' | grep -v 'vim' | awk '{print $2}' | xargs $CMDPREF kill -9 >/dev/null 2>&1
+test_kill
+fi
+
+echo -ne "Stopping cluster ...\t\t\t\t\t\t"
+# $CMDPREF rm -f /tmp/ruby-fastcgi-aurita-$1*
+# ps aux | grep lighttpd | grep -v 'vim' | awk '{print $2}' | xargs kill -9  >/dev/null 2>&1
+ps aux | grep 'daemon.rb' | grep 'ruby' | grep $1 | grep -v 'vim' | awk '{print $2}' | xargs $CMDPREF kill -9 >/dev/null 2>&1
+sleep 0
+test_success
+
+echo -ne "Flushing logs ... \t\t\t\t\t\t"
+$CMDPREF echo "" > /var/log/lore/query.log
+$CMDPREF echo "" > /var/log/aurita/run.log
+$CMDPREF echo "" > /var/log/aurita/sys.log
+test_success
+
+echo -ne "Setting permissions ... \t\t\t\t\t"
+$CMDPREF chown -R www-data:www-data /var/log/aurita
+$CMDPREF chmod -R 777 /var/log/aurita
+$CMDPREF chown -R www-data:www-data /var/log/lore
+$CMDPREF chmod -R 777 /var/log/lore
+test_success
+
+echo -ne "Starting cluster ... \t\t\t\t\t\t"
+$CMDPREF ruby $AURITA_BIN_PATH/daemon.rb $1 3001 2>/dev/null & 
+$CMDPREF ruby $AURITA_BIN_PATH/daemon.rb $1 3002 2>/dev/null & 
+$CMDPREF ruby $AURITA_BIN_PATH/daemon.rb $1 3003 2>/dev/null & 
+$CMDPREF ruby $AURITA_BIN_PATH/daemon.rb $1 3004 2>/dev/null & 
+test_success
+
+if [ "$2" = '-a' ]; then
+echo -ne "Restarting lighttpd ... \n"
+echo -ne "(config: $AURITA_CONF_PATH/lighttpd_mongrel.conf)\n"
+echo -ne "\t\t\t\t\t\t\t\t"
+$CMDPREF /usr/sbin/lighttpd -f $AURITA_CONF_PATH/lighttpd_mongrel.conf >/var/log/aurita/server_$1.log 2>&1
+test_success
+fi

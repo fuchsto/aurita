@@ -1,6 +1,4 @@
-
-
-# From http://mongrel.rubyforge.org/browser/trunk/examples/mongrel_simple_service.rb
+#!/usr/bin/env ruby
 
 require 'rubygems'
 require 'aurita'
@@ -21,9 +19,36 @@ if !project_name then
 end
 
 Aurita.load_project project_name.to_sym
+Lore.enable_logging
+Lore.enable_query_log
+Lore.logfile       = STDERR
+Lore.query_logfile = STDERR
+Lore.logger.level       = Logger::DEBUG
+Lore.query_logger.level = Logger::DEBUG
+Aurita::Configuration.sys_log_path = STDERR
+Aurita::Configuration.run_log_path = STDERR
+
 Aurita.bootstrap
+
 Aurita.import :handler, :mongrel
 
+# Simple Mongrel daemon for development environments. 
+# Starts Aurita project at given port. 
+# All loggers are redirected to STDERR. 
+# Example usage: 
+#
+#   sudo aurita/bin/daemon my_project 3001 > daemon.log
+#
+# This would launch a single mongrel daemon handling 
+# an aurita application for project 'my_project' on 
+# port 3001 and write all log messages to file 
+# 'daemon.log'. 
+#
+# Note that this daemon is *not* suitable for 
+# production mode, it's intended to quickly fire up 
+# a project to test your changes in development 
+# without restarting any real webserver. 
+#
 class Daemon 
 
   attr_accessor :logger

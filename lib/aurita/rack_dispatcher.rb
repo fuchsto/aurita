@@ -28,7 +28,7 @@ end
 class Aurita::Rack_Dispatcher 
 include Observable
 
-  attr_reader :params, :mode, :controller, :action, :dispatch_time, :failed, :response_header, :response_body
+  attr_reader :params, :mode, :controller, :action, :dispatch_time, :failed, :response_header, :response_body, :status
   attr_accessor :gc_after_dispatches, :decorator
 
   public
@@ -42,20 +42,20 @@ include Observable
   #
   def initialize(application=Aurita::Main::Application, 
                  decorator=Aurita::Main::Default_Decorator)
-    @application           = application
-    @decorator             = decorator
-    @logger                = Aurita::Log::Class_Logger.new('Dispatcher')
-    @gc_after_dispatches   = 500
+    @application         = application
+    @decorator           = decorator
+    @logger              = Aurita::Log::Class_Logger.new('Dispatcher')
+    @gc_after_dispatches = 500
 
-    @params                = {}
-    @response_header       = {}
-    @response_body         = ''
-    @mode                  = false
-    @controller            = false
-    @action                = false
-    @dispatch_time         = 0.0
-    @failed                = false
-    @num_dispatches        = 0 
+    @params              = {}
+    @response_header     = {}
+    @response_body       = ''
+    @mode                = false
+    @controller          = false
+    @action              = false
+    @dispatch_time       = 0.0
+    @failed              = false
+    @num_dispatches      = 0 
   end
 
   # Dispatch given CGI request to controller call. 
@@ -63,21 +63,20 @@ include Observable
   #
   def dispatch(request)
   # {{{
-    @dispatch_time  = 0.0
-    @request        = request
-    @params         = Aurita::Rack_Attributes.new(request)
-    @mode           = params[:mode]
-    @controller     = params[:controller]
-    @action         = params[:action]
-    @failed         = false
-    @session        = Aurita::Rack_Session.new(request)
+    @dispatch_time     = 0.0
+    @request           = request
+    @params            = Aurita::Rack_Attributes.new(request)
+    @mode              = params[:mode]
+    @controller        = params[:controller]
+    @action            = params[:action]
+    @failed            = false
+    @session           = Aurita::Rack_Session.new(request)
     @params[:_request] = @request
     @params[:_session] = @session
+    @status            = 200
 
     if !@controller then
-      p request
       uri = request.env['REQUEST_URI']
-      p uri
       if !uri.include?('?') then
         uri_p = uri.split('/')
         if uri_p[1] == 'aurita' then
@@ -115,7 +114,6 @@ include Observable
       end
 
       raise ::Exception.new('Unknown controller: ' << @controller.inspect) unless @controller_klass
-      @keys = nil
       
       controller_instance = @controller_klass.new(@params, @model_klass)
 
@@ -130,13 +128,15 @@ include Observable
           @response_header.update(response[:http_header]) if response[:http_header]
           response[:html]   = element.string if (element.respond_to?(:string) && response[:html] == '')
           if response[:file] then
+            # TODO: Implement this for Rack! 
             cgi_output(File.open(response[:file], "rb").read)
             return
           end
         rescue ::Exception => failed
           @failed = true
-          STDERR.puts("Error in Dispatcher: #{failed.message}")
-          STDERR.puts("#{failed.backtrace.join("\n")}")
+          @status = 500
+          @logger.log { "Error in Dispatcher: #{failed.message}" }
+          @logger.log { "#{failed.backtrace.join("\n")}" }
           # Dispatch failed, so quit
           return
         end
@@ -171,12 +171,12 @@ include Observable
 
       Aurita::Plugin_Register.call(Hook.dispatcher.request_finished, 
                                          controller_instance, 
-                                         :dispatcher => self, 
-                                         :controller => controller_instance, 
-                                         :action => @action, 
-                                         :time => @benchmark_time, 
+                                         :dispatcher  => self, 
+                                         :controller  => controller_instance, 
+                                         :action      => @action, 
+                                         :time        => @benchmark_time, 
                                          :num_queries => @num_queries, 
-                                         :num_tuples => @num_tuples)
+                                         :num_tuples  => @num_tuples)
 
     rescue Exception => excep
       @logger.log(excep.message)

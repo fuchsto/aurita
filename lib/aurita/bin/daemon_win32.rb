@@ -3,6 +3,7 @@
 # From http://mongrel.rubyforge.org/browser/trunk/examples/mongrel_simple_service.rb
 
 require 'rubygems'
+require 'aurita'
 
 require 'mongrel'
 require 'yaml'
@@ -41,12 +42,16 @@ class MongrelDaemon < Win32::Daemon
 
     @simple = SimpleHandler.new
     @files  = Mongrel::DirHandler.new(@options[:server_root])
+    @aurita = Aurita_Handler.new
 
     @http_server = Mongrel::HttpServer.new(@options[:ip], @options[:port])
     # Configure Mongrel for Aurita project: 
-    @http_server.register("/", @simple)
-    @http_server.register("/inc", @files)
-    @http_server.register("/images", @files)
+    @http_server.register("/", @aurita)
+    @http_server.register("/aurita", @aurita)
+    @http_server.register("/aurita/inc", @files)
+    @http_server.register("/aurita/assets", @files)
+    @http_server.register("/aurita/images", @files)
+    @http_server.register("/aurita/shared", @files)
 
     File.open(DEBUG_LOG_FILE,"a+") { |f| f.puts("#{Time.now} - service_init left") }
   end
@@ -94,10 +99,23 @@ class MongrelDaemon < Win32::Daemon
   
 end
 
+project_name = ARGV[0]
+port         = ARGV[1]
+port       ||= 3000
+port         = port.to_i
+
+if !project_name then
+  puts "Usage: "
+  puts "  daemon_win32 <project_name> <port>"
+  exit
+end
+
+Aurita.load_project project_name.to_sym
+
 OPTIONS = {
-  :port            => 3000,
+  :port            => port,
   :ip              => "0.0.0.0",
-  :server_root     => File.expand_path(File.dirname(__FILE__)),
+  :server_root     => Aurita.project.base_path + '/public/' 
 }
 
 web_server = MongrelDaemon.new(OPTIONS)

@@ -10,7 +10,7 @@ module Main
   class User_Login_Data < User_Group
     
     table :user_login_data, :internal
-    primary_key :user_group_id
+    primary_key :user_group_id, User_Group.user_group_id
   
     is_a User_Group, :user_group_id
 

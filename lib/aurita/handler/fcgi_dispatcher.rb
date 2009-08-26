@@ -25,7 +25,7 @@ rescue
 end 
 
 
-class Aurita::Dispatcher 
+class Aurita::FCGI_Dispatcher 
 include Observable
 
   attr_reader :params, :mode, :controller, :action, :dispatch_time, :failed

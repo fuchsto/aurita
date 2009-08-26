@@ -14,7 +14,7 @@ module Main
     extend Aurita::Taggable_Behaviour
 
     table :user_profile, :internal
-    primary_key :user_group_id
+    primary_key :user_group_id, User_Group.user_group_id
 
     is_a User_Login_Data, :user_group_id
 

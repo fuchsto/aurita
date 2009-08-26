@@ -300,7 +300,7 @@ JS
         end
         cat_ids << c.category_id
       }
-      options.fields = cat_ids
+      options.fields = cat_ids.map { |v| v.to_s }
    
       super(params)
       set_options(options) 
@@ -360,7 +360,7 @@ JS
           user_group_ids << u.user_group_id
         end
       }
-      options.fields = user_group_ids
+      options.fields = user_group_ids.map { |v| v.to_s }
    
       super(params)
       set_options(options) 

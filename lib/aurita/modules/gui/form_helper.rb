@@ -59,7 +59,9 @@ module GUI
       if instance then
         model.get_primary_keys.each_pair { |table, keys|
           keys.each { |key|
-            table_attribs = instance.abs_attr[table]
+            # TODO: Prettify - attribute value map is not necessary
+            # and rather expensive. 
+            table_attribs = instance.get_attribute_value_map[table]
             if table_attribs && table_attribs[key]then
               render Hidden_Field.new(:name => "#{table}.#{key}", 
                                       :value => table_attribs[key].to_s, 

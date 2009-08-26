@@ -1,9 +1,13 @@
 
 # Fixes issue with ruby 1.9
-module URI
-  module REGEXP
-    module PATTERN
-      class PARAM
+begin
+  URI::REGEXP::PATTERN::PARAM.class
+rescue
+  module URI
+    module REGEXP
+      module PATTERN
+        class PARAM
+        end
       end
     end
   end
@@ -13,14 +17,14 @@ require('fcgi')
 require('rubygems')
 require('aurita')
 
-Aurita.import :rack_dispatcher
+Aurita.import 'handler/fcgi_dispatcher'
 
 module Aurita
 module Handler
 
   class FCGI
 
-    @@dispatcher = Aurita::Rack_Dispatcher.new()
+    @@dispatcher = Aurita::FCGI_Dispatcher.new()
 
     def initialize()
     end
@@ -41,12 +45,10 @@ module Handler
       rescue ::Exception => exception
         cgi.out { "#{exception.message}<br />
                    #{exception.backtrace.join('<br />')}" }
-      ensure
-        @@dispatcher.finish_request
       end
     end
 
   end # class Aurita::Handler::FCGI
 
 end
-
+end

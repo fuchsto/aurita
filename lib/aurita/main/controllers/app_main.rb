@@ -214,7 +214,7 @@ module Main
       set_http_header('expires' => Time.now-24*60*60)
 
       log('logout user')
-      Aurita.session.delete_user_login_cookie()
+      Aurita.session.close()
 
       render_view(:after_logout)
     end

@@ -40,9 +40,9 @@ module Main
     def toggle_readonly
       user_cat = User_Category.find(1).with((User_Category.user_group_id == param(:user_group_id)) & (User_Category.category_id == param(:category_id))).entity
       if user_cat.readonly == 'f' then
-        user_cat.readonly = 't' 
+        user_cat.readonly = true
       else
-        user_cat.readonly = 'f' 
+        user_cat.readonly = false
       end
       user_cat.commit
     end

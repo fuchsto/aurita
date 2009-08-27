@@ -25,23 +25,10 @@ module Main
 
       old_tags = Tag_Index.select { |ti|
         ti.where(Tag_Index.content_id == content.content_id)
-      }.map { |t| t.tag }
+      }.to_a.map { |t| t.tag }
       
       new_tags = content.tags.gsub('{','').gsub('}','').gsub(',',' ').split(' ')
       new_tags.each { |tag|
-#       tag_parts = tag.split(':')
-#       if tag_parts.length == 1 then
-#         type = 'IMMEDIATE'
-#       else
-#         case tag_parts[0]
-#           when 'usr' then type = 'CHANGER' 
-#           when 'con' then type = 'CONTENT' 
-#           when 'cat' then type = 'CATEGORY'
-#           when 'inh' then type = 'INHERITED'
-#           when 'med' then type = 'MEDIA'
-#         end
-#       end
-
         begin
           if !old_tags.include?(tag) then
             Tag_Index.create( :content_id => content.content_id, 

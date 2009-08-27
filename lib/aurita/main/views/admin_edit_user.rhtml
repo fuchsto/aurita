@@ -39,7 +39,7 @@
 
 <div class="form_box">
   <div id="user_role_list">
-    <% if user.locked == 't' then %>
+    <% if user.locked then %>
       <h2><%= tl(:activate_user) %></h2>
       <br />
       <%= tl(:unlock_user_hints) %>

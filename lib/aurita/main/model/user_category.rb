@@ -38,7 +38,7 @@ module Main
     # Ensures that every new permission to a Category is readonly 
     # at first. 
     def self.before_create(args)
-      args[:readonly] = 't'
+      args[:readonly] = true
     end
 
   end

@@ -118,8 +118,8 @@ module Handler
         end
       end
       @app = Rack::Deflater.new(@app) if opts[:compress]
-      @app = Rack::Static.new(@app, :root => Aurita.project.base_path + 'public/assets/') 
-#     @app = Rack::ContentLength.new(@app)
+    # @app = Rack::Static.new(@app, :root => Aurita.project.base_path + 'public/assets/') 
+      @app = Rack::ContentLength.new(@app)
       @app = Rack::Chunked.new(@app) if opts[:chunked]
     end
     

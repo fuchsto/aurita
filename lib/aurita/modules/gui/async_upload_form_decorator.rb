@@ -21,7 +21,7 @@ module GUI
       HTML.div.form_box { 
         HTML.div.form_content { @form } + 
         HTML.div.form_button_bar(:id => @form.dom_id + '_buttons')  {
-          Button.new(:class => :submit, :onclick => Javascript.Aurita.submit_upload_form(@form.dom_id.to_s), :icon => :ok) { tl(:ok) } + 
+          Button.new(:type => :submit, :class => :submit, :onclick => Javascript.Aurita.submit_upload_form(@form.dom_id.to_s), :icon => :ok) { tl(:ok) } + 
           Button.new(:class => :cancel, :onclick => Javascript.Aurita.cancel_form(@form.dom_id.to_s), :icon => :cancel) { tl(:cancel) } 
         }
       }

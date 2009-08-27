@@ -82,6 +82,9 @@ module Aurita
     # {{{
       @@logger.log("delete user login cookie")
       @env['rack.session'][:drop] = true
+      @env['rack.session'][:close] = true
+      @env['rack.session.options'][:drop] = true
+      @env['rack.session.options'][:close] = true
     end # def }}}
     
     # Returns active interface language for this session

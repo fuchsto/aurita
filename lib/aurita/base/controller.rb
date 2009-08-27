@@ -188,8 +188,10 @@ class Aurita::Base_Controller
     error_details = []
     excep.serialize.each_pair { |table, fields| 
       fields.each_pair { |attrib_name, reason|
+        message = tl("#{table.sub('.','_')}_#{attrib_name}__#{reason}".to_sym)
         form_element_id = "#{table.gsub('.','_')}_#{attrib_name}"
-        error_details << "{ field_id: '#{form_element_id}', reason: '#{reason.to_s}' }"
+        error_details << "{ field_id: '#{form_element_id}', reason: '#{reason.to_s}', " << 
+                           "value: '#{param(attrib_name.to_sym)}', message: '#{message}}' }"
       }
     }
     script << error_details.join(',')

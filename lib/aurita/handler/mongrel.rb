@@ -4,6 +4,7 @@ require 'stringio'
 require 'rack'
 require 'rack/content_length'
 require 'rack/chunked'
+require 'rack/deflater'
 require 'rack/session/memcache'
 require 'aurita'
 
@@ -15,6 +16,14 @@ module Handler
   class Aurita_Application
 
     @@dispatcher = Aurita::Rack_Dispatcher.new()
+
+    attr_accessor :logger
+
+    def initialize(logger=nil)
+      @logger   = logger
+      @logger ||= ::Logger.new(STDERR) 
+      super()
+    end
 
     private
 
@@ -28,20 +37,33 @@ module Handler
     #
     def rewrite_url(request)
       uri = request['REQUEST_URI']
-      if !uri.include?('?') then
-        uri_p = uri.split('/')
-        if uri_p.length >= 4 && uri_p[1] == 'aurita' then
-          host       = uri_p[0]
-          controller = uri_p[2]
-          action     = uri_p[3]
-          get_params = uri_p[4]
-          query = "controller=#{controller}&action=#{action}&#{get_params}"
-          path  = "/aurita/run?#{query}"
-          uri   = "#{host}#{path}"
-          request['REQUEST_URI']  = uri
-          request['REQUEST_PATH'] = path
-          request['QUERY_STRING'] = query
-        end
+      # Poor man's routing: 
+      routed = false
+      uri_p  = uri.split('/')
+      if !uri.include?('?') && uri_p.length >= 4 then
+        host       = uri_p[0]
+        controller = uri_p[2]
+        action     = uri_p[3]
+        get_params = uri_p[4]
+
+        routed = true
+      end
+      if uri_p[2] == 'assets' && uri_p.length == 4
+        host       = uri_p[0]
+        controller = 'Wiki::Media_Asset'
+        action     = 'proxy'
+        m_id       = uri_p[3].gsub(/asset_([^\.])\.(.+)/,'\1')
+        get_params = "media_asset_id=#{m_id}"
+        routed = true
+      end
+      
+      if routed then
+        query = "controller=#{controller}&action=#{action}&#{get_params}"
+        path  = "/aurita/run?#{query}"
+        uri   = "#{host}#{path}"
+        request['REQUEST_URI']  = uri
+        request['REQUEST_PATH'] = path
+        request['QUERY_STRING'] = query
       end
     end
 
@@ -54,13 +76,15 @@ module Handler
     def call(env)
       # Apply rewrites *before* creating Rack::Request from it: 
       rewrite_url(env) 
-      STDERR.puts 'REWRITE ================================================='
+      @logger.debug { 'REQUEST =================================================' }
       env.each_pair { |k,v|
-        STDERR.puts "REWRITE #{k} - #{v.inspect}"
+        @logger.debug { "REQUEST #{k} - #{v.inspect}" }
       }
       request    = Rack::Request.new(env)
-      STDERR.puts "PARAMS: #{request.params.inspect}"
-      STDERR.write(request['rack.errors'].read) if request['rack.errors']
+
+      @logger.debug { "REQUEST PARAMS: #{request.params.inspect}" }
+      @logger.debug { request['rack.errors'].read } if request['rack.errors']
+
       @@dispatcher.dispatch(request)
 
       [ @@dispatcher.status, @@dispatcher.response_header, @@dispatcher.response_body ]
@@ -77,18 +101,24 @@ module Handler
   #
   class Mongrel < ::Mongrel::HttpHandler
 
-    def initialize
-      app = Aurita::Handler::Aurita_Application.new
-      begin
-        app = Rack::Session::Memcache.new(app, 
-                                          :domain => Aurita.project.domain, 
-                                          :expire_after => 2592000)
-      rescue ::Exception => no_memcache
-        app = Rack::Session::Pool.new(app, 
-                                      :domain => Aurita.project.domain, 
-                                      :expire_after => 2592000)
+    attr_reader :logger
+
+    def initialize(opts={})
+      @logger   = opts[:logger] 
+      @logger ||= ::Logger.new(STDERR)
+      @app = Aurita::Handler::Aurita_Application.new()
+      @app.logger = @logger
+      unless opts[:no_session] then
+        begin
+          @app = Rack::Session::Memcache.new(@app)
+        rescue ::Exception => no_memcache
+          @logger.info { "#{self.class.to_s}: Falling back to Session::Pool" }
+          @app = Rack::Session::Pool.new(@app)
+        end
       end
-      @app = Rack::Chunked.new(Rack::ContentLength.new(app))
+      @app = Rack::Deflater.new(@app) if opts[:compress]
+      @app = Rack::ContentLength.new(@app)
+      @app = Rack::Chunked.new(Rack::ContentLength.new(@app)) if opts[:chunked]
     end
     
     def process(request, response)

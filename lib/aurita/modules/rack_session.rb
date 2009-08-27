@@ -11,11 +11,27 @@ Aurita::Main.import_model :user_login_data
 module Aurita
 
 
-  # Proxy class for real CGI session. 
-  # Will be refactored to proxy class for Rack session, but 
-  # usage won't be affected. 
+  # Proxy class for real Rack::Session. 
+  # Within your application, this class is used indirectly 
+  # via Aurita.session or Aurita.user ( = Aurita.session.user). 
   #
-  # 
+  # Aurita.user returns the User_Group instance of the current user: 
+  #
+  #    puts 'Your user name is ' << Aurita.user.user_group_name
+  #    puts 'Your user id is ' << Aurita.user.user_group_id
+  #
+  # In case the user is not logged in, the guest user instance 
+  # (user with user_group_id = 0) will be returned. 
+  # Note that the guest user is a singleton, so changes on this 
+  # instance will affect all users that aren't logged in. 
+  #
+  # Session variables can be set via: 
+  #
+  #   Aurita.session['your_param'] = 'value'
+  #
+  # .. and read via: 
+  #
+  #   session_param = Aurita.session['your_param']
   #
   class Rack_Session
 
@@ -29,8 +45,7 @@ module Aurita
       @user         = false
       @env          = rack_request.env
       @session_opts = @env['rack.session.options']
-      @sid          = @session_opts[:id] if @session_opts
-      STDERR.puts 'SESSION ID: ' << @sid.inspect
+      @session_id   = @session_opts[:id] if @session_opts
     end
 
     def param(key)
@@ -61,39 +76,17 @@ module Aurita
       @user = user
     end
      
-    # Set a new authentication cookie for this session containing 
-    # the given parameters: 
-    #
-    # - login: Login of user as MD5
-    # - pass:  Password of user as MD5
-    # - user_group_id: ID of user
-    #
-    def set_user_login_cookie(login, pass, user_group_id, sticky='f')
-    # {{{
-      set_param('user_group_id', user_group_id)
-    end # def }}}
-
     # Delete this session's authentication cookie by setting its 
     # expiration time to a date in the past, then close this session. 
-    def delete_user_login_cookie() 
-      @@logger.log("delete user login cookie")
+    def close() 
     # {{{
+      @@logger.log("delete user login cookie")
+      @env['rack.session'][:drop] = true
     end # def }}}
     
-    # Get cookie contents that authenticate this session's user as 
-    # Array:
-    #
-    #   [ <user_group_id, <login as md5>, <pass as md5>, <session timestamp> ]
-    #
-    #   
-    def get_user_login_cookie 
-    # {{{
-      @@logger.log("get user login cookie")
-    end # def }}}
-
     # Returns active interface language for this session
     def language
-      :de
+      param('lang') || :de
     end
 
   end # class

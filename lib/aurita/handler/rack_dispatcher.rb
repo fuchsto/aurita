@@ -118,8 +118,13 @@ include Observable
           @response_header.update(response[:http_header]) if response[:http_header]
           response[:html]   = element.string if (element.respond_to?(:string) && response[:html] == '')
           if response[:file] then
-            # TODO: Implement this for Rack! 
-            cgi_output(File.open(response[:file], "rb").read)
+            # For FCGI dispatcher without using X-Sendfile, this was: 
+            # cgi_output(File.open(response[:file], "rb").read)
+            @response_headers['Content-Type'] = "application/force-download" 
+            @response_headers['Content-Disposition'] = "attachment; filename=\"#{File.basename(filename)}\"" 
+            @response_headers["X-Sendfile"] = response[:file]
+            @response_headers['Content-length'] = File.size(response[:file])
+
             return
           end
         rescue ::Exception => failed

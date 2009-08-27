@@ -1,4 +1,3 @@
-
 require('aurita/controller')
 require('aurita-gui/javascript')
 Aurita.import_module :gui, :context_menu
@@ -201,12 +200,9 @@ module Main
       
       if user then
         log { "Login accepted: #{user.user_group_id}" }
-        pstor_key = Aurita.session.set_user_login_cookie(user.login, 
-                                                         user.pass, 
-                                                         user.user_group_id, 
-                                                         param(:sticky).to_s == '0')
-        log { "Login successful: #{user.user_group_id}, #{pstor_key.session_id}" }
-        puts "({'session_id': '#{pstor_key.session_id}'})"
+        Aurita.session['user_group_id'] = user.user_group_id
+        sid = Aurita.session.session_id
+        puts "({'session_id': '#{sid}'})"
       else
         puts '0'
       end

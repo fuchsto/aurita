@@ -5,6 +5,7 @@ require 'rack'
 require 'rack/content_length'
 require 'rack/chunked'
 require 'rack/deflater'
+require 'rack/static'
 require 'rack/session/memcache'
 require 'aurita'
 
@@ -48,7 +49,7 @@ module Handler
 
         routed = true
       end
-      if uri_p[2] == 'assets' && uri_p.length == 4
+      if false && uri_p[2] == 'assets' && uri_p.length == 4
         host       = uri_p[0]
         controller = 'Wiki::Media_Asset'
         action     = 'proxy'
@@ -117,8 +118,9 @@ module Handler
         end
       end
       @app = Rack::Deflater.new(@app) if opts[:compress]
-      @app = Rack::ContentLength.new(@app)
-      @app = Rack::Chunked.new(Rack::ContentLength.new(@app)) if opts[:chunked]
+      @app = Rack::Static.new(@app, :root => Aurita.project.base_path + 'public/assets/') 
+#     @app = Rack::ContentLength.new(@app)
+      @app = Rack::Chunked.new(@app) if opts[:chunked]
     end
     
     def process(request, response)
@@ -143,6 +145,17 @@ module Handler
       env.delete "PATH_INFO" if env["PATH_INFO"] == ""
 
       status, headers, body = @app.call(env)
+      if headers['X-Content-Length'] then
+        @logger.debug { "Forcing Content-Length to #{headers['X-Content-Length']}" }
+        headers.delete('Content-Length') # Remove existing Content-Length=0
+        headers['Content-Length'] = headers['X-Content-Length'] 
+        headers.delete('X-Content-Length')
+      #  headers.delete('Connection')
+      #  headers.delete('connection')
+      end
+      if body.is_a?(Rack::File) then
+        status, header, body = body.call(env)
+      end
 
       begin
         # Mapping Rack response to Mongrel response

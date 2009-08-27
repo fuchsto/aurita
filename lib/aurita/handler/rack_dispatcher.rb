@@ -118,14 +118,35 @@ include Observable
           @response_header.update(response[:http_header]) if response[:http_header]
           response[:html]   = element.string if (element.respond_to?(:string) && response[:html] == '')
           if response[:file] then
-            # For FCGI dispatcher without using X-Sendfile, this was: 
-            # cgi_output(File.open(response[:file], "rb").read)
-            @response_headers['Content-Type'] = "application/force-download" 
-            @response_headers['Content-Disposition'] = "attachment; filename=\"#{File.basename(filename)}\"" 
-            @response_headers["X-Sendfile"] = response[:file]
-            @response_headers['Content-length'] = File.size(response[:file])
-
-            return
+            # TODO: 
+            # if Aurita.server.allows_x_sendfile then
+            filename = response[:file]
+            filesize = File.size(filename)
+            if false then
+              # For FCGI dispatcher without using X-Sendfile, this was: 
+              # cgi_output(File.open(response[:file], "rb").read)
+              @logger.log("Sending file: #{filename}")
+              @logger.log("Filesize: #{filesize}")
+              @response_header['Content-Type'] = "application/force-download" 
+              @response_header['Content-Disposition'] = "attachment; filename=\"#{File.basename(filename)}\"" 
+              @response_header["X-Sendfile"] = filename
+              @response_header["X-LIGHTTPD-send-file"] = filename
+              # Use X-Content-length, as Content-length will be overwritten 
+              # by Rack::ContentLength, which determines value from size of 
+              # response body. 
+              @response_header['X-Content-Length'] = filesize
+              @response_header['Content-Length'] = filesize
+              @response_body = ''
+              return
+            else 
+#             @response_body = Rack::File.new(filename)
+              @response_header['X-Content-Length'] = filesize
+              @response_header['Content-Length'] = filesize
+              @response_body = File.open(filename, "r").read
+            end
+          else
+            length = @response_body.to_s.length
+            @response_header['Content-Length'] = length.to_s
           end
         rescue ::Exception => failed
           @failed = true

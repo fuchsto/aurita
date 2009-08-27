@@ -61,7 +61,7 @@ class Mongrel_Daemon
 
     @logger.info { "Mongrel_Daemon: run entered" }
     begin
-      @logger.info { "Mongrel_Daemon: http_server.run" }
+      @logger.info("Mongrel_Daemon: http_server.run")
       @http_server.run.join
     rescue StandardError, ::Exception => err
       @logger.error { "Mongrel_Daemon: #{err}" }

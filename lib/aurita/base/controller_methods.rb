@@ -380,10 +380,10 @@ module Aurita
     #
     # File would be uploaded to <project dir>/public/assets/tmp/uploads/document
     #
-    def upload_file(params)
+    def receive_file(params)
     # {{{
       
-      form_file_tag_name = params[:form_file_tag_name]
+      form_file_tag_name = params[:from_param]
       relative_path      = params[:relative_path]
       server_filename    = params[:server_filename]
 
@@ -391,47 +391,55 @@ module Aurita
 
       begin
 
-        tmpfile = @request.params[form_file_tag_name.to_s].first
-        server_filename    = sanitize_filename(tmpfile.original_filename) unless server_filename        
-        if server_filename.to_s == '' then 
-          filename = sanitize_filename(tmpfile.original_filename)
-        else
-          filename = server_filename
+        # Be compatible to Rack and CGI requests: 
+        if @request.is_a?(Rack::Request) then
+          file_info         = @request.params[form_file_tag_name.to_s]
+          tmpfile           = file_info[:tempfile] 
+          original_filename = file_info[:filename]
+          filetype          = file_info[:type]
+        else 
+          # Assuming CGI request
+          tmpfile           = @request.params[form_file_tag_name.to_s].first
+          filetype          = tmpfile.content_type
+          original_filename = tmpfile.original_filename
+          filetype.gsub!("\r",'')
+          filetype.gsub!("\n",'')
+          filetype.gsub!(' ','')
         end
-        filetype  = tmpfile.content_type
-        
-        if tmpfile.instance_of? Tempfile then
-        # Fix permissions of tempfile in CGI's tmp/ directory: 
-          File.chmod(0777, tmpfile.local_path)
-        end
-        path_to = Aurita.project_path + '/public/assets/tmp/'
-        path_to   += relative_path+'/' if relative_path
-        path_to   += filename
 
-        path_to.gsub!('//','/')
+        path_from = nil
+        original_filename = sanitize_filename(original_filename) 
+        server_filename ||= original_filename
 
         if tmpfile.instance_of?(StringIO) then
-          local_path        = nil # not existing, not needed
-          original_filename = tmpfile.original_filename
+          # not existing, not needed
         elsif tmpfile.instance_of?(Tempfile) then
-          local_path        = tmpfile.local_path
-          original_filename = tmpfile.original_filename
+          # Fix permissions of tempfile in CGI's tmp/ directory: 
+          path_from   = tmpfile.local_path if tmpfile.respond_to?(:local_path)
+          path_from ||= tmpfile.path
+          File.chmod(0777, path_from)
         end
-        Aurita.log 'UPLOAD: tmpfile ' << tmpfile.inspect
-        Aurita.log 'UPLOAD: path_to ' << path_to.inspect
-        Aurita.log 'UPLOAD: original_filename ' << original_filename.inspect
-        Aurita.log 'UPLOAD: local_path ' << local_path.inspect
-        Aurita.log 'UPLOAD: filetype ' << filetype.inspect
-        Aurita.log 'UPLOAD: info ' << info.inspect
         
-        info[:type] = filetype.gsub("\r",'').gsub("\n",'').gsub(' ','')
-        info[:original_filename] = sanitize_filename(tmpfile.original_filename)
-        info[:server_filename] = relative_path.to_s + '/' + filename
-        info[:server_filepath] = path_to.to_s
-        Aurita.log 'UPLOAD: info ' << info.inspect
+        path_to  = Aurita.project_path + '/public/assets/tmp/'
+        path_to += relative_path+'/' if relative_path
+        path_to += server_filename
+
+        path_to.squeeze!('/')
+
+        Aurita.log { 'UPLOAD: tmpfile ' << tmpfile.inspect } 
+        Aurita.log { 'UPLOAD: path_to ' << path_to.inspect } 
+        Aurita.log { 'UPLOAD: path from ' << path_to.inspect }
+        Aurita.log { 'UPLOAD: filetype ' << filetype.inspect }
+        Aurita.log { 'UPLOAD: info ' << info.inspect }
+        
+        info[:type]              = filetype
+        info[:original_filename] = original_filename
+        info[:server_filename]   = server_filename
+        info[:server_filepath]   = path_to.to_s
+        Aurita.log { 'UPLOAD: info ' << info.inspect } 
 
         if tmpfile.instance_of? Tempfile then
-          FileUtils.copy(local_path, path_to)
+          FileUtils.copy(path_from, path_to)
         else 
           File.open(path_to.untaint, 'w') { |file| 
             File.chmod(0777, path_to)

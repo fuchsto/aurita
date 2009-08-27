@@ -116,7 +116,7 @@ module GUI
         return ''
       end
 
-      onclick = "Cuba.load({ action: '#{CGI.escape(e.interface).gsub('%2F','/').gsub('%3D','=')}' }); "
+      onclick = "Aurita.load({ action: '#{CGI.escape(e.interface).gsub('%2F','/').gsub('%3D','=')}' }); "
       label_style = 'padding: 2px; margin: -2px; '
       if e.attr[:entry_type] == 'BLANK_NODE' then
         label_style << 'color: black; '
@@ -124,7 +124,9 @@ module GUI
 
       params = { :hierarchy_entry_id => e.hierarchy_entry_id, 
                  :hierarchy_id       => e.hierarchy_id }
-      return Context_Menu_Element.new(HTML.div.link(:style => label_style, :onclick => onclick) { e.label }, 
+      return Context_Menu_Element.new(HTML.div.link(:style => label_style) { 
+                                        HTML.a(:onclick => onclick) { e.label } 
+                                      }, 
                                       :entity => e, 
                                       :params => params)
     end

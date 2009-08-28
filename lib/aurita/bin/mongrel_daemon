@@ -8,6 +8,8 @@ require 'mongrel'
 require 'yaml'
 require 'zlib'
 
+begin
+
 project_name = ARGV[0]
 port         = ARGV[1]
 port       ||= 3000
@@ -31,6 +33,7 @@ logfile = "/var/log/aurita/aurita_#{project_name}_debug.log"
 
 Aurita.load_project project_name.to_sym
 
+if false then
 Lore.enable_logging
 Lore.enable_query_log
 Lore.logfile                       = logfile
@@ -39,6 +42,14 @@ Lore.logger.level                  = Logger::DEBUG
 Lore.query_logger.level            = Logger::DEBUG
 Aurita::Configuration.sys_log_path = logfile
 Aurita::Configuration.run_log_path = logfile
+else
+Lore.disable_logging
+Lore.disable_query_log
+Lore.logger.level                  = Logger::ERROR
+Lore.query_logger.level            = Logger::ERROR
+Aurita::Configuration.sys_log_path = false
+Aurita::Configuration.run_log_path = false
+end
 
 Aurita.bootstrap
 
@@ -69,4 +80,11 @@ daemon_logger = ::Logger.new(logfile)
 daemon_logger.progname = "(Port #{port})"
 web_server.logger = daemon_logger
 web_server.run
+
+rescue ::Exception => e
+  STDERR.puts e.message
+  e.backtrace.each { |l|
+    STDERR.puts l
+  }
+end
 

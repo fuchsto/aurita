@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Usage: 
+# 
+#    flush_cluster <project_name> <port_start> <port_end>
+# 
+
+PROJECT=$1
+PORT_START=$2
+PORT_END=$3
+AURITA_BIN_PATH='/usr/share/gitwc/aurita/lib/aurita/bin'
+red='\e[0;31m'
+RED='\e[1;31m'
+blue='\e[0;34m'
+BLUE='\e[1;34m'
+cyan='\e[0;36m'
+CYAN='\e[1;36m'
+NC='\e[0m' # No Color
+
+if [ $# -lt 3 ]; then
+  exit 1
+fi
+
+if [ $EUID -eq 0 ]; then
+  CMDPREF=''
+else
+  CMDPREF=sudo 
+fi
+
+function test_success {
+  if [ $? -eq 0 ]; then
+    echo -e "${CYAN} [ OK ]${NC}"
+  else
+    echo -e "${RED} [ FAIL ]${NC}"
+  fi
+}
+
+echo -e "Flushing cluster for $PROJECT ... \t\t\t\t"
+ps aux | grep 'mongrel_daemon' | grep $PROJECT | grep -v 'vim' | awk '{print $2}' | xargs $CMDPREF kill -9 >/dev/null 2>&1
+
+for port in `seq $PORT_START $PORT_END`
+do
+$CMDPREF /usr/bin/env ruby $AURITA_BIN_PATH/mongrel_daemon $PROJECT $port 2>/var/log/aurita/mongrel_error.log & 
+echo -ne "port $port " 
+test_success
+done

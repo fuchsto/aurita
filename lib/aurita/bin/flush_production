@@ -1,0 +1,68 @@
+#!/bin/bash
+
+
+red='\e[0;31m'
+RED='\e[1;31m'
+blue='\e[0;34m'
+BLUE='\e[1;34m'
+cyan='\e[0;36m'
+CYAN='\e[1;36m'
+NC='\e[0m' # No Color
+
+AURITA_BIN_PATH='/usr/share/gitwc/aurita/lib/aurita/bin'
+AURITA_PROJECT_PATH='/usr/share/gitwc/aurita_projects'
+
+if [ $EUID -eq 0 ]; then
+  CMDPREF=''
+else
+  CMDPREF=sudo 
+fi
+
+function test_success {
+  if [ $? -eq 0 ]; then
+    echo -e "${CYAN} [ OK ]${NC}"
+  else
+    echo -e "${RED} [ FAIL ]${NC}"
+  fi
+}
+function test_kill {
+  if [ $? -eq 0 ]; then
+    echo -e "${CYAN} [ OK ]${NC}"
+  else
+    echo -e "${RED} [ NONE ]${NC}"
+  fi
+}
+
+echo -ne "Deleting cache ...\t\t\t\t\t\t"
+$CMDPREF find /tmp/ -name 'lore_cache__*' -exec rm -f {} \; >/dev/null
+test_success
+
+if [ "$1" = '-a' ]; then
+echo -ne "Stopping lighttpd  ... \t\t\t\t\t\t"
+$CMDPREF /etc/init.d/lighttpd stop
+test_kill
+fi
+
+echo -ne "Setting permissions ... \t\t\t\t\t"
+$CMDPREF chown -R www-data:www-data /var/log/aurita
+$CMDPREF chmod -R 777 /var/log/aurita
+$CMDPREF chown -R www-data:www-data /var/log/lore
+$CMDPREF chmod -R 777 /var/log/lore
+test_success
+
+echo -ne "Flushing logs ... \t\t\t\t\t\t"
+$CMDPREF rm -f /var/log/aurita/*.log
+test_success
+
+$CMDPREF `dirname $0`/flush_cluster default 3001 3002
+$CMDPREF `dirname $0`/flush_cluster maecki 3003 3004
+$CMDPREF `dirname $0`/flush_cluster gnaier 3005 3006
+$CMDPREF `dirname $0`/flush_cluster wortundform 3007 3008
+# $CMDPREF `dirname $0`/flush_cluster demo 3020 3021
+
+if [ "$1" = '-a' ]; then
+echo -ne "Restarting lighttpd ... \n"
+$CMDPREF /etc/init.d/lighttpd start >/var/log/aurita/server_production.log 2>&1
+test_success
+fi
+

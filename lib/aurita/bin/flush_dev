@@ -40,16 +40,9 @@ test_success
 
 if [ "$2" = '-a' ]; then
 echo -ne "Stopping lighttpd  ... \t\t\t\t\t\t"
-ps aux | grep 'lighttpd_mongrel.conf' | grep -v 'vim' | awk '{print $2}' | xargs $CMDPREF kill -9 >/dev/null 2>&1
+ps aux | grep 'lighttpd' grep 'lighttpd_dev.conf' | grep -v 'vim' | awk '{print $2}' | xargs $CMDPREF kill -9 >/dev/null 2>&1
 test_kill
 fi
-
-echo -ne "Stopping cluster ...\t\t\t\t\t\t"
-# $CMDPREF rm -f /tmp/ruby-fastcgi-aurita-$1*
-# ps aux | grep lighttpd | grep -v 'vim' | awk '{print $2}' | xargs kill -9  >/dev/null 2>&1
-ps aux | grep 'mongrel_daemon' | grep $1 | grep -v 'vim' | awk '{print $2}' | xargs $CMDPREF kill -9 >/dev/null 2>&1
-sleep 0
-test_success
 
 echo -ne "Flushing logs ... \t\t\t\t\t\t"
 $CMDPREF echo "" > /var/log/lore/query.log
@@ -65,10 +58,7 @@ $CMDPREF chmod -R 777 /var/log/lore
 test_success
 
 echo -ne "Starting cluster ... \t\t\t\t\t\t"
-$CMDPREF ruby $AURITA_BIN_PATH/mongrel_daemon $1 3001 2>/var/log/aurita/mongrel.log & 
-$CMDPREF ruby $AURITA_BIN_PATH/mongrel_daemon $1 3002 2>/var/log/aurita/mongrel.log & 
-$CMDPREF ruby $AURITA_BIN_PATH/mongrel_daemon $1 3003 2>/var/log/aurita/mongrel.log & 
-$CMDPREF ruby $AURITA_BIN_PATH/mongrel_daemon $1 3004 2>/var/log/aurita/mongrel.log & 
+$CMDPREF `dirname $0`/flush_cluster $1 3032 3034
 test_success
 
 if [ "$2" = '-a' ]; then

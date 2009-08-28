@@ -2,23 +2,23 @@
 class Integer
 
   def filesize
-    size = self.to_i
+    size = self.to_f
     size_suffix = ' Byte'
     if (size > 1024) then 
-      size = size / 1024
-      size_suffix = ' Kb'
+      size = size / 1024.0
+      size_suffix = ' Kib'
     else
       return size.to_s << size_suffix
     end
     if (size > 1024) then
-      size = size / 1024
-      size_suffix = ' Mb'
+      size = size / 1024.0
+      size_suffix = ' Mib'
     end
     if (size > 1024) then
-      size = size / 1024
-      size_suffix = ' Gb'
+      size = size / 1024.0
+      size_suffix = ' Gib'
     end
-    size = ((size * 100).round.to_f / 100).to_s << size_suffix
+    size = (size.round(2)).to_s << size_suffix
     size
   end
 

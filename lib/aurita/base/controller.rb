@@ -27,6 +27,18 @@ Aurita.import(:base, :plugin_register)
 #
 #   log('the log message') 
 #
+# This will log on DEBUG level. Specify another one like this: 
+#
+#   log.info { 'I will be logged on log level INFO' }
+#
+# Or better: 
+#
+#   log.info { "complex operation returned: #{complex_operation()}" }
+#
+# When passing a block, its content will not be evaluated in case 
+# the logger is disabled or ignoring this log level, which 
+# increases performance in production mode. 
+#
 # Log messages will be written to path/to/log/aurita/run.log
 #
 # == Render strings
@@ -134,9 +146,11 @@ class Aurita::Base_Controller
   protected
 
   def self.log(message, level=nil, &block)
+    return @@logger unless message
     @@logger.log(message, level, &block)
   end
   def log(message=nil, level=nil, &block)
+    return @@logger unless message
     @@logger.log(message, level, &block)
   end
 
@@ -275,15 +289,43 @@ class Aurita::Base_Controller
   #     ...
   #   end
   #
+  # Aliases for guard_interface are guard_interfaces() and guard(). 
+  #
+  # For guarding default CRUD methods (show, list, add, perform_add, 
+  # update, perform_update, delete, perform_delete), use: 
+  #
+  #   guard_interface(:CRUD)
+  #
+  # Or to just guard add, delete and update methods, but allow show 
+  # and list:
+  #
+  #   guard_interface(:CUD)
+  #
+  # This also works along with other methods, like: 
+  #
+  #   guard(:CRUD, :reorder, :publish)
   #
   def self.guard_interface(*methods, &block)
   # {{{
     @guard_blocks = Hash.new unless @guard_blocks
     methods.each { |m|
-      @guard_blocks[m] = Array.new unless (@guard_blocks[m].instance_of?(Array))
-      @guard_blocks[m] << block
+      if m == :CRUD then
+        guard_interface(:show, :list, :add, :perform_add, :update, 
+                        :perform_update, :delete, :perform_delete)
+      elsif m == :CUD then
+        guard_interface(:add, :perform_add, :update, 
+                        :perform_update, :delete, :perform_delete)
+      else
+        @guard_blocks[m] = Array.new unless (@guard_blocks[m].instance_of?(Array))
+        @guard_blocks[m] << block
+      end
     }
   end # }}}
+
+  class <<self
+    alias guard guard_interface
+    alias guard_interfaces guard_interface
+  end
 
   # Set default values for request params in case 
   # they are missing. 
@@ -294,7 +336,7 @@ class Aurita::Base_Controller
   #
   def default_params(params={})
     params.each_pair { |k,v|
-      @params[k] = v unless @params[k]
+      @params[k.to_sym] = v unless @params[k.to_sym]
     }
   end
   
@@ -543,9 +585,10 @@ class Aurita::Base_Controller
   #   param(:foo) --> 23
   #   param(:bar) --> 'the value'
   #
-  # A default value can be specified: 
+  # A default value can be specified that will be returned 
+  # if the requested request parameter is missing: 
   #
-  #   sort_dir = param(:sort_dir, :asc)
+  #   sort_dir = param(:sort_dir, 'asc')
   #
   # This is short for
   #   
@@ -569,7 +612,7 @@ class Aurita::Base_Controller
   def set_params(param_hash={})
   # {{{
     param_hash.each_pair { |k,v|
-      @params[k] = v
+      @params[k.to_sym] = v
     }
   end # }}}
   alias set_param set_params
@@ -646,7 +689,6 @@ public
         id_values << param(key.to_sym) if param(key.to_sym) 
       }
       @instance_id = id_values.first 
-    # @instance_id = id_values
     end
     return @instance_id 
   end # }}}
@@ -690,7 +732,7 @@ public
   # Returns Hash of form values to be used in model_form 
   # in case no other value has been specified. Example: 
   # 
-  #   { User.is_admin => 'f' }
+  #   { User.is_admin => false }
   #
   def default_form_values
     Hash.new

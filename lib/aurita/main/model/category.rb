@@ -60,7 +60,8 @@ module Main
       Category.touch(category_id)
     end
 
-    # Return (virtual) category "no category". 
+    # Return (virtual) category "no category", which is Category with 
+    # category_id '1'. 
     def self.unassigned_category
       # Reserved id 1 -> generic category id
       @unassigned_category = Category.load(:category_id => 1) unless @unassigned_category

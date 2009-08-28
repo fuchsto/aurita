@@ -47,6 +47,17 @@ module Main
       }
       create_for(content, category_ids)
     end
+
+    def self.after_create(instance)
+      Category.touch(instance.category_id)
+    end
+    def self.after_delete(args)
+      Category.touch(args[:category_id])
+    end
+    def self.after_update(instance)
+      Category.touch(instance.category_id)
+    end
+
   end
 
   class Content

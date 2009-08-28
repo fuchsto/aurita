@@ -6,6 +6,10 @@ module Aurita
 module Main
 
   class Category_Controller < App_Controller
+
+    guard(:CUD) { |controller_instance|
+      Aurita.user.is_admin? 
+    }
     
     def form_groups
       [

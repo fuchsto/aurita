@@ -21,6 +21,7 @@ if [ $# -lt 2 ]; then
   exit 1
 fi
 if [ $# -eq 2 ]; then
+  echo "no end port"
   PORT_END=$2
 fi
 
@@ -41,9 +42,4 @@ function test_success {
 echo -e "Flushing cluster for $PROJECT ... \t\t\t\t"
 ps aux | grep 'mongrel_daemon' | grep $PROJECT | grep -v 'vim' | awk '{print $2}' | xargs $CMDPREF kill -9 >/dev/null 2>&1
 
-for port in `seq $PORT_START $PORT_END`
-do
-$CMDPREF $AURITA_BIN_PATH/start_cluster $PROJECT $port 
-echo -ne "port $port " 
-test_success
-done
+$CMDPREF $AURITA_BIN_PATH/start_cluster $PROJECT $PORT_START $PORT_END

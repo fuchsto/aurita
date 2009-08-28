@@ -54,10 +54,10 @@ echo -ne "Flushing logs ... \t\t\t\t\t\t"
 $CMDPREF rm -f /var/log/aurita/*.log
 test_success
 
-$CMDPREF `dirname $0`/flush_cluster default 3001 3002
-$CMDPREF `dirname $0`/flush_cluster maecki 3003 3004
-$CMDPREF `dirname $0`/flush_cluster gnaier 3005 3006
-$CMDPREF `dirname $0`/flush_cluster wortundform 3007 3008
+$CMDPREF `dirname $0`/flush_cluster default 3001 3004
+$CMDPREF `dirname $0`/flush_cluster maecki 3005 3006
+$CMDPREF `dirname $0`/flush_cluster gnaier 3007 3008
+$CMDPREF `dirname $0`/flush_cluster wortundform 3009 3010
 # $CMDPREF `dirname $0`/flush_cluster demo 3020 3021
 
 if [ "$1" = '-a' ]; then

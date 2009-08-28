@@ -1,4 +1,3 @@
-
 require('aurita/env.rb')
 require('aurita/base/log/system_logger.rb')
 require('aurita/base/log/class_logger.rb')
@@ -25,7 +24,7 @@ end
 
 Aurita.import_module :gui, :lang
 
-# Module Aurita hold some useful methods itself. 
+# Module Aurita holds some useful methods itself. 
 #
 # Most are used for bootstrapping an application, 
 # some provide access to global data, like session, 
@@ -44,15 +43,23 @@ Aurita.import_module :gui, :lang
 #
 module Aurita
 
-  # Returns current session object. 
-  # A session is always bound to Thread.current, 
-  # So this is thread safe. 
+  # Returns current session object, which is an instance 
+  # of Aurita::Session. 
+  # A session is always bound to Thread.current, So this is thread safe. 
   def self.session
     return Thread.current['request'][:_session] if (Thread.current['request'] && !@session)
     @session = Aurita::Batch_Session.new unless @session
     @session
   end
 
+  # Overwrite the current session. Expects instance of 
+  # Aurita::Rack_Session, which again expects the request's env: 
+  #
+  #    Aurita.session = Aurita::Session.new(env)
+  #
+  # You could have received env from a request object, like a 
+  # Mongrel::Request or Rack::Request
+  # 
   def self.session=(session)
     Thread.current['request'][:_session] = session
     @session = session
@@ -108,7 +115,7 @@ module Aurita
     require("#{Aurita::Configuration.projects_base_path}#{project_name.to_s}/config.rb")
     Lore::Context.enter Aurita::Project_Configuration.context
     @@project = Aurita::Project_Configuration
-    Aurita.import_module :session
+    Aurita.import('base/session')
   end
 
   # Return active project. 
@@ -121,6 +128,7 @@ module Aurita
     end
   end
 
+  # Whether a project has been loaded using Aurita.load :the_project
   def self.project_loaded?
     begin
       return @@project.is_a?(Aurita::Project)
@@ -129,7 +137,6 @@ module Aurita
     return false
   end
     
-
   # Import a plugins. Imports all plugin models, controllers, 
   # modules, permission configuration, and its language packs. 
   def self.import_plugin(plugin_name)

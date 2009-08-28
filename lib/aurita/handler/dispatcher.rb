@@ -4,8 +4,8 @@ require('aurita')
 require('stringio')
 require('observer')
 
-Aurita.import(:base, :rack_attributes)
-Aurita.import(:modules, :rack_session)
+Aurita.import(:base, :attributes)
+Aurita.import(:base, :session)
 Aurita.import(:base, :exceptions)
 Aurita.import(:base, :log, :class_logger)
 Aurita.import(:base, :bits, :cgi)
@@ -25,7 +25,7 @@ rescue
 end 
 
 
-class Aurita::Rack_Dispatcher 
+class Aurita::Dispatcher 
 include Observable
 
   attr_reader :params, :mode, :controller, :action, :dispatch_time, :failed, :response_header, :response_body, :status
@@ -58,15 +58,18 @@ include Observable
     @num_dispatches      = 0 
   end
 
-  # Dispatch given CGI request to controller call. 
-  # Expects CGI request object. 
+  # Dispatch given request to a controller method, and 
+  # handles its response (e.g. by rendering it), which then 
+  # is stored in this Dispatcher's @response. 
+  #
+  # Expects instance of Rack::Request. 
   #
   def dispatch(request)
   # {{{
     @dispatch_time     = 0.0
     @request           = request
-    @params            = Aurita::Rack_Attributes.new(request)
-    @session           = Aurita::Rack_Session.new(request)
+    @params            = Aurita::Attributes.new(request)
+    @session           = Aurita::Session.new(request)
     @mode              = params[:mode]
     @controller        = params[:controller]
     @action            = params[:action]

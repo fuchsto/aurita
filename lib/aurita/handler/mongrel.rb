@@ -9,14 +9,14 @@ require 'rack/static'
 require 'rack/session/memcache'
 require 'aurita'
 
-Aurita.import 'handler/rack_dispatcher'
+Aurita.import 'handler/dispatcher'
  
 module Aurita
 module Handler
 
   class Aurita_Application
 
-    @@dispatcher = Aurita::Rack_Dispatcher.new()
+    @@dispatcher = Aurita::Dispatcher.new()
 
     attr_accessor :logger
 
@@ -150,8 +150,8 @@ module Handler
         headers.delete('Content-Length') # Remove existing Content-Length=0
         headers['Content-Length'] = headers['X-Content-Length'] 
         headers.delete('X-Content-Length')
-      #  headers.delete('Connection')
-      #  headers.delete('connection')
+     #  headers.delete('Connection')
+     #  headers.delete('connection')
       end
       if body.is_a?(Rack::File) then
         status, header, body = body.call(env)

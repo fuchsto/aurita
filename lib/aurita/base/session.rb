@@ -1,15 +1,10 @@
 
 require('aurita')
 require('digest/md5')
-require('cgi')
-require('cgi/session')
-# require('cgi/session/pstore')
 
-Aurita.import_module :lore_manager
 Aurita::Main.import_model :user_login_data
 
 module Aurita
-
 
   # Proxy class for real Rack::Session. 
   # Within your application, this class is used indirectly 
@@ -33,7 +28,7 @@ module Aurita
   #
   #   session_param = Aurita.session['your_param']
   #
-  class Rack_Session
+  class Session
 
     @@logger     = Aurita::Log::Class_Logger.new('Aurita::Session')
     @@guest_user = Aurita::Main::User_Login_Data.load({ :user_group_id => 0 }) 

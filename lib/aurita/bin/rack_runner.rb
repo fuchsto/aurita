@@ -16,7 +16,7 @@ require 'aurita'
 
 Aurita.load_project ARGV[0].to_sym
 Aurita.bootstrap
-Aurita.import :rack_dispatcher
+Aurita.import 'handler/dispatcher'
 
 port   = ARGV[1]
 port ||= 3000
@@ -28,7 +28,7 @@ Lore.disable_logging
 class Aurita_Application
   def call(env)
 
-    dispatcher = Aurita::Rack_Dispatcher.new()
+    dispatcher = Aurita::Dispatcher.new()
     request    = Rack::Request.new(env)
     dispatcher.dispatch(request)
 

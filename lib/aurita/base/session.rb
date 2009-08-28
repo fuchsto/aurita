@@ -88,5 +88,39 @@ module Aurita
     end
 
   end # class
+
+  # Fake session for tests, batch / console mode, or whenever 
+  # no real session is available. 
+  class Mock_Session < Session
+
+    @@guest_user = Aurita::Main::User_Login_Data.load({ :user_group_id => 0 }) 
+
+    def initialize(request=nil)
+      @params = {}
+      @user   = false
+    end
+
+    def param(key)
+      @params[key]
+    end
+    alias [] param
+
+    def set_param(key, value)
+      @params[key] = value
+    end
+    alias []= set_param
+    
+    def user()
+      @user || @@guest_user
+    end
+
+    def user=(user)
+      @user = user
+    end
+
+    def close()
+    end
+
+  end
   
 end # module

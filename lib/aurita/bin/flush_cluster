@@ -43,7 +43,7 @@ ps aux | grep 'mongrel_daemon' | grep $PROJECT | grep -v 'vim' | awk '{print $2}
 
 for port in `seq $PORT_START $PORT_END`
 do
-$CMDPREF /usr/bin/env ruby $AURITA_BIN_PATH/mongrel_daemon $PROJECT $port 2>>/var/log/aurita/mongrel_error.log & 
+$CMDPREF $AURITA_BIN_PATH/start_cluster $PROJECT $port 
 echo -ne "port $port " 
 test_success
 done

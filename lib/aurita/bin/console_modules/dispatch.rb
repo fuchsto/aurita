@@ -23,17 +23,16 @@ module Console
   class Dispatch
 
     def initialize(argv)
-      # Fake an CGI request: 
-      ENV['REQUEST_METHOD'] = 'GET'
-      @cgi = CGI.new 
-      @cgi.params['mode']       = 'default'
-      @cgi.params['controller'] = 'App_Main'
-      @cgi.params['action']     = 'start'
-      @cgi.params['controller'] = argv[0].to_s if argv[0]
-      @cgi.params['action']     = argv[1].to_s if argv[1]
+      # Fake a request
+      
+      params = {}
+      params['mode']       = 'default'
+      params['controller'] = 'App_Main'
+      params['action']     = 'start'
+      params['controller'] = argv[0].to_s if argv[0]
+      params['action']     = argv[1].to_s if argv[1]
 
-      Aurita.import('dispatcher')
-      Aurita.import_module :decorators, :default
+      Aurita.import('handler/dispatcher')
 
       arg_c = 0
       while argv[2+arg_c] do 
@@ -48,16 +47,16 @@ module Console
             value = value.squeeze(' ').split(',')
           end
         end
-        @cgi.params[param[0]] = value
+        params[param[0]] = value
         arg_c += 1
       end
 
       puts '============================================================='
       puts 'Dispatching with request parameters: '
-      pp @cgi.params
+      pp params
       puts '============================================================='
 
-      user_group_id   = @cgi.params['user_group_id'].first if @cgi.params['user_group_id']
+      user_group_id   = params['user_group_id'].first if params['user_group_id']
 
       @old_session_user   = Aurita.session.user
       Aurita.session.user = User_Profile.load(:user_group_id => user_group_id) if user_group_id
@@ -66,7 +65,7 @@ module Console
     end
 
     def run
-      @dispatcher.dispatch(@cgi)
+      @dispatcher.dispatch(request)
       Aurita.session.user = @old_session_user
     end
 

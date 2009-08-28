@@ -106,7 +106,7 @@ port         = port.to_i
 
 if !project_name then
   puts "Usage: "
-  puts "  daemon_win32 <project_name> <port>"
+  puts "  ruby mongrel_daemon_win32 <project_name> <port>"
   exit
 end
 

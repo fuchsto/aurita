@@ -29,7 +29,7 @@ if !project_name then
   exit
 end
 
-logfile = "/var/log/aurita/aurita_#{project_name}_debug.log"
+logfile = "/var/log/aurita/aurita_#{project_name}_#{port}_debug.log"
 
 Aurita.load_project project_name.to_sym
 

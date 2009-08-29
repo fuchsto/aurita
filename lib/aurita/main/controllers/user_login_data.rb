@@ -6,7 +6,7 @@ module Main
 
   class User_Login_Data_Controller < App_Controller
     
-    guard_interface(:perform_lock, :perform_unlock, :perform_delete) { 
+    guard_interface(:perform_lock, :perform_unlock, :perform_delete, :perform_add) { 
       Aurita.user.is_admin?
     }
     
@@ -73,21 +73,21 @@ module Main
       user.commit
 
       super()
-      exec_js("Cuba.load({ element: 'admin_users_box_body', action: 'User_Profile/admin_box_body/' }); 
-               Cuba.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
+      exec_js("Aurita.load({ element: 'admin_users_box_body', action: 'User_Profile/admin_box_body/' }); 
+               Aurita.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
     end
 
     def perform_lock
       instance = load_instance
-      instance['locked'] = 't'
+      instance['locked'] = true
       instance.commit
-      exec_js("Cuba.load({ element: 'app_main_content', action: 'User_Login_Data/update/user_group_id=#{instance.user_group_id}' }); ")
+      exec_js("Aurita.load({ action: 'User_Login_Data/update/user_group_id=#{instance.user_group_id}' }); ")
     end
     def perform_unlock
       instance = load_instance
-      instance['locked'] = 'f'
+      instance['locked'] = false
       instance.commit
-      exec_js("Cuba.load({ element: 'app_main_content', action: 'User_Login_Data/update/user_group_id=#{instance.user_group_id}' }); ")
+      exec_js("Aurita.load({ action: 'User_Login_Data/update/user_group_id=#{instance.user_group_id}' }); ")
     end
 
     def delete
@@ -99,12 +99,12 @@ module Main
     
     def perform_delete
       instance = load_instance
-      instance.locked = 't'; 
-      instance.deleted = 't'; 
-      instance.hidden = 't'; 
+      instance.locked  = true; 
+      instance.deleted = true; 
+      instance.hidden  = true; 
       instance.commit
-      exec_js("Cuba.load({ element: 'app_left_column', action: 'App_Admin/left/' }); 
-               Cuba.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
+      exec_js("Aurita.load({ element: 'app_left_column', action: 'App_Admin/left/' }); 
+               Aurita.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
     end
 
   end

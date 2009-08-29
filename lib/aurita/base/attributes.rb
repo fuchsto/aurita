@@ -28,6 +28,20 @@ module Aurita
   # Most probably, you will not need to use this class directly as 
   # it is wrapped by helpers. (See Aurita::Main::Base_Controller#param)
   #
+  # Initialize by passing a model klass that will use this 
+  # Attribute instance, as well as CGI request object or 
+  # key/value Hash. 
+  #
+  # Usage: 
+  #
+  #   params = Attributes.new(Model_Klass, request)
+  # or:    
+  #   params = Attributes.new(Model_Klass, hash)
+  #
+  # A request object has to provide method #params, 
+  # returning key/value hash of all request params 
+  # (such as GET and POST)
+  #
   # Model attributes can be named using a fully qualified 
   # attribute path, like
   #
@@ -192,7 +206,6 @@ module Aurita
 
             if !implicit_attr_name.nil? and implicit_attr_name == attribute_name then
               attrib_value = @attributes[key_array[0]+'.'+key_array[1]+'.'+attribute_name]
-      #       break
             end
           }
           value = attrib_value 

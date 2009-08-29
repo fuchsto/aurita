@@ -8,7 +8,7 @@
 PROJECT=$1
 PORT_START=$2
 PORT_END=$3
-AURITA_BIN_PATH='/usr/share/gitwc/aurita/lib/aurita/bin'
+AURITA_BIN_PATH='/usr/share/gitwc/aurita/bin'
 red='\e[0;31m'
 RED='\e[1;31m'
 blue='\e[0;34m'

@@ -9,7 +9,7 @@ Aurita.import_module :gui, :form_helper
 module Aurita
 module GUI
 
-  class ERB_Binding_Params
+  class ERB_Binding_Params # :nodoc:
     
     def initialize(param_hash)
       @params = param_hash

@@ -9,7 +9,7 @@ cyan='\e[0;36m'
 CYAN='\e[1;36m'
 NC='\e[0m' # No Color
 
-AURITA_BIN_PATH='/usr/share/gitwc/aurita/lib/aurita/bin'
+AURITA_BIN_PATH='/usr/share/gitwc/aurita/bin'
 AURITA_PROJECT_PATH='/usr/share/gitwc/aurita_projects'
 
 if [ $EUID -eq 0 ]; then

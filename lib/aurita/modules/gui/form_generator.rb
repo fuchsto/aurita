@@ -30,7 +30,7 @@ module GUI
     
     @@type_field_map[Lore::PG_DATE] = Proc.new { |l,f| Datepick_Field.new(:label => l, :name => f) }
     @@type_field_map[Lore::PG_TEXT] = Proc.new { |l,f| Text_Editor_Field.new(:label => l, :name => f) }
-    @@type_field_map[Lore::PG_BOOL] = Proc.new { |l,f| Pg_Boolean_Field.new(:label => l, :name => f) }
+    @@type_field_map[Lore::PG_BOOL] = Proc.new { |l,f| Boolean_Radio_Field.new(:label => l, :name => f) }
 
     def initialize(klass)
       super(klass)

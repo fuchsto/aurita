@@ -58,6 +58,12 @@ else
   Aurita::Configuration.run_log_path = false
 end
 
+if kill_old then
+  # TODO: This is really quick'n'dirty
+  command = "ps aux | grep 'mongrel_daemon #{project_name} #{port}' | tail -n 2 | head -n 1 | awk '{print $2}' | xargs sudo kill -9 " 
+  system(command)
+end
+
 Aurita.load_project project_name.to_sym
 Aurita.bootstrap
 
@@ -81,13 +87,6 @@ if gatling then
 elsif short then
   OPTIONS[:chunked]     = false
   OPTIONS[:no_sessions] = false
-end
-
-if kill_old then
-  # TODO: This is really quick'n'dirty
-  command = "ps aux | grep 'mongrel_daemon #{project_name}' | awk '{print $2}' | xargs sudo kill -9"
-  puts command
-  system(command)
 end
 
 web_server = Aurita::Mongrel_Daemon.new(OPTIONS)

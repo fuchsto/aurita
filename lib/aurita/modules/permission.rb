@@ -30,11 +30,11 @@ module Aurita
     attr_accessor :name, :type, :params
     
     @@type_map = { 
-      :bool      => Proc.new { |name, params| Aurita::GUI::Pg_Boolean_Field.new(:name => name, :value => params[:default]) }, 
-      :string    => Proc.new { |name, params| Aurita::GUI::Text_Field.new(:name => name,       :value => params[:default]) }, 
-      :integer   => Proc.new { |name, params| Aurita::GUI::Text_Field.new(:name => name,       :value => params[:default]) }, 
-      :option    => Proc.new { |name, params| Aurita::GUI::Select_Field.new(:name => name,     :value => params[:default], :options => params[:options]) }, 
-      :selection => Proc.new { |name, params| Aurita::GUI::Checkbox_Field.new(:name => name,   :value => params[:default], :options => params[:options]) }
+      :bool      => Proc.new { |name, params| Aurita::GUI::Boolean_Radio_Field.new(:name => name, :value => params[:default]) }, 
+      :string    => Proc.new { |name, params| Aurita::GUI::Text_Field.new(:name => name,          :value => params[:default]) }, 
+      :integer   => Proc.new { |name, params| Aurita::GUI::Text_Field.new(:name => name,          :value => params[:default]) }, 
+      :option    => Proc.new { |name, params| Aurita::GUI::Select_Field.new(:name => name,        :value => params[:default], :options => params[:options]) }, 
+      :selection => Proc.new { |name, params| Aurita::GUI::Checkbox_Field.new(:name => name,      :value => params[:default], :options => params[:options]) }
     }
 
     def initialize(name, params={})

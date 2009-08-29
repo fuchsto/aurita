@@ -21,12 +21,12 @@ module Main
       form.add(Text_Field.new(:name     => Role.role_name, 
                               :label    => tl(Role.role_name), 
                               :required => true))
-      form.add(Pg_Boolean_Field.new(:name  => :is_super_admin, 
-                                    :label => tl(:is_super_admin), 
-                                    :value => 'f'))
-      form.add(Pg_Boolean_Field.new(:name  => :is_admin, 
-                                    :label => tl(:is_admin), 
-                                    :value => 'f'))
+      form.add(Boolean_Radio_Field.new(:name  => :is_super_admin, 
+                                       :label => tl(:is_super_admin), 
+                                       :value => 'f'))
+      form.add(Boolean_Radio_Field.new(:name  => :is_admin, 
+                                       :label => tl(:is_admin), 
+                                       :value => 'f'))
 
       Plugin_Register.permissions.each_pair { |plugin, permissions|
         permissions.each { |p|
@@ -65,12 +65,12 @@ module Main
       is_super_admin = (perms[:is_super_admin])? 't' : 'f'
       is_admin = (perms[:is_admin])? 't' : 'f'
 
-      form.add(Pg_Boolean_Field.new(:name  => :is_super_admin, 
-                                    :label => tl(:is_super_admin), 
-                                    :value => is_super_admin))
-      form.add(Pg_Boolean_Field.new(:name  => :is_admin, 
-                                    :label => tl(:is_admin), 
-                                    :value => is_admin))
+      form.add(Boolean_Radio_Field.new(:name  => :is_super_admin, 
+                                       :label => tl(:is_super_admin), 
+                                       :value => is_super_admin))
+      form.add(Boolean_Radio_Field.new(:name  => :is_admin, 
+                                       :label => tl(:is_admin), 
+                                       :value => is_admin))
 
       Plugin_Register.permissions.each_pair { |plugin, permissions|
         permissions.each { |p|

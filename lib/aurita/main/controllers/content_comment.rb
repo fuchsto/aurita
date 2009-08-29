@@ -17,7 +17,7 @@ module Main
 
     def list_string(content_id)
 
-      content = Content.find(1).with(:content_id.is(content_id)).polymorphic.entity
+      content = Content.find(1).with(:content_id.is(content_id)).entity
 
       entries = Content_Comment.select { |p|
         p.join(User_Profile).on(Content_Comment.user_group_id == User_Profile.user_group_id) { |pu|

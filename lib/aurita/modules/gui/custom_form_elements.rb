@@ -17,12 +17,12 @@ module GUI
     end
   end
 
-  class Pg_Boolean_Field < Radio_Field
+  class Boolean_Radio_Field < Radio_Field
   include Aurita::GUI::I18N_Helpers
 
     def initialize(params={}, &block)
       super(params, &block)
-      set_options([ 't', 'f' ])
+      set_options([ true, false ])
       set_option_labels([ tl(:yes), tl(:no) ])
     end
   end

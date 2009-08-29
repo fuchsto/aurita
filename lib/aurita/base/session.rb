@@ -43,6 +43,16 @@ module Aurita
       @session_id   = @session_opts[:id] if @session_opts
     end
 
+    # Open session for a user. 
+    # This is to be called e.g. after validating the user's 
+    # credentials after logon. 
+    # Returns session id created for this user. 
+    def open(user)
+      @session['user_group_id'] = user.user_group_id
+      @session['user'] = Marshal.dump(user)
+      @session_id
+    end
+
     def param(key)
       @session ||= @env['rack.session']
       @session[key.to_s]
@@ -60,6 +70,13 @@ module Aurita
     # as User_Login_Data instance. 
     def user
       return @user if @user
+      marshal = param('user')
+      if marshal.is_a?(Hash) then
+        model = eval(marshal[:klass])
+        @user = model.new(marshal[:values], marshal[:joined], :cached)
+        return @user if @user
+      end
+
       user_id = param('user_group_id')
       @user   = Aurita::Main::User_Group.load(:user_group_id => user_id)
       return (@user || @@guest_user)

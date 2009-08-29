@@ -43,7 +43,7 @@ class Mongrel_Daemon
                                             :no_sessions => @options[:no_sessions], 
                                             :logger      => @logger)
 
-    @http_server = Mongrel::HttpServer.new(@options[:ip], @options[:port])
+    @http_server = Mongrel::HttpServer.new(@options[:ip], @options[:port], 950, 10)
 
     # Configure Mongrel for Aurita project: 
     @http_server.register("/", @aurita)
@@ -62,8 +62,10 @@ class Mongrel_Daemon
     @logger.info { "Mongrel_Daemon: run entered" }
     begin
       @logger.info("Mongrel_Daemon: http_server.run")
-      @http_server.run.join
+      @http_server.run
+      @http_server.acceptor.join
     rescue StandardError, ::Exception => err
+      STDERR.puts err.inspect
       @logger.error { "Mongrel_Daemon: #{err}" }
       @logger.error { err.backtrace.join("\n") }
     end

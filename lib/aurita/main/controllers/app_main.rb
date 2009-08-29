@@ -189,6 +189,13 @@ module Main
       view_string(:tag_index, :tags => Tag_Index.all.entities)
     end
 
+    # Performs logon for user upon validating credentials. 
+    # Expects parameters 'login' and 'pass' as MD5, 
+    # returns JSON string containing session id created for 
+    # this user, like: 
+    #
+    #   { 'session_id': '32jgdx94l34dkjg6743545kjfsdlkjr3' }
+    #
     def validate_user
       use_decorator(:none)
 
@@ -200,7 +207,7 @@ module Main
       
       if user then
         log { "Login accepted: #{user.user_group_id}" }
-        Aurita.session['user_group_id'] = user.user_group_id
+        Aurita.session.open(user)
         sid = Aurita.session.session_id
         puts "({'session_id': '#{sid}'})"
       else

@@ -17,6 +17,11 @@ port         = port.to_i
 gatling      = ARGV[2] == 'gatling'
 short        = ARGV[2] == 'short'
 verbosive    = ARGV[2] == '-v'
+kill_old     = ARGV[3] == '-k'
+if ['-vk', '-kv'].include?(ARGV[2]) then
+  verbosive = true
+  kill_old  = true
+end
 
 if !project_name then
   puts "Usage: "
@@ -32,26 +37,28 @@ end
 
 logfile = "/var/log/aurita/aurita_#{project_name}_#{port}_debug.log"
 
-Aurita.load_project project_name.to_sym
 
 if verbosive then
-Lore.enable_logging
-Lore.enable_query_log
-Lore.logfile                       = logfile
-Lore.query_logfile                 = logfile
-Lore.logger.level                  = Logger::DEBUG
-Lore.query_logger.level            = Logger::DEBUG
-Aurita::Configuration.sys_log_path = logfile
-Aurita::Configuration.run_log_path = logfile
+  Lore.enable_logging
+  Lore.enable_query_log
+  Lore.logfile                       = logfile
+  Lore.query_logfile                 = logfile
+  Lore.logger.level                  = Logger::DEBUG
+  Lore.query_logger.level            = Logger::DEBUG
+  Aurita::Configuration.sys_log_path = logfile
+  Aurita::Configuration.run_log_path = logfile
+  STDERR.puts "\nServer log is #{logfile}\n"
 else
-Lore.disable_logging
-Lore.disable_query_log
-Lore.logger.level                  = Logger::ERROR
-Lore.query_logger.level            = Logger::ERROR
-Aurita::Configuration.sys_log_path = false
-Aurita::Configuration.run_log_path = false
+  Lore.disable_logging
+  Lore.disable_query_log
+  Lore.logger.level                  = Logger::ERROR
+  Lore.logfile                       = logfile
+  Lore.query_logger.level            = Logger::ERROR
+  Aurita::Configuration.sys_log_path = false
+  Aurita::Configuration.run_log_path = false
 end
 
+Aurita.load_project project_name.to_sym
 Aurita.bootstrap
 
 Aurita.import :handler, :mongrel_daemon
@@ -74,6 +81,13 @@ if gatling then
 elsif short then
   OPTIONS[:chunked]     = false
   OPTIONS[:no_sessions] = false
+end
+
+if kill_old then
+  # TODO: This is really quick'n'dirty
+  command = "ps aux | grep 'mongrel_daemon #{project_name}' | awk '{print $2}' | xargs sudo kill -9"
+  puts command
+  system(command)
 end
 
 web_server = Aurita::Mongrel_Daemon.new(OPTIONS)

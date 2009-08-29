@@ -26,8 +26,13 @@ module Main
 
 
     def index
-      render_view(:user_category_list, 
-                  :categories => Aurita.user.categories)
+      return Page.new(:header => tl(:your_categories)) { 
+        Aurita.user.categories.map { |c| 
+          HTML.div.category_thumb { 
+            link_to(c, :controller => 'Category') { c.category_name }
+          }
+        }
+      }
     end
 
     def perform_delete

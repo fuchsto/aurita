@@ -47,6 +47,10 @@ module Main
     # removed from them. 
     def self.touch(cat_id)
       @@logger.log("Touching category #{cat_id} (deleting cache) ...")
+      cache_name = Aurita.project_path + "cache/category_#{cat_id}.html"
+      if File.exists?(cache_name) then
+        File.delete(cache_name)
+      end
       cache_name = Aurita.project_path + "cache/category_changes_#{cat_id}.html"
       if File.exists?(cache_name) then
         File.delete(cache_name)

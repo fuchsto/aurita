@@ -1768,3 +1768,23 @@ table.message_table {
   padding: 0px; 
   margin: 0px
 }
+
+table.listing_2_columns td {
+  border-bottom: 1px dotted #a0a0a0; 
+  padding: 1px; 
+  padding-left: 4px; 
+  height: 20px; 
+  vertical-align: top; 
+}
+table.listing_2_columns td input {
+  padding: 2px; 
+  margin-top: 4px; 
+  margin-bottom: 4px; 
+}
+table.listing_2_columns td b {
+  color: #676767; 
+  font-weight: normal; 
+}
+table.listing_2_columns { 
+  border-top: 1px dotted #a0a0a0; 
+}

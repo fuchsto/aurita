@@ -110,7 +110,7 @@ module Main
       args.delete(:created)
       return args
     end
-    
+
     # Operations to perform after having written an instance to DB 
     # (creating tag index etc.)
     def self.after_create(instance)
@@ -122,6 +122,15 @@ module Main
     # (updating tag index). 
     def self.after_commit(instance)
       Tag_Index.update_index_for(instance)
+      instance.categories.each { |c| c.touch }
+    end
+
+    def self.after_delete(args)
+      if args[:content_id] then
+        Content_Category.delete { |cc|
+          cc.where(Content_Category.content_id == args[:content_id]) 
+        }
+      end
     end
 
     # Increments hit count for this instance. To be triggered whenever 

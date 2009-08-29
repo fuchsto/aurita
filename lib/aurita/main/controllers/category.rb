@@ -164,7 +164,7 @@ module Main
       cat_id = cat.category_id
 
       cache_name = Aurita.project_path + "cache/category_#{cat_id}.html"
-      if(true || !File.exists?(cache_name)) then
+      if(!File.exists?(cache_name)) then
         # TODO: Add this as a test case: 
         #    users = User_Category.select { |uc|
         #      uc.join(User_Profile).on(User_Category.user_group_id == User_Profile.user_group_id) { |up|
@@ -191,9 +191,7 @@ module Main
         components = plugin_get(Hook.main.category.list, :category_id => cat_id).collect { |c| c.string }
         elements += components
 
-        contents = view_string(:category, 
-                               :category => cat, 
-                               :elements => elements)
+        contents = Page.new(:header => cat.category_name) { elements }
         begin
           File.delete(cache_name) 
         rescue ::Exception => e
@@ -217,7 +215,7 @@ module Main
       cache_name = Aurita.project_path + "cache/category_changes_#{cat.category_id}.html"
 
       count = 0
-      if(true || !File.exists?(cache_name)) then
+      if(!File.exists?(cache_name)) then
         cat_result = ''
         components = plugin_get(Hook.main.workspace.recent_changes_in_category, :category_id => cat.category_id)
         components.each { |component|

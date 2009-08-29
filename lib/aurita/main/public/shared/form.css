@@ -188,6 +188,11 @@ input.button_green:hover {
   border-color: #009900;
 }
 
+button.mini { 
+  padding: 0px; 
+  width: auto !important; 
+}
+
 input.inline, textarea.inline { 
   margin: 0px; 
 } 

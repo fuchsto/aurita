@@ -204,7 +204,7 @@ JS
       own_category_id = user.category_id
       
       user.writeable_categories.each { |c|
-        if c.is_private == 't' then 
+        if c.is_private then 
           if c.category_id.to_s != own_category_id.to_s then
             private_category_names << (tl(:user) + ': ' << c.category_name)
             private_category_ids   << c.category_id
@@ -214,7 +214,7 @@ JS
           category_ids << c.category_id
         end
       }
-      option_values = ['', own_category_id] + category_ids
+      option_values = ['', own_category_id.to_s] + category_ids
       option_labels = [tl(:select_additional_category), tl(:your_private_category)] + category_names
       if Aurita.user.is_admin? then
         option_values += private_category_ids

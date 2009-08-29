@@ -48,6 +48,7 @@ module Aurita
     # credentials after logon. 
     # Returns session id created for this user. 
     def open(user)
+      @session ||= @env['rack.session']
       @session['user_group_id'] = user.user_group_id
       @session['user'] = Marshal.dump(user)
       @session_id

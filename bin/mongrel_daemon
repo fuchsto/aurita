@@ -60,7 +60,7 @@ end
 
 if kill_old then
   # TODO: This is really quick'n'dirty
-  command = "ps aux | grep 'mongrel_daemon #{project_name} #{port}' | tail -n 2 | head -n 1 | awk '{print $2}' | xargs sudo kill -9 " 
+  command = "ps aux | grep 'mongrel_daemon #{project_name} #{port}' | grep -v #{$$} | awk '{print $2}' | xargs sudo kill -9 2>/dev/null" 
   system(command)
 end
 

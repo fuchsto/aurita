@@ -1,0 +1,12 @@
+D, [2009-08-28T19:22:33.716735 #32644] DEBUG -- : Entering context aurita
+  sql|aurita| SELECT * FROM internal.user_group_hierarchy WHERE false
+  sql|aurita| SELECT * FROM internal.role WHERE false
+  sql|aurita| SELECT * FROM internal.user_role WHERE false
+  sql|aurita| SELECT * FROM internal.user_group WHERE false
+  sql|aurita| SELECT * FROM internal.user_login_data WHERE false
+  sql|aurita| SELECT * FROM internal.user_login_data 
+  sql|aurita|  JOIN internal.user_group ON (internal.user_group.user_group_id = internal.user_login_data.user_group_id) 
+  sql|aurita| WHERE internal.user_group.user_group_id = '0'      LIMIT 1  OFFSET 0
+  sql|aurita| SELECT * FROM internal.user_login_data 
+  sql|aurita|  JOIN internal.user_group ON (internal.user_group.user_group_id = internal.user_login_data.user_group_id) 
+  sql|aurita| WHERE internal.user_group.user_group_id = '0'      LIMIT 1  OFFSET 0

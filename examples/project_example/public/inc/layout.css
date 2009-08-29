@@ -1,0 +1,115 @@
+
+body { 
+  overflow-x: hidden; 
+}
+
+.site_body, .site_body_App_News, .site_body_App_General, .site_body_App_My_Place, .site_body_App_My_Base, .site_body_App_Expert { 
+  padding: 0px; 
+  padding-left: 20px; 
+  margin: 0px; 
+  background-color: #eaeaea; 
+  overflow-x: hidden; 
+}
+.head_content { 
+  position: absolute; 
+  right: 35px; 
+  top: 30px; 
+  z-index: 89; 
+}
+
+#site_main {
+  margin-right: 20px;
+  padding-top: 0px;
+  padding-bottom: 5px; 
+  background-color: #eaeaea; 
+  min-width: 900px; 
+  display: block; 
+  border-top: 1px solid transparent; 
+}
+
+#site_head {
+/*  background: url('/aurita/images/aurita_header.jpg'); */
+  margin-right: 20px; 
+  min-width: 900px; 
+  height: 141px; 
+  margin-top: 0px; 
+  border-top: 1px solid transparent; 
+}
+
+.header_button_background { 
+  position: absolute; 
+  top: 124px; 
+  left: 251px; 
+  width: 100%; 
+  height: 19px; 
+}
+
+.head_content { 
+  position: absolute; 
+  right: 35px; 
+  top: 30px; 
+  z-index: 89; 
+}
+
+.logo {  
+  position: absolute; 
+  right: 15px; 
+  top: 58px; 
+ 
+  z-index: 90; 
+}
+
+.logo_box {
+ 
+  position: absolute; 
+  right: 19px; 
+  top: 40px; 
+  width: 324px; 
+  height: 112px; 
+ 
+  z-index: 80; 
+ 
+  background-color: #000000; 
+  opacity:.20; 
+  filter: alpha(opacity=20); 
+  -moz-opacity: 0.2; 
+  -khtml-opacity:0.2; 
+  color:rgba(255, 255, 255, 0.2);
+}
+.left_column {
+  vertical-align: top; 
+  padding: 5px; 
+  padding-top: 5px; 
+  width: 221px;
+}
+.main_content {
+  vertical-align: top; 
+  margin-bottom: 0px; 
+  margin-top: 14px; 
+  padding: 8px 18px 18px; 
+  min-height: 700px;
+  margin-right: 14px; 
+  z-index: 11;  
+}
+.right_column { 
+/*
+  position: absolute; 
+  right: 24px; 
+  top: 161px; 
+  clear: both; 
+  z-index: 11;
+*/
+  padding: 5px; 
+  vertical-align: top; 
+  width: 226px;
+}
+
+#app_right_column { 
+  position: absolute; 
+  right: 30px; 
+  top: 148px; 
+  z-index: 11;
+  padding: 0px; 
+  vertical-align: top; 
+  width: 215px;
+}

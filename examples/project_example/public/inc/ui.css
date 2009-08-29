@@ -1,0 +1,145 @@
+
+b, strong { 
+  font-weight: bold; 
+}
+
+.calendar { 
+  z-index: 601; 
+}
+
+.hover_line:hover { 
+  background-color: #cecece; 
+}
+
+
+ul.article_title_list { 
+  padding: 0px; 
+  margin: 0px; 
+  margin-left: 0px; 
+  list-style-type: none; 
+}
+li.article_title_list { 
+  padding: 3px; 
+}
+
+.tag {
+  font-family: inherit; 
+  font-size: 10px; 
+  font-weight: lighter; 
+  letter-spacing: normal;
+}
+
+#cover { 
+}
+
+.media_management_folder_content { 
+  position: absolute; 
+  top: 70px; 
+  float: left; 
+  margin-left: 320px; 
+  margin-right: 0px; 
+  min-height: 300px; 
+  min-width: 300px; 
+}
+
+
+.top_button_bar {
+  position: absolute; 
+  border-right: 1px solid #000000;
+  top: 21px; 
+  right: 18px; 
+}
+.top_button { 
+  background-color: #bcc2c0; 
+  width: 90px; 
+  height: 12px;
+  padding: 3px; 
+  padding-left: 14px; 
+  font-size: 11px; 
+  border-top: 1px solid #000000; 
+  border-left: 1px solid #000000;
+  float: right; 
+  margin-top: 0px; 
+}
+
+.notification {
+  padding: 7px; 
+  color: #000000; 
+  font-size: 14px; 
+}
+
+
+.article_content { 
+  margin-top: 7px; 
+  font-family: inherit; 
+  line-height: 1.4em; 
+}
+.article_text { 
+  display: block;
+}
+
+.text { 
+  color: #000000;
+} 
+
+.tools { 
+  margin-top: 15px; 
+  margin-left: 22px; 
+}
+
+.modifyable { 
+  cursor: pointer
+}
+
+.context_menu { 
+  padding: 3px; 
+}
+
+abbr, acronym, .help { 
+  border-bottom: 1px dotted #985454; 
+  cursor: help; 
+}
+
+div.content_infobox { 
+  border-top: 1px dotted #983453;
+  padding-top: 12px; 
+  padding-left: 0px; 
+  font-size: smaller; 
+  font-color: #565656;
+}
+ul.content_infobox {
+  color: #4a4a4a;
+  margin-left: 0px; 
+  padding-left: 0px;
+  line-height: 10px; 
+  list-style-type: none; 
+}
+
+.clear_spacer { 
+  clear: both; 
+}
+
+.clearfix:after {
+    content: "."; 
+    display: block; 
+    height: 0; 
+    clear: both; 
+    visibility: hidden;
+}
+
+.user_thumb_small {
+  padding: 2px; 
+  background-color: #cccccc; 
+  margin-right: 10px; 
+  margin-top: 10px; 
+  cursor: pointer; 
+}
+.user_thumb { 
+  background-color: #cccccc; 
+  padding: 1px;  
+  width: 97px; 
+  height: 120px; 
+  margin-top: 10px; 
+  cursor: pointer; 
+}
+

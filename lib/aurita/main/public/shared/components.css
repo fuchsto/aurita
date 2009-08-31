@@ -199,30 +199,6 @@ table.sortable th {
 table.list { 
   border: 1px solid #000000; 
 } 
-fieldset.list table.list { 
-  border-color: transparent; 
-}
-fieldset.list { 
-  width: 450px; 
-  border: 1px solid #909090; 
-}
-fieldset.list legend { 
-  font-size: 12px; 
-  padding: 5px; 
-  padding-bottom: 2px; 
-  margin-left: 3px; 
-}
-fieldset { 
-  border: 1px solid #909090; 
-  padding: 3px; 
-}
-fieldset legend { 
-  font-size: 12px; 
-  padding: 5px; 
-  padding-bottom: 2px; 
-  margin-left: 3px; 
-}
-
 table.list td { 
   padding: 6px; 
 }

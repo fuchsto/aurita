@@ -142,8 +142,9 @@ module Main
     end
 
     def add
-      form = model_form(:model => Hierarchy, :action => :perform_add)
+      form = add_form()
       form.add(Hidden_Field.new(:name => Hierarchy.category.to_s, :value => param(:category)))
+      form.add(GUI::Category_Selection_List_Field.new())
       render_form(form)
     end
 

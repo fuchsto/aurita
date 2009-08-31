@@ -569,7 +569,7 @@ module Aurita
       end
       
       if(defined? form_groups) then
-        form.fields = form_groups.flatten
+        form.fields = form_groups
       end
 
       form.set_values(form_values)

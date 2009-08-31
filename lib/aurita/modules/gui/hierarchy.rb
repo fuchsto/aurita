@@ -196,7 +196,7 @@ module GUI
         else
           next_level = ''
         end
-        string << HTML.li(:id => 'entry_' << entry_id) { HTML.font(:style => 'cursor: ns-resize; ') { label_string } +
+        string << HTML.li(:id => "entry_#{entry_id}") { HTML.font(:style => 'cursor: ns-resize; ') { label_string } +
                    HTML.ul(:id => "entry_placeholder_#{entry_id}", :class => 'no_bullets drop-placeholder') { '&nbsp;' + 
                        next_level 
                    }

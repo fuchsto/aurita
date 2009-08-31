@@ -477,6 +477,34 @@ li ul.checkbox_options label {
   display: inline; 
 }
 
+fieldset.list table.list { 
+  border-color: transparent; 
+}
+fieldset.list { 
+  width: 450px; 
+  border: 1px solid #909090; 
+}
+fieldset.list legend { 
+  font-size: 12px; 
+  padding: 5px; 
+  padding-bottom: 2px; 
+  margin-left: 3px; 
+}
+fieldset { 
+  border: 1px solid #cdcdcd; 
+  padding: 10px; 
+  margin: 10px -10px;
+}
+fieldset legend { 
+  font-size: 12px; 
+  padding: 5px 5px 6px; 
+  margin-left: -11px; 
+  margin-top: -6px; 
+  background-color: #dedede; 
+  border: 1px solid #cdcdcd; 
+}
+
+
 .tag_autocomplete_field_wrap li.autocomplete { 
   width: 100% !important; 
   padding-left: 4px !important; 

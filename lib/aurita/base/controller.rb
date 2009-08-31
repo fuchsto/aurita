@@ -597,9 +597,10 @@ class Aurita::Base_Controller
   #
   def param(key=nil, default=nil)
   # {{{
-    return @params[key] if (key && @params[key])
+    return @params[key] if (key && @params[key].to_s != '')
     return @params unless key
     return default if default
+    return nil
   end # }}}
 
   protected

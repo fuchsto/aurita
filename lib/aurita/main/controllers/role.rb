@@ -9,9 +9,7 @@ module Main
 
     def form_groups
       [
-        Role.role_name, 
-        :is_super_admin, 
-        :is_admin, 
+        Role.role_name
       ]
     end
 
@@ -23,10 +21,10 @@ module Main
                               :required => true))
       form.add(Boolean_Radio_Field.new(:name  => :is_super_admin, 
                                        :label => tl(:is_super_admin), 
-                                       :value => 'f'))
+                                       :value => false))
       form.add(Boolean_Radio_Field.new(:name  => :is_admin, 
                                        :label => tl(:is_admin), 
-                                       :value => 'f'))
+                                       :value => false))
 
       Plugin_Register.permissions.each_pair { |plugin, permissions|
         permissions.each { |p|
@@ -39,7 +37,8 @@ module Main
 
     def update
       perms = {}
-      role = Role.load(:role_id => param(:role_id))
+      role = load_instance()
+
       Role_Permission.all_with(Role_Permission.role_id == role.role_id).each { |p|
         (perms[p.name.to_sym] = p) if p.name
       }
@@ -52,8 +51,8 @@ module Main
         user_list << HTML.li { link_to(u) { u.user_group_name } }
       }
       users_box = Box.new(:id => :role_users, :class => :topic_inline, :style => "width: 382px; ")
-      users_box.header = tl(:users)
-      users_box.body = user_list
+      users_box.header    = tl(:users)
+      users_box.body      = user_list
       users_box.collapsed = true
 
       puts users_box.string
@@ -101,8 +100,8 @@ module Main
           end
         }
       }
-      exec_js("Cuba.load({ element: 'admin_roles_box_body', action: 'Role/admin_box_body/' }); 
-               Cuba.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
+      exec_js("Aurita.load({ element: 'admin_roles_box_body', action: 'Role/admin_box_body/' }); 
+               Aurita.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
     end
 
     def perform_update
@@ -125,8 +124,8 @@ module Main
           end
         }
       }
-      exec_js("Cuba.load({ element: 'admin_roles_box_body', action: 'Role/admin_box_body/' }); 
-               Cuba.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
+      exec_js("Aurita.load({ element: 'admin_roles_box_body', action: 'Role/admin_box_body/' }); 
+               Aurita.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
     end
 
     def perform_delete
@@ -134,8 +133,8 @@ module Main
         r.where(r.role_id == param(:role_id))
       }
       super()
-      exec_js("Cuba.load({ element: 'admin_roles_box_body', action: 'Role/admin_box_body/' }); 
-               Cuba.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
+      exec_js("Aurita.load({ element: 'admin_roles_box_body', action: 'Role/admin_box_body/' }); 
+               Aurita.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
     end
 
     def admin_box_body
@@ -144,12 +143,14 @@ module Main
         HTML.img(:src => '/aurita/images/icons/button_add.gif') + tl(:add_role) 
       }
       list = HTML.ul.single_line_list { } 
-      Role.each { |role|
-        role = Context_Menu_Element.new(HTML.a.entry(:onclick => js.Cuba.load(:action => "Role/update/role_id=#{role.role_id}")) { 
-                                          role.role_name
-                                        }, 
-                                        :entity => role)
-        list << HTML.li { role }
+      Role.find(:all).sort_by(:role_name).each { |role|
+        role_id = role.role_id
+        entry = HTML.div { 
+                  HTML.a.entry(:onclick => js.Cuba.load(:action => "Role/update/id=#{role_id}")) { 
+                     " #{role.role_name}"
+                  } 
+                }
+        list << HTML.li { Context_Menu_Element.new(entry, role) }
       }
       body << list
       HTML.div { body }

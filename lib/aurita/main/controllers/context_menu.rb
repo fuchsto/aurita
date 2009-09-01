@@ -91,7 +91,14 @@ module Main
     def category
       cat = Category.load(:category_id => param(:category_id))
       header(tl(:category) + ' ' << cat.category_name)
-      load_entry(:show_category, 'app_main_content' => 'Category/show/category_id='+cat.category_id)
+      load_entry(:show_category, 'app_main_content' => "Category/show/category_id=#{cat.category_id}")
+    end
+
+    def role
+      role = Role.get(param(:role_id))
+      header(tl(:role) + ' ' << role.role_name)
+      targets = { :admin_roles_box_body => 'Role/admin_box_body' }
+      entry(:delete_role, "Role/delete/role_id=#{role.role_id}", targets)
     end
 
     def topic_header

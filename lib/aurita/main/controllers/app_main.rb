@@ -173,11 +173,11 @@ module Main
           cat_id = cat.category_id
           box = Box.new(:type => :category, 
                         :class => :topic_inline, 
-                        :id => 'category_' << cat_id, 
+                        :id => "category_#{cat_id}", 
                         :params => { :category_id => cat_id } )
           box.header = tl(:category) + ' ' << cat.category_name 
           box.body = cat_result
-          result << HTML.li(:id => 'component_' << count.to_s) { box.string }.string
+          result << HTML.li(:id => "component_#{count}") { box.string }.string
           count += 1
         end
       }

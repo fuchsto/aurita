@@ -155,44 +155,6 @@ module Main
       }
     end
 
-    def recent_changes_string(cat) 
-      cat_result = ''
-      result = HTML.ul
-      cache_name = Aurita.project_path + "cache/category_changes_#{cat.category_id}.html"
-
-      count = 0
-      if(!File.exists?(cache_name)) then
-        cat_result = ''
-        components = plugin_get(Hook.main.workspace.recent_changes_in_category, :category_id => cat.category_id)
-        components.each { |component|
-          cat_result << HTML.span(:id => "component_#{count}") { component }.string
-          count += 1
-        }
-        if components.length > 0 then
-          cat_id = cat.category_id
-          box = Box.new(:type => :category, 
-                        :class => :topic_inline, 
-                        :id => "category_#{cat_id}", 
-                        :params => { :category_id => cat_id } )
-          box.header = tl(:category) + ' ' << cat.category_name 
-          box.body = cat_result
-          result << HTML.li(:id => "component_#{count}") { box }
-          count += 1
-        end
-        File.open(cache_name, "a") { |f|
-          f << result.string
-        }
-      end
-
-      string = ''
-      File.open(cache_name, "r") { |f|
-        f.each { |l| 
-          string << l
-        }
-      }
-      string
-    end
-
   end
 
 end

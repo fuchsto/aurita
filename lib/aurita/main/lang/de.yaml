@@ -11,6 +11,7 @@ manage_users : Benutzerverwaltung
 
 readonly_permission : Nur Lesen
 
+role : Rolle
 internal.role.role_name : Name
 is_admin : Administrator
 is_super_admin : Super-Administrator

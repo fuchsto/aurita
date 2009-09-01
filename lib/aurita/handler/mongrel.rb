@@ -41,14 +41,26 @@ module Handler
       # Poor man's routing: 
       routed = false
       uri_p  = uri.split('/')
-      if !uri.include?('?') && uri_p.length >= 4 then
-        host       = uri_p[0]
-        controller = uri_p[2]
-        action     = uri_p[3]
-        get_params = uri_p[4]
 
-        routed = true
+      if !uri.include?('?') then
+        if uri_p.length >= 4 && uri_p[3].to_i.to_s == uri_p[3]
+          # host/aurita/Controller/1234/[action]
+          host       = uri_p[0]
+          controller = uri_p[2]
+          action     = uri_p[4]
+          action   ||= 'show'
+          get_params = "id=#{uri_p[3]}"
+          routed = true
+        elsif uri_p.length >= 4 then
+          # host/aurita/Controller/action/[param=value]
+          host       = uri_p[0]
+          controller = uri_p[2]
+          action     = uri_p[3]
+          get_params = uri_p[4]
+          routed = true
+        end
       end
+      # Only if X-Sendfile is available
       if false && uri_p[2] == 'assets' && uri_p.length == 4
         host       = uri_p[0]
         controller = 'Wiki::Media_Asset'
@@ -79,12 +91,12 @@ module Handler
       rewrite_url(env) 
       @logger.debug { 'REQUEST =================================================' }
       env.each_pair { |k,v|
-        @logger.debug { "REQUEST #{k} - #{v.inspect}" }
+      # @logger.debug { "REQUEST #{k} - #{v.inspect}" }
       }
       request    = Rack::Request.new(env)
 
       @logger.debug { "REQUEST PARAMS: #{request.params.inspect}" }
-      @logger.debug { request['rack.errors'].read } if request['rack.errors']
+      # @logger.debug { request['rack.errors'].read } if request['rack.errors']
 
       @@dispatcher.dispatch(request)
 

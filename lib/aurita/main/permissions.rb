@@ -8,7 +8,7 @@ module Main
 
     register_permission(:delete_hierarchies, 
                         :type    => :bool, 
-                        :default => 't')
+                        :default => true)
 
   end
 

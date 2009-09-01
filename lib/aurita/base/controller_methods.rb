@@ -210,7 +210,7 @@ module Aurita
       log(@params.inspect)
       log('perform_add <--')
       return @klass_instance
-    end # def }}}
+    end # }}}
     
     # Default implementation of update routine on a 
     # business object. 

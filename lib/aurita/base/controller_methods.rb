@@ -546,12 +546,12 @@ module Aurita
 
       form.add(GUI::Hidden_Field.new(:name => :action, :value => method.to_s, :required => true)) if method
       form.add(GUI::Hidden_Field.new(:name => :controller, :value => klass.model_name.to_s, :required => true))
-      
+
       form_values = {}
       default_form_values.each_pair { |attrib, value|
         form_values[attrib.to_s] = value
       }
-
+      
       if instance then
         instance.attribute_values.each { |table, args| 
           args.each { |name, value|

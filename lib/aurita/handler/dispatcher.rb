@@ -13,6 +13,7 @@ Aurita.import(:base, :plugin_register)
 Aurita.import_module :decorators, :default
 
 require('lore/exceptions/validation_failure')
+require('lore/exceptions/unknown_type')
 require('lore/validation/parameter_validator')
 require('lore')
 

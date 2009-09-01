@@ -339,14 +339,20 @@ li.focussed {
 }
 li.focussed input, li.focussed select, li.focussed textarea { 
   color: #000000;
-  background: #f4f4f4; 
+  background: #ffffff; 
   border-color: #f3cb98; 
 }
 
 li.form_field .readonly { 
   padding: 3px; 
   padding-left: 7px; 
+  float: left; 
 } 
+li.form_field.readonly_wrap label {
+  float: left; 
+  width: 140px; 
+}
+
 ul li.form_field {
   border: 1px solid transparent; 
   margin-bottom: 2px; 
@@ -502,6 +508,41 @@ fieldset legend {
   margin-top: -6px; 
   background-color: #dedede; 
   border: 1px solid #cdcdcd; 
+}
+
+.section_content fieldset.list table.list { 
+  border-color: transparent; 
+}
+.section_content fieldset.list { 
+  width: 450px; 
+  border: 1px solid #909090; 
+}
+.section_content fieldset.list legend { 
+  font-size: 12px; 
+  padding: 5px; 
+  padding-bottom: 2px; 
+  margin-left: 3px; 
+}
+.section_content fieldset { 
+  border: 1px solid #efefef; 
+  padding: 10px; 
+  margin: 0px; 
+  margin-top: 29px; 
+  margin-bottom: 0px; 
+  background-color: #ffffff; 
+}
+.section_content fieldset legend { 
+  font-size: 12px; 
+  padding: 4px 18px 6px; 
+  margin-left: -11px; 
+  margin-top: -27px; 
+  border: 1px solid #efefef; 
+  border-bottom: 1px solid transparent; 
+  background-color: #ffffff; 
+}
+.section_content form { 
+  padding: 10px; 
+  margin: -10px; 
 }
 
 

@@ -184,7 +184,7 @@ JS
       @option_field_decorator ||= Category_Selection_List_Option_Field
       @select_field_class     ||= Category_Select_Field
 
-      params[:name]  = Category.category_id.to_s if params[:name].to_s.empty?
+      params[:name]  = Category.category_id if params[:name].to_s.empty?
       params[:label] = tl(:categories) unless params[:label]
       
       user           = params[:user]

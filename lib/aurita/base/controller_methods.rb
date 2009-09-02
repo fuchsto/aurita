@@ -170,13 +170,14 @@ module Aurita
       @params.each_pair { |param_name, param_value| 
         if param_name.to_s != '' && !(ignored_params.include?(param_name.to_sym)) then
           param_name = param_name.to_sym
+          param_name_split = param_name.to_s.split('.').last.to_sym
           # only update attributes (that is: Skip primary keys)
           if instance_attr.include?(param_name)  then
             inst[param_name] = param_value
-            log('Setting ' << param_name.to_s << ' : ' << param_value.to_s)
-          elsif(instance_attr.include?(param_name.to_s.split('.').last)) then
-            log('Setting ' << param_name.to_s << ' : ' << param_value.to_s)
-            inst.set_attribute_value(param_name, param_value)
+          elsif(instance_attr.include?(param_name_split)) then
+            inst.set_attribute_value(param_name_split, param_value)
+          else
+            log('Ignoring ' << param_name.to_s << ' : ' << param_value.to_s)
           end
         end
       }
@@ -231,6 +232,7 @@ module Aurita
       @klass_instance = load_instance() 
       @klass_instance = update_instance(@klass_instance)
       @klass_instance.commit()
+      return @klass_instance
     end # def }}}
 
     # Default implementation of deletion routine on a 

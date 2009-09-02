@@ -348,11 +348,11 @@ li.form_field .readonly {
   padding: 3px; 
   padding-left: 7px; 
   float: left; 
-  width: 210px; 
+  width: 195px; 
 } 
 li.form_field.readonly_wrap label {
   float: left; 
-  width: 140px; 
+  width: 110px; 
 }
 
 ul li.form_field {

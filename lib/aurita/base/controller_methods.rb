@@ -1,6 +1,8 @@
 
 require('lore')
 require('aurita/base/exceptions')
+
+Aurita.import_module :gui, :custom_form_elements
 Aurita.import_module :gui, :form_generator
 
 module Aurita

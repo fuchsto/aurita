@@ -1,8 +1,16 @@
 
+require 'rubygems'
+require 'aurita'
+Aurita.import_module :gui, :custom_form_elements
+
 require('lore/gui/form_generator')
 
 module Aurita
 module GUI
+
+  class Boolean_Radio_Field < Radio_Field
+    # Pre-define
+  end
 
   class Validating_Form_Field_Wrapper < Aurita::GUI::Form_Field_Wrapper
     def initialize(field)
@@ -27,10 +35,11 @@ module GUI
   end
 
   class Form_Generator < Lore::GUI::Form_Generator
+    include Aurita::GUI
     
-    @@type_field_map[Lore::PG_DATE] = Proc.new { |l,f| Datepick_Field.new(:label => l, :name => f) }
-    @@type_field_map[Lore::PG_TEXT] = Proc.new { |l,f| Text_Editor_Field.new(:label => l, :name => f) }
-    @@type_field_map[Lore::PG_BOOL] = Proc.new { |l,f| Boolean_Radio_Field.new(:label => l, :name => f) }
+    @@type_field_map[Lore::PG_DATE] = Proc.new { |l,f| Aurita::GUI::Datepick_Field.new(:label => l, :name => f) }
+    @@type_field_map[Lore::PG_TEXT] = Proc.new { |l,f| Aurita::GUI::Text_Editor_Field.new(:label => l, :name => f) }
+    @@type_field_map[Lore::PG_BOOL] = Proc.new { |l,f| Aurita::GUI::Boolean_Radio_Field.new(:label => l, :name => f) }
 
     def initialize(klass)
       super(klass)
@@ -40,3 +49,4 @@ module GUI
 
 end
 end
+

@@ -1,4 +1,5 @@
 
+require('lore/clause')
 
 module Aurita
 module Main

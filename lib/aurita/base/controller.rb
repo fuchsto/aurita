@@ -3,11 +3,10 @@ require('aurita-gui')
 require('aurita-gui/form')
 require('aurita-gui/button')
 require('aurita/base/controller_methods')
-require('aurita/base/controller_methods')
+Aurita.import_module :gui, :custom_form_elements
 Aurita.import(:base, :exception, :parameter_exception)
 Aurita.import(:base, :log, :class_logger)
 Aurita.import_module :gui, :erb_template
-Aurita.import_module :gui, :custom_form_elements
 Aurita.import_module :gui, :async_form_decorator
 Aurita.import(:base, :plugin_register)
 

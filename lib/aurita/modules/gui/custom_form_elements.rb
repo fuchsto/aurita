@@ -1,14 +1,12 @@
 
 require('aurita')
-require('aurita/controller')
 require('aurita-gui')
 require('aurita-gui/widget')
-Aurita.import_module :gui, :erb_helpers
+# Aurita.import_module :gui, :erb_helpers
 Aurita.import_module :gui, :i18n_helpers
 
 module Aurita
 module GUI
-
 
   class Text_Editor_Field < Textarea_Field
     def initialize(params={}, &block)

@@ -9,6 +9,7 @@ input, select, textarea {
 ul.form_fields {
   margin: 0px; 
   padding: 0px; 
+  width: 340px; 
 }
 
 ul.form_fields input, ul.form_fields textarea, ul.form_fields select {
@@ -260,7 +261,7 @@ button:hover {
 }
 
 .form_button_bar button.submit { 
-  margin-right: 3px; 
+  margin-right: 6px; 
 }
 .form_button_bar button.cancel { 
   margin-right: 0px; 
@@ -347,6 +348,7 @@ li.form_field .readonly {
   padding: 3px; 
   padding-left: 7px; 
   float: left; 
+  width: 210px; 
 } 
 li.form_field.readonly_wrap label {
   float: left; 

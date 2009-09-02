@@ -15,6 +15,25 @@ module Main
     primary_key :role_permission_id, :role_permission_id_seq
     
     has_a Role, :role_id
+
+    add_output_filter(:value) { |v|
+      if (v == 't') then 
+        true
+      elsif (v == 'f') then 
+        false
+      else 
+        v
+      end
+    }
+    add_input_filter(:value) { |v|
+      if v == true then
+        't'
+      elsif v == false then
+        'f'
+      else 
+        v
+      end
+    }
   end
 
   class User_Group < Aurita::Model
@@ -96,7 +115,7 @@ module Main
 
       return true if is_admin? or content.user_group_id == user_group_id
       return false unless content.category
-      return true if content.category.is_public == 't'
+      return true if content.category.is_public 
 
       categories = User_Category.select { |uc| 
         uc.join(Content_Category).on(User_Category.category_id == Content_Category.category_id) { |cc|
@@ -134,17 +153,17 @@ module Main
         content = Content.load(:content_id => content)
       end
       return true if is_admin? or (may_view_content?(content) && content.user_group_id == user_group_id)
-      return false if content.locked == 't'
+      return false if content.locked 
       permissions = Content_Permissions.all_with(Content_Permissions.content_id == content.content_id).entities
       permissions.each { |p|
-        return true if p.user_group_id == Aurita.user.user_group_id and p.readonly == 'f'
+        return true if p.user_group_id == Aurita.user.user_group_id and !p.readonly
       }
       return false if permissions.length > 0
       categories = User_Category.select { |uc| 
         uc.join(Content_Category).on(User_Category.category_id == Content_Category.category_id) { |cc|
           uc.where((Content_Category.content_id == content.content_id) & 
                    (User_Category.user_group_id == user_group_id) & 
-                   (User_Category.readonly == 'f'))
+                   (User_Category.readonly == false))
         }
       }.first
       (!categories.nil?)

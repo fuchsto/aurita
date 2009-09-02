@@ -324,7 +324,7 @@ module Aurita
         exec_js("Aurita.set_hashcode('#{url}');")
       end
     end
-
+    alias redirect redirect_to
 
     # Redirect to controller method or URL using an HTTP 302 
     # status code. 

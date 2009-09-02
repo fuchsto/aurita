@@ -9,7 +9,6 @@ module Main
 
     def form_groups
       [
-        Role.role_name
       ]
     end
 
@@ -38,53 +37,66 @@ module Main
     def update
       perms = {}
       role = load_instance()
-
-      Role_Permission.all_with(Role_Permission.role_id == role.role_id).each { |p|
-        (perms[p.name.to_sym] = p) if p.name
+      
+      Role_Permission.all_with(Role_Permission.role_id == role.role_id).each { |perm|
+        (perms[perm.name.to_sym] = perm) if perm.name
       }
-
+      
       form = update_form(Role)
-
+      form.delete_field(Role.role_name)
+      
       role_users = User_Role.all_with(User_Role.role_id == param(:role_id)).sort_by(User_Group.user_group_name, :asc).entities
       user_list  = HTML.ul { } 
       role_users.each { |u|
         user_list << HTML.li { link_to(u) { u.user_group_name } }
       }
-      users_box = Box.new(:id => :role_users, :class => :topic_inline, :style => "width: 382px; ")
-      users_box.header    = tl(:users)
-      users_box.body      = user_list
-      users_box.collapsed = true
-
-      puts users_box.string
-
-      form.add(Text_Field.new(:name     => Role.role_name, 
-                              :label    => tl(Role.role_name), 
-                              :value    => role.role_name, 
-                              :required => true))
-      is_super_admin = (perms[:is_super_admin])? 't' : 'f'
-      is_admin = (perms[:is_admin])? 't' : 'f'
-
-      form.add(Boolean_Radio_Field.new(:name  => :is_super_admin, 
-                                       :label => tl(:is_super_admin), 
-                                       :value => is_super_admin))
-      form.add(Boolean_Radio_Field.new(:name  => :is_admin, 
-                                       :label => tl(:is_admin), 
-                                       :value => is_admin))
-
+      
+      main_permissions_fieldset = Fieldset.new(:name => :main_role_fieldset, :legend => tl(:main_role_fieldset))
+      
+      main_permissions_fieldset.add(Text_Field.new(:name     => Role.role_name, 
+                                                   :label    => tl(Role.role_name), 
+                                                   :value    => role.role_name, 
+                                                   :required => true))
+      
+      is_super_admin   = perms[:is_super_admin].value if perms[:is_super_admin]
+      is_super_admin ||= 'false'
+      is_admin         = perms[:is_admin].value if perms[:is_admin]
+      is_admin       ||= 'false'
+      main_permissions_fieldset.add(Boolean_Radio_Field.new(:name  => :is_super_admin, 
+                                                            :label => tl(:is_super_admin), 
+                                                            :value => is_super_admin))
+      main_permissions_fieldset.add(Boolean_Radio_Field.new(:name  => :is_admin, 
+                                                            :label => tl(:is_admin), 
+                                                            :value => is_admin))
+      form.add(main_permissions_fieldset)
+      
+      permission_field_names = [ Role.role_name, :is_super_admin, :is_admin ]
       Plugin_Register.permissions.each_pair { |plugin, permissions|
+        permission_fields = []
         permissions.each { |p|
           e = p.element
           if perms[p.name.to_sym] then
             e.value = perms[p.name.to_sym].value 
           else
-            e.value = 'f' 
+            e.value = false
           end
-          form.add(e)
-          form.fields << p.name
+          permission_field_names << e.name
+          permission_fields << e
         }
+        fieldset = GUI::Fieldset.new(:name => "fieldset_#{plugin}", :legend => Lang.get(plugin, :plugin_name)) { permission_fields }
+        form.add(fieldset)
       }
-    
-      render_form(form, :title => tl(:edit_role))
+      form.fields = permission_field_names
+      form.add(GUI::Hidden_Field.new(:name => :controller, :value => 'Role'))
+      form.add(GUI::Hidden_Field.new(:name => :action, :value => 'perform_update'))
+      form.add(GUI::Hidden_Field.new(:name => :role_id, :value => role.role_id))
+      
+      users_box = Box.new(:id => :role_users, :class => :topic_inline, :style => "width: 382px; ")
+      users_box.header    = tl(:users)
+      users_box.body      = user_list
+      users_box.collapsed = true
+      
+      return Page.new(:header => tl(:edit_role)) { [users_box.string] + decorate_form(form) } 
     end
 
     def perform_add
@@ -112,8 +124,8 @@ module Main
         r.where(r.role_id == role_id)
       }
 
-      Role_Permission.create(:role_id => role_id, :name => 'is_admin', :value => 't') if (param(:is_admin) == 't')
-      Role_Permission.create(:role_id => role_id, :name => 'is_super_admin', :value => 't') if (param(:is_super_admin) == 't')
+      Role_Permission.create(:role_id => role_id, :name => 'is_admin', :value => true) if (param(:is_admin) == 'true')
+      Role_Permission.create(:role_id => role_id, :name => 'is_super_admin', :value => true) if (param(:is_super_admin) == 'true')
 
       Plugin_Register.permissions.each_pair { |plugin, permissions|
         permissions.each { |p|
@@ -146,7 +158,7 @@ module Main
       Role.find(:all).sort_by(:role_name).each { |role|
         role_id = role.role_id
         entry = HTML.div { 
-                  HTML.a.entry(:onclick => js.Cuba.load(:action => "Role/update/id=#{role_id}")) { 
+                  HTML.a.entry(:onclick => js.Cuba.load(:action => "Role/update/role_id=#{role_id}")) { 
                      " #{role.role_name}"
                   } 
                 }

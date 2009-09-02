@@ -73,21 +73,21 @@ module Main
       user.commit
 
       super()
-      exec_js("Aurita.load({ element: 'admin_users_box_body', action: 'User_Profile/admin_box_body/' }); 
-               Aurita.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
+      redirect_to(:action => :update, :user_group_id => instance.pkey)
+      redirect(:target => :admin_users_box_body, :action => :admin_box_body)
     end
 
     def perform_lock
       instance = load_instance
-      instance['locked'] = true
+      instance.locked = true
       instance.commit
-      exec_js("Aurita.load({ action: 'User_Login_Data/update/user_group_id=#{instance.user_group_id}' }); ")
+      redirect_to(:action => :update, :user_group_id => instance.pkey)
     end
     def perform_unlock
       instance = load_instance
-      instance['locked'] = false
+      instance.locked = false
       instance.commit
-      exec_js("Aurita.load({ action: 'User_Login_Data/update/user_group_id=#{instance.user_group_id}' }); ")
+      redirect_to(:action => :update, :user_group_id => instance.pkey)
     end
 
     def delete
@@ -103,8 +103,8 @@ module Main
       instance.deleted = true; 
       instance.hidden  = true; 
       instance.commit
-      exec_js("Aurita.load({ element: 'app_left_column', action: 'App_Admin/left/' }); 
-               Aurita.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
+      redirect_to(:action => :update, :user_group_id => instance.pkey)
+      redirect(:target => :admin_users_box_body, :action => :admin_box_body)
     end
 
   end

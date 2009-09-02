@@ -311,10 +311,10 @@ class Aurita::Base_Controller
     methods.each { |m|
       if m == :CRUD then
         guard_interface(:show, :list, :add, :perform_add, :update, 
-                        :perform_update, :delete, :perform_delete)
+                        :perform_update, :delete, :perform_delete, &block)
       elsif m == :CUD then
         guard_interface(:add, :perform_add, :update, 
-                        :perform_update, :delete, :perform_delete)
+                        :perform_update, :delete, :perform_delete, &block)
       else
         @guard_blocks[m] = Array.new unless (@guard_blocks[m].instance_of?(Array))
         @guard_blocks[m] << block

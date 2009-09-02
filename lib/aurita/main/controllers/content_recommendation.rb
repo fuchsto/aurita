@@ -12,18 +12,18 @@ module Main
 
     def perform_add
       user_from = User_Profile.load(:user_group_id => Aurita.user.user_group_id)
-      username = user_from.user_group_name + ' (' << user_from.forename.to_s + ' ' << user_from.surname.to_s + ')'
+      username = "#{user_from.user_group_name}  (#{user_from.forename} #{user_from.surname})"
       case param(:type) 
         when 'ARTICLE' then
           article = Wiki::Article.find(1).with(Wiki::Article.content_id == param(:content_id)).entity
           content_name = article.title
-          content_link = 'article--' + article.article_id 
+          content_link = "article--#{article.article_id}"
           message = tl(:article_recommendation_message)
           subject = tl(:article_recommendation_subject)
         when 'ASSET' then
           media_asset = Wiki::Media_Asset.find(1).with(Wiki::Media_Asset.content_id == param(:content_id)).entity
           content_name = media_asset.title.to_s
-          content_link = 'media--' + media_asset.media_asset_id
+          content_link = "media--#{media_asset.media_asset_id}"
           message = tl(:asset_recommendation_message)
           subject = tl(:asset_recommendation_subject)
       end

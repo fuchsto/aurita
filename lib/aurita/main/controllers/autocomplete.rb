@@ -107,7 +107,7 @@ module Main
       users = User_Profile.find(10).with(user_constraints).entities
       count = 1
       users.each { |a|
-        puts '<li class="autocomplete autocomplete_default" name="' << a.user_group_name + '" id="user__'<< a.user_group_id << '"><nobr><b>' << a.user_group_name << '</b></nobr><span class="informal"><br />Benutzer</span></li>'
+        puts "<li class=\"autocomplete autocomplete_default\" name=\"#{a.user_group_name}\" id=\"user__#{a.user_group_id}\"><nobr><b>#{a.user_group_name}</b></nobr><span class=\"informal\"><br />Benutzer</span></li>"
         style = ''
         count += 1
       }

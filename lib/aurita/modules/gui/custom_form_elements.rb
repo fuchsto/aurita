@@ -70,7 +70,7 @@ JS
 
     def initialize(params={}, &block) 
       params[:id]    = :autocomplete_tags # unless params[:id]
-      params[:name]  = :tags # unless params[:name]
+      params[:name]  = :tags unless params[:name]
       params[:class] = 'lore inline' unless params[:class]
       @onselect      = params[:onselect]
       @onselect    ||= "alert('Username_Autocomplete_Field.onselect('+li.id+'));"

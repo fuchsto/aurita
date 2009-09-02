@@ -182,7 +182,7 @@ recommend_to_users : Folgenden Benutzern empfehlen
 article_recommendation_subject : Artikelempfehlung - {1}
 article_recommendation_message : Artikelempfehlung von {1}<br /><br /> <a href="#{3}">{2}</a>
 
-asset_recommendation_subject : Dateiweiterletung - {1}
+asset_recommendation_subject : Dateiweiterleitung - {1}
 asset_recommendation_message : Dateiweiterleitung von {1}<br /><br /> <a href="#{3}">{2}</a>
 
 

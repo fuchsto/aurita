@@ -91,7 +91,7 @@ module Handler
       rewrite_url(env) 
       @logger.debug { 'REQUEST =================================================' }
       env.each_pair { |k,v|
-      # @logger.debug { "REQUEST #{k} - #{v.inspect}" }
+      #  @logger.debug { "REQUEST #{k} - #{v.inspect}" }
       }
       request    = Rack::Request.new(env)
 

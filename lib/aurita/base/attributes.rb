@@ -11,7 +11,7 @@ module Aurita
       key = key.to_s
 
       direct_match = super(key) 
-      return direct_match unless direct_match.nil?
+      return direct_match unless direct_match.empty?
       super(key.split('.')[-1])
     end
 
@@ -99,23 +99,19 @@ module Aurita
       
       # write all attributes (unfiltered) to attrib pool: 
       implicit_name = ''
-      resolved_value = ''
       attribs.each_pair { |name, value|
         if !name.nil? then
-          resolved_value = Attributes::resolve_cgi_value(value)
           if name.to_s[-2..-1] == '[]' then
             name = name[0..-3]
             # Empty Array params should return an empty Array so 
             # param(:some_array_param).each { ... }
             # works as expected. 
-            resolved_value = [] unless resolved_value 
-          else
-            resolved_value = resolved_value.first if resolved_value.is_a?(Array) 
+            value = [] unless value 
           end
-          @attributes[name] = resolved_value
+          @attributes[name] = value
           implicit_name = name.split('.')[2]
           if !implicit_name.nil? then 
-            @attributes[implicit_name] = resolved_value
+            @attributes[implicit_name] = value
           end
         end
       }
@@ -126,18 +122,6 @@ module Aurita
       touch
       return self
     end
-
-    def self.resolve_cgi_value(value) # :nodoc:
-    # {{{
-      if(value.instance_of? Array) then
-        if(value.first.instance_of?(StringIO) or value.first.instance_of?(Tempfile)) then
-          value = value.map { |v| v = v.read } 
-        end
-      elsif(value.instance_of? StringIO or value.instance_of?(Tempfile)) then
-        value = value.read
-      end
-      return value
-    end # def }}}
 
     def each_pair(&block)
       @attributes.each_pair(&block)

@@ -17,6 +17,7 @@ require('aurita/base/bits/hash')
 require('aurita/base/bits/time')
 require('aurita/base/bits/time_ago')
 require('aurita/base/bits/file')
+require('aurita/base/bits/nil')
 
 if not defined? RUBY_PATCHLEVEL or (RUBY_VERSION <= '1.8.5' and RUBY_PATCHLEVEL < 2)
   raise SecurityError, 'Please use Ruby 1.8.5-p2 or later!'

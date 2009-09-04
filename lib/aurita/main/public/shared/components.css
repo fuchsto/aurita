@@ -1315,6 +1315,7 @@ table.todo_entry_table {
   border: 1px solid #c0c0c0; 
   border-spacing: 0px; 
   background-color: #eaeaea; 
+  width: 100%; 
 }
 table.todo_entry_table tr.deact { 
   color: #454545; 

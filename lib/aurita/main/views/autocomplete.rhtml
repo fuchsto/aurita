@@ -3,13 +3,29 @@
   <nobr>
       <span id="indicator_"><img src="/aurita/images/search.gif" /></span>
       <span id="indicator" style="display: none; "><img src="/aurita/images/search_loading.gif" /></span>
-      <input type="text" id="autocomplete" name="key" class="autocomplete" />
+      <input type="text" onkeyup="custom_autocomplete(); " id="autocomplete" name="key" class="autocomplete" />
+      <!--  <input type="text" onkeyup="custom_autocomplete(); " id="autocomplete" name="key" class="autocomplete" /> -->
   </nobr>
   <div id="autocomplete_choices" class="autocomplete" ></div>
 
 </div>
 
 <script language="Javascript">
+
+  function custom_autocomplete_onupdate() { 
+    Element.hide('indicator');
+    Element.show('indicator_');
+    Element.setStyle('autocomplete_choices', { width: '420px', top: '25px', left: '-191px' }); 
+    Element.show('autocomplete_choices');
+  }
+  function custom_autocomplete() { 
+    Element.show('indicator');
+    Element.hide('indicator_');
+    Aurita.load_silently({ action: 'Autocomplete/all/key='+($('autocomplete').value), 
+                           element: 'autocomplete_choices', 
+                           onload: custom_autocomplete_onupdate });
+  };
+
   
   function show_article(text, li)
   {
@@ -44,10 +60,10 @@
   }
 
   function fix_rollout(element, query) { 
-    Element.setStyle('autocomplete_choices', { width: '420px', top: '25px', left: '-242px' }); 
+    Element.setStyle('autocomplete_choices', { width: '420px', top: '25px', left: '-191px' }); 
     return query; 
   }
-  
+
   new Ajax.Autocompleter("autocomplete", 
                          "autocomplete_choices", 
                          "/aurita/dispatch_runner.fcgi", 
@@ -56,10 +72,10 @@
                            updateElement: show_article, 
                            indicator: 'indicator', 
                            tokens: [], 
-                           frequency: 0.5, 
+                           frequency: 0.1, 
                            callback: fix_rollout, 
                            parameters: 'controller=Autocomplete&action=all&mode=none'
                          }
-  );
-  
+ );
+
 </script>

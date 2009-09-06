@@ -101,11 +101,11 @@ module Main
     def perform_reorder
       hid = param(:hierarchy_id)
       position_tree = []
-      parse_position_tree("hierarchy_sortable_list_#{hid}", '0', position_tree)
+      position_tree = param("hierarchy_sortable_list_#{hid}")
       sortpos = 0
-      position_tree.each { |entry|
-        entry_id = entry[0]
-        entry_parent_id = entry[1]
+      position_tree.each_pair { |sortpos,entry|
+        entry_id = entry["id"]
+        entry_parent_id = '0'
         Hierarchy_Entry.update { |e|
           e.where(e.hierarchy_entry_id == entry_id) 
           e.set(:hierarchy_entry_id_parent => entry_parent_id, 

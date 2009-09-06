@@ -95,8 +95,7 @@ module Handler
       }
       request    = Rack::Request.new(env)
 
-      @logger.debug { "REQUEST PARAMS: #{request.params.inspect}" }
-      # @logger.debug { request['rack.errors'].read } if request['rack.errors']
+      @logger.info { "REQUEST PARAMS: #{request.params.inspect}" }
 
       @@dispatcher.dispatch(request)
 

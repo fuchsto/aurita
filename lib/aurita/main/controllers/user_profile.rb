@@ -18,7 +18,7 @@ module Main
 #########################################
     
     guard_interface(:perform_update) { |c|
-      (Aurita.user.is_admin? || c.param(:user_group_id) == Aurita.user.user_group_id)
+      (Aurita.user.is_admin? || c.param(:user_group_id).to_s == Aurita.user.user_group_id.to_s)
     }
 
     guard_interface(:perform_delete) { 

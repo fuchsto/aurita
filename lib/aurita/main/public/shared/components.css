@@ -35,7 +35,7 @@ ul.no_bullets li { list-style-type: none; }
 ol li { list-style-type: decimal; }
 
 body { 
-  font-size: 11px; 
+  font-size: 12px; 
   line-height: 18px !important; 
 }
 
@@ -410,7 +410,7 @@ table.list td.tab_left {
 }
 .box_hierarchy_entry { 
   height: 22px; 
-  font-size: 11px; 
+  font-size: 12px; 
   line-height: 21px;
   border-bottom: 1px solid #cfcfcf; 
   cursor: pointer; 
@@ -531,12 +531,11 @@ tr.highlighted td {
   background-color: #dedede; 
   color: #000000;
   padding: 0px; 
-  margin: 3px; 
-/*  clear: both; */
+/*  margin: 3px; */
 }
 .topic, .topic_inline { 
   background-color: #dedede; 
-  border: 1px solid #cccccc; 
+/*  border: 1px solid #cccccc; */
   color: #000000;
 }
 .topic_inline { 
@@ -545,6 +544,7 @@ tr.highlighted td {
   margin-right: -4px;
 */
   padding: 0px; 
+  padding-top: 2px; 
   margin-bottom: 4px; 
 }
 .topic_inline .box_body { 
@@ -574,8 +574,8 @@ tr.highlighted td {
 .topic_content, .box_body { 
   padding: 3px; 
   padding-left: 3px; 
-  font-size: 11px; 
-  font-family: Verdana, sans-serif; 
+  font-size: inherit; 
+  font-family: inherit; 
   overflow: hidden;  
 }
 
@@ -619,7 +619,6 @@ img.icon {
   padding: 1px; 
   z-index: 700; 
   background-color: #f0f0f0; 
-  font-size: 11px; 
   border-top: 1px solid #ffffff;
   border-left: 1px solid #ffffff;
   border-bottom: 1px solid #989898;
@@ -652,7 +651,7 @@ img.icon {
 }
 
 .context_menu_entry_label { 
-  font-family: Verdana, Arial, Helvetica; 
+  font-family: inherit; 
   font-size: 11px; 
   position: relative; 
   top: -4px; 
@@ -1165,6 +1164,7 @@ div.autocomplete ul.autocomplete li.autocomplete {
   padding:2px;
   cursor:pointer;
   overflow: hidden; 
+  padding-left: 7px; 
 }
 #autocomplete_choices { 
   width: 420px; 
@@ -1262,6 +1262,9 @@ table.media_asset_table th.hovered {
 }
 table.media_asset_table tr.even { 
   background-color: #efefef;
+}
+table.media_asset_table tr.odd { 
+  background-color: #f7f7f7;
 }
 table.media_asset_table td { 
   padding: 7px; 
@@ -1617,7 +1620,7 @@ div.near_column {
 
 .box_hierarchy_entry { 
   height: 22px; 
-  font-size: 11px; 
+  font-size: inherit;
   line-height: 21px;
   border-bottom: 1px solid #676767; 
   cursor: pointer; 

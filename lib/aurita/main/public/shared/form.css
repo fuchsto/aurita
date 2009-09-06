@@ -367,7 +367,8 @@ ul li.form_field {
 li.form_field.required {
 } 
 li.form_field.required label {
-  color: #ff6855;
+/*  color: #ff6855; */
+  color: #dd0000;
 } 
 
 li.form_field.invalid { 

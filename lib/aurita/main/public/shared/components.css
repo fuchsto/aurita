@@ -554,6 +554,9 @@ tr.highlighted td {
   font-family: inherit; 
   overflow: hidden;  
 }
+.topic_content ul, .box_body ul {
+  padding: 5px;  
+}
 
 a.icon { 
   padding: 3px; 
@@ -1226,10 +1229,10 @@ table.media_asset_table th.hovered {
   background: transparent url(/aurita/images/button_hover_bg.gif) repeat scroll 0 0; 
 }
 table.media_asset_table tr.even { 
-  background-color: #f0f0f0;
+  background: transparent url(/aurita/images/icons/tall_row_brighter_bg.png) repeat-x scroll 0 0
 }
 table.media_asset_table tr.odd { 
-  background-color: #f7f7f7;
+  background: transparent url(/aurita/images/icons/tall_row_brighter_bg.png) repeat-x scroll 0 0
 }
 table.media_asset_table td { 
   padding: 7px; 
@@ -1792,4 +1795,12 @@ table.listing_2_columns td b {
   font-weight: normal; 
 }
 table.listing_2_columns { 
+}
+
+.user_profile_box { 
+  width: 320px; 
+  float: left; 
+}
+.user_profile_box h2 { 
+  padding-left: 7px; 
 }

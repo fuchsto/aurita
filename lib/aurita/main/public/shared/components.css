@@ -87,8 +87,8 @@ p {
 
 .highlighted { 
 /*  background-color: #f9dba8 !important; */
-  background-color: #f9dba8 !important; 
   border-color: #e3bb88 !important; 
+  background: #f9cf88 url(/aurita/images/icons/tall_row_highlighted_bg.png) repeat-x scroll 0 0px !important; 
 }
 
 .context_hover { 
@@ -319,7 +319,7 @@ table.list td.tab_left {
 }
 
 .index_entry { 
-  margin-bottom: 2px; 
+  margin: 4px; 
   padding: 5px 5px 5px 10px; 
 }
 .index_entry .header { 
@@ -330,14 +330,33 @@ table.list td.tab_left {
 .index_entry .info { 
 }
 .article_view, .article_entry {
-  width: 100%; 
+/*  width: 100%; */
+  padding: 8px; 
 /*  max-width: 600px; */
+  background-color: #f0f0f0; 
 }
 .article_entry { 
   padding: 5px;
   margin: 2px;
   border-bottom: 1px solid #222222;
   padding-left: 13px; 
+}
+
+div.article_view div.article_info {
+  font-family: inherit; 
+  font-size: 11px;
+  line-height: 15px; 
+  font-weigth: lighter; 
+  color: #676767;
+  margin-left: -7px; 
+  margin-right: -7px; 
+  padding-left: 4px; 
+}
+
+.article_view .article_info input, .article_view .article_info select, .article_view .article_info input:focus, .article_view .article_info select:focus { 
+  padding: 1px; 
+  margin: 0px; 
+  font-size: 10px; 
 }
 
 .user_index_entry { 
@@ -449,10 +468,10 @@ table.list td.tab_left {
   background-color: #e3bb88 !important; 
 }
 .darker_bg { 
-  background-color: #d7d7d7; 
+  background-color: #eaeaea; 
 }
 .highlighted .darker_bg, .highlighted.darker_bg { 
-  background-color: #e3bb88 !important; 
+  background-color: #f7cf9b !important; 
   border-color: #e3bb88 !important; 
 }
 .default_bg { 
@@ -531,7 +550,6 @@ tr.highlighted td {
 
 .topic_content, .box_body { 
   padding: 3px; 
-  padding-top: 0px; 
   font-size: inherit; 
   font-family: inherit; 
   overflow: hidden;  
@@ -1208,7 +1226,7 @@ table.media_asset_table th.hovered {
   background: transparent url(/aurita/images/button_hover_bg.gif) repeat scroll 0 0; 
 }
 table.media_asset_table tr.even { 
-  background-color: #efefef;
+  background-color: #f0f0f0;
 }
 table.media_asset_table tr.odd { 
   background-color: #f7f7f7;
@@ -1262,6 +1280,7 @@ table.media_asset_table td.date {
 
 table.todo_entry_table { 
   border: 1px solid #c0c0c0; 
+  border-left: 0px solid transparent; 
   border-spacing: 0px; 
   background-color: #eaeaea; 
   width: 100%; 
@@ -1316,6 +1335,19 @@ table.todo_entry_table td.unit_cost {
 table.todo_entry_table td.total_cost { 
   text-align: right; 
   width: 47px; 
+}
+
+table.todo_entry_table td { 
+  background: #e2e2e2 url(/aurita/images/icons/tall_row_bg.png) repeat-x scroll 0 0px; 
+}
+table.todo_entry_table tr.highlighted td { 
+  background: #f9cf88 url(/aurita/images/icons/tall_row_highlighted_bg.png) repeat-x scroll 0 0px; 
+}
+table.todo_entry_table tr.deact td { 
+  background: #d4d3d4 url(/aurita/images/icons/tall_row_darker_bg.png) repeat-x scroll 0 0px; 
+}
+table.todo_entry_table tr.deact.highlighted td { 
+  background: #ebc490 url(/aurita/images/icons/tall_row_darker_highlighted_bg.png) repeat-x scroll 0 0px; 
 }
 
 table.todo_entry_table td.done { 
@@ -1539,7 +1571,7 @@ div.near_column {
   padding-right: 10px; 
   float: left; 
   margin-right: 4px; 
-  background-color: #f6f6f6; 
+  background-color: #f5f5f5; 
   height: 20px; 
   overflow-y: hidden; 
 }
@@ -1555,12 +1587,12 @@ div.near_column {
   padding: 18px; 
   margin-top: 1px; 
   margin-bottom: -2px; 
-  background-color: #f6f6f6; 
+  background-color: #f5f5f5; 
   height: 20px; 
   overflow-y: hidden; 
 }
 .section_content { 
-  background-color: #f6f6f6; 
+  background-color: #f5f5f5; 
   padding: 10px; 
 }
 
@@ -1745,7 +1777,6 @@ table.message_table {
 }
 
 table.listing_2_columns td {
-  border-bottom: 1px dotted #a0a0a0; 
   padding: 1px; 
   padding-left: 4px; 
   height: 20px; 
@@ -1761,5 +1792,4 @@ table.listing_2_columns td b {
   font-weight: normal; 
 }
 table.listing_2_columns { 
-  border-top: 1px dotted #a0a0a0; 
 }

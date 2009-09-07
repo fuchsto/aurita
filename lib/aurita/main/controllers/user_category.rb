@@ -6,7 +6,7 @@ module Main
 
   class User_Category_Controller < App_Controller
 
-    guard_interface(:list, :perform_add, :perform_delete, :perform_update, :toggle_readonly) { Aurita.user.is_admin? }
+    guard_interface(:list, :CUD, :toggle_readonly) { Aurita.user.is_admin? }
 
     def list
       puts list_string(param(:user_group_id))
@@ -44,10 +44,10 @@ module Main
 
     def toggle_readonly
       user_cat = User_Category.find(1).with((User_Category.user_group_id == param(:user_group_id)) & (User_Category.category_id == param(:category_id))).entity
-      if user_cat.readonly == 'f' then
-        user_cat.readonly = true
-      else
+      if user_cat.readonly then
         user_cat.readonly = false
+      else
+        user_cat.readonly = true
       end
       user_cat.commit
     end

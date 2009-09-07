@@ -26,9 +26,9 @@
             <%= gui.link_to(:controller => 'User_Group', :action => :show, :user_group_id => entry.user_group_id) { entry.user_group_name } %>
           </strong> (<%= gui.datetime(entry.time) %>) 
           <% if entry.user_group_id == Aurita.user.user_group_id || Aurita.user.is_admin? then %>
-            <span class="link" onclick="Cuba.confirmable_action({ action: 'Content_Comment/perform_delete/content_comment_id=<%= entry.content_comment_id %>', 
-                                                                  message: '<%= tl(:confirm_delete_comment) %>', 
-                                                                  onconfirm: function() { Element.toggle('content_comment_<%= entry.content_comment_id %>'); } }); ">
+            <span class="link" onclick="Aurita.confirmable({ action: 'Content_Comment/perform_delete/content_comment_id=<%= entry.content_comment_id %>', 
+                                                             message: 'confirm_delete_comment', 
+                                                             onconfirm: function() { Element.toggle('content_comment_<%= entry.content_comment_id %>'); } }); ">
               <img src="/aurita/images/icons/comment_delete.gif" />
             </span>
 

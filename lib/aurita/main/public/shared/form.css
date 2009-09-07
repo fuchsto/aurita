@@ -30,9 +30,11 @@ ul.form_fields textarea {
   padding: 5px; 
   padding-right: 6px; 
   margin: 0px; 
-  height: 65px; 
+  height: 105px; 
 }
-
+ul.form_fields textarea.large_editor { 
+  height: 165px; 
+}
 input {
   line-height: 120%; 
   padding: 5px; 

@@ -1,5 +1,5 @@
 <div>
-	<%= message %>
+	<%= tl(message.to_sym) if message %>
 </div>
 <div style="margin-top: 7px; text-align: center; ">
   <button type="button" class="submit" style="width: 80px; " onclick="Aurita.confirm_action(); "><%= tl(:ok) %></button>

@@ -35,7 +35,8 @@ ul.no_bullets li { list-style-type: none; }
 ol li { list-style-type: decimal; }
 
 body { 
-  font-size: 12px; 
+  font-size: 13.34px; 
+  font-family: helvetica,arial,freesans,clean,sans-serif;
   line-height: 18px !important; 
 }
 
@@ -121,6 +122,14 @@ p {
   -moz-opacity: 0.6; 
   -khtml-opacity:0.6; 
   color:rgba(255, 255, 255, 0.6);
+}
+
+.main_autocomplete_box { 
+  border-top: 1px solid white; 
+  border-left: 1px solid white; 
+  border-right: 1px solid #c8c8c8; 
+  border-bottom: 1px solid #c8c8c8; 
+  background-color: #f0f0f0;
 }
 
 div.warning_box { 
@@ -242,7 +251,7 @@ table.list td.tab_left {
   margin-left: 0px; 
   margin-top: 2px; 
   padding-left: 10px; 
-  background-color: #efefef; 
+  background-color: #f8f8f8; 
   line-height: 19px; 
   clear: both; 
 }
@@ -391,61 +400,6 @@ table.list td.tab_left {
   text-align: center; 
 }
 
-.media_asset_folder_tree_box { 
-  border-top: 1px solid #cfcfcf; 
-  margin-top: 0px; 
-  padding-top: 0px; 
-  float: left; 
-/*  
-  height: 220px; 
-  overflow-x: hidden; 
-  overflow-y: auto; 
-*/
-  padding-left: 0px; 
-  width: 100%; 
-}
-#media_folder_box_body { 
-  padding-left: 1px; 
-  padding-right: 0px; 
-}
-.box_hierarchy_entry { 
-  height: 22px; 
-  font-size: 12px; 
-  line-height: 21px;
-  border-bottom: 1px solid #cfcfcf; 
-  cursor: pointer; 
-}
-.box_hierarchy_entry .label { 
-  overflow: hidden; 
-}
-.box_hierarchy_entry_level_1 .label { 
-  padding-left: 31px; 
-  background-color: #cfcfcf; 
-}
-.box_hierarchy_entry_level_2 .label { 
-  padding-left: 42px; 
-  background-color: #c4c4c4; 
-}
-.box_hierarchy_entry_level_3 .label { 
-  padding-left: 53px; 
-  background-color: #bebebe; 
-}
-.box_hierarchy_entry_level_4 .label { 
-  padding-left: 64px; 
-  background-color: #b6b6b6; 
-}
-.box_hierarchy_entry_level_5 .label { 
-  padding-left: 75px; 
-  background-color: #b6b6b6; 
-}
-.box_hierarchy_entry_level_6 .label { 
-  padding-left: 86px; 
-  background-color: #b6b6b6; 
-}
-.highlighted .label { 
-  background-color: transparent !important; 
-}
-
 .video_index_entry { 
   min-width: 300px; 
   width: 30%; 
@@ -502,7 +456,7 @@ table.list td.tab_left {
   border-color: #e3bb88 !important; 
 }
 .default_bg { 
-  background-color: #efefef; 
+  background-color: #f9f9f9; 
 }
 .highlighted .default_bg, .highlighted.default_bg { 
   background-color: #f9dba8 !important; 
@@ -534,8 +488,12 @@ tr.highlighted td {
 /*  margin: 3px; */
 }
 .topic, .topic_inline { 
-  background-color: #dedede; 
+  background-color: #f0f0f0; 
 /*  border: 1px solid #cccccc; */
+  border-right: 1px solid #c8c8c8; 
+  border-bottom: 1px solid #c8c8c8; 
+  border-left: 1px solid white;
+  border-top: 1px solid white; 
   color: #000000;
 }
 .topic_inline { 
@@ -544,7 +502,6 @@ tr.highlighted td {
   margin-right: -4px;
 */
   padding: 0px; 
-  padding-top: 2px; 
   margin-bottom: 4px; 
 }
 .topic_inline .box_body { 
@@ -554,10 +511,11 @@ tr.highlighted td {
   padding: 3px;      
   font-size: 13px; 
   color: #000000;
-  height: 17px; 
+  height: 16px; 
   font-family: inherit; 
   line-height: 17px; 
-  background-color: #cfcfcf; 
+  background-color: #dedede; 
+  background: url('/aurita/images/icons/box_header_bg.png'); 
 }
 .box_header .header {
   font-family: Verdana, sans-serif; 
@@ -573,7 +531,7 @@ tr.highlighted td {
 
 .topic_content, .box_body { 
   padding: 3px; 
-  padding-left: 3px; 
+  padding-top: 0px; 
   font-size: inherit; 
   font-family: inherit; 
   overflow: hidden;  
@@ -596,7 +554,7 @@ a.icon img {
   vertical-align: middle; 
 }
 a.icon:hover { 
-  background-color: #e9e9e9; 
+  background-color: #f8f8f8; 
 }
 
 .small_topic .box_header { 
@@ -986,22 +944,6 @@ button.icon_button img {
   margin: -4px -4px 4px -6px; 
   padding: 2px 1px 3px 4px; 
 }
-.user_profile_box { 
-  background-color: #dedede; 
-  width: 320px; 
-  margin: 0px; 
-  margin-right: 3px; 
-  margin-bottom: 3px; 
-  float: left; 
-}
-.user_profile_box h2, .user_profile_box .box_header { 
-  background-color: #cecece; 
-  padding: 5px; 
-  font-size: 12px; 
-  font-weight: lighter; 
-  color: #000000; 
-  margin-top: 0px; 
-}
 
 td.profile_left_column { 
   width: 120px; 
@@ -1118,7 +1060,7 @@ ol#poll_options li {
 input.autocomplete, input.autocomplete:focus {
   width:180px;
   background-color: white;
-  border:1px solid #888;
+  border:1px solid #cccccc;
   margin:3px;
   padding:3px;
   margin-right: 0px;
@@ -1244,8 +1186,10 @@ li.autocomplete_first_entry {
 /* -------------------------------------------- */
 
 table.media_asset_table { 
-  border: 1px solid #565656; 
-  background-color: #dedede; 
+  border-right: 1px solid #c8c8c8; 
+  border-bottom: 1px solid #c8c8c8; 
+  border-left: 1px solid white;
+  border-top: 1px solid white; 
   width: 100%; 
 }
 table.media_asset_table th { 
@@ -1256,6 +1200,9 @@ table.media_asset_table th {
   border-left: 1px solid #898989; 
   background: transparent url(/aurita/images/button_bg.gif) repeat scroll 0 0; 
   cursor: default; 
+}
+table #0_col_header { 
+  border-left: 0px; 
 }
 table.media_asset_table th.hovered { 
   background: transparent url(/aurita/images/button_hover_bg.gif) repeat scroll 0 0; 
@@ -1269,7 +1216,7 @@ table.media_asset_table tr.odd {
 table.media_asset_table td { 
   padding: 7px; 
   vertical-align: top; 
-  border-right: 1px solid #efefef; 
+  border-left: 1px solid #dfdfdf; 
 }
 table.media_asset_table td.icon { 
   width: 70px; 
@@ -1283,7 +1230,6 @@ table.media_asset_table tr.even td.icon {
 /*  background-color: #c0c0c0; */
 }
 table.media_asset_table tr.even td { 
-  border-right: 1px solid #dfdfdf; 
 }
 table.media_asset_table td.info { 
   padding-left: 10px; 
@@ -1345,7 +1291,7 @@ table.todo_entry_table td {
   padding-bottom: 0px; 
   vertical-align: top; 
   border-bottom: 1px solid #c9c9c9; 
-  border-right: 1px solid #dedede; 
+  border-left: 1px solid #dedede; 
 }
 
 table.todo_entry_table td.done, table.todo_entry_table td.priority, table.todo_entry_table td.user { 
@@ -1454,7 +1400,7 @@ div.calculation_totals .totals {
   background-color: white; 
   height: 200px; 
   margin-left: 2px; 
-  margin-bottom: 3px; 
+  margin-top: 3px; 
 }
 .media_asset_thumbnail.tiny { 
   width: 75px; 
@@ -1639,10 +1585,10 @@ div.near_column {
   border-color: #cfcfcf; 
 }
 .box_hierarchy_entry_level_1 { 
-  background-color: #b6b6b6; 
+  background-color: #e8e8e8; 
 }
 .box_hierarchy_entry_level_2 { 
-  background-color: #a9a9a9; 
+  background-color: #e0e0e0; 
 }
 .box_hierarchy_entry_level_3 { 
   background-color: #a0a0a0; 
@@ -1650,6 +1596,54 @@ div.near_column {
 .box_hierarchy_entry_level_4 { 
   background-color: #a0a0a0; 
 }
+.media_asset_folder_tree_box { 
+  border-top: 1px solid #cfcfcf; 
+  margin-top: 0px; 
+  padding: 0px; 
+  float: left; 
+/*  
+  height: 220px; 
+  overflow-x: hidden; 
+  overflow-y: auto; 
+*/
+  width: 100%; 
+}
+#media_folder_box_body { 
+  padding: 0px; 
+}
+.box_hierarchy_entry { 
+  height: 22px; 
+  line-height: 21px;
+  border-bottom: 1px solid #cfcfcf; 
+  cursor: pointer; 
+  background: transparent url(/aurita/images/icons/row_bg.png) repeat; 
+}
+.box_hierarchy_entry .label { 
+  overflow: hidden; 
+  height: 100%; 
+}
+.box_hierarchy_entry_level_1 .label { 
+  padding-left: 31px; 
+}
+.box_hierarchy_entry_level_2 .label { 
+  padding-left: 42px; 
+}
+.box_hierarchy_entry_level_3 .label { 
+  padding-left: 53px; 
+}
+.box_hierarchy_entry_level_4 .label { 
+  padding-left: 64px; 
+}
+.box_hierarchy_entry_level_5 .label { 
+  padding-left: 75px; 
+}
+.box_hierarchy_entry_level_6 .label { 
+  padding-left: 86px; 
+}
+.highlighted .label { 
+  background-color: transparent !important; 
+}
+
 
 table.calendar_mini_month { 
   width: 100%; 

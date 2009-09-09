@@ -203,15 +203,11 @@ module Aurita
     #
     def perform_add() 
     # {{{
-      if !@klass then
-        model_klass_name = self.to_s.gsub('_Controller','')
-        model_klass = eval(model_klass_name)
-        @klass = model_klass 
-      end
-      log('perform_add -->')
+      @klass ||= resolve_model_klass()
+      log { "perform_add on #{@klass.inspect} --> "}
       @klass_instance = @klass.create(@params)
       log(@params.inspect)
-      log('perform_add <--')
+      log { 'perform_add <--' }
       return @klass_instance
     end # }}}
     

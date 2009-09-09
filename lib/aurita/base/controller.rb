@@ -146,11 +146,11 @@ class Aurita::Base_Controller
   protected
 
   def self.log(message, level=nil, &block)
-    return @logger unless message
+    return @logger unless (message || block_given?)
     @logger.log(message, level, &block)
   end
   def log(message=nil, level=nil, &block)
-    return @logger unless message
+    return @logger unless (message || block_given?)
     @logger.log(message, level, &block)
   end
 
@@ -243,6 +243,7 @@ class Aurita::Base_Controller
         permission = permission && (g.call(self))
       }
     end
+    
     result = nil
     if permission then
       begin
@@ -252,7 +253,6 @@ class Aurita::Base_Controller
         
         controller_cache = self.class.cache
         cached_actions   = self.class.cached_actions
-        log('Cached actions are ' + cached_actions.inspect)
 
         if cached_actions.include?(method.to_sym) then
           cache_params = @params.to_hash.update(:action => method)
@@ -267,7 +267,9 @@ class Aurita::Base_Controller
           else 
             log('Controller cache miss') 
             result = __send__(method, *args) 
-            @response[:html] = result.string if @response[:html] == '' && result.respond_to?(:string)
+            if @response[:html] == '' && result.respond_to?(:string) then
+              @response[:html] = result.string 
+            end
             controller_cache.store(cache_params) { @response } 
           end
         else
@@ -495,6 +497,9 @@ class Aurita::Base_Controller
     @klass = model_klass if model_klass
     return @klass
   end
+  def resolve_model_klass
+    self.class.resolve_model_klass
+  end
 
   # Return plain name of this controller, like 'Article' for 
   # Article_Controller. 
@@ -518,9 +523,7 @@ class Aurita::Base_Controller
   # 
   def self.model
   # {{{
-    return @model_klass if @model_klass
-    model_klass_name = self.class.to_s.gsub('_Controller','')
-    model_klass_resolved = true
+    model_klass_name = self.to_s.gsub('_Controller','')
     begin
       model_klass = eval(model_klass_name)
     rescue ::Exception => excep
@@ -582,9 +585,9 @@ class Aurita::Base_Controller
     @response[:script]       = ''
     @response[:error]        = ''
     @response[:http_header]  = nil
-    @klass = model_klass
-    @logger = Aurita::Log::Class_Logger.new(self.class.to_s)
-    self.class.resolve_model_klass unless @klass
+    @klass   = model_klass
+    @klass ||= resolve_model_klass 
+    @logger  = Aurita::Log::Class_Logger.new(self.class.to_s)
   end # }}}
 
   # Call action from a foreign controller. This is useful for 

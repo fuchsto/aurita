@@ -45,37 +45,39 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 h1 { 
-  font-size: 21px;
-  margin-bottom: 6px; 
-  font-weight: bold; 
-  color: #000000;
+  font-size: 25px;
+  margin-bottom: 0px; 
+  font-weight: lighter; 
+  line-height: 30px; 
 }
 
 h2 { 
-  font-size: 17px;
+  font-size: 20px;
   line-height: 20px; 
-  color: #000000;
   padding-top: 10px; 
   padding-bottom: 10px; 
+  font-weight: lighter; 
 }
 h3, h4 { 
   font-weight: bold; 
-  line-height: 20px; 
-  color: #000000;
+  line-height: 17px; 
   padding-top: 10px; 
   padding-bottom: 10px; 
 }
-h3 { font-size: 15px; padding: 0px; }
-h4 { font-size: 13px; padding: 0px; }
+h3 { font-size: 16px; padding: 0px; }
+h4 { font-size: 14px; padding: 0px; }
 
 h5, h6 { 
-  font-size: 12px;
+  font-size: 13px;
   line-height: 18px; 
-  color: #000000;
   font-weight: bold; 
   text-transform: uppercase; 
   padding-top: 10px; 
   padding-bottom: 10px; 
+}
+
+h1, h2, h3, h4, h5, h6 { 
+  color: #3287D7;
 }
 
 
@@ -227,7 +229,7 @@ table.list td {
   border-top: 1px solid #cecece; 
 }
 table.list th, table.list th.first { 
-  background: transparent url('/aurita/images/icons/box_header_bg.png') repeat scroll 0 0;
+  background: transparent url('/aurita/images/icons/box_header_bg.png') repeat-x scroll 0 0;
   color: #000000; 
   padding: 3px 5px; 
   font-size: 13px; 
@@ -254,7 +256,7 @@ table.list td.tab_left {
   padding-left: 10px; 
   line-height: 19px; 
   clear: both; 
-  background: #f8f8f8 url('/aurita/images/icons/tall_row_brighter_bg.png'); 
+  background: #f3f3f3 url('/aurita/images/icons/tall_row_brighter_bg.png') repeat-x; 
 }
 .article_thumb { 
   display: inline; 
@@ -320,7 +322,7 @@ table.list td.tab_left {
 }
 
 .index_entry { 
-  margin: 4px; 
+  margin: 2px; 
   padding: 5px 5px 5px 10px; 
 }
 .index_entry .header { 
@@ -523,8 +525,6 @@ tr.highlighted td {
   padding: 0px; 
   margin-bottom: 4px; 
 }
-.topic_inline .box_body { 
-}
 
 .box_header {
   padding: 3px;      
@@ -540,8 +540,12 @@ tr.highlighted td {
   font-family: Verdana, sans-serif; 
 }
 
-.box_body .box_header { 
-  background-color: #cfcfcf; 
+.box_body { 
+  background: #F3F3F3 url(/aurita/images/icons/tall_row_brighter_bg.png) repeat-x scroll 0 0; 
+}
+.main_content .box_body { 
+  background: transparent; 
+  padding: 2px; 
 }
 
 .topic_inline .box_header { 

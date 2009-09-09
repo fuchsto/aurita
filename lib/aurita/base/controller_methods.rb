@@ -258,12 +258,6 @@ module Aurita
       @klass_instance = nil
     end # def }}}
 
-    # Invalidates all caches for this controller's model. 
-    #
-    def invalidate_cache() 
-      @klass.invalidate_all()
-    end
-
     protected
 
     # Set HTTP response header entries. 

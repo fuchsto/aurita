@@ -133,8 +133,7 @@ include Observable
               @logger.log("Filesize: #{filesize}")
               @response_header['Content-Type'] = "application/force-download" 
               @response_header['Content-Disposition'] = "attachment; filename=\"#{File.basename(filename)}\"" 
-              @response_header["X-Sendfile"] = filename
-              @response_header["X-LIGHTTPD-send-file"] = filename
+              @response_header["X-Aurita-Sendfile"] = filename
               # Use X-Content-length, as Content-length will be overwritten 
               # by Rack::ContentLength, which determines value from size of 
               # response body. 
@@ -143,7 +142,6 @@ include Observable
               @response_body = ''
               return
             else 
-#             @response_body = Rack::File.new(filename)
               @response_header['X-Content-Length'] = filesize
               @response_header['Content-Length'] = filesize
               @response_body = File.open(filename, "r").read
@@ -173,6 +171,7 @@ include Observable
       end
 
       @params[:_controller] = controller_instance
+
       output = @decorator.new(@model_klass, response, @params).string
       @response_header['etag'] = Digest::MD5.hexdigest(output)
       @response_body = output
@@ -200,6 +199,7 @@ include Observable
 
     rescue Exception => excep
       @logger.log(excep.message)
+      @logger.log(excep.backtrace.join("\n"))
       @response_body = excep.message + "\n"
       @response_body << excep.backtrace.join("\n")
     end

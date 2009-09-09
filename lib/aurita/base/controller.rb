@@ -140,18 +140,18 @@ class Aurita::Base_Controller
   private
 
   @guard_blocks    = Hash.new 
-  @@logger         = Aurita::Log::Class_Logger.new(self)
+  @logger          = Aurita::Log::Class_Logger.new(self)
   @@erb_template   = Aurita::GUI::ERB_Template
 
   protected
 
   def self.log(message, level=nil, &block)
-    return @@logger unless message
-    @@logger.log(message, level, &block)
+    return @logger unless message
+    @logger.log(message, level, &block)
   end
   def log(message=nil, level=nil, &block)
-    return @@logger unless message
-    @@logger.log(message, level, &block)
+    return @logger unless message
+    @logger.log(message, level, &block)
   end
 
   # Send a plugin hook signal that will not be answered with 
@@ -247,9 +247,34 @@ class Aurita::Base_Controller
     if permission then
       begin
         raise ::Exception.new("No such method: #{self.class.to_s}.#{method}") unless (respond_to?(method) || self.class.respond_to?(method))
+
         log('Guards passed')
-        result   = self.class.get_cached(@params) 
-        result ||= __send__(method, *args) 
+        
+        controller_cache = self.class.cache
+        cached_actions   = self.class.cached_actions
+        log('Cached actions are ' + cached_actions.inspect)
+
+        if cached_actions.include?(method.to_sym) then
+          cache_params = @params.to_hash.update(:action => method)
+
+          log('Using controller cache ' << controller_cache.inspect) 
+          result = controller_cache.get(cache_params)
+          log('Cached response found') if result
+          if result then
+            @response = result
+            log('Controller cache hit') 
+            return
+          else 
+            log('Controller cache miss') 
+            result = __send__(method, *args) 
+            @response[:html] = result.string if @response[:html] == '' && result.respond_to?(:string)
+            controller_cache.store(cache_params) { @response } 
+          end
+        else
+          log('No controller cache')
+          result = __send__(method, *args) 
+        end
+
         log('Call finished')
       rescue Lore::Exceptions::Validation_Failure => ikp
         log('Validation failure in call_guarded')
@@ -328,6 +353,11 @@ class Aurita::Base_Controller
     alias guard_interfaces guard_interface
   end
 
+  # Returns this controller's cache implementation class, if any. 
+  def self.cache
+    (@cache || false)
+  end
+
   # Enabe caching for this controller by optionally providing a 
   # cache implementation class (Default is Aurita::Cache::Simple). 
   # Example: 
@@ -343,20 +373,86 @@ class Aurita::Base_Controller
   def self.use_cache(cache_class=nil)
     cache_class ||= Cache::Simple
     @cache = cache_class.new(self)
-    @cache.depends_on(resolve_model_klass())
+    klass  = resolve_model_klass()
+    @cache.depends_on(klass) if klass
   end
 
   # Add a model this controller's cache depends on. 
-  # See Cache::Simple for details on caching. 
+  # Same as 
   #
+  #   Controller.cache.depends_on(*models)
+  #
+  # See Cache::Simple for details on caching. 
   def self.cache_depends_on(*models)
     @cache ||= Cache::Simple.new(self)
     @cache.depends_on(*models)
   end
 
+  # Get response from cache by providing 
+  # request parameters. 
+  # Same as 
+  #
+  #   Controller.cache.get(params)
+  #
+  # It is automatically called in Controller.call_guarded, 
+  # usually you shouldn't need to use this method manually. 
+  #
+  # See Cache::Simple for details on caching. 
   def self.get_cached(params={})
     return false unless @cache
     @cache.get(params)
+  end
+
+  # Clear this controller's cache, either completely 
+  # or just for a given actions. 
+  # May also be used outside of this controller. 
+  # Same as 
+  #
+  #   Controller.cache.invalidate([actions])
+  #
+  # Example: 
+  #
+  #   class Event_Controller < Plugin_Controller
+  #
+  #     def perform_add
+  #       # ...
+  #       Calendar_Controller.invalidate_cache(:day, :week, :month)
+  #     end
+  #
+  #   end
+  #
+  # Note that usually this would be solved by 
+  # adding model Event to Calendar_Controller's 
+  # cache dependencies: 
+  #
+  #   class Calendar_Controller
+  #     cache_depends_on Event
+  #
+  #     ...
+  #   end
+  #
+  # See Cache::Simple for details on caching. 
+  def self.invalidate_cache(*actions)
+    @cache.invalidate(actions)
+  end
+  def invalidate_cache(*actions)
+    self.class.invalidate_cache(*actions)
+  end
+
+  # Define which actions to cache. 
+  # Example: 
+  #
+  #   class Calendar_Controller < Plugin_Controller
+  #     cache_actions :day, :month, :list, :add, :update
+  #     
+  #     ...
+  #   end
+  #
+  def self.cache_actions(*actions)
+    @cached_actions = actions
+  end
+  def self.cached_actions
+    @cached_actions || []
   end
 
   # Set default values for request params in case 
@@ -394,7 +490,7 @@ class Aurita::Base_Controller
   # set this controllers @klass variable and return model 
   # klass if successful. 
   # 
-  def resolve_model_klass
+  def self.resolve_model_klass
     model_klass = model()
     @klass = model_klass if model_klass
     return @klass
@@ -403,7 +499,7 @@ class Aurita::Base_Controller
   # Return plain name of this controller, like 'Article' for 
   # Article_Controller. 
   #
-  def controller_name
+  def self.controller_name
   # {{{
     parts  = self.class.to_s.split('::')
     if parts[-2] == 'Main'
@@ -413,11 +509,14 @@ class Aurita::Base_Controller
     end
     c_name.gsub('_Controller','')
   end # }}}
+  def controller_name
+    self.class.controller_name
+  end
 
   # Guess model klass for this controller by conroller name, 
   # and return model klass if successful. 
   # 
-  def model
+  def self.model
   # {{{
     return @model_klass if @model_klass
     model_klass_name = self.class.to_s.gsub('_Controller','')
@@ -439,6 +538,9 @@ class Aurita::Base_Controller
   def model_name 
     self.class.to_s.gsub('_Controller','')
   end
+  def self.model_name
+    self.to_s.gsub('_Controller','')
+  end
 
   # Example: 
   #
@@ -446,6 +548,13 @@ class Aurita::Base_Controller
   #
   # See also #model_name
   def short_model_name
+    short_name = model_name
+    short_name.sub!('Aurita::','')
+    short_name.sub!('Plugins::','')
+    short_name.sub!('Main::','')
+    short_name
+  end
+  def self.short_model_name
     short_name = model_name
     short_name.sub!('Aurita::','')
     short_name.sub!('Plugins::','')
@@ -465,6 +574,7 @@ class Aurita::Base_Controller
     @session = params[:_session]
     @params  = params
     @params.delete('controller')
+    @action  = @params['action']
     @params.delete('action')
     @response = {}
     @response[:decorator]    = nil # Set in Decorator itself
@@ -474,7 +584,7 @@ class Aurita::Base_Controller
     @response[:http_header]  = nil
     @klass = model_klass
     @logger = Aurita::Log::Class_Logger.new(self.class.to_s)
-    resolve_model_klass unless @klass
+    self.class.resolve_model_klass unless @klass
   end # }}}
 
   # Call action from a foreign controller. This is useful for 

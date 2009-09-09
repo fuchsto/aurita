@@ -124,7 +124,7 @@ module Aurita
     end
 
     def each_pair(&block)
-      @attributes.each_pair(&block)
+      to_hash.each_pair(&block)
     end
 
     # Delete attribute with given name. 
@@ -134,6 +134,20 @@ module Aurita
       key = key.to_s
       @attributes.delete(key)
       @attributes.delete(key.intern)
+    end
+
+    def keys
+      @attributes.keys
+    end
+
+    def to_hash
+      param_hash = {}
+      param_keys = @attributes.keys.map { |k| k.to_sym }.uniq
+      param_keys.each { |k| 
+        v = @attributes[k]
+        param_hash[k] = v
+      }
+      param_hash
     end
 
     # Whether a field is present in this Attribute instance.

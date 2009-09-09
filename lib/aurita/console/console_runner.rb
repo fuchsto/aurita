@@ -18,7 +18,7 @@ module Console
     end
 
     def run
-      require("aurita/bin/console_modules/#{@module_name}")
+      require("aurita/console/console_modules/#{@module_name}")
       @module = Aurita::Console.const_get(@module_name.to_s.camelcase)
       @module.new(@argv[2..-1]).run
     end

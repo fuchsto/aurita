@@ -206,7 +206,9 @@ table.sortable th {
 }
 
 table.list { 
-  border: 1px solid #000000; 
+  border-width: 1px; 
+  border-style: solid; 
+  border-color: white #C8C8C8 #C8C8C8 white
 } 
 table.list td { 
   padding: 6px; 
@@ -225,14 +227,13 @@ table.list td {
   border-top: 1px solid #cecece; 
 }
 table.list th, table.list th.first { 
-  background-color: #565656; 
-  color: #ffffff; 
-  padding: 3px; 
-  padding-left: 7px; 
-  border-left: 1px solid #f5f5f5; 
-  border-top: 1px solid #f5f5f5; 
-  border-right: 1px solid #454545; 
-  border-bottom: 1px solid #454545; 
+  background: transparent url('/aurita/images/icons/box_header_bg.png') repeat scroll 0 0;
+  color: #000000; 
+  padding: 3px 5px; 
+  font-size: 13px; 
+  line-height: 17px; 
+  height: 16px; 
+  border-left: 1px solid #cccccc; 
 }
 table.list th img { 
   display: inline !important; 
@@ -251,9 +252,9 @@ table.list td.tab_left {
   margin-left: 0px; 
   margin-top: 2px; 
   padding-left: 10px; 
-  background-color: #f8f8f8; 
   line-height: 19px; 
   clear: both; 
+  background: #f8f8f8 url('/aurita/images/icons/tall_row_brighter_bg.png'); 
 }
 .article_thumb { 
   display: inline; 
@@ -492,7 +493,6 @@ div.article_view div.article_info {
   background-color: #ffffff; 
 }
 .highlighted .bright_bg, .highlighted.bright_bg { 
-  background-color: #ffebb8 !important; 
   border-color: #e3bb88 !important; 
 }
 
@@ -1603,7 +1603,6 @@ div.near_column {
   height: 22px; 
   font-size: inherit;
   line-height: 21px;
-  border-bottom: 1px solid #676767; 
   cursor: pointer; 
 }
 .box_hierarchy_entry_level_1 .label { 
@@ -1649,7 +1648,7 @@ div.near_column {
 .box_hierarchy_entry { 
   height: 22px; 
   line-height: 21px;
-  border-bottom: 1px solid #cfcfcf; 
+/* border-bottom: 1px solid #cfcfcf; */
   cursor: pointer; 
   background: transparent url(/aurita/images/icons/row_bg.png) repeat; 
 }
@@ -1731,10 +1730,10 @@ table.message_table {
   vertical-align: top; 
 }
 
-.message_table td.checkbox { 
+.message_table td.to_trash, .message_table td.delete, .message_table td.restore { 
   width: 20px; 
   text-align: center; 
-  padding-top: 4px; 
+  padding-top: 2px; 
   border-left: 1px dotted #bfbfbf; 
 }
 .message_table td.date { 

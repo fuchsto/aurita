@@ -79,12 +79,14 @@ OPTIONS = {
 # Gatling mode is as fast as can be, but without 
 # sessions, e.g. only public services are available. 
 if gatling then
+  OPTIONS[:compress]    = false
   OPTIONS[:chunked]     = false
   OPTIONS[:no_sessions] = true
 # Short mode is for requests that need session 
 # handling ( => user identification) but will 
 # return short responses. 
 elsif short then
+  OPTIONS[:compress]    = false
   OPTIONS[:chunked]     = false
   OPTIONS[:no_sessions] = false
 end

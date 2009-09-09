@@ -1,6 +1,6 @@
 
 require 'aurita'
-Aurita.import 'lib/console_runner'
+Aurita.import 'console/console_runner'
 
 begin
   require 'rubygems'

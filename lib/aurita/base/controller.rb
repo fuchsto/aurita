@@ -8,6 +8,7 @@ Aurita.import(:base, :exception, :parameter_exception)
 Aurita.import(:base, :log, :class_logger)
 Aurita.import_module :gui, :erb_template
 Aurita.import_module :gui, :async_form_decorator
+Aurita.import_module :cache, :simple
 Aurita.import(:base, :plugin_register)
 
 
@@ -233,7 +234,7 @@ class Aurita::Base_Controller
   #
   def call_guarded(method, args=[])
   # {{{
-    Aurita.log('Guarded call of ' << self.class.to_s + '.' << method.to_s)
+    log('Guarded call of ' << self.class.to_s + '.' << method.to_s)
     
     method = method.to_sym
     permission = true
@@ -245,16 +246,17 @@ class Aurita::Base_Controller
     result = nil
     if permission then
       begin
-         raise ::Exception.new("No such method: #{self.class.to_s}.#{method}") unless (respond_to?(method) || self.class.respond_to?(method))
-         Aurita.log('Guards passed')
-         result = __send__(method, *args) 
-         Aurita.log('Call finished')
+        raise ::Exception.new("No such method: #{self.class.to_s}.#{method}") unless (respond_to?(method) || self.class.respond_to?(method))
+        log('Guards passed')
+        result   = self.class.get_cached(@params) 
+        result ||= __send__(method, *args) 
+        log('Call finished')
       rescue Lore::Exceptions::Validation_Failure => ikp
-        Aurita.log('Invalid_Klass_Parameter in call_guarded')
+        log('Validation failure in call_guarded')
         ikp.log()
         notify_invalid_params(ikp)
       rescue ::Exception => excep
-        Aurita.log('Exception: ' << excep.inspect)
+        log('Exception: ' << excep.inspect)
         raise excep
       end
     else
@@ -324,6 +326,37 @@ class Aurita::Base_Controller
   class <<self
     alias guard guard_interface
     alias guard_interfaces guard_interface
+  end
+
+  # Enabe caching for this controller by optionally providing a 
+  # cache implementation class (Default is Aurita::Cache::Simple). 
+  # Example: 
+  #
+  #   use_cache(Cache::Memcached)
+  # 
+  # Automatically adds this controller's base model as cache 
+  # dependency, so caches of Article_Controller depend on 
+  # model Article. 
+  #
+  # See Cache::Simple for details on caching. 
+  #
+  def self.use_cache(cache_class=nil)
+    cache_class ||= Cache::Simple
+    @cache = cache_class.new(self)
+    @cache.depends_on(resolve_model_klass())
+  end
+
+  # Add a model this controller's cache depends on. 
+  # See Cache::Simple for details on caching. 
+  #
+  def self.cache_depends_on(*models)
+    @cache ||= Cache::Simple.new(self)
+    @cache.depends_on(*models)
+  end
+
+  def self.get_cached(params={})
+    return false unless @cache
+    @cache.get(params)
   end
 
   # Set default values for request params in case 

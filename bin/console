@@ -5,7 +5,7 @@
 #    aurita <project name> <console module name>
 #
 require('aurita')
-Aurita.import 'lib/console_runner'
+Aurita.import '../lib/aurita/console/console_runner'
 
 Aurita.load_project ARGV[0]
 

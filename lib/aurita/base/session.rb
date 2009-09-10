@@ -119,7 +119,7 @@ module Aurita
   class Mock_Session < Session
 
     begin
-      @@guest_user = Aurita::Main::User_Login_Data.create_shallow({ :user_group_id => 0 }) 
+      @@guest_user = Aurita::Main::User_Login_Data.create_shallow({ :user_group_id => 0, :user_group_name => 'guest' }) 
     rescue ::Exception => ignore
     end
 

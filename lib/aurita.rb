@@ -170,8 +170,9 @@ module Aurita
   #   Aurita.import_plugin_model :wiki, :article
   #
   def self.import_plugin_model(plugin, model)
-    Aurita.log "importing model #{plugin}/#{model}"
-    require("#{Aurita::Configuration.plugins_path}#{plugin.to_s}/model/#{model.to_s}")
+    r = require("#{Aurita::Configuration.plugins_path}#{plugin.to_s}/model/#{model.to_s}")
+    Aurita.log "imported model #{plugin}/#{model}" if r
+    r
   end
   # Import a single controller from a plugin. 
   # Example: 
@@ -179,8 +180,9 @@ module Aurita
   #   Aurita.import_plugin_controller :wiki, :article
   #
   def self.import_plugin_controller(plugin, controller)
-    Aurita.log "importing controller #{plugin}/#{controller}"
-    require("#{Aurita::Configuration.plugins_path}#{plugin.to_s}/controllers/#{controller.to_s}")
+    r = require("#{Aurita::Configuration.plugins_path}#{plugin.to_s}/controllers/#{controller.to_s}")
+    Aurita.log "imported controller #{plugin}/#{controller}" if r
+    r
   end
   # Import a single module from a plugin. 
   # Example: 
@@ -188,8 +190,9 @@ module Aurita
   #   Aurita.import_plugin_module :wiki, :article_hierarchy_default_decorator
   #
   def self.import_plugin_module(plugin, module_name)
-    Aurita.log "importing module #{plugin}/#{module_name}"
-    require("#{Aurita::Configuration.plugins_path}#{plugin.to_s}/modules/#{module_name.to_s}")
+    r = require("#{Aurita::Configuration.plugins_path}#{plugin.to_s}/modules/#{module_name.to_s}")
+    Aurita.log "imported module #{plugin}/#{module_name}" if r
+    r
   end
 
   # Boostraps Aurita. Imports models and controllers from 

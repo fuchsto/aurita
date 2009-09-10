@@ -202,11 +202,12 @@ module Main
         return show_own
       end
 
-      if Aurita.user.user_group_id == param(:user_group_id) then
+      user = load_instance() unless user
+
+      if user.user_group_id == Aurita.user.user_group_id then
         return show_own
       end
 
-      user = User_Group.load(:user_group_id => param(:user_group_id)) unless user
       user_group_id = user.user_group_id
       if [0,5].include?(user_group_id.to_i) then
         puts 'Kein Profil'

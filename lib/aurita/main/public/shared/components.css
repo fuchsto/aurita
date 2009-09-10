@@ -89,7 +89,7 @@ p {
 
 .highlighted { 
 /*  background-color: #f9dba8 !important; */
-  border-color: #e3bb88 !important; 
+  border-color: #e3bb88; 
   background: #f9cf88 url(/aurita/images/icons/tall_row_highlighted_bg.png) repeat-x scroll 0 0px !important; 
 }
 
@@ -113,7 +113,7 @@ p {
 }
 
 .highlighted .box_header { 
-  background-color: #e3bb88;
+  background: #f9cf88 url('/aurita/images/icons/box_header_highlighted_bg.png') repeat-x 
 }
 .highlighted .box_body { 
   background-color: transparent;
@@ -227,13 +227,17 @@ table.list tr.deact {
 }
 table.list td {
   border-top: 1px solid #cecece; 
+  background: #f3f3f3 url('/aurita/images/icons/tall_row_brighter_bg.png') repeat-x; 
+}
+table.list tr.highlighted td { 
+  background: #f9cf88 url(/aurita/images/icons/tall_row_highlighted_bg.png) repeat-x scroll 0 0px; 
 }
 table.list th, table.list th.first { 
   background: transparent url('/aurita/images/icons/box_header_bg.png') repeat-x scroll 0 0;
   color: #000000; 
   padding: 3px 5px; 
-  font-size: 13px; 
-  line-height: 17px; 
+  font-size: 12px; 
+  line-height: 16px; 
   height: 16px; 
   border-left: 1px solid #cccccc; 
 }
@@ -282,7 +286,6 @@ table.list td.tab_left {
   width: 100px; 
   height: 20px; 
   float: left; 
-  background-color: #cccccc; 
   font-size: 12px; 
   border-left: 1px solid #cccccc; 
   border-right: 1px solid #cccccc; 
@@ -293,6 +296,7 @@ table.list td.tab_left {
   margin-top: 3px; 
   margin-right: 3px; 
   margin-bottom: 0px; 
+  background: #c3c3c3 url('/aurita/images/icons/box_header_bg.png') repeat-x
 }
 .flag_button { 
   color: #232323; 
@@ -304,13 +308,10 @@ table.list td.tab_left {
   border-top: 1px solid #565656; 
 }
 .flag_button_active { 
-  background-color: #565656; 
-  color: #cccccc; 
   margin-bottom: -1px; 
-  border-left: 1px solid #565656; 
-  border-right: 1px solid #565656; 
-  border-top: 1px solid #565656; 
   border-bottom: 0px; 
+  background: #f9cf88 url('/aurita/images/icons/box_header_highlighted_bg.png') repeat-x 
+/*  background: #c6c6c6 url('/aurita/images/icons/tall_row_highlighted_bg.png') repeat-x; */
 }
 
 .folder_tab_list_entry { 
@@ -516,6 +517,10 @@ tr.highlighted td {
   border-left: 1px solid white;
   border-top: 1px solid white; 
   color: #000000;
+}
+.highlighted.topic, .highlighted.topic_inline { 
+  border-left: 1px solid #ffffff; 
+  border-top: 1px solid #ffffff; 
 }
 .topic_inline { 
 /*  
@@ -1714,31 +1719,26 @@ table.profile_user_data td {
   cursor: pointer; 
 }
 
+#messaging_content { 
+  background-color: #eaeaea; 
+}
+
 table.message_table { 
   width: 100%; 
 }
 
-.message_table th { 
-  border-bottom: 1px solid black; 
-  padding: 2px; 
-  font-weight: bold; 
-}
-
 .message_table td { 
-  border-bottom: 1px solid #bfbfbf; 
   padding-left: 2px;
   padding-right: 2px; 
   padding-bottom: 2px; 
   padding-top: 2px; 
-  border-right: 1px dotted #bfbfbf; 
   vertical-align: top; 
 }
 
 .message_table td.to_trash, .message_table td.delete, .message_table td.restore { 
   width: 20px; 
   text-align: center; 
-  padding-top: 2px; 
-  border-left: 1px dotted #bfbfbf; 
+  padding-top: 6px; 
 }
 .message_table td.date { 
   width: 140px; 
@@ -1763,10 +1763,12 @@ table.message_table {
 }
 
 .message_table .mail_view .mail_toolbar { 
-  background-color: #dfdfdf; 
-  padding: 4px; 
-  border: 1px solid #afafaf; 
+  padding: 1px; 
+  padding-top: 3px; 
+  border-left: 1px solid #afafaf; 
+  border-right: 1px solid #afafaf; 
   margin: -1px -1px 0px 0px; 
+  background: transparent url(/aurita/images/icons/box_header_bg.png) repeat-x scroll 0 0; 
 }
 .message_table .mail_view .mail_body { 
   height: 90px; 

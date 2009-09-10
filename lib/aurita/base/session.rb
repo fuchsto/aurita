@@ -2,7 +2,11 @@
 require('aurita')
 require('digest/md5')
 
-Aurita::Main.import_model :user_login_data
+begin
+  Aurita::Main.import_model :user_login_data
+rescue ::Exception => ignore
+  # No project loaded? 
+end
 
 module Aurita
 
@@ -31,7 +35,10 @@ module Aurita
   class Session
 
     @@logger     = Aurita::Log::Class_Logger.new('Aurita::Session')
-    @@guest_user = Aurita::Main::User_Login_Data.load({ :user_group_id => 0 }) 
+    begin
+      @@guest_user = Aurita::Main::User_Login_Data.load({ :user_group_id => 0 }) 
+    rescue ::Exception => ignore
+    end
 
     attr_reader :session_id
 
@@ -111,7 +118,10 @@ module Aurita
   # no real session is available. 
   class Mock_Session < Session
 
-    @@guest_user = Aurita::Main::User_Login_Data.load({ :user_group_id => 0 }) 
+    begin
+      @@guest_user = Aurita::Main::User_Login_Data.create_shallow({ :user_group_id => 0 }) 
+    rescue ::Exception => ignore
+    end
 
     def initialize(request=nil)
       @params = {}

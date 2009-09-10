@@ -268,7 +268,8 @@ class Aurita::Base_Controller
             log('Controller cache miss') 
             result = __send__(method, *args) 
             if @response[:html] == '' && result.respond_to?(:string) then
-              @response[:html] = result.string 
+              @response[:html]    = result.string 
+              @response[:script] << result.script if result.respond_to?(:script)
             end
             controller_cache.store(cache_params) { @response } 
           end
@@ -278,6 +279,11 @@ class Aurita::Base_Controller
         end
 
         log('Call finished')
+        after_hooks = self.class.hooks_after(method)
+        if after_hooks then 
+          log("Calling hook after method #{method}")
+          after_hooks.each { |hook| hook.call(self) }
+        end
       rescue Lore::Exceptions::Validation_Failure => ikp
         log('Validation failure in call_guarded')
         ikp.log()
@@ -344,7 +350,7 @@ class Aurita::Base_Controller
         guard_interface(:add, :perform_add, :update, 
                         :perform_update, :delete, :perform_delete, &block)
       else
-        @guard_blocks[m] = Array.new unless (@guard_blocks[m].instance_of?(Array))
+        @guard_blocks[m] = Array.new unless @guard_blocks[m].is_a?(Array)
         @guard_blocks[m] << block
       end
     }
@@ -353,6 +359,27 @@ class Aurita::Base_Controller
   class <<self
     alias guard guard_interface
     alias guard_interfaces guard_interface
+  end
+
+  # Define hooks to call after given methods. 
+  # Example: 
+  #
+  #    after(:perform_add, :perform_delete, :perform_update) { |controller_instance|
+  #       invalidate_cache(:list)
+  #    }
+  #
+  def self.after(*methods, &block)
+    @hooks_after = Hash.new unless @hooks_after
+    methods.each { |m|
+      @hooks_after[m] = Array.new unless @hooks_after[m].is_a?(Array)
+      @hooks_after[m] << block
+    }
+  end
+
+  # Returns Hash of all hooks defined via Controller.after()
+  # by method name. 
+  def self.hooks_after(method)
+    @hooks_after[method] if @hooks_after
   end
 
   # Returns this controller's cache implementation class, if any. 
@@ -506,7 +533,7 @@ class Aurita::Base_Controller
   #
   def self.controller_name
   # {{{
-    parts  = self.class.to_s.split('::')
+    parts  = self.to_s.split('::')
     if parts[-2] == 'Main'
       c_name = parts[-1] 
     else

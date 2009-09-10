@@ -475,7 +475,7 @@ ul.checkbox_options input {
 
 li ul.checkbox_options { 
   clear: both; 
-  height: 13px; 
+  height: 20px; 
 }
 li ul.checkbox_options li { 
   display: inline; 
@@ -561,4 +561,11 @@ fieldset legend {
 
 .category_select_field button { 
   width: 30px; 
+}
+
+.selection_list_field { 
+  background: #efefef; 
+}
+.selection_list_field ul { 
+  padding-bottom: 2px !important; 
 }

@@ -12,7 +12,7 @@
 <% if user_profile.email_home.to_s != '' then %>
 	    <tr>
 	      <td class="profile_left_column" >
-	        eMail
+          <%= tl(:email) %>
 	      </td>
 	      <td class="profile_right_column">
 	        <a href="mailto: <%= user_profile.email_home %>">
@@ -24,7 +24,7 @@
 <% if user_profile.phone_home.to_s != '' then %>
 	    <tr>
 	      <td class="profile_left_column" >
-	        Tel
+          <%= tl(:phone) %>
 	      </td>
 	      <td class="profile_right_column">
           <%= user_profile.phone_home %>
@@ -34,7 +34,7 @@
 <% if user_profile.mobile_home.to_s != '' then %>
 	    <tr>
 	      <td class="profile_left_column" >
-	        Mobil
+          <%= tl(:mobile_phone) %>
 	      </td>
 	      <td class="profile_right_column">
           <%= user_profile.mobile_home %>
@@ -43,16 +43,16 @@
 <% end %>
 	    <tr>
 	      <td class="profile_left_column" >
-	        Begriffe
+          <%= tl(:tags) %>
 	      </td>
 	      <td class="profile_right_column">
-	        <%= user_profile.tags %>
+          <%= user_profile.tags.split(' ').map { |tag| link_to(:controller => 'App_Main', :action => :find, :tag => tag) { tag} }.join(' ') %>
 	      </td>
 	    </tr>
 <% if !last_seen_online.empty? then %>
 	    <tr>
 	      <td class="profile_left_column" >
-	        Zuletzt online am
+          <%= tl(:last_seen_online) %>
 	      </td>
 	      <td class="profile_right_column">
 	        <%= gui.datetime(last_seen_online) %>
@@ -62,7 +62,7 @@
 <% if user_profile.location.to_s != '' then %>
 	    <tr>
 	      <td class="profile_left_column" >
-	        Ort
+          <%= tl(:location) %>
 	      </td>
         <td class="profile_right_column">
           <%= user_profile.location %>

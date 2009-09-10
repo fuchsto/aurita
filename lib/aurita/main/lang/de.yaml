@@ -327,3 +327,9 @@ send : Senden
 files_and_folders : Dateien / Ordner
 
 content_does_not_exist : Inhalt existiert nicht (mehr). 
+
+email : eMail
+phone : Tel
+location : Ort
+mobile_phone : Mobil
+last_seen_online : Zuletzt online

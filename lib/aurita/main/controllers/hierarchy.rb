@@ -102,8 +102,8 @@ module Main
       hid = param(:hierarchy_id)
       position_tree = []
       position_tree = param("hierarchy_sortable_list_#{hid}")
-      sortpos = 0
       position_tree.each_pair { |sortpos,entry|
+        sortpos = sortpos.to_i
         entry_id = entry["id"]
         entry_parent_id = '0'
         Hierarchy_Entry.update { |e|

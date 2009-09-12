@@ -333,3 +333,6 @@ phone : Tel
 location : Ort
 mobile_phone : Mobil
 last_seen_online : Zuletzt online
+
+error_header : Ein Fehler ist aufgetreten
+

@@ -11,6 +11,7 @@ Aurita.import(:base, :log, :class_logger)
 Aurita.import(:base, :bits, :cgi)
 Aurita.import(:base, :plugin_register)
 Aurita.import_module :decorators, :default
+Aurita.import_module :gui, :error_page
 
 require('lore/exceptions/validation_failure')
 require('lore/exceptions/unknown_type')
@@ -152,11 +153,10 @@ include Observable
           end
         rescue ::Exception => failed
           @failed = true
-          @status = 500
+          @status = 200
+          response = { :html => GUI::Error_Page.new(failed).string }
           @logger.log { "Error in Dispatcher: #{failed.message}" }
           @logger.log { "#{failed.backtrace.join("\n")}" }
-          # Dispatch failed, so quit
-          return
         end
       end
 

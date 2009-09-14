@@ -1809,3 +1809,16 @@ table.listing_2_columns {
 .user_profile_box h2 { 
   padding-left: 7px; 
 }
+
+.server_error { 
+  background-color: #efefef; 
+  border: 1px solid red; 
+  padding: 10px; 
+}
+.server_error h1.error { 
+  margin-top: 0px; 
+  margin-bottom: 10px; 
+}
+.server_error .error_backtrace { 
+  color: #565656; 
+}

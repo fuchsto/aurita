@@ -5,7 +5,7 @@
     <nobr>
       <span class="link" onclick="Element.show('tag_input_<%= cid %>');">+</span>
       <span id="tag_input_<%= cid %>" style="display: none; ">
-        <input type="text" class="mini" style="width: 110px;" name="new_tag" id="tag_field_<%= cid %>" />&nbsp;<button type="button" class="mini" onclick="Cuba.load({ element: 'content_tag_list', action: 'Content/add_tag/content_id=<%= cid %>&tag='+$('tag_field_<%= cid %>').value });">ok</button>
+        <input type="text" class="mini" style="width: 110px;" name="new_tag" id="tag_field_<%= cid %>" />&nbsp;<button type="button" class="mini" onclick="Aurita.load({ element: 'content_tag_list', action: 'Content/add_tag/content_id=<%= cid %>&tag='+$('tag_field_<%= cid %>').value });">ok</button>
       </span>
     </nobr>
   </span>

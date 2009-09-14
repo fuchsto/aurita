@@ -21,14 +21,14 @@ module Main
                         }
         account.body = tl(:logged_in_as) + ' <span class="link" ' + ERB_Helpers.onclick_link_to(:controller => 'User_Profile') + '>' << Aurita.user.user_group_name + '</span><br /><br />' + logout_string
       else
-        account.body = HTML.a(:class => :icon, :onclick => "Cuba.load({ element: 'app_main_content', action: 'User_Profile/add/' })") { tl(:please_register) }.string <<
+        account.body = HTML.a(:class => :icon, :onclick => "Aurita.load({ action: 'User_Profile/add/' })") { tl(:please_register) }.string <<
                        tl(:or) <<
-                       HTML.a(:class => :icon, :onclick => "Cuba.load({ element: 'app_main_content', action: 'App_Main/login/' })") { 
+                       HTML.a(:class => :icon, :onclick => "Aurita.load({ action: 'App_Main/login/' })") { 
                          HTML.img(:src => "/aurita/images/icons/login.gif") +
                          tl(:logon) 
                        }.string
 
-        account.body = HTML.a(:class => :icon, :onclick => "Cuba.load({ element: 'app_main_content', action: 'App_Main/login/' })") { 
+        account.body = HTML.a(:class => :icon, :onclick => "Aurita.load({ action: 'App_Main/login/' })") { 
                          HTML.img(:src => "/aurita/images/icons/login.gif") + tl(:logon) 
                        }.string
       end

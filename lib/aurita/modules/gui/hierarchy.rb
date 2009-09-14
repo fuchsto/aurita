@@ -116,16 +116,21 @@ module GUI
         return ''
       end
 
-      onclick = "Aurita.load({ action: '#{CGI.escape(e.interface).gsub('%2F','/').gsub('%3D','=')}' }); "
       label_style = 'padding: 2px; margin: -2px; '
+      onclick     = ''
+      entry       = ''
       if e.attr[:entry_type] == 'BLANK_NODE' then
         label_style << 'color: black; '
+        entry   = e.label
+      else
+        onclick = "Aurita.load({ action: '#{CGI.escape(e.interface).gsub('%2F','/').gsub('%3D','=')}' }); "
+        entry   = HTML.a(:onclick => onclick) { e.label } 
       end
 
       params = { :hierarchy_entry_id => e.hierarchy_entry_id, 
                  :hierarchy_id       => e.hierarchy_id }
       return Context_Menu_Element.new(HTML.div.link(:style => label_style) { 
-                                        HTML.a(:onclick => onclick) { e.label } 
+                                        entry
                                       }, 
                                       :entity => e, 
                                       :params => params)
@@ -164,7 +169,7 @@ module GUI
 
         if @entry_map[entry_id] then
           entry   = e.model_instance
-          onclick = "Cuba.load({ action: '#{CGI.escape(entry.interface).gsub('%2F','/').gsub('%3D','=')}' }); "
+          onclick = "Aurita.load({ action: '#{CGI.escape(entry.interface).gsub('%2F','/').gsub('%3D','=')}' }); "
           next_level = Accordion_Box.new(:header => HTML.a(:onclick => onclick) { e.model_instance.label }, :class => "accordion_level_#{indent}") { recurse(entry_id, indent+1) }.string
           string << next_level.string
         else
@@ -274,7 +279,7 @@ module GUI
       hid = @hierarchy.hierarchy_id
       icon = HTML.img(:src => '/aurita/images/icons/save.gif', 
                       :style => 'margin-bottom: 4px;', 
-                      :onclick => "Cuba.load({ element: 'hierarchy_#{hid}_body', action: 'Hierarchy/body/hierarchy_id=#{hid}' }); " )
+                      :onclick => "Aurita.load({ element: 'hierarchy_#{hid}_body', action: 'Hierarchy/body/hierarchy_id=#{hid}' }); " )
       App_Controller.render_string(:html => icon + @entries_string, 
                                    :script => js)
     end

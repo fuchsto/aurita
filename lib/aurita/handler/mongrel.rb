@@ -89,13 +89,7 @@ module Handler
     def call(env)
       # Apply rewrites *before* creating Rack::Request from it: 
       rewrite_url(env) 
-      @logger.debug { 'REQUEST =================================================' }
-      env.each_pair { |k,v|
-      #  @logger.debug { "REQUEST #{k} - #{v.inspect}" }
-      }
-      request    = Rack::Request.new(env)
-
-      @logger.info { "REQUEST PARAMS: #{request.params.inspect}" }
+      request = Rack::Request.new(env)
 
       @@dispatcher.dispatch(request)
 
@@ -128,8 +122,9 @@ module Handler
           @app = Rack::Session::Pool.new(@app)
         end
       end
+    
+      @app = Rack::Realoder.new(@app, 3) if [ :debug, :development ].include?(opts[:mode]) 
       @app = Rack::Deflater.new(@app) if opts[:compress]
-    # @app = Rack::Static.new(@app, :root => Aurita.project.base_path + 'public/assets/') 
       @app = Rack::ContentLength.new(@app)
       @app = Rack::Chunked.new(@app) if opts[:chunked]
     end

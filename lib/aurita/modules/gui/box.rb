@@ -36,7 +36,7 @@ module GUI
                  HTML.div.header(:style => "#{@header_style.to_s} float:left; clear: none;") { @header.to_s } + 
                  HTML.div(:style => 'clear: none; float: right; cursor: pointer;') { collapse_icon }
                }
-      header.onclick = "Aurita.toggle_box('#{attrib[:id]}');"
+      header.onclick = "Aurita.GUI.toggle_box('#{attrib[:id]}');"
       header.add_css_class("#{@type}_header") if @type
 
       header = Context_Menu_Element.new(header, :type => @type, :highlight_id => dom_id(), :params => @context_menu_params) unless @type == :none

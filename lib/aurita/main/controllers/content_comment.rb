@@ -8,7 +8,7 @@ module Main
 
     def toolbar_buttons
       new_comments = HTML.a(:class => :icon, 
-                            :onclick => "Cuba.load({ element: 'app_main_content', action: 'Content_Comment/list_recentyl_commented' });") { 
+                            :onclick => "Aurita.load({ action: 'Content_Comment/list_recentyl_commented' });") { 
         HTML.img(:src => '/aurita/images/icons/comment.gif') + 
         tl(:new_asset_comments) 
       }

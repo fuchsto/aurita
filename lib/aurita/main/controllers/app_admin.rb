@@ -13,10 +13,10 @@ module Main
     def system_box
       box = Box.new(:type => :system, :class => :topic)
       box.header = tl(:admin_tools)
-      edit_tags = HTML.a(:class => :icon, :onclick => js.Cuba.load(:action => 'Tag_Blacklist/edit/')) { 
+      edit_tags = HTML.a(:class => :icon, :onclick => js.Aurita.load(:action => 'Tag_Blacklist/edit/')) { 
         HTML.img(:src => '/aurita/images/icons/tags.gif') + tl(:edit_tags) 
       }
-      edit_synonyms = HTML.a(:class => :icon, :onclick => js.Cuba.load(:action => 'Tag_Synonym/edit/')) { 
+      edit_synonyms = HTML.a(:class => :icon, :onclick => js.Aurita.load(:action => 'Tag_Synonym/edit/')) { 
         HTML.img(:src => '/aurita/images/icons/synonym.gif') + tl(:edit_synonyms) 
       }
       plugin_buttons = plugin_get(Hook.admin.toolbar_buttons)
@@ -43,7 +43,7 @@ module Main
       body = Array.new
       User_Profile.all_with((User_Group.atomic == 't') & (User_Login_Data.deleted == 'f') & (User_Login_Data.locked == 't')).sort_by(:surname, :asc).each { |user|
         if user.user_group_id != '0' then
-          user = Context_Menu_Element.new(HTML.a.entry(:onclick => js.Cuba.load(:action => "User_Login_Data/update/user_group_id=#{user.user_group_id}")) { 
+          user = Context_Menu_Element.new(HTML.a.entry(:onclick => js.Aurita.load(:action => "User_Login_Data/update/user_group_id=#{user.user_group_id}")) { 
                                             user.surname.capitalize + ' ' + user.forename.capitalize 
                                           }, 
                                           :entity => user)

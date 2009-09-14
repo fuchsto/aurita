@@ -65,8 +65,8 @@ module GUI
       }
       type   = params[:type]
       type ||= entity.model_name
-      result << " onMouseOut=\"context_menu_out(this); \" "
-      result << " onMouseOver=\"context_menu('#{type}', '#{menu_params}', '#{highlight_element_id}');\" "
+      result << " onMouseOut=\"Aurita.context_menu_out(this); \" "
+      result << " onMouseOver=\"Aurita.context_menu_over('#{type}', '#{menu_params}', '#{highlight_element_id}');\" "
     end
 
     # Builds a wrapping div-element (or any other HTML tag) that displays a context 
@@ -120,8 +120,8 @@ module GUI
       }
       params[:onmouseover] = '' unless params[:onmouseover]
       params[:onmouseout]  = '' unless params[:onmouseout]
-      params[:onmouseover] << "context_menu('#{entity.model_name}', '#{menu_params}', '#{highlight_element_id}'); "
-      params[:onmouseout]  << "context_menu_out(this); "
+      params[:onmouseover] << "Aurita.context_menu_over('#{entity.model_name}', '#{menu_params}', '#{highlight_element_id}'); "
+      params[:onmouseout]  << "Aurita.context_menu_out(this); "
       params.delete(:entity)
       params.delete(:params)
       params[:close_tag] = false

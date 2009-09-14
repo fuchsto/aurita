@@ -40,8 +40,8 @@ module GUI
       }
 
       element.id = "#{params[:id]}" unless element.dom_id()
-      element.onmouseout  = "context_menu_out(this);"
-      element.onmouseover = "context_menu('#{type}', '#{menu_params}', '#{highlight_element_id}');"
+      element.onmouseout  = "Aurita.context_menu_out(this);"
+      element.onmouseover = "Aurita.context_menu_over('#{type}', '#{menu_params}', '#{highlight_element_id}');"
       super(element)
     end
     

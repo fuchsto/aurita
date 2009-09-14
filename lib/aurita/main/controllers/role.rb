@@ -151,14 +151,14 @@ module Main
 
     def admin_box_body
       body = Array.new
-      body << HTML.button(:class => :icon, :onclick => js.Cuba.load(:action => 'Role/add/')) { 
+      body << HTML.button(:class => :icon, :onclick => js.Aurita.load(:action => 'Role/add/')) { 
         HTML.img(:src => '/aurita/images/icons/button_add.gif') + tl(:add_role) 
       }
       list = HTML.ul.single_line_list { } 
       Role.find(:all).sort_by(:role_name).each { |role|
         role_id = role.role_id
         entry = HTML.div { 
-                  HTML.a.entry(:onclick => js.Cuba.load(:action => "Role/update/role_id=#{role_id}")) { 
+                  HTML.a.entry(:onclick => js.Aurita.load(:action => "Role/update/role_id=#{role_id}")) { 
                      " #{role.role_name}"
                   } 
                 }

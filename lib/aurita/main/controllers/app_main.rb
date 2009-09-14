@@ -75,7 +75,7 @@ module Main
       result = []
 
       user_categories = HTML.a(:class => :icon, 
-                               :onclick => "Cuba.load({ action: 'User_Category/index'});") { 
+                               :onclick => "Aurita.load({ action: 'User_Category/index'});") { 
           icon_tag(:categories) +
           tl(:user_categories) 
       }
@@ -103,14 +103,14 @@ module Main
       buttons  = Array.new
       buttons << Context_Menu_Element.new(HTML.div(:class => :header_button_active, 
                                                    :id => :button_App_General, 
-                                                   :onclick => Javascript.app_load_setup('App_General')) { tl(:general) }, 
+                                                   :onclick => Javascript.Aurita.GUI.switch_layout('App_General')) { tl(:general) }, 
                                           :type => :site_general,
                                           :params => { :category => 'GENERAL' } )
 
       if Aurita.user.is_registered? then
         buttons << Context_Menu_Element.new(HTML.div(:class => :header_button, 
                                                      :id => :button_App_My_Place, 
-                                                     :onclick => Javascript.app_load_setup('App_My_Place')) { tl(:my_place) }, 
+                                                     :onclick => Javascript.Aurita.GUI.switch_layout('App_My_Place')) { tl(:my_place) }, 
                                             :type => :site_my_place, 
                                             :params => { :category => 'MY_PLACE' } )
 
@@ -121,7 +121,7 @@ module Main
       if Aurita.user.is_admin? then
         buttons << Context_Menu_Element.new(HTML.div(:class => :header_button, 
                                                      :id => :button_App_Admin, 
-                                                     :onclick => Javascript.app_load_setup('App_Admin')) { tl(:admin) }, 
+                                                     :onclick => Javascript.Aurita.GUI.switch_layout('App_Admin')) { tl(:admin) }, 
                                             :type => :site_app_admin, 
                                             :params => { :category => 'ADMIN' } )
       end

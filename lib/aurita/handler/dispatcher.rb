@@ -18,17 +18,8 @@ require('lore/exceptions/unknown_type')
 require('lore/validation/parameter_validator')
 require('lore')
 
-begin 
-  require 'zlib' 
-  require 'stringio' 
-  GZIP_SUPPORTED = false
-rescue 
-  GZIP_SUPPORTED = false 
-end 
-
 
 class Aurita::Dispatcher 
-include Observable
 
   attr_reader :params, :mode, :controller, :action, :dispatch_time, :failed, :response_header, :response_body, :status
   attr_accessor :gc_after_dispatches, :decorator
@@ -37,10 +28,9 @@ include Observable
 
   # Usage: 
   #
-  #  require('my_app/[<module>/]application')
-  #  dispatcher = Dispatcher.new(My_App::[<Module>::]Application,    # Register your app
-  #                              My_App_Namespace::Interface,        # Tell dispatcher from where to load app interfaces
-  #                              My_App_Namespace::Custom_Template)  # Define which template klass to use for output
+  #  require('my_app/application')
+  #  dispatcher = Dispatcher.new(My_App::Application,     # Register your app
+  #                              My_App::Custom_Decoator) # Define which template klass to use for output
   #
   def initialize(application=Aurita::Main::Application, 
                  decorator=Aurita::Main::Default_Decorator)
@@ -87,7 +77,6 @@ include Observable
     Thread.current['request'] = @params
 
     @response_header = {}
-    @response_header['connection']     = 'close' 
     @response_header['Accept-Charset'] = 'utf-8' 
     @response_header['type']           = 'text/html; charset=utf-8' 
     @response_header['expires']        = (Time.now - (1 * 24 * 60 * 60)).to_s
@@ -101,12 +90,8 @@ include Observable
     begin
       raise ::Exception.new('No controller given') if(@controller.nil? || @controller == '') 
 
-      begin
-        @model_klass      = @application.get_model_klass(@controller)
-        @controller_klass = @application.get_controller_klass(@controller)
-      rescue ::Exception => excep
-        raise ::Exception.new('Error when trying to load model or interface \'' << @controller + '\': ' << excep.message + "\n" << excep.backtrace.join("\n"))
-      end
+      @model_klass      = @application.get_model_klass(@controller)
+      @controller_klass = @application.get_controller_klass(@controller)
 
       raise ::Exception.new('Unknown controller: ' << @controller.inspect) unless @controller_klass
       
@@ -139,12 +124,12 @@ include Observable
               # by Rack::ContentLength, which determines value from size of 
               # response body. 
               @response_header['X-Content-Length'] = filesize
-              @response_header['Content-Length'] = filesize
+              @response_header['Content-Length']   = filesize
               @response_body = ''
               return
             else 
               @response_header['X-Content-Length'] = filesize
-              @response_header['Content-Length'] = filesize
+              @response_header['Content-Length']   = filesize
               @response_body = File.open(filename, "r").read
             end
           else
@@ -154,7 +139,7 @@ include Observable
         rescue ::Exception => failed
           @failed = true
           @status = 200
-          response = { :html => GUI::Error_Page.new(failed).string }
+          response = { :error => GUI::Error_Page.new(failed).string }
           @logger.log { "Error in Dispatcher: #{failed.message}" }
           @logger.log { "#{failed.backtrace.join("\n")}" }
         end
@@ -189,19 +174,18 @@ include Observable
       @num_tuples     = Lore::Connection.result_row_count
 
       Aurita::Plugin_Register.call(Hook.dispatcher.request_finished, 
-                                         controller_instance, 
-                                         :dispatcher  => self, 
-                                         :controller  => controller_instance, 
-                                         :action      => @action, 
-                                         :time        => @benchmark_time, 
-                                         :num_queries => @num_queries, 
-                                         :num_tuples  => @num_tuples)
+                                   controller_instance, 
+                                   :dispatcher  => self, 
+                                   :controller  => controller_instance, 
+                                   :action      => @action, 
+                                   :time        => @benchmark_time, 
+                                   :num_queries => @num_queries, 
+                                   :num_tuples  => @num_tuples)
 
     rescue Exception => excep
       @logger.log(excep.message)
       @logger.log(excep.backtrace.join("\n"))
-      @response_body = excep.message + "\n"
-      @response_body << excep.backtrace.join("\n")
+      @response_body = { :error => GUI::Error_Page.new(excep).string }
     end
 
   end # def }}}

@@ -246,11 +246,11 @@ module GUI
     #
     #   <li class="user_entry" <%= onclick_link_to(user) %> ><%= user.username %></li>
     #   -->
-    #   <li class="user_entry" onclick="Cuba.load({ action: 'User/5' });" >JohnDoe</li>
+    #   <li class="user_entry" onclick="Aurita.load({ action: 'User/5' });" >JohnDoe</li>
     #
     #   <li class="user_entry" <%= onclick_link_to(user, :target => 'dom_id') %> ><%= user.username %></li>
     #   -->
-    #   <li class="user_entry" onclick="Cuba.load({ action: 'User/5', element: 'dom_id' });" >JohnDoe</li>
+    #   <li class="user_entry" onclick="Aurita.load({ action: 'User/5', element: 'dom_id' });" >JohnDoe</li>
     #
     def onclick_link_to(*args)
       params = args.at(0)

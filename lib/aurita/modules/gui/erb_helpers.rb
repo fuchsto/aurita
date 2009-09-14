@@ -33,15 +33,15 @@ module GUI
       icon = ''
       icon = '<img src="/aurita/images/icons/button_' << args[:icon].to_s + '.gif" alt="" />' if args[:icon]
       if args[:action] then
-        onclick = "Cuba.load({ element: 'app_main_content', action: '#{args[:action]}' }); "
+        onclick = "Aurita.load({ element: 'app_main_content', action: '#{args[:action]}' }); "
       elsif args[:onclick] then
         onclick = args[:onclick]
       elsif args[:hashcode] then
-        onclick = "Cuba.set_hashcode('#{args[:hashcode]}'); "
+        onclick = "Aurita.set_hashcode('#{args[:hashcode]}'); "
       else 
         onclick = ''
         args.each_pair { |k,v|
-          onclick <<  "Cuba.load({ element: '#{k}', action: '#{v}' }); " unless [:icon, :class, :type].include?(k)
+          onclick <<  "Aurita.load({ element: '#{k}', action: '#{v}' }); " unless [:icon, :class, :type].include?(k)
         }
       end
       label = yield()
@@ -135,7 +135,7 @@ module GUI
       end
       return '' unless id
       hashcode = 'media--' + id.to_s 
-      HTML.a(:onclick => "Cuba.set_hashcode('#{hashcode}');", :class => 'link', :href => "##{hashcode}") { media_asset_thumb(params) }
+      HTML.a(:onclick => "Aurita.set_hashcode('#{hashcode}');", :class => 'link', :href => "##{hashcode}") { media_asset_thumb(params) }
     end
 
     def self.hidden_field(params)

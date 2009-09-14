@@ -29,7 +29,7 @@ module Main
           dword = word.downcase
           marked_tags << dword
           begin
-            text.gsub!(/([>|\s]+)(#{word})([<|\s]+)/i, '\1<a class="tag_link" href="#find--' << dword + '" onclick="Cuba.set_hashcode(\'find--' << dword + '\'); ">\2</a>\3')
+            text.gsub!(/([>|\s]+)(#{word})([<|\s]+)/i, '\1<a class="tag_link" href="#find--' << dword + '" onclick="Aurita.set_hashcode(\'find--' << dword + '\'); ">\2</a>\3')
           rescue ::Exception => ignore
           end
         end

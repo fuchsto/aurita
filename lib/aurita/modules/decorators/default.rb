@@ -106,7 +106,7 @@ module Main
 
       @template = ''
       if @mode == 'async' then
-        response[:html].pack!
+        response[:html].pack! if response[:html]
         @content  = "{ html: \"#{response[:html]}\", script: \"#{response[:script]}\""
         @content << ", debug: \"#{response[:debug]}\" " if response[:debug]
         @content << ", error: \"#{response[:error]}\" " if response[:error]

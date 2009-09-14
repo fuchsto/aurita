@@ -911,5 +911,11 @@ public
     Hash.new
   end
 
+  def self.set_default_redirects
+    after(:perform_add, :perform_update, :perform_delete) { |c|
+      c.redirect_to(:action => :list)
+    }
+  end
+
 end # class
 

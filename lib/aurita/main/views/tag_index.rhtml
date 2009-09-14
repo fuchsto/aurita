@@ -5,7 +5,7 @@
    displayed << entry.tag
 %>
 
-<font class="link" onclick="Cuba.load({ element: 'app_main_content', action: 'App_Main/find_by_tag/tag=<%= entry.tag.to_s.gsub('"','') %>'});" >
+<font class="link" onclick="Aurita.load({ action: 'App_Main/find_by_tag/tag=<%= entry.tag.to_s.gsub('"','') %>'});" >
   <%= entry.tag %> (<%= entry.relevance %>)
 </font>
 

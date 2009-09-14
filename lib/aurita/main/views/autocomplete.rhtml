@@ -34,11 +34,11 @@
 
     if(generic_id.match('find_all__')) {	
       tag = generic_id.replace('find_all__','');
-      Cuba.set_hashcode('find_all--'+tag); 
+      Aurita.set_hashcode('find_all--'+tag); 
     }
     else if(generic_id.match('find_full__')) {	
       tag = generic_id.replace('find_full__','');
-      Cuba.set_hashcode('find_full--'+tag); 
+      Aurita.set_hashcode('find_full--'+tag); 
     }
     else { 
       if(req_parts[0] == 'url') { 
@@ -49,11 +49,11 @@
       else { 
         if(req_parts[2]) { 
           req_url = (req_parts[0] + '::' + req_parts[1] + '/show/id=' + req_parts[2]); 
-          Cuba.load({ action: req_url }); 
+          Aurita.load({ action: req_url }); 
         }
         else { 
           req_url = (req_parts[0] + '/show/id=' + req_parts[1]); 
-          Cuba.load({ action: req_url }); 
+          Aurita.load({ action: req_url }); 
         }
       } 
     }

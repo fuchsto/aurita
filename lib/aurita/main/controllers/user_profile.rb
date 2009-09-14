@@ -140,16 +140,16 @@ module Main
       instance = perform_add()
       if instance then
         plugin_call(Hook.main.after_register_user, :user => instance) 
-        exec_js("Cuba.load({ element: 'admin_users_box_body', action: 'User_Profile/admin_box_body/' }); 
-                 Cuba.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
+        exec_js("Aurita.load({ element: 'admin_users_box_body', action: 'User_Profile/admin_box_body/' }); 
+                 Aurita.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
       end
     end
 
     def admin_box_body
       body = Array.new
-      guest = Context_Menu_Element.new(HTML.a.entry(:onclick => js.Cuba.load(:action => 'User_Login_Data/update/user_group_id=0')) { tl(:unregistered_user) }, 
+      guest = Context_Menu_Element.new(HTML.a.entry(:onclick => js.Aurita.load(:action => 'User_Login_Data/update/user_group_id=0')) { tl(:unregistered_user) }, 
                                       :type => :system_link)
-      body << HTML.button(:class => :icon, :onclick => js.Cuba.load(:action => 'User_Profile/admin_add/')) { 
+      body << HTML.button(:class => :icon, :onclick => js.Aurita.load(:action => 'User_Profile/admin_add/')) { 
         HTML.img(:src => '/aurita/images/icons/button_add.gif') + tl(:add_user) 
       }
       list = HTML.ul.single_line_list { HTML.li { guest } }
@@ -157,7 +157,7 @@ module Main
         if user.user_group_id != '0' then
           user_label = user.surname.capitalize + ' ' + user.forename.capitalize 
           user_label << ' (' + user.division + ')' if user.division.to_s != ''
-          user = Context_Menu_Element.new(HTML.a.entry(:onclick => js.Cuba.load(:action => "User_Login_Data/update/user_group_id=#{user.user_group_id}")) { 
+          user = Context_Menu_Element.new(HTML.a.entry(:onclick => js.Aurita.load(:action => "User_Login_Data/update/user_group_id=#{user.user_group_id}")) { 
                                             user_label
                                           }, 
                                           :entity => user) 
@@ -274,8 +274,8 @@ module Main
       elsif (param(:pass) && param(:pass) != param(:pass_confirm)) then
         raise ::Exception.new('Passworte stimmen nicht &uuml;berein')
       end
-      exec_js("Cuba.load({ element: 'admin_users_box_body', action: 'User_Profile/admin_box_body/' }); 
-               Cuba.load({ element: 'app_main_content', action: 'User_Profile/show/user_group_id=#{instance.user_group_id}' }); ")
+      exec_js("Aurita.load({ element: 'admin_users_box_body', action: 'User_Profile/admin_box_body/' }); 
+               Aurita.load({ element: 'app_main_content', action: 'User_Profile/show/user_group_id=#{instance.user_group_id}' }); ")
     end
 
     def perform_delete

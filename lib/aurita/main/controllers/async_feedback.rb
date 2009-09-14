@@ -1,8 +1,4 @@
 
-# Cuba.import_imp_model :wiki, :article
-# Cuba.import_imp_model :wiki, :article_access
-# Aurita::Main.import_controller :media_asset
-
 module Aurita
 module Main
 

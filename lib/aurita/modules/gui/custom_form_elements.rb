@@ -117,11 +117,11 @@ JS
                  :src => "/aurita/assets/medium/asset_#{@value}.jpg", 
                  :class => :picture_asset_element_preview, 
                  :style => "display: #{visibility}") + 
-        Button.new(:onclick => "Cuba.select_media_asset({ hidden_field: '#{dom_id()}',
+        Button.new(:onclick => "Aurita.Wiki.select_media_asset({ hidden_field: '#{dom_id()}',
                                                           user_id: ''});") { tl(:select_image) } + 
-        Button.new(:onclick => "Cuba.load({ action: 'Wiki::Media_Asset/add_profile_image/' });", 
+        Button.new(:onclick => "Aurita.load({ action: 'Wiki::Media_Asset/add_profile_image/' });", 
                    :id => "upload_profile_image_button_#{dom_id()}" ) { tl(:upload_image) }+ 
-        Button.new(:onclick => "Cuba.select_media_asset_click(0, '#{dom_id()}');", 
+        Button.new(:onclick => "Aurita.Wiki.select_media_asset_click(0, '#{dom_id()}');", 
                    :id => "clear_selected_image_button_#{dom_id()}" ) { tl(:clear_image) }+ 
         Hidden_Field.new(:id => dom_id(), :value => @value, :name => @attrib[:name]) + 
         HTML.div(:class => :media_asset_selection, :id => "select_box_#{dom_id()}", :force_no_close => true)
@@ -145,7 +145,7 @@ JS
           @attrib[:option_labels] << c.category_name
         }
       end
-      @attrib[:onchange] = "category_selection_add('#{@parent.dom_id}');" if @parent
+      @attrib[:onchange] = "Aurita.Main.category_selection_add('#{@parent.dom_id}');" if @parent
       super()
     end
 
@@ -153,7 +153,7 @@ JS
       select_field = Select_Field.new(@attrib)
       if @parent then
         button       = Button.new(:class   => :add_category_button, 
-                                  :onclick => "category_selection_add('#{@parent.dom_id}');") { '+' }
+                                  :onclick => "Aurita.Main.category_selection_add('#{@parent.dom_id}');") { '+' }
         return HTML.div.category_select_field { 
           select_field
         }
@@ -417,8 +417,7 @@ JS
       def element
         HTML.div { 
           HTML.span(:class => :link, 
-                    :onclick => "Cuba.load({ element: 'dispatcher', 
-                                             action: 'User_Role/perform_delete/user_group_id=#{@user.user_group_id}&role_id=#{@value}' });") { 'X ' } + 
+                    :onclick => "Aurita.call({ action: 'User_Role/perform_delete/user_group_id=#{@user.user_group_id}&role_id=#{@value}' });") { 'X ' } + 
           @label.to_s
         }
       end
@@ -473,7 +472,7 @@ JS
     def element
       name = dom_id().to_s.gsub('.','_')
       trigger_name = "#{name}_trigger"
-      trigger_onclick = "open_calendar('#{name}','#{trigger_name}');"
+      trigger_onclick = "Aurita.GUI.open_calendar('#{name}','#{trigger_name}');"
       clear_onclick   = "$('#{name}').value = '';"
 
       @attrib[:onclick] = trigger_onclick

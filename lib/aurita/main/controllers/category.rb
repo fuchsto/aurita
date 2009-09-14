@@ -59,7 +59,7 @@ module Main
       }
       super()
       exec_js("Aurita.load({ element: 'admin_categories_box_body', action: 'Category/admin_box_body/' }); 
-               Aurita.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
+               Aurita.load({ action: 'App_Main/blank/' }); ")
     end
     
     def perform_add
@@ -73,23 +73,23 @@ module Main
       instance = super()
       redirect_to(:controller => 'Category', :action => :show, :category_id => instance.category_id)
       exec_js("Aurita.load({ element: 'admin_categories_box_body', action: 'Category/admin_box_body/' }); 
-               Aurita.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
+               Aurita.load({ action: 'App_Main/blank/' }); ")
     end
 
     def perform_update
       super()
       exec_js("Aurita.load({ element: 'admin_categories_box_body', action: 'Category/admin_box_body/' }); 
-               Aurita.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
+               Aurita.load({ action: 'App_Main/blank/' }); ")
     end
 
     def admin_box_body
       body = Array.new
-      body << HTML.button(:class => :icon, :onclick => js.Cuba.load(:action => 'Category/add/')) { 
+      body << HTML.button(:class => :icon, :onclick => js.Aurita.load(:action => 'Category/add/')) { 
         HTML.img(:src => '/aurita/images/icons/button_add.gif') + tl(:add_content_category) 
       }
       list = HTML.ul.single_line_list { } 
       Category.all_with((Category.is_private == 'f') & (Category.category_id >= '100')).sort_by(:category_name, :asc).each { |cat|
-        cat = Context_Menu_Element.new(HTML.a.entry(:onclick => js.Cuba.load(:action => "Category/update/category_id=#{cat.category_id}")) { 
+        cat = Context_Menu_Element.new(HTML.a.entry(:onclick => js.Aurita.load(:action => "Category/update/category_id=#{cat.category_id}")) { 
                                           cat.category_name
                                        }, 
                                        :entity => cat)

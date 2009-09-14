@@ -291,9 +291,26 @@ module Aurita
     end
 
     # Ajax redirect. 
+    # Examples: 
+    #
+    # To redirect withing current controller: 
+    #
+    #   redirect_to(:action => :list)
+    #
+    #   redirect(:element => :some_element_dom_id, :to => :show)
+    #
+    # To redirect to another controller: 
+    #   
+    #   redirect_to(:controller => 'Other_Controller', :action => :show)
+    #
+    # Any parameter different from :controller, :action, :to, :element and :target
+    # are used as GET parameters: 
+    #
+    #   redirect(:element => :some_element_dom_id, :to => :show, :product_id => 123)
     #
     def redirect_to(params={})
       params[:controller] = controller_name() unless params[:controller]
+      params[:action]     = params[:to] if params[:to]
       params[:action]     = :show unless params[:action]
 
       url = "#{params[:controller]}/#{params[:action]}/"
@@ -310,12 +327,11 @@ module Aurita
           get_params << "#{k}=#{v}"
         }
       end
+      url << get_params.join('&') if get_params
       if target then
-        url << get_params.join('&') if get_params
         exec_js("Aurita.load({ action: '#{url}', element: '#{target}' });")
       else
-        url << get_params.join('--') if get_params
-        exec_js("Aurita.set_hashcode('#{url}');")
+        exec_js("Aurita.load({ action: '#{url}' });")
       end
     end
     alias redirect redirect_to
@@ -668,6 +684,7 @@ module Aurita
       form.readonly! 
       render_form(form)
     end # def }}}
+
 
   end # class
 

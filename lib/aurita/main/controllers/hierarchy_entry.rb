@@ -26,9 +26,9 @@ module Main
          Hierarchy_Entry.hierarchy_id, 
          Hierarchy_Entry.hierarchy_entry_id_parent 
       ]
-      form.add(Hidden_Field.new(:name => Hierarchy_Entry.hierarchy_id, 
+      form.add(Hidden_Field.new(:name  => Hierarchy_Entry.hierarchy_id, 
                                 :value => param(:hierarchy_id)))
-      form.add(Hidden_Field.new(:name => Hierarchy_Entry.hierarchy_entry_id_parent, 
+      form.add(Hidden_Field.new(:name  => Hierarchy_Entry.hierarchy_entry_id_parent, 
                                 :value => param(:hierarchy_entry_id_parent)))
       form[Hierarchy_Entry.hierarchy_entry_id_parent].hide! 
       
@@ -40,10 +40,10 @@ module Main
         options.update(p)
       }
       
-      type_select = Select_Field.new(:name => Hierarchy_Entry.entry_type, 
-                                     :label => tl(:context_entry_type), 
+      type_select = Select_Field.new(:name    => Hierarchy_Entry.entry_type, 
+                                     :label   => tl(:context_entry_type), 
                                      :options => options, 
-                                     :value => 'ARTICLE')
+                                     :value   => 'ARTICLE')
       form.add(type_select)
       
       tags = Input_Field.new(:type => :text, :label => tl(:tags), :name => Content.tags, :required => true)
@@ -118,7 +118,7 @@ module Main
       }
       hid = entry.hierarchy_id
       super()
-      exec_js("Cuba.load({ element: 'hierarchy_#{hid}_body', action: 'Hierarchy/body/hierarchy_id=#{hid}' });")
+      exec_js("Aurita.load({ element: 'hierarchy_#{hid}_body', action: 'Hierarchy/body/hierarchy_id=#{hid}' });")
     end
 
   end # class

@@ -102,29 +102,27 @@ module Main
       hid = param(:hierarchy_id)
       position_tree = []
       position_tree = param("hierarchy_sortable_list_#{hid}")
-      position_tree.each_pair { |sortpos,entry|
-        sortpos = sortpos.to_i
-        entry_id = entry["id"]
-        entry_parent_id = '0'
+      position_tree = parse_position_tree(position_tree)
+      position_tree.each_with_index { |entry, sortpos|
         Hierarchy_Entry.update { |e|
-          e.where(e.hierarchy_entry_id == entry_id) 
-          e.set(:hierarchy_entry_id_parent => entry_parent_id, 
+          e.where(e.hierarchy_entry_id == entry[0]) 
+          e.set(:hierarchy_entry_id_parent => entry[1], 
                 :sortpos => sortpos)
         }
-        sortpos += 1
       }
     end
 
   private 
 
-    def parse_position_tree(param_string, last_parent_entry_id, tree)
+    def parse_position_tree(mapping, last_parent_entry_id=0, tree=[])
       position = 0
-      while param(param_string + "[#{position}][id]") do 
-        entry_id = param(param_string + "[#{position}][id]")
+      while mapping[position.to_s] && mapping[position.to_s]['id'] do 
+        entry_id = mapping[position.to_s]['id']
         tree << [ entry_id, last_parent_entry_id ]
-        parse_position_tree(param_string + "[#{position}]", entry_id, tree)
+        tree = parse_position_tree(mapping[position.to_s], entry_id, tree)
         position += 1
       end
+      return tree
     end
 
   public
@@ -168,7 +166,7 @@ module Main
                                  { onUpdate: on_hierarchy_entry_reorder, tree: true });"
       icon = HTML.img(:src => '/aurita/images/icons/save.gif', 
                       :style => 'margin-bottom: 4px;', 
-                      :onclick => "Cuba.load({ element: 'hierarchy_#{h_id}_body', action: 'Hierarchy/body/hierarchy_id=#{h_id}' }); " )
+                      :onclick => "Aurita.load({ element: 'hierarchy_#{h_id}_body', action: 'Hierarchy/body/hierarchy_id=#{h_id}' }); " )
 
       exec_js(js_init)
       puts icon + dec.string

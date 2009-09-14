@@ -11,7 +11,7 @@ module Main
     }
 
 		def toolbar_buttons
-      edit_synonyms = HTML.a(:class => :icon, :onclick => js.Cuba.load(:action => 'Tag_Synonym/show/')) { 
+      edit_synonyms = HTML.a(:class => :icon, :onclick => js.Aurita.load(:action => 'Tag_Synonym/show/')) { 
         HTML.img(:src => '/aurita/images/icons/tags.gif') + tl(:edit_tags) 
       }
 		end

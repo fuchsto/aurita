@@ -31,7 +31,7 @@ module Aurita
       if interface.include?('http://') then
         result << 'onClick="window.open(\'' << interface + '\');" '
       else
-        result << 'onClick="context_menu_click({url: \''
+        result << 'onClick="Aurita.context_menu_click({url: \''
         result << interface << '\', targets: ' << target_string << ', autoclose: false ' << onload + '  }); " '
       end
       result << 'class="context_menu"><nobr>&nbsp; '
@@ -44,7 +44,7 @@ module Aurita
       icon = icon_for(label)
       entry_id = 'context_menu_entry_' + rand(1000).to_s; 
       result = '<div id="' << entry_id + '" class="context_menu_entry" onMouseOut="unhover_element(\'' << entry_id + '\');" onMouseOver="hover_element(\'' << entry_id + '\'); " '
-      result << "onClick=\"Cuba.load({ element: 'app_main_content', action: '#{interface}'"
+      result << "onClick=\"Aurita.load({ element: 'app_main_content', action: '#{interface}'"
       result << ", onload: '#{js_init_fun.to_s}'" if js_init_fun
       result << '} ); context_menu_close(); " class="context_menu"><nobr>&nbsp; '
       result << '<img src="' << icon + '" border="0" /> '
@@ -60,7 +60,7 @@ module Aurita
         interface.gsub!('/aurita/','')
         entry_id = 'context_menu_entry_' + rand(1000).to_s; 
         result << '<div id="' << entry_id + '" class="context_menu_entry" onMouseOut="unhover_element(\'' << entry_id + '\');" onMouseOver="hover_element(\'' << entry_id + '\'); " ' 
-        result << 'onClick="Cuba.load({ element: \'' << target + '\', action: \'' << interface << '\'' << onload.to_s << ' }); context_menu_close(); " class="context_menu"><nobr>&nbsp; '
+        result << 'onClick="Aurita.load({ element: \'' << target + '\', action: \'' << interface << '\'' << onload.to_s << ' }); Aurita.context_menu_close(); " class="context_menu"><nobr>&nbsp; '
         result << '<img src="' << icon + '" border="0" /> '
         result << '<font class="context_menu_entry_label">' + tl(label) << '&nbsp;</font></nobr></div>'
       }
@@ -75,7 +75,7 @@ module Aurita
       target_string << '}'
       target_string.gsub!('; }','}')
 
-      result = '<img src="/aurita/images/icons/' << icon_name.to_s + '.gif" onClick="context_menu_click({url: \''
+      result = '<img src="/aurita/images/icons/' << icon_name.to_s + '.gif" onClick="Aurita.context_menu_click({url: \''
       result << interface << '\', targets: ' << target_string << ', autoclose: false}); " />'
       puts result
     end

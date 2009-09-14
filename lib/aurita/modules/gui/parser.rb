@@ -29,7 +29,7 @@ module GUI
       post_string.gsub!(/\[size=([^\]]+)\]/, '<font size="\1">')
       post_string.gsub!('[/size]', '</font>')
       post_string.gsub!(/\[url=([^\]]+)\]/, ' <a href="\1" target="_blank" >- ')
-      post_string.gsub!(/\[appurl=([^\]]+)\]/, ' <a href="#\1" onclick="Cuba.set_hashcode(\'\1\'); " >')
+      post_string.gsub!(/\[appurl=([^\]]+)\]/, ' <a href="#\1" onclick="Aurita.set_hashcode(\'\1\'); " >')
       post_string.gsub!('[/appurl]', ' </a>')
       post_string.gsub!('[/url]', ' -&gt;</a>')
       post_string.gsub!('[/url]', ' -&gt;</a>')

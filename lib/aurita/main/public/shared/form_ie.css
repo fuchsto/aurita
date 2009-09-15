@@ -18,3 +18,21 @@ ul li.form_field {
   padding: 0px; 
   margin-bottom: 4px; 
 }
+.form_button_bar button { 
+  width: 165px; 
+  margin-left: 1px; 
+  margin-right: 3pc; 
+}
+
+.section_content fieldset { 
+  width: 340px; 
+  margin-top: 20px; 
+  margin-bottom: 80px; 
+  background-color: transparent; 
+}
+.section_content fieldset legend { 
+  height: 15px; 
+  margin: 0px; 
+  padding-left: 0px; 
+  background-color: transparent; 
+}

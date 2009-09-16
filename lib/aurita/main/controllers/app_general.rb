@@ -41,7 +41,6 @@ module Main
       puts plugin_get(Hook.public.main.left).map { |component| component.string } 
       puts plugin_get(Hook.main.left).map { |component| component.string } 
       puts plugin_get(Hook.main.left.hierarchies, :perspective => 'GENERAL').map { |h| h.string } 
-      exec_js("Effect.Appear('app_left_column'); ")
       exec_js("new accordion('app_left_column', { classNames: { content: 'accordion_box_body', toggle: 'accordion_box_header', toggleActive: 'accordion_box_header_active' } });");
     end
 

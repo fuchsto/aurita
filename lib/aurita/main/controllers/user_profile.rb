@@ -272,10 +272,10 @@ module Main
         instance.pass = Digest::MD5.hexdigest(pass)
         instance.commit
       elsif (param(:pass) && param(:pass) != param(:pass_confirm)) then
-        raise ::Exception.new('Passworte stimmen nicht &uuml;berein')
+        raise ::Exception.new(tl(:passwords_dont_match))
       end
       exec_js("Aurita.load({ element: 'admin_users_box_body', action: 'User_Profile/admin_box_body/' }); 
-               Aurita.load({ element: 'app_main_content', action: 'User_Profile/show/user_group_id=#{instance.user_group_id}' }); ")
+               Aurita.load({ action: 'User_Profile/show/user_group_id=#{instance.user_group_id}' }); ")
     end
 
     def perform_delete

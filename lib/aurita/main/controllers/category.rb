@@ -110,43 +110,27 @@ module Main
       cat = load_instance()
       cat_id = cat.category_id
 
-      cache_name = Aurita.project_path + "cache/category_#{cat_id}.html"
-      if(!File.exists?(cache_name)) then
-        # TODO: Add this as a test case: 
-        #    users = User_Category.select { |uc|
-        #      uc.join(User_Profile).on(User_Category.user_group_id == User_Profile.user_group_id) { |up|
-        #        up.where(uc.category_id == cat_id) 
-        #        up.order_by(:user_group_name, :asc)
-        #      }
-        #    }
-        users = User_Profile.select { |uc|
-          uc.where(User_Profile.user_group_id.in( User_Category.select(User_Category.user_group_id) { |uid| 
-            uid.where(User_Category.category_id == cat_id) 
-          } ))
-          uc.order_by(:user_group_name, :asc)
-        }
+      users = cat.users
+      elements = []
+      if Aurita.user.is_registered? then
+        users_box = Box.new(:type => :none, 
+                            :class => :topic_inline)
+        users_box.body = view_string(:user_list, :users => users)
+        users_box.header = tl(:users)
 
-        elements = []
-        if Aurita.user.is_registered? then
-          users_box = Box.new(:type => :none, 
-                              :class => :topic_inline)
-          users_box.body = view_string(:user_list, :users => users)
-          users_box.header = tl(:users)
-
-          elements << users_box.string
-        end
-        components = plugin_get(Hook.main.category.list, :category_id => cat_id).collect { |c| c.string }
-        elements += components
-
-        contents = Page.new(:header => cat.category_name) { elements }
-        begin
-          File.delete(cache_name) 
-        rescue ::Exception => e
-        end
-        File.open(cache_name, "a") { |f|
-          f << contents
-        }
+        elements << users_box.string
       end
+      components = plugin_get(Hook.main.category.list, :category_id => cat_id).collect { |c| c.string }
+      elements += components
+
+      contents = Page.new(:header => cat.category_name) { elements }
+      begin
+        File.delete(cache_name) 
+      rescue ::Exception => e
+      end
+      File.open(cache_name, "a") { |f|
+        f << contents
+      }
 
       File.open(cache_name, "r") { |f|
         f.each { |l| 

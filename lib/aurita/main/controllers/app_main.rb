@@ -150,7 +150,6 @@ module Main
         count += 1
       }
       puts HTML.ul(:id => 'workspace_components', :class => 'no_bullets' ) { result }.string
-      exec_js("Effect.Appear('app_main_content'); ")
     end
 
     def frontpage

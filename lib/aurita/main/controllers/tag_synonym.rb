@@ -50,6 +50,7 @@ module Main
       Tag_Synonym.delete { |s| s.where((s.synonym == param(:tag)) & (s.tag == param(:synonym))) }
 
       redirect_to(:action => :show, :tag => param(:tag), :target => :tag_form)
+      exec_js("Element.hide('synonym_#{param(:tag)}_#{param(:synonym)}');")
     end
 
     def list
@@ -58,7 +59,12 @@ module Main
         HTML.h2(:style => 'padding: 0px; ') { param(:tag).to_s } +
         HTML.ul { 
           syns.map { |s|
-            HTML.li { link_to(:target => :dispatcher, :controller => 'Tag_Synonym', :action => :perform_delete, :tag => s.tag, :synonym => s.synonym) { 'X ' } + s.synonym }
+            HTML.li(:id => "synonym_#{s.tag}_#{s.synonym}") { 
+              link_to(:target     => :dispatcher, 
+                      :controller => 'Tag_Synonym', 
+                      :action     => :perform_delete, 
+                      :tag        => s.tag, 
+                      :synonym => s.synonym) { 'X ' } + s.synonym }
           }
         }
       }
@@ -70,7 +76,7 @@ module Main
         HTML.h2(:style => 'padding: 0px; ') { param(:tag).to_s } +
         HTML.ul { 
           syns.map { |s|
-            HTML.li { 
+            HTML.li(:id => "synonym_#{s.tag}_#{s.synonym}") { 
               HTML.div(:style => 'width: 20px; float: left; ') { 
                 link_to(:target => :dispatcher, :controller => 'Tag_Synonym', :action => :perform_delete, :tag => s.tag, :synonym => s.synonym) { 'X ' } 
               } + 
@@ -102,7 +108,7 @@ module Main
     end
 
     def edit
-      exec_js("init_autocomplete_tag_selection(); ")
+      exec_js("Aurita.Main.init_autocomplete_tag_selection(); ")
 
       Page.new(:header => tl(:edit_synonyms)) { 
         HTML.div.form_box {

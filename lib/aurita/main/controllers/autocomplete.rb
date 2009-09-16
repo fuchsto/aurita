@@ -118,7 +118,8 @@ module Main
     def tags
       use_decorator(:none)
 
-      keys = param(:tags)
+      keys   = param(:tags)
+      keys ||= param(:tag)
       return unless keys
 
       keys.strip!

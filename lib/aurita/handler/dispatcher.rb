@@ -158,7 +158,7 @@ class Aurita::Dispatcher
       @params[:_controller] = controller_instance
 
       output = @decorator.new(@model_klass, response, @params).string
-      @response_header['etag'] = Digest::MD5.hexdigest(output)
+      @response_header['etag'] = Digest::MD5.hexdigest(output) if output
       @response_body = output
 
       @num_dispatches += 1

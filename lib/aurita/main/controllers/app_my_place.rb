@@ -17,7 +17,6 @@ module Main
       puts plugin_get(Hook.public.my_place.left).map { |component| component.string } 
       puts plugin_get(Hook.my_place.left).map { |component| component.string } 
       puts plugin_get(Hook.my_place.left.hierarchies, :perspective => 'MY_PLACE').map { |h| h.string } 
-      exec_js("Effect.Appear('app_left_column'); ")
     end
 
   end # class

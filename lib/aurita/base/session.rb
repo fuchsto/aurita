@@ -111,6 +111,7 @@ module Aurita
     def language
       param('lang') || :de
     end
+    alias lang language
 
   end # class
 

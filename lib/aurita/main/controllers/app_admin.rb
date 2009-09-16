@@ -28,13 +28,11 @@ module Main
       puts plugin_get(Hook.admin.left.top).map { |component| component.string } 
       puts plugin_get(Hook.admin.left).map { |component| component.string } 
       puts plugin_get(Hook.admin.left.hierarchies, :perspective => 'ADMIN').map { |h| h.string } 
-      exec_js("Effect.Appear('app_left_column')")
     end
 
     def main
       puts plugin_get(Hook.admin.workspace.top).map { |component| component.string } 
       puts plugin_get(Hook.admin.workspace).map { |component| component.string } 
-      exec_js("Effect.Appear('app_main_content')")
     end
 
     def locked_users_box

@@ -40,6 +40,7 @@ module Aurita
     end
 
     def accessible
+#     return Lore::Clause.new(true) if Aurita.user.is_super_admin?
       @category_map               ||= Content_Category
       @category_map_key_attrib    ||= :content_id
       @category_map_cat_id_attrib ||= :category_id

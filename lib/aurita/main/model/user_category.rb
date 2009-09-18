@@ -54,12 +54,10 @@ module Main
       #     u.where((User_Category.category_id == category_id) & (User_Login_Data.locked == 'f'))
       #   }
       # }
-      User_Category.select { |uc|
-        uc.where((User_Category.category_id == category_id) & 
-                 (User_Category.user_group_id.in( 
-                    User_Login_Data.select(User_Login_Data.user_group_id) { |uid| uid.where(User_Login_Data.locked == 'f') }
-                 ))
-        )
+      User_Profile.select { |u|
+        u.where(User_Profile.user_group_id.in(User_Category.select(User_Category.user_group_id) { |uid|
+          uid.where(User_Category.category_id == category_id)
+        }))
       }
     end # }}}
   end 

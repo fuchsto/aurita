@@ -76,12 +76,12 @@ module Aurita
             result = component.controller.new(caller_params).__send__(component.method)
           end
           if result then
-            if result.instance_of?(String) || result.is_a?(Aurita::GUI::Element) || result.respond_to?(:aurita_gui_element) then
+            if result.is_a?(Hash) || result.is_a?(String) || result.is_a?(Aurita::GUI::Element) || result.respond_to?(:aurita_gui_element) then
               components << result
             elsif result.instance_of?(Array) then
               components += result
             else
-              raise ::Exception.new('Components have to be an Array instance or derived from Aurita::GUI::Element (Given: ' << result.class.to_s + ') ' << component.inspect )
+              raise ::Exception.new('Components have to be an Array, Hash or Aurita::GUI::Element instance (Given: ' << result.class.to_s + ') ' << component.inspect )
             end
           end
         end

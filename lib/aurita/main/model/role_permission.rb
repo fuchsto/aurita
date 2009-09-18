@@ -66,7 +66,7 @@ module Main
     def has_permission(perm)
     # {{{
       if perm == :is_super_admin then
-        raise ::Exception.new('find me')
+        # raise ::Exception.new('find me')
       end
       if @role_permissions.nil? || @role_permissions[perm.to_s].nil? then
         perms = Role_Permission.select { |rp| 

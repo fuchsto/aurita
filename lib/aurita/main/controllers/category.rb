@@ -123,20 +123,7 @@ module Main
       components = plugin_get(Hook.main.category.list, :category_id => cat_id).collect { |c| c.string }
       elements += components
 
-      contents = Page.new(:header => cat.category_name) { elements }
-      begin
-        File.delete(cache_name) 
-      rescue ::Exception => e
-      end
-      File.open(cache_name, "a") { |f|
-        f << contents
-      }
-
-      File.open(cache_name, "r") { |f|
-        f.each { |l| 
-          puts l
-        }
-      }
+      Page.new(:header => cat.category_name) { elements }
     end
 
   end

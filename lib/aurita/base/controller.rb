@@ -180,6 +180,8 @@ class Aurita::Base_Controller
   end
 
 
+  # Expects Lore::Exceptions::Validation_Failure. 
+  #
   # Triggered if invalid attribute values are passed to a model 
   # method like Model.create, Model.update etc.
   #
@@ -196,15 +198,15 @@ class Aurita::Base_Controller
   # See Aurita::Main::Default_Decorator for additional info on 
   # asynchronous response handling. 
   #
-  def notify_invalid_params(excep)
+  def notify_invalid_params(validation_failure)
   # {{{
     script = 'Aurita.handle_form_error('
     error_details = []
-    excep.serialize.each_pair { |table, fields| 
+    validation_failure.serialize.each_pair { |table, fields| 
       fields.each_pair { |attrib_name, reason|
         message = tl("#{table.sub('.','_')}_#{attrib_name}__#{reason}".to_sym)
-        form_element_id = "#{table.gsub('.','_')}_#{attrib_name}"
-        error_details << "{ field_id: '#{form_element_id}', reason: '#{reason.to_s}', " << 
+        form_element_id = "#{table}.#{attrib_name}"
+        error_details << "{ field: '#{form_element_id}', reason: '#{reason.to_s}', " +
                            "value: '#{param(attrib_name.to_sym)}', message: '#{message}}' }"
       }
     }

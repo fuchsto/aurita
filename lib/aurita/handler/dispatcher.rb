@@ -21,7 +21,7 @@ require('lore')
 
 class Aurita::Dispatcher 
 
-  attr_reader :params, :mode, :controller, :action, :dispatch_time, :failed, :response_header, :response_body, :status
+  attr_reader :params, :mode, :controller, :action, :dispatch_time, :failed
   attr_accessor :gc_after_dispatches, :decorator
 
   public
@@ -38,15 +38,7 @@ class Aurita::Dispatcher
     @decorator           = decorator
     @logger              = Aurita::Log::Class_Logger.new('Dispatcher')
     @gc_after_dispatches = 500
-
-    @params              = {}
-    @response_header     = {}
-    @response_body       = ''
-    @mode                = false
-    @controller          = false
-    @action              = false
-    @dispatch_time       = 0.0
-    @failed              = false
+    @benchmark_time      = 0
     @num_dispatches      = 0 
   end
 
@@ -58,29 +50,29 @@ class Aurita::Dispatcher
   #
   def dispatch(request)
   # {{{
-    @dispatch_time     = 0.0
-    @request           = request
-    @params            = Aurita::Attributes.new(request)
-    @session           = Aurita::Session.new(request)
-    @mode              = params[:mode]
-    @controller        = params[:controller]
-    @action            = params[:action]
-    @params[:_request] = @request
-    @params[:_session] = @session
-    @failed            = false
-    @status            = 200
+    dispatch_time     = 0.0
+    params            = Aurita::Attributes.new(request)
+    session           = Aurita::Session.new(request)
+    params[:_request] = request
+    params[:_session] = session
+    failed            = false
+    status            = 200
+    response_body     = ''
+    response_header   = {}
 
-    @controller ||= 'App_Main'
-    @action     ||= 'start'
-    @mode       ||= 'default'
+    controller        = params[:controller]
+    action            = params[:action]
+    mode              = params[:mode]
+    controller      ||= 'App_Main'
+    action          ||= 'start'
+    mode            ||= 'default'
 
-    Thread.current['request'] = @params
+    Thread.current['request'] = params
 
-    @response_header = {}
-    @response_header['Accept-Charset'] = 'utf-8' 
-    @response_header['type']           = 'text/html; charset=utf-8' 
-    @response_header['expires']        = (Time.now - (1 * 24 * 60 * 60)).to_s
-    @response_header['pragma']         = 'No-cache'
+    response_header['Accept-Charset'] = 'utf-8' 
+    response_header['type']           = 'text/html; charset=utf-8' 
+    response_header['expires']        = (Time.now - (1 * 24 * 60 * 60)).to_s
+    response_header['pragma']         = 'No-cache'
 
     Lore::Connection.reset_query_count()
     Lore::Connection.reset_result_row_count()
@@ -88,72 +80,61 @@ class Aurita::Dispatcher
     benchmark_time = Time.now
 
     begin
-      raise ::Exception.new('No controller given') if(@controller.nil? || @controller == '') 
+      raise ::Exception.new('No controller given') if(controller.nil? || controller == '') 
 
-      @model_klass      = @application.get_model_klass(@controller)
-      @controller_klass = @application.get_controller_klass(@controller)
+      model_klass      = @application.get_model_klass(controller)
+      controller_klass = @application.get_controller_klass(controller)
 
-      raise ::Exception.new('Unknown controller: ' << @controller.inspect) unless @controller_klass
+      raise ::Exception.new('Unknown controller: ' << controller.inspect) unless controller_klass
       
-      controller_instance = @controller_klass.new(@params, @model_klass)
+      controller_instance = controller_klass.new(params, model_klass)
 
-      Aurita::Plugin_Register.call(Hook.__send__(@controller.downcase.gsub('::','__')).__send__("before_#{@action}"), controller_instance)
+      # TODO: Move plugin call to Controller#call_guarded
+      Aurita::Plugin_Register.call(Hook.__send__(controller.downcase.gsub('::','__')).__send__("before_#{action}"), controller_instance)
 
       response = false
-      if !@controller_klass.nil?
-        @logger.log("Calling model interface method #{@controller}.#{@action}")
+      if !controller_klass.nil?
+        @logger.log("Calling model interface method #{controller}.#{action}")
         begin
-          element           = controller_instance.call_guarded(@action)
+          element           = controller_instance.call_guarded(action)
           response          = controller_instance.response
-          @response_header.update(response[:http_header]) if response[:http_header]
+          response_header.update(response[:http_header]) if response[:http_header]
           response[:html]   = element.string if (element.respond_to?(:string) && response[:html] == '')
           if response[:file] then
-            # TODO: 
-            # if Aurita.server.allows_x_sendfile then
             filename = response[:file]
             filesize = File.size(filename)
-            # For FCGI dispatcher without using X-Sendfile, this was: 
-            # cgi_output(File.open(response[:file], "rb").read)
-            @logger.log("Sending file: #{filename}")
-            @logger.log("Filesize: #{filesize}")
-            @response_header['Content-Type'] = "application/force-download" 
-            @response_header['Content-Disposition'] = "attachment; filename=\"#{File.basename(filename)}\"" 
-            @response_header["X-Aurita-Sendfile"] = filename
-            # Use X-Content-length, as Content-length will be overwritten 
-            # by Rack::ContentLength, which determines value from size of 
-            # response body. 
-            @response_header['X-Content-Length'] = filesize
-            @response_header['Content-Length']   = filesize
-            @response_body = ''
-            return
-          else
-            length = @response_body.to_s.length
-            @response_header['Content-Length'] = length.to_s
+            response_header['Content-Type']        = "application/force-download" 
+            response_header['Content-Disposition'] = "attachment; filename=\"#{File.basename(filename)}\"" 
+            response_header['Content-Length']      = filesize
+            response_header["X-Aurita-Sendfile"]   = filename
+            response_header["X-Aurita-Filesize"]   = filesize
+            response_body = ''
+
+            return [ status, response_header, response_body ]
           end
-        rescue ::Exception => failed
-          @failed = true
-          @status = 200
-          response = { :error => GUI::Error_Page.new(failed).string }
-          @logger.log { "Error in Dispatcher: #{failed.message}" }
-          @logger.log { "#{failed.backtrace.join("\n")}" }
+        rescue ::Exception => excep
+          failed = true
+          status = 200
+          response = { :error => GUI::Error_Page.new(excep).string }
+          @logger.log { "Error in Dispatcher: #{excep.message}" }
+          @logger.log { "#{excep.backtrace.join("\n")}" }
         end
       end
 
-      @mode = response[:mode] if response && response[:mode]
-      @mode = :default unless @mode
-      response[:mode] = @mode.intern 
+      mode = response[:mode] if response && response[:mode]
+      mode = :default unless mode
+      response[:mode] = mode.intern 
         
-      if @failed then
-        Aurita::Plugin_Register.call(Hook.__send__(@controller.downcase.gsub('::','__')).__send__(@action + '_failed'), controller_instance)
+      # TODO: Move plugin call to Controller#call_guarded
+      if failed then
+        Aurita::Plugin_Register.call(Hook.__send__(controller.downcase.gsub('::','__')).__send__(action + '_failed'), controller_instance)
       else
-        Aurita::Plugin_Register.call(Hook.__send__(@controller.downcase.gsub('::','__')).__send__('after_' << @action), controller_instance)
+        Aurita::Plugin_Register.call(Hook.__send__(controller.downcase.gsub('::','__')).__send__('after_' << action), controller_instance)
       end
 
-      @params[:_controller] = controller_instance
+      params[:_controller] = controller_instance
 
-      output = @decorator.new(@model_klass, response, @params).string
-    # @response_header['etag'] = Digest::MD5.hexdigest(output) if output
-      @response_body = output
+      response_body = @decorator.new(model_klass, response, params).string
 
       @num_dispatches += 1
       if @num_dispatches >= @gc_after_dispatches then
@@ -171,23 +152,22 @@ class Aurita::Dispatcher
                                    controller_instance, 
                                    :dispatcher  => self, 
                                    :controller  => controller_instance, 
-                                   :action      => @action, 
+                                   :action      => action, 
                                    :time        => @benchmark_time, 
                                    :num_queries => @num_queries, 
                                    :num_tuples  => @num_tuples)
 
+      response_header['etag'] = Digest::MD5.hexdigest(response_body) if @response_body
+
     rescue Exception => excep
       @logger.log(excep.message)
       @logger.log(excep.backtrace.join("\n"))
-      @response_body = { :error => GUI::Error_Page.new(excep).string }
+      response_body = { :error => GUI::Error_Page.new(excep).string }
     end
 
+    response_header.each_pair { |k,v| response_header[k] = v.to_s }
+    return [ status, response_header, response_body ]
   end # def }}}
-
-  def response_header
-    @response_header.each_pair { |k,v| @response_header[k] = v.to_s }
-    @response_header
-  end
 
 end # class
 

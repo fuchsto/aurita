@@ -17,13 +17,12 @@ module Handler
 
   class Aurita_Application
 
-    @@dispatcher = Aurita::Dispatcher.new()
-
     attr_accessor :logger
 
     def initialize(logger=nil)
-      @logger   = logger
-      @logger ||= ::Logger.new(STDERR) 
+      @logger      = logger
+      @logger    ||= ::Logger.new(STDERR) 
+      @dispatcher  = Aurita::Dispatcher.new()
       super()
     end
 
@@ -38,6 +37,7 @@ module Handler
     #   <host>/aurita/?controller=Foo&action=bar[&param_1=value&param_2=value]
     #
     def rewrite_url(request)
+    # {{{
       uri = request['REQUEST_URI']
       # Poor man's routing: 
       routed = false
@@ -79,7 +79,7 @@ module Handler
         request['REQUEST_PATH'] = path
         request['QUERY_STRING'] = query
       end
-    end
+    end # }}}
 
     public
 
@@ -92,9 +92,7 @@ module Handler
       rewrite_url(env) 
       request = Rack::Request.new(env)
 
-      @@dispatcher.dispatch(request)
-
-      [ @@dispatcher.status, @@dispatcher.response_header, @@dispatcher.response_body ]
+      @dispatcher.dispatch(request)
     end
   end
 
@@ -152,17 +150,6 @@ module Handler
       env.delete "PATH_INFO" if env["PATH_INFO"] == ""
 
       status, headers, body = @app.call(env)
-      if false && headers['X-Content-Length'] then
-        @logger.debug { "Forcing Content-Length to #{headers['X-Content-Length']}" }
-        headers.delete('Content-Length') # Remove existing Content-Length=0
-        headers['Content-Length'] = headers['X-Content-Length'] 
-        headers.delete('X-Content-Length')
-     #  headers.delete('Connection')
-     #  headers.delete('connection')
-      end
-      if body.is_a?(Rack::File) then
-        status, header, body = body.call(env)
-      end
 
       begin
         # Mapping Rack response to Mongrel response
@@ -182,6 +169,7 @@ module Handler
           response.socket.flush
         }
       ensure
+        response.socket.flush
         body.close if body.respond_to? :close
       end
     end

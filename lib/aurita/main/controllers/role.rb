@@ -8,9 +8,13 @@ module Main
   class Role_Controller < App_Controller
 
     def form_groups
-      [
-      ]
+      []
     end
+
+    after(:perform_add, :perform_update, :perform_delete) { |c|
+      c.redirect_to(:blank)
+      c.redirect(:element => :admin_roles_box_body, :to => :admin_box_body) 
+    }
 
     def add
       form = add_form(Role)
@@ -51,7 +55,8 @@ module Main
         user_list << HTML.li { link_to(u) { u.user_group_name } }
       }
       
-      main_permissions_fieldset = Fieldset.new(:name => :main_role_fieldset, :legend => tl(:main_role_fieldset))
+      main_permissions_fieldset = Fieldset.new(:name => :main_role_fieldset, 
+                                               :legend => tl(:main_role_fieldset))
       
       main_permissions_fieldset.add(Text_Field.new(:name     => Role.role_name, 
                                                    :label    => tl(Role.role_name), 
@@ -83,7 +88,8 @@ module Main
           permission_field_names << e.name
           permission_fields << e
         }
-        fieldset = GUI::Fieldset.new(:name => "fieldset_#{plugin}", :legend => Lang.get(plugin, :plugin_name)) { permission_fields }
+        fieldset = GUI::Fieldset.new(:name   => "fieldset_#{plugin}", 
+                                     :legend => Lang.get(plugin, :plugin_name)) { permission_fields }
         form.add(fieldset)
       }
       form.fields = permission_field_names
@@ -112,8 +118,6 @@ module Main
           end
         }
       }
-      exec_js("Aurita.load({ element: 'admin_roles_box_body', action: 'Role/admin_box_body/' }); 
-               Aurita.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
     end
 
     def perform_update
@@ -136,8 +140,6 @@ module Main
           end
         }
       }
-      exec_js("Aurita.load({ element: 'admin_roles_box_body', action: 'Role/admin_box_body/' }); 
-               Aurita.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
     end
 
     def perform_delete
@@ -145,8 +147,6 @@ module Main
         r.where(r.role_id == param(:role_id))
       }
       super()
-      exec_js("Aurita.load({ element: 'admin_roles_box_body', action: 'Role/admin_box_body/' }); 
-               Aurita.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
     end
 
     def admin_box_body

@@ -19,15 +19,8 @@ module Main
         logout_string = HTML.a(:href => "/aurita/App_Main/logout/x=#{rand(10000)}") { 
                           HTML.img(:src => '/aurita/images/icons/logout.gif') +  '&nbsp; Logout' 
                         }
-        account.body = tl(:logged_in_as) + ' <span class="link" ' + ERB_Helpers.onclick_link_to(:controller => 'User_Profile') + '>' << Aurita.user.user_group_name + '</span><br /><br />' + logout_string
+        account.body = tl(:logged_in_as) + ' ' + link_to(:controller => 'User_Profile') { Aurita.user.user_group_name } + '<br /><br />' + logout_string
       else
-        account.body = HTML.a(:class => :icon, :onclick => "Aurita.load({ action: 'User_Profile/add/' })") { tl(:please_register) }.string <<
-                       tl(:or) <<
-                       HTML.a(:class => :icon, :onclick => "Aurita.load({ action: 'App_Main/login/' })") { 
-                         HTML.img(:src => "/aurita/images/icons/login.gif") +
-                         tl(:logon) 
-                       }.string
-
         account.body = HTML.a(:class => :icon, :onclick => "Aurita.load({ action: 'App_Main/login/' })") { 
                          HTML.img(:src => "/aurita/images/icons/login.gif") + tl(:logon) 
                        }.string
@@ -58,7 +51,7 @@ module Main
     def users_online_box_body
       body = HTML.ul(:class => :no_bullets)
       User_Online.current_users.each { |user|
-        body << HTML.li { link_to(user) }
+        body << HTML.li { link_to(user) { user.label } }
       }
       body
     end

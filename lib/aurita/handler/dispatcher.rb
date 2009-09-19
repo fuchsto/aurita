@@ -112,26 +112,20 @@ class Aurita::Dispatcher
             # if Aurita.server.allows_x_sendfile then
             filename = response[:file]
             filesize = File.size(filename)
-            if false then
-              # For FCGI dispatcher without using X-Sendfile, this was: 
-              # cgi_output(File.open(response[:file], "rb").read)
-              @logger.log("Sending file: #{filename}")
-              @logger.log("Filesize: #{filesize}")
-              @response_header['Content-Type'] = "application/force-download" 
-              @response_header['Content-Disposition'] = "attachment; filename=\"#{File.basename(filename)}\"" 
-              @response_header["X-Aurita-Sendfile"] = filename
-              # Use X-Content-length, as Content-length will be overwritten 
-              # by Rack::ContentLength, which determines value from size of 
-              # response body. 
-              @response_header['X-Content-Length'] = filesize
-              @response_header['Content-Length']   = filesize
-              @response_body = ''
-              return
-            else 
-              @response_header['X-Content-Length'] = filesize
-              @response_header['Content-Length']   = filesize
-              @response_body = File.open(filename, "r").read
-            end
+            # For FCGI dispatcher without using X-Sendfile, this was: 
+            # cgi_output(File.open(response[:file], "rb").read)
+            @logger.log("Sending file: #{filename}")
+            @logger.log("Filesize: #{filesize}")
+            @response_header['Content-Type'] = "application/force-download" 
+            @response_header['Content-Disposition'] = "attachment; filename=\"#{File.basename(filename)}\"" 
+            @response_header["X-Aurita-Sendfile"] = filename
+            # Use X-Content-length, as Content-length will be overwritten 
+            # by Rack::ContentLength, which determines value from size of 
+            # response body. 
+            @response_header['X-Content-Length'] = filesize
+            @response_header['Content-Length']   = filesize
+            @response_body = ''
+            return
           else
             length = @response_body.to_s.length
             @response_header['Content-Length'] = length.to_s
@@ -158,7 +152,7 @@ class Aurita::Dispatcher
       @params[:_controller] = controller_instance
 
       output = @decorator.new(@model_klass, response, @params).string
-      @response_header['etag'] = Digest::MD5.hexdigest(output) if output
+    # @response_header['etag'] = Digest::MD5.hexdigest(output) if output
       @response_body = output
 
       @num_dispatches += 1

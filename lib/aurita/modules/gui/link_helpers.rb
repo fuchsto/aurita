@@ -171,6 +171,50 @@ module GUI
       url
     end
 
+    # Resolves parameter Hash from link args. 
+    # Helper method for #link_to, #call_to etc. 
+    # Example: 
+    #
+    #   parse_link_args(:add) 
+    #   -->
+    #   { :action => :add }
+    #
+    #   parse_link_args('Show entry', some_model_inst)
+    #   -->
+    #   { :action => :show, :controller => 'Some_Model_Controller', :some_model_id => 122 }
+    #
+    def parse_link_args(*args)
+      label  = false
+      entity = false
+      action = false
+      case args.at(0)
+      when Aurita::Model then
+        entity   = args.at(0)
+        params   = args.at(1)
+      when Symbol then
+        action   = args.at(0)
+        params   = args.at(1)
+      when String then
+        label    = args.at(0)
+        params   = args.at(1)
+      when Hash then
+        params   = args.at(0)
+      end
+
+      # For link_to(:add, entity, params) 
+      if params.is_a?(Aurita::Model) then
+        params   = args.at(2)
+        entity   = args.at(1)
+      end
+
+      params ||= {}
+      params[:entity] = entity if entity
+      params[:label]  = label  if label
+      params[:action] = action if action
+
+      return params
+    end
+
     # Examples: 
     #
     #  link_to('http://google.com', :target => '_blank') { 'google' }
@@ -196,83 +240,68 @@ module GUI
     #  --> '/aurita/Article/index/some_param=value'
     #
     def link_to(*args, &block)
-      if block_given? then
-        label  = yield()
-        params = args.at(0)
-        if params.kind_of? Aurita::Model then
-          entity   = params
-          params   = args.at(1)
-          params ||= {}
-          option_hash = args.at(2)
-        end
-      else
-        label  = args.at(0)
-        params = args.at(1)
-        if label.kind_of? Aurita::Model then
-          entity = label
-          params = args.at(1)
-          params ||= {}
-          label  = entity.label_string
-          option_hash = args.at(2)
-        elsif params.kind_of? Aurita::Model then
-          entity = params
-          params = args.at(2)
-          option_hash = args.at(3)
-        end
-      end
-      params           ||= {}
-      option_hash      ||= {}
-      params[:entity]    = entity 
+
+      params   = parse_link_args(*args)
+
+      label    = yield if block_given?
+      label  ||= params[:label]
+
+      return js_link_to(params) unless label
+
       if params[:options] then
         html_options = params[:options].dup 
         params.delete(:options)
       end
       html_options ||= {}
-      target   = params[:target]
       target ||= params[:element]
-      params.delete(:target)
+
       params.delete(:element)
+      params.delete(:label)
+
       unless html_options[:onclick] then
         target_part = ", element: '#{target}' " if target
         html_options[:onclick]  = "Aurita.load({ action: '#{resource_url_for(params)}' #{target_part}}); return false; "
       end
-      html_options[:href] = '#' << resource_url_for(params) unless target
+      html_options[:href] = "/aurita/#{resource_url_for(params)}" unless target
       HTML.a(html_options) { label }.string
     end
 
-    # Behaves like #link_to, but generates tag fields only, not a whole <a> tag. 
-    #
-    # Examples: 
-    #
-    #   <li class="user_entry" <%= onclick_link_to(user) %> ><%= user.username %></li>
-    #   -->
-    #   <li class="user_entry" onclick="Aurita.load({ action: 'User/5' });" >JohnDoe</li>
-    #
-    #   <li class="user_entry" <%= onclick_link_to(user, :target => 'dom_id') %> ><%= user.username %></li>
-    #   -->
-    #   <li class="user_entry" onclick="Aurita.load({ action: 'User/5', element: 'dom_id' });" >JohnDoe</li>
-    #
-    def onclick_link_to(*args)
-      params = args.at(0)
-      entity = nil
-      if params.kind_of? Aurita::Model then
-        entity = params
-        params = args.at(1)
-        params ||= {}
-      else
-        params = args.at(0)
+    def link_to_call(*args, &block)
+
+      params   = parse_link_args(*args)
+
+      label    = yield if block_given?
+      label  ||= params[:label]
+
+      return js_link_to_call(params) unless label
+
+      if params[:options] then
+        html_options = params[:options].dup 
+        params.delete(:options)
       end
-      params ||= {}
-      params[:entity]  = entity 
-      html_options = {}
-      unless params[:onclick] then
-        target = params[:target]
-        params.delete(:target)
-        params[:onclick]  = "Aurita.load({ action: '#{resource_url_for(params)}'"
-        params[:onclick] << " , element: '#{target}'" if target
-        params[:onclick] << " })"
+      html_options ||= {}
+
+      params.delete(:element)
+      params.delete(:label)
+
+      unless html_options[:onclick] then
+        html_options[:onclick]  = "Aurita.call({ action: '#{resource_url_for(params)}'}); return false; "
       end
-      return ' onclick="' << params[:onclick] + '; return false;" '
+      HTML.a(html_options) { label }.string
+    end
+
+    def js_link_to(params)
+        target = params[:element]
+        params.delete(:element)
+
+        onclick  = "Aurita.load({ action: '#{resource_url_for(params)}'"
+        onclick << " , element: '#{target}'" if target
+        onclick << " })"
+      return "#{onclick}; "
+    end
+
+    def js_link_to_call(params)
+      return "Aurita.call({ action: '#{resource_url_for(params)}' });"
     end
 
   end

@@ -1,4 +1,5 @@
 
+require 'rubygems'
 require 'mongrel'
 require 'stringio'
 require 'rack'
@@ -123,7 +124,7 @@ module Handler
         end
       end
     
-      @app = Rack::Realoder.new(@app, 3) if [ :debug, :development ].include?(opts[:mode]) 
+      @app = Rack::Realoder.new(@app, 3) if [ :test, :development ].include?(opts[:mode]) 
       @app = Rack::Deflater.new(@app) if opts[:compress]
       @app = Rack::ContentLength.new(@app)
       @app = Rack::Chunked.new(@app) if opts[:chunked]
@@ -151,7 +152,7 @@ module Handler
       env.delete "PATH_INFO" if env["PATH_INFO"] == ""
 
       status, headers, body = @app.call(env)
-      if headers['X-Content-Length'] then
+      if false && headers['X-Content-Length'] then
         @logger.debug { "Forcing Content-Length to #{headers['X-Content-Length']}" }
         headers.delete('Content-Length') # Remove existing Content-Length=0
         headers['Content-Length'] = headers['X-Content-Length'] 

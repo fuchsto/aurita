@@ -4,7 +4,8 @@ require 'aurita-gui/html'
 require('rubygems')
 
 Aurita.load_project :default
-Aurita.import_plugin_model :wiki, :article
+Aurita.bootstrap
+include Aurita::Plugins
 
 require('aurita/modules/gui/link_helpers')
 
@@ -15,9 +16,21 @@ describe Aurita::GUI::Link_Helpers, "URL rendering" do
   before do
     $mock_article = Aurita::Plugins::Wiki::Article.mock(:content_id => 4321, 
                                                         :article_id => 1234, 
-                                                        :tags => '{ foo, bar, batz }',
+                                                        :pass       => 'foo', 
+                                                        :login      => 'mock', 
+                                                        :tags       => [ :foo, :bar, :batz ], 
                                                         :user_group_id => 100, 
-                                                        :title => 'Mock article')
+                                                        :title      => 'Mock article')
+  end
+
+  it "should provide a shortcut for actions" do
+    url = "Aurita.load({ action: 'Some_Controller/add/' }); "
+    link_to(:add, :controller => 'Some_Controller').should == url
+  end
+
+  it "should provide a shortcut for labels" do
+    url = "<a onclick=\"Aurita.load({ action: 'Some_Controller/show/' }); return false; \" href=\"#Some_Controller/show/\">show some controller</a>"
+    link_to('show some controller', :controller => 'Some_Controller').should == url
   end
 
   it "does not modify plain urls" do
@@ -29,7 +42,7 @@ describe Aurita::GUI::Link_Helpers, "URL rendering" do
     resource_path = '/aurita/Wiki::Article/show/article_id=1234'
     url_for($mock_article).should == resource_path
 
-    resource_path = '/aurita/Wiki::Article/add'
+    resource_path = '/aurita/Wiki::Article/add/'
     url_for(Wiki::Article, :action => :add).should == resource_path
 
     resource_path = '/aurita/Wiki::Article/show/article_id=1234&viewparams=plain'
@@ -54,14 +67,14 @@ describe Aurita::GUI::Link_Helpers, "URL rendering" do
 
   it "returns full <a> tags as link to a resource on method link_to" do
     s = '<a onclick="Aurita.load({ action: \'Wiki::Article/show/article_id=1234\' }); return false; " href="#Wiki::Article/show/article_id=1234">Mock article</a>'
-    link_to($mock_article).should == s
+    link_to('Mock article', $mock_article).should == s
   end
 
   it "returns onclick=... tag attribute as link to a resource on method onclick_link_to" do
-    s = ' onclick="Aurita.load({ action: \'Wiki::Article/show/article_id=1234\' }); return false;" '
-    onclick_link_to($mock_article).should == s
-    s = ' onclick="Aurita.load({ action: \'Wiki::Article/show/article_id=1234\' , element: \'left_col\' }); return false;" '
-    onclick_link_to($mock_article, :target => :left_col).should == s
+    s = 'Aurita.load({ action: \'Wiki::Article/show/article_id=1234\' }); '
+    js_link_to(:entity => $mock_article).should == s
+    s = 'Aurita.load({ action: \'Wiki::Article/show/article_id=1234\' , element: \'left_col\' }); '
+    js_link_to(:entity => $mock_article, :element => :left_col).should == s
   end
 
 end

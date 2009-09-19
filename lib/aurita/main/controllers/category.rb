@@ -20,6 +20,11 @@ module Main
       Aurita.user.is_admin? 
     }
 
+    after(:perform_update, :perform_delete) { |c|
+      c.redirect_to(:blank)
+      c.redirect(:element => :admin_categories_box_body, :to => :admin_box_body)
+    }
+
     def add
       form = add_form
       render_form(add_form, :title => tl(:add_category))
@@ -58,10 +63,8 @@ module Main
         cc.where(User_Category.category_id == param(:category_id))
       }
       super()
-      exec_js("Aurita.load({ element: 'admin_categories_box_body', action: 'Category/admin_box_body/' }); 
-               Aurita.load({ action: 'App_Main/blank/' }); ")
     end
-    
+
     def perform_add
 
       check = Category.find(1).with(Category.category_name.ilike("%#{param(:category_name)}%")).entity
@@ -71,25 +74,18 @@ module Main
       end
 
       instance = super()
-      redirect_to(:controller => 'Category', :action => :show, :category_id => instance.category_id)
-      exec_js("Aurita.load({ element: 'admin_categories_box_body', action: 'Category/admin_box_body/' }); 
-               Aurita.load({ action: 'App_Main/blank/' }); ")
-    end
 
-    def perform_update
-      super()
-      exec_js("Aurita.load({ element: 'admin_categories_box_body', action: 'Category/admin_box_body/' }); 
-               Aurita.load({ action: 'App_Main/blank/' }); ")
+      redirect_to(instance)
     end
 
     def admin_box_body
       body = Array.new
-      body << HTML.button(:class => :icon, :onclick => js.Aurita.load(:action => 'Category/add/')) { 
+      body << HTML.button(:class => :icon, :onclick => link_to(:action => :add)) { 
         HTML.img(:src => '/aurita/images/icons/button_add.gif') + tl(:add_content_category) 
       }
       list = HTML.ul.single_line_list { } 
       Category.all_with((Category.is_private == 'f') & (Category.category_id >= '100')).sort_by(:category_name, :asc).each { |cat|
-        cat = Context_Menu_Element.new(HTML.a.entry(:onclick => js.Aurita.load(:action => "Category/update/category_id=#{cat.category_id}")) { 
+        cat = Context_Menu_Element.new(HTML.a.entry(:onclick => link_to(cat, :action => :update)) {
                                           cat.category_name
                                        }, 
                                        :entity => cat)

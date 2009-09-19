@@ -14,8 +14,8 @@ module Main
   
     is_a User_Group, :user_group_id
 
-    expects :login
-    expects :pass
+#    expects :login
+#    expects :pass
 
     # Returns instance of User_Login_Data (being an instance of User_Group) 
     # by login credentials. 

@@ -12,10 +12,6 @@ module Aurita
 module Main
 
   class User_Profile_Controller < App_Controller
-
-#########################################
-# BEGIN FORM CONFIG
-#########################################
     
     guard_interface(:perform_update) { |c|
       (Aurita.user.is_admin? || c.param(:user_group_id).to_s == Aurita.user.user_group_id.to_s)
@@ -24,6 +20,15 @@ module Main
     guard_interface(:perform_delete) { 
       Aurita.user.is_admin?
     } 
+
+    after(:perform_admin_add) { |c|
+      c.redirect_to(:blank)
+      c.redirect(:element => :admin_users_box_body, :to => :admin_box_body)
+    }
+
+#########################################
+# BEGIN FORM CONFIG
+#########################################
 
     def form_groups
       [
@@ -140,16 +145,16 @@ module Main
       instance = perform_add()
       if instance then
         plugin_call(Hook.main.after_register_user, :user => instance) 
-        exec_js("Aurita.load({ element: 'admin_users_box_body', action: 'User_Profile/admin_box_body/' }); 
-                 Aurita.load({ element: 'app_main_content', action: 'App_Main/blank/' }); ")
       end
     end
 
     def admin_box_body
       body = Array.new
-      guest = Context_Menu_Element.new(HTML.a.entry(:onclick => js.Aurita.load(:action => 'User_Login_Data/update/user_group_id=0')) { tl(:unregistered_user) }, 
+      guest = Context_Menu_Element.new(HTML.a.entry(:onclick => link_to(:controller => 'User_Login_Data', 
+                                                                        :action     => :update, 
+                                                                        :user_group_id => 0) ) { tl(:unregistered_user) }, 
                                       :type => :system_link)
-      body << HTML.button(:class => :icon, :onclick => js.Aurita.load(:action => 'User_Profile/admin_add/')) { 
+      body << HTML.button(:class => :icon, :onclick => link_to(:action => :admin)) { 
         HTML.img(:src => '/aurita/images/icons/button_add.gif') + tl(:add_user) 
       }
       list = HTML.ul.single_line_list { HTML.li { guest } }
@@ -157,10 +162,11 @@ module Main
         if user.user_group_id != '0' then
           user_label = user.surname.capitalize + ' ' + user.forename.capitalize 
           user_label << ' (' + user.division + ')' if user.division.to_s != ''
-          user = Context_Menu_Element.new(HTML.a.entry(:onclick => js.Aurita.load(:action => "User_Login_Data/update/user_group_id=#{user.user_group_id}")) { 
-                                            user_label
-                                          }, 
-                                          :entity => user) 
+          user = Context_Menu_Element.new(HTML.a.entry(:onclick => link_to(user, 
+                                                                           :controller => 'User_Login_Data', 
+                                                                           :action => :update)) { 
+                                            user_label 
+                                          })
           list << HTML.li { user } 
         end
       }
@@ -210,11 +216,11 @@ module Main
 
       user_group_id = user.user_group_id
       if [0,5].include?(user_group_id.to_i) then
-        puts 'Kein Profil'
+        puts tl(:user_has_no_profile)
         return
       end
-      if user.locked == 't' then
-        puts 'Benutzer wurde gesperrt'
+      if user.locked then
+        puts tl(:user_has_been_locked)
         return
       end
 
@@ -240,7 +246,7 @@ module Main
 
     def show_by_username
       user = User_Profile.find(1).with(User_Group.user_group_name == param(:user_group_name)).entity
-      puts 'Der Benutzer existiert nicht' unless user
+      puts tl(:no_such_user) unless user
       show(user) if user
     end
 
@@ -268,18 +274,20 @@ module Main
       @params[User_Login_Data.pass] = nil
       super()
       instance = load_instance()
+
       if(pass.nonempty? && pass == param(:pass_confirm)) then
         instance.pass = Digest::MD5.hexdigest(pass)
         instance.commit
       elsif (param(:pass) && param(:pass) != param(:pass_confirm)) then
         raise ::Exception.new(tl(:passwords_dont_match))
       end
-      exec_js("Aurita.load({ element: 'admin_users_box_body', action: 'User_Profile/admin_box_body/' }); 
-               Aurita.load({ action: 'User_Profile/show/user_group_id=#{instance.user_group_id}' }); ")
+
+      redirect_to(instance) 
+      redirect(:element => :admin_users_box_body, :action => :admin_box_body)
     end
 
     def perform_delete
-      raise ::Exception.new('No. ')
+      raise ::Exception.new('No.')
     end
     
     def find_all(params)

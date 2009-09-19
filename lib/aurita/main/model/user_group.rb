@@ -46,10 +46,11 @@ module Main
     hide_attribute :atomic
 
     # Renders user name to string. 
-    def label_string
+    def label
       return "#{user_group_name} (#{division})" if division && !division.empty? 
       return user_group_name.to_s
     end
+    alias label_string label
 
  private
     # Filter user group hierarchy using a visitor. 

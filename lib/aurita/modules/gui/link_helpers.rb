@@ -181,12 +181,19 @@ module GUI
     #
     #   parse_link_args('Show entry', some_model_inst)
     #   -->
-    #   { :action => :show, :controller => 'Some_Model_Controller', :some_model_id => 122 }
+    #   { 
+    #     :label         => 'Show entry', 
+    #     :action        => :show, 
+    #     :controller    => 'Some_Model_Controller', 
+    #     :some_model_id => 122 
+    #   }
     #
-    def parse_link_args(*args)
+    def parse_link_args(*args, &block)
       label  = false
       entity = false
       action = false
+      url    = false
+      label  = yield if block_given? 
       case args.at(0)
       when Aurita::Model then
         entity   = args.at(0)
@@ -195,8 +202,23 @@ module GUI
         action   = args.at(0)
         params   = args.at(1)
       when String then
-        label    = args.at(0)
-        params   = args.at(1)
+        if label then
+          # Label has been set via block already, 
+          # so first String argument must be URL: 
+          url = args.at(0)
+        else
+          # Label has not been set via block, so 
+          # first argument might be label: 
+          label  = args.at(0) 
+          params = args.at(1)
+          if params.is_a?(String) then
+            # First and second argument are Strings. 
+            # Assuming first to be label, second to 
+            # be URL: 
+            url    = args.at(1)
+            params = args.at(2)
+          end
+        end
       when Hash then
         params   = args.at(0)
       end
@@ -211,40 +233,75 @@ module GUI
       params[:entity] = entity if entity
       params[:label]  = label  if label
       params[:action] = action if action
+      params[:url]    = url    if url
 
       return params
     end
 
     # Examples: 
     #
-    #  link_to('http://google.com', :target => '_blank') { 'google' }
-    #  or
-    #  link_to('google', 'http://google.com', :target => '_blank') 
-    #  --> '<a href="http://google.com" target="_blank">google</a>'
+    #   link_to('http://google.com', :target => '_blank') { 'google' }
+    # or
+    #   link_to('google', 'http://google.com', :target => '_blank') 
+    #   --> '<a href="http://google.com" target="_blank">google</a>'
     #
-    #  link_to(user_entity) { 'link to this user' }
-    #  --> '<a href="/aurita/User/5">link to this user</a>'
+    #   link_to(user_entity) { 'link to this user' }
+    #   --> '<a href="/aurita/User/5">link to this user</a>'
     #
-    #  In case User#label_string is defined: 
-    #  link_to(user_entity) 
-    #  --> '<a href="/aurita/User/5">John Doe</a>'
+    #   link_to(:entity => user_entity, :action => 'list_info') 
+    #   --> '/aurita/User/5/list_info'
     #
-    #  link_to(:entity => user_entity, :action => 'list_info') 
-    #  --> '/aurita/User/5/list_info'
+    # In case @controller is of type Foo: 
     #
-    #  In case @controller is of type Foo: 
-    #  link_to(:action => 'index', :some_param => 'value')  { 'List all Foos' }
-    #  --> '<a href="/aurita/Foo/index/some_param=value">List all Foos</a>'
+    #   link_to(:action => 'index', :some_param => 'value')  { 'List all Foos' }
+    #   --> '<a href="/aurita/Foo/index/some_param=value">List all Foos</a>'
     #
-    #  url_for(:controller => 'Article', :action => 'index', :some_param => 'value') 
-    #  --> '/aurita/Article/index/some_param=value'
+    # Naming controller explicitly: 
+    #
+    #   url_for(:controller => 'Article', :action => 'index', :some_param => 'value') 
+    #   --> '/aurita/Article/index/some_param=value'
+    #
+    # Within same controller, rendering an <a> tag: 
+    #  
+    #   link_to(:action => :list) { 'show list' }
+    # 
+    # Within same controller, rendering an onclick tag attribute: 
+    # 
+    #   link_to(:show)
+    # 
+    # Link to foreign controller action, rendering an tag; 
+    # 
+    #   link_to(:controller => 'Some_Controller', :action => :add) { 'add some' }
+    # 
+    # Without a label, rendering Javascript code for Ajax call: 
+    # 
+    #   link_to(:action => :update) 
+    # 
+    # Link to a specific entity. If no :action is set, it will be defaulted to :show: 
+    # 
+    #   link_to(entity) { 'show entry' }
+    #   link_to(entity, :action => :delete) { 'delete this entry' }
+    # 
+    # Same as
+    # 
+    #   link_to(entity, :delete) { 'delete this entry' }
+    # 
+    # By providing a DOM element id as :element or :to parameter, an Ajax call is performed and result loaded into this element: 
+    # 
+    #   link_to(:action => :add, :target => :element_dom_id) { 'remote call' } 
+    # 
+    # Any parameter different from :controller, :action, :target, :element, :onload and :to is interpreted as request parameter: 
+    # 
+    #   link_to(:action => :show, :viewparam => :table) { 'show as table' }
+    # 
+    # With javascript function to be called on load. Automatically renders an Ajaxified tag: 
+    # 
+    #   link_to(:action => :show, :onload => js.Aurita.do_something) { 'with onload function' }  
     #
     def link_to(*args, &block)
 
-      params   = parse_link_args(*args)
-
-      label    = yield if block_given?
-      label  ||= params[:label]
+      params = parse_link_args(*args, &block)
+      label  = params[:label]
 
       return js_link_to(params) unless label
 
@@ -268,10 +325,8 @@ module GUI
 
     def link_to_call(*args, &block)
 
-      params   = parse_link_args(*args)
-
-      label    = yield if block_given?
-      label  ||= params[:label]
+      params = parse_link_args(*args, &block)
+      label  = params[:label]
 
       return js_link_to_call(params) unless label
 

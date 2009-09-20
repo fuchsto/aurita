@@ -92,6 +92,21 @@ module Aurita
       self.class.model_name
     end
 
+    # Resolve name of controller for this model. 
+    # Example: 
+    #
+    #    Aurita::Plugins::Wiki::Article.controller_name
+    #    --> 
+    #    'Wiki::Article_Controller'
+    #
+    def self.controller_name
+      model_name + '_Controller'
+    end
+    # See Model.controller_name
+    def controller_name
+      self.class.controller_name
+    end
+
     def self.log(message)
       @@logger.log(message)
     end

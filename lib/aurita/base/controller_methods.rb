@@ -329,6 +329,19 @@ module Aurita
         params   = args.at(1)
         params ||= {}
         params[:action] = args.at(0) 
+      elsif args.at(0).is_a?(Aurita::Model) then
+        entity = args.at(0)
+        action = false
+        if args.at(1).is_a?(Symbol) then
+          params   = args.at(2)
+          action   = args.at(1)
+        else
+          params = args.at(1)
+        end
+        params ||= {}
+        params[:action]     = action
+        params[:controller] = entity.controller_name
+        params.update(entity.key)
       else
         params = args.at(0)
       end

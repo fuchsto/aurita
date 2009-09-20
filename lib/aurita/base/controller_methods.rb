@@ -256,6 +256,22 @@ module Aurita
 
     protected
 
+    # Enforce HTTP caching of this request in the client's browser 
+    # by setting HTTP headers 'Expires' and 'Last-Modified' 
+    # appropriately. 
+    def force_http_cache
+      @response[:force_cache] = true
+      @response[:no_cache]    = false
+    end
+
+    # Forbid HTTP caching of this request in the client's browser 
+    # by setting HTTP headers 'Expires' and 'Last-Modified' 
+    # appropriately. 
+    def no_http_cache
+      @response[:force_cache] = false
+      @response[:no_cache]    = true
+    end
+
     # Set HTTP response header entries. 
     # Example: 
     #
@@ -308,7 +324,15 @@ module Aurita
     #
     #   redirect(:element => :some_element_dom_id, :to => :show, :product_id => 123)
     #
-    def redirect_to(params={})
+    def redirect_to(*args)
+      if args.at(0).is_a?(Symbol) then
+        params   = args.at(1)
+        params ||= {}
+        params[:action] = args.at(0) 
+      else
+        params = args.at(0)
+      end
+
       params[:controller] = controller_name() unless params[:controller]
       params[:action]     = params[:to] if params[:to]
       params[:action]     = :show unless params[:action]
@@ -384,11 +408,20 @@ module Aurita
     # Upload a file from CGI multipart request. 
     # Example (file form field has name 'file_to_upload'): 
     #
-    #   upload_file(:form_file_tag_name => :file_to_upload, 
-    #               :relative_path      => :uploads, 
-    #               :server_filename    => 'document')
+    #   receive_file(:form_file_tag_name => :file_to_upload, 
+    #                :relative_path      => :uploads, 
+    #                :server_filename    => 'document')
     #
     # File would be uploaded to <project dir>/public/assets/tmp/uploads/document
+    #
+    # Returns a Hash with keys: 
+    #
+    #   :filesize          => Size of uploaded file in bytes
+    #   :md5_checksum      => MD5 checksum of file content
+    #   :original_filename => Name of original file uploaded
+    #   :server_filename   => Name of this file on server
+    #   :server_filepath   => Absolute file system path of file on server
+    #   :type              => MIME type of uploaded file
     #
     def receive_file(params)
     # {{{
@@ -396,6 +429,7 @@ module Aurita
       form_file_tag_name = params[:from_param]
       relative_path      = params[:relative_path]
       server_filename    = params[:server_filename]
+      md5_checksum       = false
 
       info = Hash.new
 
@@ -453,13 +487,18 @@ module Aurita
         else 
           File.open(path_to.untaint, 'w') { |file| 
             File.chmod(0777, path_to)
-            file << tmpfile.string
+            content      = tmpfile.string
+            md5_checksum = Digest::MD5.hexdigest(content)
+            file << content
           }
         end
         GC.enable
         GC.start
         GC.disable
-        info[:filesize] = File.size(path_to.to_s)
+
+        md5_checksum      ||= Digest::MD5.hexdigest(File.read(path_to.to_s))
+        info[:filesize]     = File.size(path_to.to_s)
+        info[:md5_checksum] = md5_checksum
       
         return info
 

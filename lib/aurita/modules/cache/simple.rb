@@ -66,7 +66,6 @@ module Cache
           file.rm
         }
       rescue Exception => ignore
-        STDERR.puts ignore.message
         # No cache file to delete
       end
       # important, as some perform operations in controllers 

@@ -22,7 +22,7 @@ require('lore')
 class Aurita::Dispatcher 
 
   attr_reader :params, :mode, :controller, :action, :dispatch_time, :failed
-  attr_accessor :gc_after_dispatches, :decorator
+  attr_accessor :decorator
 
   public
 
@@ -37,7 +37,6 @@ class Aurita::Dispatcher
     @application         = application
     @decorator           = decorator
     @logger              = Aurita::Log::Class_Logger.new('Dispatcher')
-    @gc_after_dispatches = 500
     @benchmark_time      = 0
     @num_dispatches      = 0 
   end
@@ -71,8 +70,9 @@ class Aurita::Dispatcher
 
     response_header['Accept-Charset'] = 'utf-8' 
     response_header['type']           = 'text/html; charset=utf-8' 
-    response_header['expires']        = (Time.now - (1 * 24 * 60 * 60)).to_s
-    response_header['pragma']         = 'No-cache'
+  # response_header['expires']        = (Time.now - (1 * 24 * 60 * 60)).to_s
+  # response_header['Last-Modified']  = (Time.now - (1 * 24 * 60 * 60)).to_s
+    response_header['Cache-Control']  = 'private'
 
     Lore::Connection.reset_query_count()
     Lore::Connection.reset_result_row_count()
@@ -121,6 +121,14 @@ class Aurita::Dispatcher
         end
       end
 
+      if response[:no_cache] then
+        response_header['expires']       = (Time.now - (1 * 24 * 60 * 60)).to_s
+      # response_header['Last-Modified'] = Time.now.to_s
+        response_header['pragma']        = 'No-cache'
+      elsif response[:force_cache] then
+        response_header['Last-Modified']  = (Time.now - (1 * 24 * 60 * 60)).to_s
+      end
+
       mode = response[:mode] if response && response[:mode]
       mode = :default unless mode
       response[:mode] = mode.intern 
@@ -137,12 +145,6 @@ class Aurita::Dispatcher
       response_body = @decorator.new(model_klass, response, params).string
 
       @num_dispatches += 1
-      if @num_dispatches >= @gc_after_dispatches then
-        GC.enable
-        GC.start 
-        GC.disable
-        @num_dispatches = 0
-      end
         
       @benchmark_time = Time.now-benchmark_time
       @num_queries    = Lore::Connection.query_count
@@ -156,8 +158,6 @@ class Aurita::Dispatcher
                                    :time        => @benchmark_time, 
                                    :num_queries => @num_queries, 
                                    :num_tuples  => @num_tuples)
-
-      response_header['etag'] = Digest::MD5.hexdigest(response_body) if @response_body
 
     rescue Exception => excep
       @logger.log(excep.message)

@@ -8,7 +8,9 @@ require 'rack/chunked'
 require 'rack/deflater'
 require 'rack/static'
 require 'rack/session/memcache'
+require 'rack/contrib'
 require 'aurita'
+require 'aurita/base/routing'
 
 Aurita.import 'handler/dispatcher'
  
@@ -23,63 +25,7 @@ module Handler
       @logger      = logger
       @logger    ||= ::Logger.new(STDERR) 
       @dispatcher  = Aurita::Dispatcher.new()
-      super()
     end
-
-    private
-
-    # Rewrite from 
-    #
-    #   <host>/aurita/Foo/bar[/param1=value&param2=value]
-    #
-    # to
-    #
-    #   <host>/aurita/?controller=Foo&action=bar[&param_1=value&param_2=value]
-    #
-    def rewrite_url(request)
-    # {{{
-      uri = request['REQUEST_URI']
-      # Poor man's routing: 
-      routed = false
-      uri_p  = uri.split('/')
-
-      if !uri.include?('?') then
-        if uri_p.length >= 4 && uri_p[3].to_i.to_s == uri_p[3]
-          # host/aurita/Controller/1234/[action]
-          host       = uri_p[0]
-          controller = uri_p[2]
-          action     = uri_p[4]
-          action   ||= 'show'
-          get_params = "id=#{uri_p[3]}"
-          routed = true
-        elsif uri_p.length >= 4 then
-          # host/aurita/Controller/action/[param=value]
-          host       = uri_p[0]
-          controller = uri_p[2]
-          action     = uri_p[3]
-          get_params = uri_p[4]
-          routed = true
-        end
-      end
-      # Only if X-Sendfile is available
-      if false && uri_p[2] == 'assets' && uri_p.length == 4
-        host       = uri_p[0]
-        controller = 'Wiki::Media_Asset'
-        action     = 'proxy'
-        m_id       = uri_p[3].gsub(/asset_([^\.])\.(.+)/,'\1')
-        get_params = "media_asset_id=#{m_id}"
-        routed = true
-      end
-      
-      if routed then
-        query = "controller=#{controller}&action=#{action}&#{get_params}"
-        path  = "/aurita/run?#{query}"
-        uri   = "#{host}#{path}"
-        request['REQUEST_URI']  = uri
-        request['REQUEST_PATH'] = path
-        request['QUERY_STRING'] = query
-      end
-    end # }}}
 
     public
 
@@ -87,13 +33,11 @@ module Handler
     # Expects request env params, returns 
     # [ status, response header, response body ] 
     # of Aurita::Rack_Dispatcher instance. 
+    #
     def call(env)
-      # Apply rewrites *before* creating Rack::Request from it: 
-      rewrite_url(env) 
-      request = Rack::Request.new(env)
-
-      @dispatcher.dispatch(request)
+      @dispatcher.dispatch(Rack::Request.new(Aurita::Routing.new.route(env)))
     end
+
   end
 
   # Aurita handler for Mongrel, derived from Mongrel::HttpHandler. 
@@ -113,6 +57,9 @@ module Handler
       @logger ||= ::Logger.new(STDERR)
       @app = Aurita::Handler::Aurita_Application.new()
       @app.logger = @logger
+      @app = Rack::ETag.new(@app)
+      @app = Rack::ConditionalGet.new(@app)
+      @app = Rack::ContentLength.new(@app)
       unless opts[:no_session] then
         begin
           @app = Rack::Session::Memcache.new(@app)
@@ -124,11 +71,11 @@ module Handler
     
       @app = Rack::Realoder.new(@app, 3) if [ :test, :development ].include?(opts[:mode]) 
       @app = Rack::Deflater.new(@app) if opts[:compress]
-      @app = Rack::ContentLength.new(@app)
       @app = Rack::Chunked.new(@app) if opts[:chunked]
     end
     
     def process(request, response)
+    # {{{
       env = {}.replace(request.params)
       env.delete "HTTP_CONTENT_TYPE"
       env.delete "HTTP_CONTENT_LENGTH"
@@ -172,7 +119,7 @@ module Handler
         response.socket.flush
         body.close if body.respond_to? :close
       end
-    end
+    end # }}}
 
   end # class Aurita::Handler::Mongrel
 

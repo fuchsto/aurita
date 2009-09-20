@@ -52,6 +52,11 @@ module Main
     hide_attribute :user_group_id
 
     use_category_map(Content_Category, :content_id => :category_id)
+
+    def user_group
+      u =   User_Group.load(:user_group_id => user_group_id)
+      u ||= User_Group.load(:user_group_id => 5)
+    end
     
     # CMS Worldwide Hype, Ajax => {cms,worldwide,hype,ajax}
     add_input_filter(:tags) { |tags| 

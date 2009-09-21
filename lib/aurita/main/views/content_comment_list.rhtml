@@ -23,7 +23,7 @@
         <img src="/aurita/assets/tiny/asset_<%= entry.picture_asset_id %>.jpg" style="float: left; width: 50px; margin-bottom: 3px; margin-right: 5px; " />
         <div style="padding: 5px; ">
           <strong>	 
-            <%= gui.link_to(:controller => 'User_Group', :action => :show, :user_group_id => entry.user_group_id) { entry.user_group_name } %>
+            <%= gui.link_to(entry, :controller => 'User_Group') { entry.user_group_name } %>
           </strong> (<%= gui.datetime(entry.time) %>) 
           <% if entry.user_group_id == Aurita.user.user_group_id || Aurita.user.is_admin? then %>
             <span class="link" onclick="Aurita.confirmable({ action: 'Content_Comment/perform_delete/content_comment_id=<%= entry.content_comment_id %>', 

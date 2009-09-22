@@ -18,7 +18,7 @@ sup {vertical-align:text-top;}
 sub {vertical-align:text-bottom;}
 input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;}
 legend{color:#000;}
-body {font:13px/1.231 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}
+body {font:13px/1.231 verdana,arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}
 table {font-size:inherit;font:100%;}
 pre,code,kbd,samp,tt{font-family:monospace;*font-size:108%;line-height:100%;}
 
@@ -35,8 +35,8 @@ ul.no_bullets li { list-style-type: none; }
 ol li { list-style-type: decimal; }
 
 body { 
-  font-size: 13.34px; 
-  font-family: helvetica,arial,freesans,clean,sans-serif;
+  font-size: 12px; 
+  font-family: verdana,helvetica,arial,freesans,clean,sans-serif;
   line-height: 18px !important; 
 }
 
@@ -695,7 +695,7 @@ img.icon {
   padding-left: 0px;
 }
 .media_folder_content { 
-  margin-top: 5px; 
+  margin: 1px; 
   overflow-x: hidden; 
   overflow-y: auto; 
 }
@@ -1237,10 +1237,7 @@ table #0_col_header {
 table.media_asset_table th.hovered { 
   background: transparent url(/aurita/images/button_hover_bg.gif) repeat scroll 0 0; 
 }
-table.media_asset_table tr.even { 
-  background: transparent url(/aurita/images/icons/tall_row_brighter_bg.png) repeat-x scroll 0 0
-}
-table.media_asset_table tr.odd { 
+table.media_asset_table tr { 
   background: transparent url(/aurita/images/icons/tall_row_brighter_bg.png) repeat-x scroll 0 0
 }
 table.media_asset_table td { 
@@ -1285,7 +1282,7 @@ table.media_asset_table td.type {
   text-align: right; 
 }
 table.media_asset_table td.date { 
-  width: 130px; 
+  width: 150px; 
 }
 
 /* -------------------------------------------- */
@@ -1356,7 +1353,8 @@ table.todo_entry_table tr.highlighted td {
   background: #f9cf88 url(/aurita/images/icons/tall_row_highlighted_bg.png) repeat-x scroll 0 0px; 
 }
 table.todo_entry_table tr.deact td { 
-  background: #d4d3d4 url(/aurita/images/icons/tall_row_darker_bg.png) repeat-x scroll 0 0px; 
+/*  background: #d4d3d4 url(/aurita/images/icons/tall_row_darker_bg.png) repeat-x scroll 0 0px; */
+  background: #c9c9c9 url(/aurita/images/icons/tall_row_darker_bg.png) repeat-x scroll 0 0px; 
 }
 table.todo_entry_table tr.deact.highlighted td { 
   background: #ebc490 url(/aurita/images/icons/tall_row_darker_highlighted_bg.png) repeat-x scroll 0 0px; 
@@ -1741,7 +1739,7 @@ table.message_table {
   padding-top: 6px; 
 }
 .message_table td.date { 
-  width: 140px; 
+  width: 150px; 
 }
 .message_table td.to, .message_table td.from { 
   padding-left: 4px; 

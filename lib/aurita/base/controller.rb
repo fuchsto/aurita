@@ -792,6 +792,11 @@ class Aurita::Base_Controller
   end # }}}
   alias set_param set_params
 
+  def delete_params(*params)
+    params.each { |k| @params[k.to_sym] = nil }
+  end
+  alias delete_param delete_params
+
   # Helper for prevariants. Raises an exception 
   # if one of the given parameters is not set. 
   #
@@ -814,7 +819,8 @@ class Aurita::Base_Controller
 
 public
 
-  # Load instance for this controller. 
+  # Load model instance identified by primary key attribute 
+  # values in request parameters (@params). 
   # Model class to load an instance from is derived from 
   # controller name. Also caches this instance for this 
   # request. 
@@ -828,21 +834,62 @@ public
   #     end
   #   end
   #
+  #
+  # Example: 
+  # Request is
+  #
+  #   [controller] Wiki::Article
+  #   [article_id] 123
+  #
+  # If there is only one primary key defined in the model klass, 
+  # attribute 'id' can be used in request, too. This is needed 
+  # for REST protocol: 
+  #
+  #   [controller] Wiki::Article
+  #   [id] 123
+  #
+  # load_instance would look up instance like: 
+  #
+  #   Wiki::Article.get(123)
+  #
+  # This is very useful, as this method also works for 
+  # polymorphic controller methods. It is thus recommended to 
+  # use load_instance instead of loading model instances 
+  # manually. 
+  # 
+  # Example: 
+  #
+  #   class Article_Controller < Aurita::Plugin_Controller
+  #     def perform_commit_version
+  #       article = load_instance
+  #       # Modify aricle
+  #     end
+  #   end
+  #  
+  #   class Memo_Article_Controller < Article_Controller
+  #     # no need to overload perform_commit_version as 
+  #     # it automatically operates on model Memo_Article
+  #   end
+  #   
+  #
   def load_instance(klass=nil)
   # {{{
     klass ||= @klass 
     raise ::Exception.new('Unknown @klass for ' << self.class.to_s) unless klass
     if !@instance then
-      load_args   = @params unless param(:id)
-      load_args ||= id_hash()
-      @instance = klass.load(load_args) 
+      if param(:id) then
+        @instance = klass.get(param(:id))
+      else
+        load_args   = @params 
+        load_args ||= id_hash()
+        @instance = klass.load(load_args) 
+      end
     end
     if !@instance then
-      puts tl(:content_does_not_exist)
-      return
+      return false
     end
-    # raise ::Exception.new('Unable to load instance for ' << self.class.to_s + '. Params: ' << @params.inspect) unless @instance
     return @instance
+    # raise ::Exception.new('Unable to load instance for ' << self.class.to_s + '. Params: ' << @params.inspect) unless @instance
   end # }}}
 
   # Returns primary key value passed in reqeust parameters. 

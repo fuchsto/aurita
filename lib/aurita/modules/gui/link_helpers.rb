@@ -223,7 +223,13 @@ module GUI
         params   = args.at(0)
       end
 
-      # For link_to(:add, entity, params) 
+      # For 
+      #   link_to(:add, entity, :controller => 'Specific_Model_Name') 
+      # or
+      #   link_to('edit this entry', entity, :action => :update)
+      #
+      # Note that args[0] can either be Symbol or String, so this 
+      # has already been interpreted above, do not change it here. 
       if params.is_a?(Aurita::Model) then
         params   = args.at(2)
         entity   = args.at(1)

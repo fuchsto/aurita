@@ -49,7 +49,7 @@ module Main
     
       login = param(:login).gsub("\s",'')
       pass  = param(:pass)
-      raise ::Exception.new(tl(:no_login_specified)) if login.to_s == ''
+      exec_js(js.Aurita.flash(tl(:no_login_specified))) if login.to_s == ''
 
       login_md5 = Digest::MD5.hexdigest(login) if param(:login).to_s.gsub(/\s/,'') != ''
       login_md5 = instance.login unless login_md5
@@ -59,7 +59,7 @@ module Main
       # Check if selected login is still available
       check = User_Group.find(1).with((User_Group.user_group_name.ilike(login)) & 
                                       (User_Group.user_group_id <=> param(:user_group_id))).entity
-      raise ::Exception.new(tl(:login_already_used)) if check
+      exec_js(js.Aurita.flash(tl(:login_already_used))) if check
 
       @params[:pass] = pass_md5
       @params[:login] = login_md5

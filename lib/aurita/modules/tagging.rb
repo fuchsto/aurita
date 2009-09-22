@@ -30,7 +30,7 @@ module Main
           marked_tags << dword
           begin
             replacement =  '\1<a class="tag_link" href="/aurita/App_Main/find/key=' << dword + '" '
-            replacement << 'onclick="Aurita.load({ method: \'POST\', action: \'App_Main/find/key=' << dword + '\'}); return false; ">\2</a>\3')
+            replacement << 'onclick="Aurita.load({ method: \'POST\', action: \'App_Main/find/key=' << dword + '\'}); return false; ">\2</a>\3'
             text.gsub!(/([>|\s]+)(#{word})([<|\s]+)/i, replacement)
           rescue ::Exception => ignore
           end

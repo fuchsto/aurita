@@ -12,6 +12,15 @@ module GUI
     def initialize(params={}, &block)
       super(params, &block)
       add_css_class('editor')
+      add_css_class('simple')
+    end
+  end
+
+  class Full_Text_Editor_Field < Textarea_Field
+    def initialize(params={}, &block)
+      super(params, &block)
+      add_css_class('editor')
+      add_css_class('full')
     end
   end
 

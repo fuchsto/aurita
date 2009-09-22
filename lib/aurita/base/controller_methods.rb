@@ -110,54 +110,6 @@ module Aurita
       raise Lore::Exception::Invalid_Klass_Parameters.new(klass, errors)
     end
 
-    # Load model instance identified by primary key attribute 
-    # values in request parameters (@params). 
-    #
-    # Example: 
-    # Request is
-    #
-    #   [controller] Wiki::Article
-    #   [article_id] 123
-    #
-    # If there is only one primary key defined in the model klass, 
-    # attribute 'id' can be used in request, too. This is needed 
-    # for REST protocol: 
-    #
-    #   [controller] Wiki::Article
-    #   [id] 123
-    #
-    # load_instance would look up instance like: 
-    #
-    #   Wiki::Article.load(:article_id => 123)
-    #
-    # This is very useful, as this method also works for 
-    # polymorphic controller methods. It is thus recommended to 
-    # use load_instance instead of loading model instances 
-    # manually. 
-    # 
-    # Example: 
-    #
-    #   class Article_Controller < Aurita::Plugin_Controller
-    #     def perform_commit_version
-    #       article = load_instance
-    #       # Modify aricle
-    #     end
-    #   end
-    #  
-    #   class Memo_Article_Controller < Article_Controller
-    #     # no need to overload perform_commit_version as 
-    #     # it automatically operates on model Memo_Article
-    #   end
-    #   
-    #
-    def load_instance(klass=nil) 
-    # {{{
-      klass = @klass if klass.nil?
-      instance = klass.load(@params)
-      raise ::Exception.new('Unable to load instance') unless instance
-      return instance
-    end # def }}}
-    
     # Updates attributes of model instance with values 
     # in request parameters (@params). 
     # Either a model instance to be updated is passed, 
@@ -205,10 +157,10 @@ module Aurita
     # {{{
       @klass ||= resolve_model_klass()
       log { "perform_add on #{@klass.inspect} --> "}
-      @klass_instance = @klass.create(@params)
+      @instance = @klass.create(@params)
       log(@params.inspect)
       log { 'perform_add <--' }
-      return @klass_instance
+      return @instance
     end # }}}
     
     # Default implementation of update routine on a 
@@ -340,12 +292,13 @@ module Aurita
         end
         params ||= {}
         params[:action]     = action
-        params[:controller] = entity.controller_name
-        params.update(entity.key)
+        params[:controller] = entity.model_name
+        params.update(:id => entity.pkey)
       else
         params = args.at(0)
       end
 
+      params ||= {}
       params[:controller] = controller_name() unless params[:controller]
       params[:action]     = params[:to] if params[:to]
       params[:action]     = :show unless params[:action]

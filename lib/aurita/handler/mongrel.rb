@@ -58,7 +58,7 @@ module Handler
       @app = Aurita::Handler::Aurita_Application.new()
       @app.logger = @logger
       @app = Rack::ETag.new(@app)
-      @app = Rack::ConditionalGet.new(@app)
+   #  @app = Rack::ConditionalGet.new(@app)
       @app = Rack::ContentLength.new(@app)
       unless opts[:no_session] then
         begin

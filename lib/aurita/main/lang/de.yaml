@@ -336,3 +336,6 @@ last_seen_online : Zuletzt online
 
 error_header : Ein Fehler ist aufgetreten
 
+passwords_do_not_match : Die Passworte sind nicht identisch
+
+

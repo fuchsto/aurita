@@ -163,7 +163,7 @@ module Main
       dec.dom_id = "hierarchy_sortable_list_#{h_id}"
       js_init = "reorder_hierarchy_id=#{h_id}; 
                  Sortable.create('hierarchy_sortable_list_#{h_id}', 
-                                 { onUpdate: on_hierarchy_entry_reorder, tree: true });"
+                                 { onUpdate: Aurita.GUI.on_hierarchy_entry_reorder, tree: true });"
       icon = HTML.img(:src => '/aurita/images/icons/save.gif', 
                       :style => 'margin-bottom: 4px;', 
                       :onclick => "Aurita.load({ element: 'hierarchy_#{h_id}_body', action: 'Hierarchy/body/hierarchy_id=#{h_id}' }); " )

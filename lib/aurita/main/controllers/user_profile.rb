@@ -166,7 +166,7 @@ module Main
                                                                            :controller => 'User_Login_Data', 
                                                                            :action => :update)) { 
                                             user_label 
-                                          })
+                                          }, :entity => user)
           list << HTML.li { user } 
         end
       }
@@ -258,12 +258,14 @@ module Main
       form         = update_form(User_Profile) 
       pass         = Password_Field.new(:name => User_Login_Data.pass, :label => tl(:change_password))
       pass_confirm = Password_Field.new(:name => :pass_confirm, :label => tl(:confirm_password))
+      pass.optional! 
       form.add(pass)
       form[User_Profile.theme] = Select_Field.new(:options => { :default => tl(:default_theme), :custom => tl(:custom_theme) }, 
                                                   :label => tl(:theme), 
                                                   :value => instance.theme, 
                                                   :name => User_Profile.theme.to_s)
       pass.value   = ''
+      pass_confirm.optional!
       form.add(pass_confirm)
       form = decorate_form(form) 
       Page.new(:header => instance.user_group_name) { form }
@@ -272,15 +274,18 @@ module Main
     def perform_update
       pass = param(:pass) # Save for later use
       @params[User_Login_Data.pass] = nil
-      super()
       instance = load_instance()
 
       if(pass.nonempty? && pass == param(:pass_confirm)) then
         instance.pass = Digest::MD5.hexdigest(pass)
         instance.commit
       elsif (param(:pass) && param(:pass) != param(:pass_confirm)) then
-        raise ::Exception.new(tl(:passwords_dont_match))
+        exec_js(js.Aurita.flash(tl(:passwords_do_not_match))) 
+        return
       end
+      delete_param(:pass)
+
+      super()
 
       redirect_to(instance) 
       redirect(:element => :admin_users_box_body, :action => :admin_box_body)

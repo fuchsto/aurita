@@ -1820,3 +1820,16 @@ table.listing_2_columns {
 .server_error .error_backtrace { 
   color: #565656; 
 }
+
+.admin_user_box_body { 
+  height: 230px; 
+  overflow-y: auto; 
+  overflow-x: hidden; 
+}
+.admin_category_box_body { 
+  height: 230px; 
+  overflow-y: auto; 
+  overflow-x: hidden; 
+}
+
+

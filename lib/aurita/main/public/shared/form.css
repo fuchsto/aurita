@@ -567,7 +567,7 @@ fieldset legend {
 }
 
 .selection_list_field { 
-  background: #efefef; 
+  border: 1px solid #dfdfdf; 
 }
 .selection_list_field ul { 
   padding-bottom: 2px !important; 

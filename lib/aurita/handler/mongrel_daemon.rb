@@ -48,10 +48,10 @@ class Mongrel_Daemon
     # Configure Mongrel for Aurita project: 
     @http_server.register("/", @aurita)
     @http_server.register("/aurita", @aurita)
-    @http_server.register("/aurita/inc",    Mongrel::DirHandler.new(@options[:server_root] + '/inc'))
-    @http_server.register("/aurita/assets", Mongrel::DirHandler.new(@options[:server_root] + '/assets'))
-    @http_server.register("/aurita/images", Mongrel::DirHandler.new(@options[:server_root] + '/images'))
-    @http_server.register("/aurita/shared", Mongrel::DirHandler.new(@options[:server_root] + '/shared'))
+    @http_server.register("/aurita/inc",    Aurita::Handler::Mongrel_Static.new(:root => @options[:server_root] + '/inc'))
+    @http_server.register("/aurita/assets", Aurita::Handler::Mongrel_Static.new(:root => @options[:server_root] + '/assets'))
+    @http_server.register("/aurita/images", Aurita::Handler::Mongrel_Static.new(:root => @options[:server_root] + '/images'))
+    @http_server.register("/aurita/shared", Aurita::Handler::Mongrel_Static.new(:root => @options[:server_root] + '/shared'))
   end
 
   public

@@ -1,11 +1,11 @@
 .context_menu_entry img { 
-  background-color: #cfcfcf; 
   padding: 4px; 
   margin: -2px 2px -3px -6px; 
 }
 .context_menu_entry_label { 
   font-family: Verdana, Arial, Helvetica; 
   font-size: 11px; 
+  line-height: 12px; 
   position: relative; 
 }
 .context_menu_entry { 
@@ -39,25 +39,23 @@
 
 .box_hierarchy_entry_level_1 .label { 
   padding-left: 11px; 
-  background-color: #cfcfcf; 
+/*  background-color: #cfcfcf; */
 }
 .box_hierarchy_entry_level_2 .label { 
   padding-left: 22px; 
-  background-color: #c4c4c4; 
+/*  background-color: #c4c4c4; */
 }
 .box_hierarchy_entry_level_3 .label { 
   padding-left: 33px; 
-  background-color: #c0c0c0; 
+/*  background-color: #c0c0c0; */
 }
 .box_hierarchy_entry_level_4 .label { 
   padding-left: 44px; 
-  background-color: #b6b6b6; 
+/*  background-color: #b6b6b6; */
 }
 .box_hierarchy_entry_level_5 .label { 
   padding-left: 55; 
-  background-color: #b6b6b6; 
 }
 .box_hierarchy_entry_level_6 .label { 
   padding-left: 66; 
-  background-color: #b6b6b6; 
 }

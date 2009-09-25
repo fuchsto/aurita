@@ -32,6 +32,9 @@ module Main
                          :num_queries => params[:num_queries], 
                          :num_tuples => params[:num_tuples])
       log { "Queries: #{params[:num_queries]}, Tuples: #{params[:num_tuples]}, Time: #{params[:time]}" }
+
+      @response[:debug] = '' unless @response[:debug]
+      @response[:debug] <<  "{ queries: #{params[:num_queries]}, tuples: #{params[:num_tuples]}, time: '#{params[:time]}' }" 
     end
 
     def ping

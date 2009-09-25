@@ -119,6 +119,14 @@ module Main
       return @category_ids
     end # }}}
 
+    def may_view_category?(cat_id)
+      User_Category.find(1).with((User_Category.category_id == cat_id) & 
+                                 (User_Category.user_group_id == user_group_id)).entity
+    end
+    alias may_view_category may_view_category?
+    alias is_in_category may_view_category?
+    alias is_in_category? may_view_category?
+
     # Returns ids of Category instances this user has write permissions for, 
     # as unordered Array. 
     def writeable_category_ids

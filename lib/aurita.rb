@@ -44,6 +44,18 @@ Aurita.import_module :gui, :lang
 #
 module Aurita
 
+  def self.runmode(mode=nil)
+    if mode then
+      @@runmode = mode
+    else
+      return @@runmode || :development
+    end
+  end
+
+  def self.runmode=(mode)
+    @@runmode = mode
+  end
+
   # Returns current session object, which is an instance 
   # of Aurita::Session. 
   # A session is always bound to Thread.current, So this is thread safe. 
@@ -112,10 +124,11 @@ module Aurita
   # Activate a project by loading its config.rb and 
   # establishing a DB connection. 
   # Project can later be retreived via Aurita.project. 
-  def self.load_project(project_name)
+  def self.load_project(project_name, runmode=:development)
     require("#{Aurita::Configuration.projects_base_path}#{project_name.to_s}/config.rb")
     Lore::Context.enter Aurita::Project_Configuration.context
     @@project = Aurita::Project_Configuration
+    @@runmode = runmode.to_sym
     Aurita.import('base/session')
   end
 

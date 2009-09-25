@@ -154,7 +154,7 @@ module Main
                                                                         :action     => :update, 
                                                                         :user_group_id => 0) ) { tl(:unregistered_user) }, 
                                       :type => :system_link)
-      body << HTML.button(:class => :icon, :onclick => link_to(:action => :admin)) { 
+      body << HTML.button(:class => :icon, :onclick => link_to(:action => :admin_add)) { 
         HTML.img(:src => '/aurita/images/icons/button_add.gif') + tl(:add_user) 
       }
       list = HTML.ul.single_line_list { HTML.li { guest } }

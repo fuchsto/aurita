@@ -76,7 +76,7 @@ end
 if verbosive then
 end
 
-logfile = "/var/log/aurita/aurita_#{project_name}_#{port}_debug.log"
+logfile = "/var/log/aurita/aurita_#{project_name}_#{port}_#{mode}.log"
 
 if verbosive then
   Lore.enable_logging
@@ -99,7 +99,7 @@ end
 
 if killold then
   # TODO: This is really quick'n'dirty
-  command = "ps aux | grep 'mongrel_daemon' | grep '#{port}' | grep -v #{$$} | awk '{print $2}' | xargs sudo kill -9 2>/dev/null" 
+  command = "ps aux | grep 'mongrel_daemon' | grep '#{port}' | grep -v #{$$} | grep -v 'grep' | awk '{print $2}' | xargs sudo kill -9 2>/dev/null" 
   system(command)
 end
 
@@ -108,6 +108,7 @@ if verbosive then
 end
 
 Aurita.load_project project_name
+Aurita.runmode = mode
 Aurita.bootstrap
 
 if verbosive then

@@ -206,7 +206,7 @@ module Aurita
       @klass_instance = nil
     end # def }}}
 
-    protected
+    public
 
     # Enforce HTTP caching of this request in the client's browser 
     # by setting HTTP headers 'Expires' and 'Last-Modified' 

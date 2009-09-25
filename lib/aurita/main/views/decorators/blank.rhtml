@@ -1,0 +1,62 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<!-- Running on Aurita (c) Copyright 2006-2008 Tobias Fuchs and wortundform office for enterprise publishing  -->
+<!-- Based on Lore DB Abstraction, both (c) Copyright 2005-2008 Tobias Fuchs published under GNU GPL -->
+
+  <head>
+    <title><%= Aurita.project.project_title %></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link rel="stylesheet" href="/aurita/shared/components.css" type="text/css" />
+    <link rel="stylesheet" href="/aurita/inc/ui_general.css" type="text/css" />
+    <link rel="stylesheet" href="/aurita/shared/form.css" type="text/css" />
+    <link rel="stylesheet" href="/aurita/inc/layout.css" type="text/css" />
+<!-- 
+    <comment> is only known by IE, thus ui.css is included by every browser 
+    except IE
+-->
+    <link rel="stylesheet" href="/aurita/inc/ui.css" type="text/css" />
+
+<!-- Special IE includes -->
+
+<!--[if IE 6]> 
+    <link rel="stylesheet" href="/aurita/shared/form_ie.css" type="text/css" />
+    <link rel="stylesheet" href="/aurita/shared/components_ie.css" type="text/css" />
+    <link rel="stylesheet" href="/aurita/inc/ui_ie.css" type="text/css" />
+    <link rel="stylesheet" href="/aurita/inc/layout_ie.css" type="text/css" />
+<![endif]--> 
+<!--[if IE 7]> 
+    <link rel="stylesheet" href="/aurita/shared/form_ie.css" type="text/css" />
+    <link rel="stylesheet" href="/aurita/shared/components_ie.css" type="text/css" />
+    <link rel="stylesheet" href="/aurita/inc/ui_ie.css" type="text/css" />
+    <link rel="stylesheet" href="/aurita/inc/layout_ie.css" type="text/css" />
+<![endif]--> 
+
+<!-- End special IE includes --> 
+    
+  </head>
+
+  <body id="app_body" class="site_body" >
+
+    <div id="dispatcher" style="display:none; "></div>
+    <div id="message_box" style="z-index: 900; display:none; padding: 20px; "></div>
+    <div id="file_upload_indicator" style="display: none; ">
+      <div style="position: relative; padding: 7px; ">
+        <img src="/aurita/images/icons/uploading.gif" style="display: inline;" />
+      </div>
+    </div>
+    <div id="context_menu" style="z-index: 503; display:none; "></div>
+
+<div>
+<!-- begin main app -->
+    <%= content %>
+<!-- end main app -->
+</div>
+
+</body>
+
+</html>

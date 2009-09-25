@@ -103,7 +103,7 @@ module Main
       instance.deleted = true; 
       instance.hidden  = true; 
       instance.commit
-      redirect_to(:action => :update, :user_group_id => instance.pkey)
+      redirect_to(:controller => 'App_Main', :action => :blank)
       redirect(:target => :admin_users_box_body, :action => :admin_box_body)
     end
 

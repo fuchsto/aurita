@@ -721,8 +721,6 @@ ul.comment_list li.odd {
 
 #autocomplete_media { 
   width: 180px; 
-  display: inline; 
-/*  float: right;  */
   margin: 0px; 
   padding: 5px; 
 }

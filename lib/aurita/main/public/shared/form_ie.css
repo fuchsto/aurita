@@ -2,6 +2,8 @@
 button, button:hover { 
   outline: none; 
   border:1px transparent solid !important;
+  line-height: 13px; 
+  height: 27px; 
 }
 button.cancel { 
   margin-left: 5px; 

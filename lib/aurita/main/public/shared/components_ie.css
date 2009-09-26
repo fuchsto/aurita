@@ -25,14 +25,32 @@
 } 
 #autocomplete_media { 
   width: 180px; 
-  display: inline; 
-  float: right; 
   margin: 0px; 
   padding: 1px; 
   padding-top: 2px; 
   padding-left: 4px; 
   height: 15px; 
 }
+.media_asset_selection_list .toolbar img.icon { 
+  position: relative; 
+  top: -2px; 
+}
+
+.media_asset_selection_list .toolbar input { 
+  height: 20px; 
+  position: relative; 
+  top: -2px; 
+}
+.media_asset_selection_list .toolbar button { 
+  height: 23px; 
+}
+
+.media_asset_selection_list .toolbar input, 
+.media_asset_selection_list #autocomplete_media, 
+.media_asset_selection_list .toolbar button { 
+  margin: 0px;
+}
+
 .context_menu_entry img { 
   margin: -1px 4px -4px -8px; 
 }

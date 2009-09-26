@@ -694,18 +694,6 @@ img.icon {
   overflow-y: auto; 
   padding-left: 0px;
 }
-.media_folder_content { 
-  margin: 1px; 
-  overflow-x: hidden; 
-  overflow-y: auto; 
-}
-.selected_media_assets { 
-/*  position: absolute; */
-  height: 130px; 
-  overflow-y: auto; 
-  overflow-x: hidden; 
-  background-color: #aeaeae; 
-}
 
 .moveable { 
   cursor: move; 
@@ -1832,4 +1820,72 @@ table.listing_2_columns {
   overflow-x: hidden; 
 }
 
+.media_asset_selection_list { 
+  border: 1px outset white; 
+}
+.media_asset_selection_list .media_asset_list { 
+  padding: 0px; 
+}
+.media_asset_selection_list .media_folder_content { 
+  margin: 0px; 
+  overflow-x: hidden; 
+  overflow-y: auto; 
+  border-bottom: 1px inset white; 
+}
+.media_asset_selection_list .selected_media_assets { 
+/*  position: absolute; */
+  height: 130px; 
+  overflow-y: auto; 
+  overflow-x: hidden; 
+  background-color: #dadada; 
+  border-top: 1px inset white; 
+}
+.media_asset_selection_list .toolbar { 
+  background: url('/aurita/images/icons/box_header_bg.png') repeat-x;
+  background-color: #c0c0c0; 
+  padding: 3px; 
+  padding-left: 6px; 
+}
+.media_asset_selection_list .toolbar img.icon { 
+  position: relative; 
+  top: 1px; 
+}
 
+.media_asset_selection_list .toolbar input, 
+.media_asset_selection_list #autocomplete_media, 
+.media_asset_selection_list .toolbar button { 
+  padding: 2px;
+}
+
+#debug_box { 
+  background: #f0f0f0; 
+  border: 1px outset white; 
+  width: 500px; 
+}
+#debug_toolbar { 
+  width: 100%; 
+  background: url('/aurita/images/icons/box_header_bg.png') repeat-x;
+  background-color: #c0c0c0; 
+}
+#developer_console { 
+  height: 300px; 
+  overflow: auto; 
+  padding: 5px; 
+  font-family: "Lucida Console",monospace; 
+  font-size: 10px; 
+}
+#developer_console hr { 
+  margin: 1px; 
+  margin-left: -3px;
+  margin-right: -3px;
+} 
+
+span.button { 
+  cursor: pointer; 
+  background: url('/aurita/images/icons/button_normal.gif') repeat-x;
+  background-color: #c0c0c0; 
+  padding: 3px; 
+  border: 1px outset white; 
+  margin-left: 5px; 
+  font-size: 10px; 
+}

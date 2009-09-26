@@ -235,7 +235,7 @@ input.inline, textarea.inline {
 
 button { 
 /*  background: url('/aurita/images/icons/button_grey_bg.png'); */
-  border-color: #898989 #343434 #343434 #898989; */
+  border-color: #898989 #343434 #343434 #898989; 
   background-color: #cfcfcf;
   background: url('/aurita/images/icons/button_normal.gif') repeat-x;  
 /*  border-color: transparent;  */

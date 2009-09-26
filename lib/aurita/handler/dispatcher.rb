@@ -21,7 +21,7 @@ require('lore')
 
 class Aurita::Dispatcher 
 
-  attr_reader :params, :mode, :controller, :action, :dispatch_time, :failed
+  attr_reader :params, :mode, :controller, :action, :dispatch_time
   attr_accessor :decorator
 
   public
@@ -35,7 +35,7 @@ class Aurita::Dispatcher
   def initialize(application=Aurita::Main::Application, 
                  decorator=Aurita::Main::Default_Decorator)
     @application         = application
-    @decorator           = decorator
+    @decorator           = decorator.new
     @logger              = Aurita::Log::Class_Logger.new('Dispatcher')
     @benchmark_time      = 0
     @num_dispatches      = 0 
@@ -54,7 +54,6 @@ class Aurita::Dispatcher
     session           = Aurita::Session.new(request)
     params[:_request] = request
     params[:_session] = session
-    failed            = false
     status            = 200
     response_body     = ''
     response_header   = {}
@@ -70,8 +69,6 @@ class Aurita::Dispatcher
 
     response_header['Accept-Charset'] = 'utf-8' 
     response_header['type']           = 'text/html; charset=utf-8' 
-  # response_header['expires']        = (Time.now - (1 * 24 * 60 * 60)).to_s
-  # response_header['Last-Modified']  = (Time.now - (1 * 24 * 60 * 60)).to_s
     response_header['Cache-Control']  = 'private'
 
     Lore::Connection.reset_query_count()
@@ -88,9 +85,6 @@ class Aurita::Dispatcher
       raise ::Exception.new('Unknown controller: ' << controller.inspect) unless controller_klass
       
       controller_instance = controller_klass.new(params, model_klass)
-
-      # TODO: Move plugin call to Controller#call_guarded
-      Aurita::Plugin_Register.call(Hook.__send__(controller.downcase.gsub('::','__')).__send__("before_#{action}"), controller_instance)
 
       response = false
       if !controller_klass.nil?
@@ -113,7 +107,6 @@ class Aurita::Dispatcher
             return [ status, response_header, response_body ]
           end
         rescue ::Exception => excep
-          failed = true
           status = 200
           response = { :error => GUI::Error_Page.new(excep).string }
           @logger.log { "Error in Dispatcher: #{excep.message}" }
@@ -121,28 +114,21 @@ class Aurita::Dispatcher
         end
       end
 
-      if response[:no_cache] then
+      if response[:force_cache] then
+        response_header['expires']       = (Time.now + (100 * 24 * 60 * 60)).to_s
+        response_header['Last-Modified'] = (Time.now - (1 * 24 * 60 * 60)).to_s
+      else
         response_header['expires']       = (Time.now - (1 * 24 * 60 * 60)).to_s
-      # response_header['Last-Modified'] = Time.now.to_s
         response_header['pragma']        = 'No-cache'
-      elsif response[:force_cache] then
-        response_header['Last-Modified']  = (Time.now - (1 * 24 * 60 * 60)).to_s
       end
 
       mode = response[:mode] if response && response[:mode]
       mode = :default unless mode
       response[:mode] = mode.intern 
-        
-      # TODO: Move plugin call to Controller#call_guarded
-      if failed then
-        Aurita::Plugin_Register.call(Hook.__send__(controller.downcase.gsub('::','__')).__send__(action + '_failed'), controller_instance)
-      else
-        Aurita::Plugin_Register.call(Hook.__send__(controller.downcase.gsub('::','__')).__send__('after_' << action), controller_instance)
-      end
 
       params[:_controller] = controller_instance
 
-      response_body = @decorator.new(model_klass, response, params).string
+      response_body = @decorator.render(model_klass, response, params)
 
       @num_dispatches += 1
         

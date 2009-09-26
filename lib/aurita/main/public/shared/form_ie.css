@@ -1,10 +1,16 @@
 
 button, button:hover { 
   outline: none; 
+  border:1px transparent solid !important;
 }
 button.cancel { 
   margin-left: 5px; 
   margin-right: 0px; 
+}
+span.button_wrap { 
+  border-style: solid; 
+  border-width: 1px; 
+  border-color: #898989 #343434 #343434 #898989; */
 }
 
 li.input_field_wrap input { 

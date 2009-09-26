@@ -5,8 +5,9 @@
         <%= f.hidden(:name => :content_id, :value => content.content_id) %>
         <%= f.textarea(:name => :message, :class => :comment, :force_closing_tag => true, :label => tl(:add_comment)) %>
       <% end %>
-      <%= gui.button(:class => 'submit', :icon => 'add', 
-                     :onclick => "save_all_editors(); Aurita.submit_form('content_comment_form'); $('content_comment_form').innerHTML = '...'; ") { 
+      <%= gui.button(:class => 'submit', 
+                     :icon => 'add', 
+                     :onclick => "Aurita.submit_form('content_comment_form'); ") { 
             tl(:send)
           } 
       %>

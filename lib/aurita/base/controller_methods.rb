@@ -4,6 +4,7 @@ require('aurita/base/exceptions')
 
 Aurita.import_module :gui, :custom_form_elements
 Aurita.import_module :gui, :form_generator
+Aurita.import_module :gui, :button
 
 module Aurita
 

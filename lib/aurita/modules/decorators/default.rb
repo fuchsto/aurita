@@ -83,7 +83,11 @@ module Main
   #
   class Default_Decorator
 
-    # Constructor expects model klass to decorate, the controllers response 
+    def initialize
+      @templates = {}
+    end
+
+    # Expects model klass to decorate, the controllers response 
     # object, and request params (GET, POST etc). 
     #
     # Example (seen from within a controller): 
@@ -94,44 +98,50 @@ module Main
     # You will never need to instantiate decorators yourself, however, as 
     # decorators are handled in Aurita::Dispatcher automatically. 
     #
-    def initialize(model_klass, response, params)
-      @params      = params
+    def render(model_klass, response, params)
+      @params = params
 
-      @mode = params[:mode].to_s
-      if @mode == '' || @mode == 'default' || @mode == 'async' || @mode == 'none' then
+      @mode = params[:mode]
+      @mode = :default if @mode.empty? 
+      @mode = @mode.to_sym
+
+      if @mode == :default || @mode == :async || @mode == :none then
         @mode = response[:decorator] if response[:decorator]
       end
-      @mode = :default if @mode == ''
-      @mode = @mode.to_s
 
-      @template = ''
-      if @mode == 'async' then
+      if @mode == :async then
         response[:html].pack! if response[:html]
         @content  = "{ html: \"#{response[:html]}\", script: \"#{response[:script]}\""
         @content << ", debug: \"#{response[:debug]}\" " if response[:debug]
         @content << ", error: \"#{response[:error]}\" " if response[:error]
         @content << '}'
-      elsif @mode == 'dispatch' || @mode == 'none' then
+      elsif @mode == :dispatch || @mode == :none then
         @content = response[:html]
       else
-        @mode   = Aurita.project.default_theme if @mode.to_s == 'default'
-        @mode ||= 'default'
-        project_template = Aurita.project_path + 'views/decorators/' << @mode + '.rhtml'
+        @mode   = Aurita.project.default_theme if @mode == :default
+        @mode ||= :default
+        project_template = "#{Aurita.project_path}views/decorators/#{@mode}.rhtml"
 
         if File.exists? project_template then
           file = project_template
         else 
-          file = Aurita::Main::Application.base_path + 'views/decorators/' << @mode + '.rhtml'
+          file = "#{Aurita::Main::Application.base_path}views/decorators/#{@mode}.rhtml"
         end
-        IO.foreach(file) { |line|
-          @template << line
-        }
-        @erb = ERB.new(@template)
+
+        if Aurita.runmode == :development || !@templates[@mode] then
+          @templates[@mode] = '' 
+          IO.foreach(file) { |line|
+            @templates[@mode] << line
+          }
+        end
+
+        @erb = ERB.new(@templates[@mode])
         @binding = binding_for(response[:html], response[:script], model_klass, params, Lang)
 
         @content = @erb.result(@binding)
       end
 
+      return @content
     end
 
     def plugin_call(hook, call_params=nil)

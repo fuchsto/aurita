@@ -252,6 +252,8 @@ class Aurita::Base_Controller
         raise ::Exception.new("No such method: #{self.class.to_s}.#{method}") unless (respond_to?(method) || self.class.respond_to?(method))
 
         log('Guards passed')
+
+        Aurita::Plugin_Register.call(Hook.__send__(self.class.to_s.downcase.gsub('::','__')).__send__("before_#{method}"), self)
         
         controller_cache = self.class.cache
         cached_actions   = self.class.cached_actions
@@ -279,13 +281,16 @@ class Aurita::Base_Controller
           log('No controller cache')
           result = __send__(method, *args) 
         end
-
-        log('Call finished')
+        
         after_hooks = self.class.hooks_after(method)
         if after_hooks then 
           log("Calling hook after method #{method}")
           after_hooks.each { |hook| hook.call(self) }
         end
+
+        Aurita::Plugin_Register.call(Hook.__send__(self.class.to_s.downcase.gsub('::','__')).__send__("after_#{method}"), self)
+
+        log('Call finished')
       rescue Lore::Exceptions::Validation_Failure => ikp
         log('Validation failure in call_guarded')
         ikp.log()

@@ -45,7 +45,7 @@ module GUI
           Button.new(:class => :submit, :onclick => Javascript.Aurita.submit_form(@form.dom_id.to_s), :icon => :ok) { 
             HTML.img(:src => '/aurita/images/icons/button_ok.gif') + tl(:ok) 
           } + 
-          Button.new(:class => :cancel, :onclick => Javascript.Aurita.cancel_form(@form.dom_id.to_s), :icon => :cancel) { 
+          Button.new(:class => :cancel, :onclick => Javascript.Aurita.cancel_form(@form.dom_id.to_s), :icon => :cancelAA) { 
             HTML.img(:src => '/aurita/images/icons/button_cancel.gif') + tl(:cancel) 
           }
         }

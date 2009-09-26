@@ -64,7 +64,7 @@ module GUI
         @template_symbol = template_filename.split('.')[0].intern
       end
 
-      if @@template[@template_symbol].nil? then
+      if Aurita.runmode == :development || @@template[@template_symbol].nil? then
         @@template[@template_symbol] = ''
 
         if plugin then

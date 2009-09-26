@@ -104,7 +104,6 @@ module Aurita
       plugin_call = @@register[hook.to_s]
       return unless plugin_call
       plugin_call.each { |component| 
-        Aurita.log { 'PLUGIN RESPONSE: ' << component.inspect}
         if !component.constraint || component.constraint.call then
           # Call params consists of params passed to plugin_get (params) 
           # and those provided in the plugin manifest statically (component.params): 
@@ -124,7 +123,7 @@ module Aurita
 
     def self.add(params)
       hook = params[:hook].to_s
-      @@register[hook] = Array.new unless @@register[hook]
+      @@register[hook]  = Array.new unless @@register[hook]
       @@register[hook] << Plugin_Call.new(params)
     end
 

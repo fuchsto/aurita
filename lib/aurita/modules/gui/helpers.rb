@@ -5,6 +5,7 @@ Aurita.import_module :gui, :format_helpers
 Aurita.import_module :gui, :i18n_helpers
 Aurita.import_module :gui, :link_helpers
 Aurita.import_module :gui, :page
+Aurita.import_module :gui, :button
 Aurita.import_module :gui, :async_form_decorator
 Aurita.import_module :gui, :async_upload_form_decorator
 

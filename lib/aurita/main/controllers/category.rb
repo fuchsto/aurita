@@ -21,7 +21,7 @@ module Main
     }
 
     after(:perform_update, :perform_delete) { |c|
-      c.redirect_to(:blank)
+      c.redirect_to(:controller => 'App_Main', :action => :blank)
       c.redirect(:element => :admin_categories_box_body, :to => :admin_box_body)
     }
 
@@ -80,10 +80,11 @@ module Main
 
     def admin_box_body
       body = Array.new
-      body << HTML.button(:class => :icon, :onclick => link_to(:action => :add)) { 
-        HTML.img(:src => '/aurita/images/icons/button_add.gif') + tl(:add_content_category) 
-      }
-      list = HTML.ul.single_line_list { } 
+      body << HTML.a(:class   => :icon, 
+                     :onclick => link_to(:add)) { 
+        icon_tag(:categories) + tl(:add_content_category) 
+      } 
+      list = HTML.ul.no_bullets { } 
       Category.all_with((Category.is_private == 'f') & (Category.category_id >= '100')).sort_by(:category_name, :asc).each { |cat|
         cat = Context_Menu_Element.new(HTML.a.entry(:onclick => link_to(cat, :action => :update)) {
                                           cat.category_name

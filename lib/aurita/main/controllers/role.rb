@@ -12,7 +12,7 @@ module Main
     end
 
     after(:perform_add, :perform_update, :perform_delete) { |c|
-      c.redirect_to(:blank)
+      c.redirect_to(:controller => 'App_Main', :action => :blank)
       c.redirect(:element => :admin_roles_box_body, :to => :admin_box_body) 
     }
 
@@ -151,10 +151,12 @@ module Main
 
     def admin_box_body
       body = Array.new
-      body << HTML.button(:class => :icon, :onclick => js.Aurita.load(:action => 'Role/add/')) { 
-        HTML.img(:src => '/aurita/images/icons/button_add.gif') + tl(:add_role) 
-      }
-      list = HTML.ul.single_line_list { } 
+      body << HTML.a(:class   => :icon, 
+                     :onclick => link_to(:add)) { 
+        icon_tag(:role) + tl(:add_role) 
+      } 
+      
+      list = HTML.ul.no_bullets { } 
       Role.find(:all).sort_by(:role_name).each { |role|
         role_id = role.role_id
         entry = HTML.div { 

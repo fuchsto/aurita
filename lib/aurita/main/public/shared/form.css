@@ -451,8 +451,7 @@ ul.form_fields .timespan select {
 }
 
 ul.radio_options label { 
-  padding-top: 0px; 
-  padding-right: 4px; 
+  padding: 2px 5px 0px 0px; 
 }
 ul.radio_options li { 
   padding-right: 4px; 

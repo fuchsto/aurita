@@ -76,6 +76,22 @@ module Main
 
   end
 
+  class User_Group < Aurita::Model
+    def last_seen_online
+      User_Action.value_of.max(:time).where(:user_group_id => user_group_id)
+    end
+=begin
+    # Returns true if last action of this user 
+    # is less than 5 minutes ago. 
+    def is_online?
+      last_action = last_seen_online.to_s
+      return false if last_action.empty?
+
+      (Time.now() - last_action.to_time) < (60 * 5)
+    end
+=end
+  end
+
 end
 end
 

@@ -104,7 +104,7 @@ module Main
       instance.hidden  = true; 
       instance.commit
       redirect_to(:controller => 'App_Main', :action => :blank)
-      redirect(:target => :admin_users_box_body, :action => :admin_box_body)
+      redirect(:target => :admin_users_box_body, :controller => 'User_Profile', :action => :admin_box_body)
     end
 
   end

@@ -303,6 +303,7 @@ module Aurita
       params[:controller] = controller_name() unless params[:controller]
       params[:action]     = params[:to] if params[:to]
       params[:action]     = :show unless params[:action]
+      params.delete(:to)
 
       url = "#{params[:controller]}/#{params[:action]}/"
       target   = params[:target]
@@ -653,6 +654,15 @@ module Aurita
       form.readonly! 
       return form
     end # def }}}
+
+    # Returns an empty page. 
+    # Useful for 
+    #
+    #   redirect_to :blank
+    #
+    def blank
+      puts ' '
+    end
 
     def show(klass=nil) 
     # {{{

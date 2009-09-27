@@ -153,13 +153,16 @@ module Main
       guest = Context_Menu_Element.new(HTML.a.entry(:onclick => link_to(:controller => 'User_Login_Data', 
                                                                         :action     => :update, 
                                                                         :user_group_id => 0) ) { tl(:unregistered_user) }, 
-                                      :type => :system_link)
-      body << HTML.button(:class => :icon, :onclick => link_to(:action => :admin_add)) { 
-        HTML.img(:src => '/aurita/images/icons/button_add.gif') + tl(:add_user) 
-      }
-      list = HTML.ul.single_line_list { HTML.li { guest } }
+                                       :type => :system_link)
+      
+      body << HTML.a(:class   => :icon, 
+                     :onclick => link_to(:admin_add)) { 
+        icon_tag(:user) + tl(:add_user) 
+      } 
+      
+      list = HTML.ul.no_bullets { HTML.li { guest } }
       User_Profile.all_with((User_Group.atomic == true) & (User_Login_Data.locked == 'f')).sort_by(:surname, :asc).each { |user|
-        if user.user_group_id != '0' then
+        if ![0,5].include?(user.user_group_id) then
           user_label = user.surname.capitalize + ' ' + user.forename.capitalize 
           user_label << ' (' + user.division + ')' if user.division.to_s != ''
           user = Context_Menu_Element.new(HTML.a.entry(:onclick => link_to(user, 
@@ -182,13 +185,11 @@ module Main
 
     def show_own
 
-      last_seen_online = User_Online.value_of.max(:time_from).where(User_Online.user_group_id == Aurita.user.user_group_id).to_s
       user = User_Group.load(:user_group_id => Aurita.user.user_group_id)
       user_profile = User_Profile.load(:user_group_id => Aurita.user.user_group_id)
 
       user_data_component = view_string(:user_profile_data, 
                                         :user => user, 
-                                        :last_seen_online => last_seen_online, 
                                         :user_profile => user_profile) 
       components = [ Element.new(:content => user_data_component) ]
       components += plugin_get(Hook.main.user_own_profile.addons, 
@@ -224,12 +225,10 @@ module Main
         return
       end
 
-      last_seen_online = User_Online.value_of.max(:time_from).where(User_Online.user_group_id == user_group_id).to_s
-      user_profile = User_Profile.load(:user_group_id => user_group_id)
+      user_profile     = User_Profile.load(:user_group_id => user_group_id)
 
       user_data_component = view_string(:user_profile_data, 
                                         :user => user, 
-                                        :last_seen_online => last_seen_online, 
                                         :user_profile => user_profile) 
       components = [ Element.new(:content => user_data_component) ]
       components += plugin_get(Hook.main.user_profile.addons, 

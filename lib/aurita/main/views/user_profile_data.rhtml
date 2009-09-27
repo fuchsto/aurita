@@ -49,13 +49,13 @@
           <%= user_profile.tags.split(' ').map { |tag| link_to(:controller => 'App_Main', :action => :find, :tag => tag) { tag} }.join(' ') %>
 	      </td>
 	    </tr>
-<% if !last_seen_online.empty? then %>
+<% if user_profile.last_seen_online then %>
 	    <tr>
 	      <td class="profile_left_column" >
           <%= tl(:last_seen_online) %>
 	      </td>
 	      <td class="profile_right_column">
-	        <%= gui.datetime(last_seen_online) %>
+          <%= gui.datetime(user_profile.last_seen_online.to_s) %>
 	      </td>
 	    </tr>
 <% end %>

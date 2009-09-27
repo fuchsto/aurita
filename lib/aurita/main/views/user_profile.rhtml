@@ -1,6 +1,13 @@
 
 
 <div class="section_header">
+<% if Aurita.user.is_admin? then %>
+  <div class="section_header_right">
+	  <a href="#" onclick="Aurita.load({ action: 'User_Profile/update/user_group_id=<%= user_profile.user_group_id %>' }); ">
+      <%= gui.icon_tag(:edit_button) %>
+    </a> 
+  </div>
+<% end %>
   <div class="section_header_left">
     <h1><%= user_profile.forename %> <%= user_profile.surname %></h1>
   </div>

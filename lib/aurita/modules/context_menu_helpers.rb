@@ -46,7 +46,7 @@ module Aurita
       result = '<div id="' << entry_id + '" class="context_menu_entry" onMouseOut="unhover_element(\'' << entry_id + '\');" onMouseOver="hover_element(\'' << entry_id + '\'); " '
       result << "onClick=\"Aurita.load({ element: 'app_main_content', action: '#{interface}'"
       result << ", onload: '#{js_init_fun.to_s}'" if js_init_fun
-      result << '} ); context_menu_close(); " class="context_menu"><nobr>&nbsp; '
+      result << '} ); Aurita.context_menu_close(); " class="context_menu"><nobr>&nbsp; '
       result << '<img src="' << icon + '" border="0" /> '
       result << '<font class="context_menu_entry_label">' + tl(label) << '&nbsp;</font></nobr></div>'
       puts result

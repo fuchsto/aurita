@@ -463,21 +463,18 @@ ul.radio_options {
 
 
 ul.checkbox_options label { 
-  float: left; 
   padding-top: 0px; 
 }
 ul.checkbox_options li { 
   clear: both; 
 }
 ul.checkbox_options input { 
-  float: left; 
   background-color: transparent !important; 
   width: auto !important; 
 }
 
 li ul.checkbox_options { 
   clear: both; 
-  height: 20px; 
 }
 li ul.checkbox_options li { 
   display: inline; 

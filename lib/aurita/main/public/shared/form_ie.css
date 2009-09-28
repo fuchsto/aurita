@@ -48,12 +48,17 @@ ul li.form_field {
 ul.radio_options li { 
   margin-left: -7px; 
 }
-ul.radio_options label { 
+ul.checkbox_options { 
+  margin: 0px; 
+  margin-bottom: 7px; 
+}
+ul.radio_options label, ul.checkbox_options label { 
   padding: 2px 5px 0px 0px; 
   margin-top: 3px; 
   display: inline; 
 }
-ul.radio_options input { 
+ul.radio_options input, ul.checkbox_options input { 
+  padding: 2px 5px 0px 0px; 
   float: none; 
   clear: both; 
 }

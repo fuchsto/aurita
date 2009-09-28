@@ -1431,9 +1431,9 @@ div.calculation_totals .totals {
   margin-top: 3px; 
 }
 .media_asset_thumbnail.tiny { 
-  width: 75px; 
+  width: 180px; 
   background-color: white; 
-  height: 125px; 
+  height: 123px; 
   margin-left: 4px; 
   margin-bottom: 3px; 
 }
@@ -1443,6 +1443,12 @@ div.calculation_totals .totals {
   padding: 2px; 
   background: url('/aurita/images/icons/loading.gif') no-repeat scroll 88px 11px; 
 }
+.media_asset_thumbnail.tiny .image { 
+  height: 70px; 
+  text-align: center; 
+  padding: 2px; 
+  background: url('/aurita/images/icons/loading.gif') no-repeat scroll 80px 11px; 
+}
 .media_asset_thumbnail.highlighted .image { 
   background: none; 
 }
@@ -1451,7 +1457,8 @@ div.calculation_totals .totals {
 }
 .media_asset_thumbnail.tiny .title { 
   overflow: hidden; 
-  height: 20px; 
+  height: 47px; 
+  padding-left: 3px; 
 }
 .media_asset_thumbnail .info { 
   padding: 3px;
@@ -1878,7 +1885,7 @@ table.listing_2_columns {
   margin-right: -3px;
 } 
 
-span.button { 
+span.button, div.button { 
   cursor: pointer; 
   background: url('/aurita/images/icons/button_normal.gif') repeat-x;
   background-color: #c0c0c0; 
@@ -1886,4 +1893,20 @@ span.button {
   border: 1px outset white; 
   margin-left: 5px; 
   font-size: 10px; 
+  text-align: center; 
+}
+
+span.inline_button, div.inline_button { 
+  cursor: pointer; 
+  background: url('/aurita/images/icons/button_normal.gif') repeat-x;
+  background-color: #c0c0c0; 
+  padding: 1px; 
+  padding-left: 3px; 
+  padding-right: 3px; 
+  border: 1px outset white; 
+  margin-left: 5px; 
+  font-size: 10px; 
+  position: relative; 
+  z-index: 450; 
+  text-align: center; 
 }

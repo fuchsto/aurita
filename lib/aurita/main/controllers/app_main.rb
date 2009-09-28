@@ -234,17 +234,21 @@ module Main
 
     def find_all
       components = plugin_get(Hook.main.find_all, :key => param(:key))
-      render_view(:find_all, 
-                  :components => components)
+      components = tl(:no_results) if components.first.nil? 
 
+      Page.new(:header => tl(:all_search_results)) { 
+        components.map { |c| c.string }.join('')
+      }
     end
     alias find find_all
 
     def find_full
       components = plugin_get(Hook.main.find_full, :key => param(:key))
-      render_view(:find_full, 
-                  :components => components)
+      components = tl(:no_results) if components.first.nil? 
 
+      Page.new(:header => tl(:fulltext_search_results)) { 
+        components.map { |c| c.string }.join('')
+      }
     end
 
   end # class

@@ -47,7 +47,7 @@ module Main
                   :content_type => param(:type), 
                   :username_autocompleter => user_select)
       
-      exec_js("init_autocomplete_single_username();")
+      exec_js("Aurita.Main.init_autocomplete_single_username();")
     end
 
   end

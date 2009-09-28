@@ -266,7 +266,7 @@ button:hover {
 }
 
 .form_button_bar button.submit { 
-  margin-right: 6px; 
+  margin-right: 2px; 
 }
 .form_button_bar button.cancel { 
   margin-right: 0px; 

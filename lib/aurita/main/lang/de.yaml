@@ -64,6 +64,10 @@ blank_node_entry : Strukturknoten
 
 show_all : Alle anzeigen
 fulltext_search : Volltextsuche
+all_search_results : Alle Ergebnisse
+no_results : Es wurden keine &Uuml;bereinstimmungen gefunden. 
+fulltext_search_results : Ergebnisse der Volltextsuche
+
 
 public--content--category_id : Kategorie
 internal--user_profile--picture_asset_id : Bild

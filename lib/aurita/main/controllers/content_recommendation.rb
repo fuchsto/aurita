@@ -17,13 +17,13 @@ module Main
         when 'ARTICLE' then
           article = Wiki::Article.find(1).with(Wiki::Article.content_id == param(:content_id)).entity
           content_name = article.title
-          content_link = "article--#{article.article_id}"
+          content_link = "Wiki::Article/show/article_id=#{article.article_id}"
           message = tl(:article_recommendation_message)
           subject = tl(:article_recommendation_subject)
         when 'ASSET' then
           media_asset = Wiki::Media_Asset.find(1).with(Wiki::Media_Asset.content_id == param(:content_id)).entity
           content_name = media_asset.title.to_s
-          content_link = "media--#{media_asset.media_asset_id}"
+          content_link = "Wiki::Media_Asset/show/media_asset_id=#{media_asset.media_asset_id}"
           message = tl(:asset_recommendation_message)
           subject = tl(:asset_recommendation_subject)
       end
@@ -54,7 +54,7 @@ module Main
                   :content_type => param(:type), 
                   :username_autocompleter => user_select)
 
-      exec_js("init_autocomplete_single_username();")
+      exec_js("Aurita.Main.init_autocomplete_single_username();")
     end
 
   end

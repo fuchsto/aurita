@@ -25,25 +25,32 @@ module Main
   class Widget_Service_Controller < App_Controller
     
     def get
-      begin
-        widget_parts = param(:widget).to_s.split('::')
-        if widget_parts.length > 1 then       # plugin widget
-          widget = Aurita::Plugins.const_get(widget_parts[0]).const_get('GUI').const_get(widget_parts[1])
-        elsif widget_parts.length == 1 then   # main widget
-          widget = Aurita::GUI.const_get(widget_parts[0])
+      use_decorator(:async)
+
+      widget_parts = param(:widget).to_s.split('::')
+      if widget_parts.length > 1 then       # plugin widget
+        begin
+          Aurita.import_plugin_module(widget_parts[0].downcase.to_sym, "gui/#{widget_parts[1].downcase}")
+        rescue ::Exception => ignore_load_error
         end
-        ctor_args = @params.dup
-        ctor_args.delete(:request)
-        ctor_args.delete(:widget)
-        ctor_args.delete(:controller)
-        ctor_args.delete(:action)
-        ctor_args.delete(:mode)
-        instance = widget.new(ctor_args)
-        result   = instance.string
-      rescue ::Exception => e
-        exec_error_js("alert('e.message');")
+        widget = Aurita::Plugins.const_get(widget_parts[0]).const_get('GUI').const_get(widget_parts[1])
+      elsif widget_parts.length == 1 then   # main widget
+        widget = Aurita::GUI.const_get(widget_parts[0])
       end
-      puts result
+
+      raise ::Exception.new("Could not resolve widget #{param(:widget).inspect}") unless widget
+
+      ctor_args = @params.clean
+      begin
+        instance  = widget.new(ctor_args)
+      rescue ::Exception => excep
+        puts excep.message
+        excep.backtrace.each { |b|
+          puts "#{b}\n"
+        }
+        return
+      end
+      puts instance.to_s
     end
     
   end

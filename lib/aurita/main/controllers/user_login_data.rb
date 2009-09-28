@@ -73,8 +73,8 @@ module Main
       user.commit
 
       super()
-      redirect_to(:action => :update, :user_group_id => instance.pkey)
-      redirect(:target => :admin_users_box_body, :action => :admin_box_body)
+      redirect_to(:blank)
+      redirect(:target => :admin_users_box_body, :controller => 'User_Profile', :action => :admin_box_body)
     end
 
     def perform_lock

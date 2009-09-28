@@ -7,7 +7,9 @@ module Main
   class Tag_Blacklist_Controller < App_Controller
 
     def edit
-      render_view(:tag_blacklist, :tags => Tag_Blacklist.all.order_by(:tag, :asc).entities)
+      Page.new(:header => tl(:ignored_tags)) { 
+        view_string(:tag_blacklist, :tags => Tag_Blacklist.all.order_by(:tag, :asc).entities)
+      }
     end
 
     def perform_add

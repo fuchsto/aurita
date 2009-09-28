@@ -168,12 +168,27 @@ module Aurita
     # Returns all attributes specified in allowed_attribs_array. 
     # Useful when you have to allow attributes that are 
     # pre-filtered. 
-    def only(allowed_attribs_array)
+    def only(*allowed_attribs)
       filtered_attribs = Hash.new
-      allowed_attribs_array.each { |attrib|
+      allowed_attribs.each { |attrib|
         filtered_attribs[attrib] = @attributes[attrib]
       }
       return filtered_attribs
+    end
+
+    # Returns all attributes not specified in allowed_attribs_array. 
+    def without(*attribs_to_filter)
+      filtered_attribs = to_hash()
+      attribs_to_filter.each { |k|
+        filtered_attribs.delete(k.to_sym)
+      }
+      return filtered_attribs
+    end
+
+    # Returns attribute Hash without meta information 
+    # _request, _session, controller, action and mode. 
+    def clean
+      without(:_request, :_session, :controller, :action, :mode)
     end
     
     # Returns empty string instead of nil. 

@@ -56,7 +56,7 @@ code =<<JS
       autocomplete_selected_users = {}; 
       new Ajax.Autocompleter("autocomplete_username", 
                              "autocomplete_username_choices", 
-                             "/aurita/dispatch_runner.fcgi", 
+                             "/aurita/poll", 
                              { 
                                minChars: 2, 
                                updateElement: function(li) { #{@onselect} } , 
@@ -92,7 +92,7 @@ code =<<JS
       autocomplete_selected_users = {}; 
       new Ajax.Autocompleter("autocomplete_username", 
                              "autocomplete_username_choices", 
-                             "/aurita/dispatch_runner.fcgi", 
+                             "/aurita/poll", 
                              { 
                                minChars: 2, 
                                updateElement: function(li) { #{@onselect} } , 

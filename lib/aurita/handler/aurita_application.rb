@@ -149,6 +149,15 @@ module Handler
       @app = Rack::ConditionalGet.new(@app)
       @app = Rack::ContentLength.new(@app)
       @app = Rack::Chunked.new(@app) 
+
+      @far_future = 'Thu, 15 Apr 2015 20:00:00 GMT'
+    end
+
+    def call(env)
+      response = @app.call(env)
+      response[1]['Expires'] = @far_future
+      response[1].delete('Last-Modified')
+      return response
     end
   end
 

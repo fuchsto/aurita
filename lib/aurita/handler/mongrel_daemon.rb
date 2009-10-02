@@ -7,14 +7,14 @@ require 'mongrel'
 require 'yaml'
 require 'zlib'
 
-Aurita.import :handler, :mongrel
+Aurita.import :handler, :mongrel_handler
 
-# Simple Mongrel daemon for development environments. 
+# Simple Mongrel daemon. 
 # Starts Aurita project at given port. 
 # All loggers are redirected to STDERR. 
 # Example usage: 
 #
-#   sudo aurita/bin/daemon my_project 3001 > daemon.log
+#   sudo aurita/bin/mongrel_daemon my_project --port 3001 --mode development & 
 #
 # This would launch a single mongrel daemon handling 
 # an aurita application for project 'my_project' on 
@@ -38,20 +38,21 @@ class Mongrel_Daemon
   private 
 
   def setup
-    @aurita  = Aurita::Handler::Mongrel.new(:compress    => @options[:compress], 
-                                            :chunked     => @options[:chunked], 
-                                            :no_sessions => @options[:no_sessions], 
-                                            :logger      => @logger)
+    @aurita  = Aurita::Handler::Mongrel_Handler.new(:compress    => @options[:compress], 
+                                                    :chunked     => @options[:chunked], 
+                                                    :no_sessions => @options[:no_sessions], 
+                                                    :logger      => @logger)
+    root = @options[:server_root]
 
     @http_server = Mongrel::HttpServer.new(@options[:ip], @options[:port], 950, 0)
 
     # Configure Mongrel for Aurita project: 
     @http_server.register("/", @aurita)
     @http_server.register("/aurita", @aurita)
-    @http_server.register("/aurita/inc",    Aurita::Handler::Mongrel_Static.new(:root => @options[:server_root] + '/inc'))
-    @http_server.register("/aurita/assets", Aurita::Handler::Mongrel_Static.new(:root => @options[:server_root] + '/assets'))
-    @http_server.register("/aurita/images", Aurita::Handler::Mongrel_Static.new(:root => @options[:server_root] + '/images'))
-    @http_server.register("/aurita/shared", Aurita::Handler::Mongrel_Static.new(:root => @options[:server_root] + '/shared'))
+    @http_server.register("/aurita/inc",    Aurita::Handler::Mongrel_Static_Handler.new(:root => root + '/inc'))
+    @http_server.register("/aurita/assets", Aurita::Handler::Mongrel_Static_Handler.new(:root => root + '/assets'))
+    @http_server.register("/aurita/images", Aurita::Handler::Mongrel_Static_Handler.new(:root => root + '/images'))
+    @http_server.register("/aurita/shared", Aurita::Handler::Mongrel_Static_Handler.new(:root => root + '/shared'))
   end
 
   public

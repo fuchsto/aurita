@@ -9,10 +9,8 @@ require 'rack/deflater'
 require 'rack/static'
 require 'rack/session/memcache'
 require 'rack/contrib'
-require 'aurita'
-require 'aurita/base/routing'
 
-Aurita.import 'handler/dispatcher'
+Aurita.import :handler, :aurita_application
  
 module Aurita
 module Handler
@@ -79,29 +77,6 @@ module Handler
 
   end
 
-  class Aurita_Application
-
-    attr_accessor :logger
-
-    def initialize(logger=nil)
-      @logger      = logger
-      @logger    ||= ::Logger.new(STDERR) 
-      @dispatcher  = Aurita::Dispatcher.new()
-    end
-
-    public
-
-    # Rack dispatch routine. 
-    # Expects request env params, returns 
-    # [ status, response header, response body ] 
-    # of Aurita::Rack_Dispatcher instance. 
-    #
-    def call(env)
-      @dispatcher.dispatch(Rack::Request.new(Aurita::Routing.new.route(env)))
-    end
-
-  end
-
   # Aurita handler for Mongrel, derived from Mongrel::HttpHandler. 
   # Using Rack as Middleware. 
   #
@@ -110,32 +85,12 @@ module Handler
   #   http_server = Mongrel::HttpServer.new(<ip>, <port>)
   #   http_server.register('/aurita', Aurita::Handler::Mongrel.new)
   #
-  class Mongrel < ::Mongrel::HttpHandler
+  class Mongrel_Handler < ::Mongrel::HttpHandler
 
     attr_reader :logger
 
     def initialize(opts={})
-      @logger   = opts[:logger] 
-      @logger ||= ::Logger.new(STDERR)
-      @app = Aurita::Handler::Aurita_Application.new()
-      @app.logger = @logger
-      @app = Rack::ETag.new(@app)
-      @app = Rack::ConditionalGet.new(@app)
-      @app = Rack::Deflater.new(@app) 
-      @app = Rack::ContentLength.new(@app)
-
-      unless opts[:no_session] then
-        begin
-          @app = Rack::Session::Memcache.new(@app)
-        rescue ::Exception => no_memcache
-          @logger.info { "#{self.class.to_s}: Falling back to Session::Pool" }
-          @app = Rack::Session::Pool.new(@app)
-        end
-      end
-    
-      @app = Rack::Reloader.new(@app, 3) if [ :test, :development ].include?(Aurita.runmode)
-      @app = Rack::Chunked.new(@app) if opts[:chunked]
-
+      @app     = Aurita::Handler::Aurita_Application.new(opts)
       @adapter = Mongrel_Adapter.new(@app)
     end
     
@@ -145,19 +100,13 @@ module Handler
 
   end # class Aurita::Handler::Mongrel
 
-  class Mongrel_Static < ::Mongrel::HttpHandler
+  class Mongrel_Static_Handler < ::Mongrel::HttpHandler
 
     attr_reader :logger
 
     def initialize(opts={})
-      @app = Rack::File.new(opts[:root])
-      @app = Rack::Deflater.new(@app) 
-      @app = Rack::ETag.new(@app)
-      @app = Rack::ConditionalGet.new(@app)
-      @app = Rack::ContentLength.new(@app)
-      @app = Rack::Chunked.new(@app) 
-
-      far_future = 'Thu, 15 Apr 2010 20:00:00 GMT'
+      @app       = Aurita::Handler::Aurita_File_Application.new(opts)
+      far_future = 'Thu, 15 Apr 2015 20:00:00 GMT'
       @adapter   = Mongrel_Adapter.new(@app, 'Expires' => far_future)
     end
     

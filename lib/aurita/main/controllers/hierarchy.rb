@@ -71,7 +71,7 @@ module Main
     end
 
 
-    def list(params)
+    def list(params={})
       params[:perspective] = 'GENERAL' unless params[:perspective]
       hierarchy_boxes(params[:perspective])
     end

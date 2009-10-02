@@ -157,8 +157,8 @@ module GUI
   
     def initialize(hierarchy_map)
       @entry_map = hierarchy_map
-      @string = recurse('0')
-      @dom_id = 'accordion_hierarchy'
+      @string    = recurse('0')
+      @dom_id    = 'accordion_hierarchy'
     end
 
     def recurse(parent_id, indent=1)
@@ -235,23 +235,31 @@ module GUI
 
     def initialize(hierarchy_map)
       @context_menu_model = ''
-      @hierarchy = hierarchy_map
-      @string = ''
-      @entry_model = @hierarchy.entry_model
-      @entry_decorator = Hierarchy_Entries_Default_Decorator
-      @entries_string = ''
-      build()
+      @hierarchy          = hierarchy_map
+      @string             = ''
+      @entry_model        = @hierarchy.entry_model
+      @entry_decorator    = Hierarchy_Entries_Default_Decorator
+      @entries_string     = ''
+    end
+
+    def string
+      @string || build()
+    end
+
+    def rebuild
+      @string = false
     end
 
     def build()
       @entries_string = @entry_decorator.new(@hierarchy).string
       box = Box.new(:entity => @hierarchy, 
-                    :class => :topic, 
-                    :id => @dom_id.to_s)
+                    :class  => :topic, 
+                    :id     => @dom_id.to_s)
       box.header = @header.to_s
       begin
-        box.body = Aurita::Main::App_Controller.view_string(:hierarchy, :entries => @entries_string)
+        box.body = @entries_string
         @string = box.string
+        return @string
       rescue ::Exception => e
       end
     end
@@ -290,40 +298,11 @@ module GUI
   extend Aurita::GUI
   include Aurita::GUI
 
-    attr_reader :string, :entries_string
-    attr_accessor :entry_decorator, :dom_id, :context_menu_params, :header, :context_menu_model
-    
-    @entries_string
-
-  protected
-    @string
-    @hierarchy
-    @entry_model
-
-  public
-
     def initialize(hierarchy_map)
-      @context_menu_model = ''
-      @hierarchy = hierarchy_map
-      @string = ''
-      @entry_model = @hierarchy.entry_model
+      super()
       @entry_decorator = Hierarchy_Entries_Accordion_Decorator
-      @entries_string = ''
-      build()
     end
 
-    def build()
-      @entries_string = @entry_decorator.new(@hierarchy).string
-      box = Box.new(:entity => @hierarchy, 
-                    :class => :topic, 
-                    :id => @dom_id.to_s)
-      box.header = @header.to_s
-      begin
-        box.body = @entries_string
-        @string = box.string
-      rescue ::Exception => e
-      end
-    end
   end # }}} 
 
 end

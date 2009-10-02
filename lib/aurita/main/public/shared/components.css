@@ -1430,6 +1430,14 @@ div.calculation_totals .totals {
   margin-left: 2px; 
   margin-top: 3px; 
 }
+
+.media_asset_thumbnail .image { 
+  height: 120px; 
+  text-align: center; 
+  padding: 2px; 
+  background: url('/aurita/images/icons/loading.gif') no-repeat scroll 88px 11px; 
+}
+
 .media_asset_thumbnail.tiny { 
   width: 180px; 
   background-color: white; 
@@ -1437,11 +1445,12 @@ div.calculation_totals .totals {
   margin-left: 4px; 
   margin-bottom: 3px; 
 }
-.media_asset_thumbnail .image { 
-  height: 120px; 
-  text-align: center; 
-  padding: 2px; 
-  background: url('/aurita/images/icons/loading.gif') no-repeat scroll 88px 11px; 
+.media_asset_selection .media_asset_thumbnail.tiny { 
+  width: 100px; 
+  height: 127px; 
+}
+.media_asset_selection .media_asset_thumbnail.tiny .image { 
+  background: url('/aurita/images/icons/loading.gif') no-repeat scroll 40px 11px; 
 }
 .media_asset_thumbnail.tiny .image { 
   height: 70px; 
@@ -1462,6 +1471,7 @@ div.calculation_totals .totals {
 }
 .media_asset_thumbnail .info { 
   padding: 3px;
+  padding-left: 7px;
   height: 70px; 
   overflow: hidden; 
 }
@@ -1657,7 +1667,7 @@ div.near_column {
   height: 100%; 
 }
 .box_hierarchy_entry_level_1 .label { 
-  padding-left: 31px; 
+  padding-left: 22px; 
 }
 .box_hierarchy_entry_level_2 .label { 
   padding-left: 42px; 

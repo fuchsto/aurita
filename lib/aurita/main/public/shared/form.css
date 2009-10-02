@@ -528,21 +528,21 @@ fieldset legend {
   margin-left: 3px; 
 }
 .section_content fieldset { 
-  border: 1px solid #efefef; 
+  border: 1px solid #dfdfdf; 
   padding: 10px; 
   margin: 0px; 
   margin-top: 29px; 
   margin-bottom: 0px; 
-  background-color: #ffffff; 
+  background-color: #fafafa; 
 }
 .section_content fieldset legend { 
   font-size: 12px; 
   padding: 4px 18px 6px; 
   margin-left: -11px; 
   margin-top: -27px; 
-  border: 1px solid #efefef; 
+  border: 1px solid #dfdfdf; 
   border-bottom: 1px solid transparent; 
-  background-color: #ffffff; 
+  background-color: #fafafa; 
 }
 .section_content form { 
   padding: 10px; 

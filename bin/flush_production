@@ -37,12 +37,6 @@ echo -ne "Deleting cache ...\t\t\t\t\t\t"
 $CMDPREF find /tmp/ -name 'lore_cache__*' -exec rm -f {} \; >/dev/null
 test_success
 
-if [ "$1" = '-a' ]; then
-echo -ne "Stopping lighttpd  ... \t\t\t\t\t\t"
-$CMDPREF /etc/init.d/lighttpd stop
-test_kill
-fi
-
 echo -ne "Setting permissions ... \t\t\t\t\t"
 $CMDPREF chown -R www-data:www-data /var/log/aurita
 $CMDPREF chmod -R 777 /var/log/aurita
@@ -59,11 +53,4 @@ $CMDPREF `dirname $0`/flush_cluster maecki 3009 3010
 $CMDPREF `dirname $0`/flush_cluster gnaier 3011 3012
 $CMDPREF `dirname $0`/flush_cluster wortundform 3013 3014
 $CMDPREF `dirname $0`/flush_cluster cfmaier 3015 3016
-# $CMDPREF `dirname $0`/flush_cluster demo 3020 3021
-
-if [ "$1" = '-a' ]; then
-echo -ne "Restarting lighttpd ... \n"
-$CMDPREF /etc/init.d/lighttpd start >/var/log/aurita/server_production.log 2>&1
-test_success
-fi
 

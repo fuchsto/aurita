@@ -42,15 +42,18 @@ module Aurita
 
     def setup
 
-      @aurita = Aurita_Application.new(@options)
+      @aurita_std  = Aurita_Application.new(@options)
+      @aurita_poll = Aurita_Poller_Application.new(@options)
       root = @options[:server_root]
 
-      app = Rack::URLMap.new('/'              => @aurita, 
-                             '/aurita'        => @aurita, 
-                             '/aurita/inc'    => Aurita_File_Application.new(root+'/inc'), 
-                             '/aurita/shared' => Aurita_File_Application.new(root+'/shared'), 
-                             '/aurita/assets' => Aurita_File_Application.new(root+'/assets'), 
-                             '/aurita/images' => Aurita_File_Application.new(root+'/images'))
+      app = Rack::URLMap.new('/'                      => @aurita_std, 
+                             '/aurita'                => @aurita_std, 
+                             '/aurita'                => @aurita_std, 
+                             '/aurita/poll'           => @aurita_poll, 
+                             '/aurita/inc'            => Aurita_File_Application.new(root+'/inc'), 
+                             '/aurita/shared'         => Aurita_File_Application.new(root+'/shared'), 
+                             '/aurita/assets'         => Aurita_File_Application.new(root+'/assets'), 
+                             '/aurita/images'         => Aurita_File_Application.new(root+'/images'))
 
       @http_server = Thin::Server.new(@options[:ip], @options[:port], app) 
 

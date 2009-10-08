@@ -75,8 +75,9 @@ module Handler
   #
   # Uses several middlewares that are sensible in nearly every 
   # case, like ETag, Session (memcache or pool, preferring memcache), 
-  # Reloader (in :test and :development mode), Chunked, Deflater
-  # and ConditionalGet. 
+  # Reloader (in :test and :development mode), Chunked, and ConditionalGet. 
+  # Deflater and Chunked can be enabled / disabled by setting options 
+  # :compress and :chunked to true or false. 
   #
   class Aurita_Application < Aurita_Rack_Application
     def initialize(options={})
@@ -88,7 +89,7 @@ module Handler
       @app = Aurita::Handler::Aurita_Dispatch_Application.new(@logger)
       @app = Rack::ETag.new(@app)
       @app = Rack::ConditionalGet.new(@app)
-      @app = Rack::Deflater.new(@app) 
+      @app = Rack::Deflater.new(@app) if @options[:compress]
       @app = Rack::ContentLength.new(@app)
 
       unless options[:no_session] then

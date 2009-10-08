@@ -27,6 +27,7 @@ gatling   = false
 short     = false
 killold   = false
 verbosive = false
+deflate   = false
 
 opts.each { |opt, arg| 
   case opt
@@ -122,7 +123,7 @@ OPTIONS = {
   :port            => port,
   :ip              => "0.0.0.0",
   :server_root     => Aurita.project.base_path + '/public/', 
-  :compress        => true, 
+  :compress        => deflate, 
   :mode            => mode, 
   :chunked         => true
 }

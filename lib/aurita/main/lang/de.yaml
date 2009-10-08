@@ -342,4 +342,6 @@ error_header : Ein Fehler ist aufgetreten
 
 passwords_do_not_match : Die Passworte sind nicht identisch
 
+file_has_been_deleted : Datei wurde gel&ouml;scht
+article_has_been_deleted : Artikel wurde gel&ouml;scht
 

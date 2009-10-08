@@ -568,3 +568,15 @@ fieldset legend {
 .selection_list_field ul { 
   padding-bottom: 2px !important; 
 }
+
+
+
+
+#context_menu ul.form_fields input, #context_menu ul.form_fields textarea, #context_menu ul.form_fields select { 
+  background-color: #ffffff; 
+}
+
+#context_menu .selection_list_field {
+  border:1px solid #ffffff;
+  background-color: #fafafa;
+}

@@ -20,14 +20,15 @@ module Console
       assets = Wiki::Media_Asset.all_with(Wiki::Media_Asset.media_asset_id >= @media_asset_id_from) if @media_asset_id_from
       assets = Wiki::Media_Asset.all_with((Wiki::Media_Asset.media_asset_id >= @media_asset_id_from) &
                                           (Wiki::Media_Asset.media_asset_id <= @media_asset_id_to)) if @media_asset_id_to
+      variant = { :website => Wiki::Media_Asset_Importer.image_variants[:website] }
       assets.sort_by(:media_asset_id, :asc).each { |media_asset|
         asset_id = media_asset.media_asset_id
 
         destfile = Aurita.project_path + "public/assets/<variants>/asset_#{asset_id}.jpg"
         if media_asset && media_asset.has_preview? then
-          puts "Importing #{media_asset.id}"
+          puts "Importing #{media_asset.pkey}"
           begin
-            Wiki::Image_Manipulation.new(media_asset).create_image_variants(Wiki::Media_Asset_Importer.image_variants)
+            Wiki::Image_Manipulation.new(media_asset).create_image_variants(variant)
           rescue ::Exception => e
             puts e.message
           end

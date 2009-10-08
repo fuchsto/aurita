@@ -26,7 +26,7 @@ module Main
     
     def get
       use_decorator(:async)
-
+      
       widget_parts = param(:widget).to_s.split('::')
       if widget_parts.length > 1 then       # plugin widget
         begin
@@ -35,11 +35,12 @@ module Main
         end
         widget = Aurita::Plugins.const_get(widget_parts[0]).const_get('GUI').const_get(widget_parts[1])
       elsif widget_parts.length == 1 then   # main widget
+        Aurita.import_module :gui, widget_parts[0].downcase
         widget = Aurita::GUI.const_get(widget_parts[0])
       end
-
+      
       raise ::Exception.new("Could not resolve widget #{param(:widget).inspect}") unless widget
-
+      
       ctor_args = @params.clean
       begin
         instance  = widget.new(ctor_args)

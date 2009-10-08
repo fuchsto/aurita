@@ -1,3 +1,4 @@
+
 require('aurita/controller')
 require('aurita-gui/javascript')
 Aurita.import_module :gui, :context_menu
@@ -45,7 +46,6 @@ module Main
       puts '&nbsp;'
     end
 
-    
     def login
       exec_js("Effect.Appear('login_box', { afterFinish: function() { $('login').focus(); } }); ")
       render_view(:login)
@@ -146,7 +146,7 @@ module Main
         i.where((Component_Position.user_group_id == Aurita.user.user_group_id) &
                 (Component_Position.gui_context == 'workspace_components'))
         i.order_by(:position, :asc)
-      }.flatten
+      }.flatten.map { |dom_id| "component_#{dom_id}" }
       log { "Positions are: #{positions.inspect}" } 
 
       # Maps dom_id to their components
@@ -171,7 +171,7 @@ module Main
 
       result = []
       positions.each { |dom_id|
-        result << components["component_#{dom_id}"]
+        result << components[dom_id]
       }
 
       puts HTML.ul(:id => 'workspace_components', :class => 'no_bullets' ) { result.join("\n") }.string
@@ -278,7 +278,7 @@ module Main
 
     def find_all
       components = plugin_get(Hook.main.find_all, :key => param(:key))
-      components = HTML.div { tl(:no_results) } if components.first.nil? 
+      components = [ HTML.div { tl(:no_results) } ] if components.first.nil? 
 
       Page.new(:header => tl(:all_search_results)) { 
         components.map { |c| c.string }.join('')
@@ -288,7 +288,7 @@ module Main
 
     def find_full
       components = plugin_get(Hook.main.find_full, :key => param(:key))
-      components = HTML.div { tl(:no_results) } if components.first.nil? 
+      components = [ HTML.div { tl(:no_results) } ] if components.first.nil? 
 
       Page.new(:header => tl(:fulltext_search_results)) { 
         components.map { |c| c.string }.join('')

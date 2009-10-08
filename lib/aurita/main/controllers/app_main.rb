@@ -140,21 +140,41 @@ module Main
     # set_http_header('Pragma' => 'no-cache');
     # @request.out('Cache-Control' => 'no-store, no-cache, must-revalidate, post-check=0,pre-check=0')
       
-      set_http_header('expires' => Time.now-24*60*60)
+    # set_http_header('expires' => Time.now-24*60*60)
+      
+      positions  = Component_Position.select_values(:component_dom_id) { |i|
+        i.where((Component_Position.user_group_id == Aurita.user.user_group_id) &
+                (Component_Position.gui_context == 'workspace_components'))
+        i.order_by(:position, :asc)
+      }.flatten
+      log { "Positions are: #{positions.inspect}" } 
 
-      result = ''
-      count = 0
+      # Maps dom_id to their components
+      components = {}
+      sorted     = []
       plugin_get(Hook.main.workspace.top).each { |component|
         component.sortable = true if component.respond_to?(:sortable) 
-        result << HTML.li(:id => 'component_' << component.dom_id.to_s) { component.string }.string
-        count += 1
+        dom_id = 'component_' << component.dom_id.to_s
+        sorted << dom_id 
+        components[dom_id] = HTML.li(:id => dom_id) { component.string }.string
       }
       plugin_get(Hook.main.workspace).each { |component|
         component.sortable = true if component.respond_to?(:sortable) 
-        result << HTML.li(:id => 'component_' << component.dom_id.to_s) { component.string }.string
-        count += 1
+        dom_id = 'component_' << component.dom_id.to_s
+        sorted << dom_id 
+        components[dom_id] = HTML.li(:id => dom_id) { component.string }.string
       }
-      puts HTML.ul(:id => 'workspace_components', :class => 'no_bullets' ) { result }.string
+
+      if positions.length == 0 then
+        positions = sorted
+      end
+
+      result = []
+      positions.each { |dom_id|
+        result << components["component_#{dom_id}"]
+      }
+
+      puts HTML.ul(:id => 'workspace_components', :class => 'no_bullets' ) { result.join("\n") }.string
       exec_js("Aurita.GUI.init_sortable_components('workspace_components', { handle: 'box_sort_handle' } ); ")
       exec_js("Aurita.GUI.init_sortable_components('recent_category_changes', { handle: 'box_sort_handle' } ); ")
     end
@@ -166,17 +186,35 @@ module Main
     end
 
     def recent_changes
-      count = 0
-      result = HTML.ul(:class => :no_bullets, :id => :recent_category_changes) { } 
-      Aurita.user.categories.each { |cat| 
+      count      = 0
+      result     = HTML.ul(:class => :no_bullets, :id => :recent_category_changes) { } 
+      # Load GUI component positions: 
+      positions  = Component_Position.select_values(:component_dom_id) { |i|
+        i.where((Component_Position.user_group_id == Aurita.user.user_group_id) &
+                (Component_Position.gui_context == 'recent_category_changes'))
+        i.order_by(:position, :asc)
+      }.flatten.map { |dom_id| dom_id.split('_').last.to_i }
+
+      # Map categories to Hash, so we can iterate over positions
+      categories = {}
+      Aurita.user.categories.each { |c|
+        categories[c.category_id] = c
+      }
+      # If there aren't any user defined positions, default them to 
+      # their natural order: 
+      if positions.length == 0 then
+        positions = categories.keys
+      end
+      
+      positions.each { |cat_id|
+        cat = categories[cat_id]
         cat_result = ''
-        components = plugin_get(Hook.main.workspace.recent_changes_in_category, :category_id => cat.category_id)
+        components = plugin_get(Hook.main.workspace.recent_changes_in_category, :category_id => cat_id)
         components.each { |component|
           cat_result << HTML.span(:id => 'component_' << count.to_s) { component.string }.string
           count += 1
         }
         if components.length > 0 then
-          cat_id = cat.category_id
           box = Box.new(:type     => :category, 
                         :class    => :topic_inline, 
                         :sortable => true, 
@@ -184,7 +222,7 @@ module Main
                         :params   => { :category_id => cat_id } )
           box.header = tl(:category) + ' ' << cat.category_name 
           box.body = cat_result
-          result << HTML.li(:id => "component_category_box_#{cat.category_id}") { box.string }.string
+          result << HTML.li(:id => "component_category_box_#{cat_id}") { box.string }.string
           count += 1
         end
       }

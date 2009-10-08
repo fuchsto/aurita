@@ -16,11 +16,12 @@ module Main
         c.where((c.user_group_id == Aurita.user.user_group_id) &
                 (c.gui_context == param(:context)))
       }
-      param(:component, []).each_with_index { |c,idx|
-        Component_Position.create(:position      => idx, 
-                                  :context       => param(:context), 
-                                  :user_group_id => Aurita.user.user_group_id, 
-                                  :component     => c)
+      context = param(:context).to_sym
+      param(context, []).each_with_index { |c,idx|
+        Component_Position.create(:position         => idx, 
+                                  :gui_context      => param(:context), 
+                                  :user_group_id    => Aurita.user.user_group_id, 
+                                  :component_dom_id => c)
       }
     end
     alias set perform_update

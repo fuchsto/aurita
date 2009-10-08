@@ -3,9 +3,29 @@ require('aurita/config.rb')
 require('logger')
 
 module Aurita
+class Configuration
+
+  def self.run_log_path
+    @@run_log_path
+  end
+  def self.sys_log_path
+    @@sys_log_path
+  end
+  def self.run_log_path=(file)
+    @@run_log_path = file
+    @@system_logger = Aurita::Log::System_Logger.new('Aurita')
+  end
+  def self.sys_log_path=(file)
+    @@sys_log_path = file
+    @@system_logger = Aurita::Log::System_Logger.new('Aurita')
+  end
+end
+
 module Log
 
   class System_Logger 
+
+    attr_accessor :scope, :logger
     
     def log(message=nil, &block)
       return if @disabled 
@@ -15,7 +35,7 @@ module Log
 
     private
     def format_message(message)
-      "[ aurita ] #{ message}"
+      "[ #{@scope} ] #{ message}"
     end
 
     public
@@ -28,7 +48,6 @@ module Log
     def disabled?
       (@disabled == true)
     end
-  
 
     public
     def debug(mesg=nil, &block)
@@ -51,6 +70,7 @@ module Log
     def initialize(name)
       @logger = ::Logger.new(Aurita::Configuration.sys_log_path)
       @logger.level = ::Logger::DEBUG
+      @scope  = 'aurita'
       if Aurita::Configuration.sys_log_path then
         @name = name.to_s
         @disabled = false

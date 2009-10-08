@@ -333,7 +333,7 @@ JS
       end
       def element
         readonly_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_readonly", 
-                                                            :options => { true => tl(:readonly_permission) }, 
+                                                            :options => { 'true' => tl(:readonly_permission) }, 
                                                             :value => @readonly_permission ).element
         readonly_checkbox.each { |e| 
           e.first.onclick = "Aurita.call('User_Category/toggle_readonly/user_group_id=#{@value}&category_id=#{@category.category_id}');"
@@ -341,7 +341,7 @@ JS
 
         HTML.div { 
           HTML.span(:class => :link, 
-                    :onclick => "Aurita.load({ element: 'dispatcher', 
+                    :onclick => "Aurita.call({ method: 'POST', 
                                                onload: function() { Aurita.load({ element: 'user_category_list', 
                                                                                   action: 'User_Category/user_list/category_id=#{@category.category_id}' }); }, 
                                                action: 'User_Category/perform_delete/user_group_id=#{@value}&category_id=#{@category.category_id}' });") { 'X ' } + 

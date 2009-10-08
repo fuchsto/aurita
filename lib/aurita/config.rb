@@ -30,19 +30,6 @@ module Aurita
     def self.plugins_path
       @@plugins_path
     end
-    def self.run_log_path
-      @@run_log_path
-    end
-    def self.sys_log_path
-      @@sys_log_path
-    end
-    def self.run_log_path=(file)
-      @@run_log_path = file
-    end
-    def self.sys_log_path=(file)
-      @@sys_log_path = file
-    end
-
   end
 
 end

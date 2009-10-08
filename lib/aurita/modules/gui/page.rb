@@ -8,21 +8,29 @@ module GUI
   class Page < Widget
   include I18N_Helpers
 
-    attr_accessor :header, :tools, :content
+    attr_accessor :header, :tools, :content, :sortable
 
     def initialize(params={}, &block)
-      @header  = params[:header]
-      @tools   = params[:tools]
+      @header   = params[:header]
+      @tools    = params[:tools]
       params.delete(:header)
-      @content = yield
+      @content  = yield
+      @params   = params
+      @sortable = params[:sortable]
+      @sortable = false unless Aurita.user.is_registered?
+      params.delete(:sortable)
       super()
     end
 
     def element
+      if @sortable then
+        @tools ||= []
+        @tools << HTML.img(:src => '/aurita/images/icons/move.gif', :class => [ :moveable, :box_sort_handle ])
+      end
       tools = HTML.div.section_header_right { @tools } if @tools
       head  = HTML.div.section_header_left  { HTML.h1 { @header } } 
       head  = tools + head if tools
-      HTML.div.section_header { 
+      HTML.div.section_header(:id => @params[:id]) { 
         head + 
         HTML.div(:style => 'clear: both;') +
         HTML.div.section_content { @content } 

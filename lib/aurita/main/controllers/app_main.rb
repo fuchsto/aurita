@@ -145,14 +145,18 @@ module Main
       result = ''
       count = 0
       plugin_get(Hook.main.workspace.top).each { |component|
-        result << HTML.li(:id => 'component_' << count.to_s) { component.string }.string
+        component.sortable = true if component.respond_to?(:sortable) 
+        result << HTML.li(:id => 'component_' << component.dom_id.to_s) { component.string }.string
         count += 1
       }
       plugin_get(Hook.main.workspace).each { |component|
-        result << HTML.span(:id => 'component_' << count.to_s) { component }.string
+        component.sortable = true if component.respond_to?(:sortable) 
+        result << HTML.li(:id => 'component_' << component.dom_id.to_s) { component.string }.string
         count += 1
       }
       puts HTML.ul(:id => 'workspace_components', :class => 'no_bullets' ) { result }.string
+      exec_js("Aurita.GUI.init_sortable_components('workspace_components', { handle: 'box_sort_handle' } ); ")
+      exec_js("Aurita.GUI.init_sortable_components('recent_category_changes', { handle: 'box_sort_handle' } ); ")
     end
 
     def frontpage
@@ -163,7 +167,7 @@ module Main
 
     def recent_changes
       count = 0
-      result = HTML.ul.no_bullets { } 
+      result = HTML.ul(:class => :no_bullets, :id => :recent_category_changes) { } 
       Aurita.user.categories.each { |cat| 
         cat_result = ''
         components = plugin_get(Hook.main.workspace.recent_changes_in_category, :category_id => cat.category_id)
@@ -173,20 +177,23 @@ module Main
         }
         if components.length > 0 then
           cat_id = cat.category_id
-          box = Box.new(:type => :category, 
-                        :class => :topic_inline, 
-                        :id => "category_#{cat_id}", 
-                        :params => { :category_id => cat_id } )
+          box = Box.new(:type     => :category, 
+                        :class    => :topic_inline, 
+                        :sortable => true, 
+                        :id       => "category_#{cat_id}", 
+                        :params   => { :category_id => cat_id } )
           box.header = tl(:category) + ' ' << cat.category_name 
           box.body = cat_result
-          result << HTML.li(:id => "component_#{count}") { box.string }.string
+          result << HTML.li(:id => "component_category_box_#{cat.category_id}") { box.string }.string
           count += 1
         end
       }
       return unless count > 0
-      return Page.new(:header => tl(:recent_changes)) { result } 
+      return Page.new(:header   => tl(:recent_changes), 
+                      :sortable => true, 
+                      :id       => :recent_changes_page) { result } 
     end
-
+    
     def tag_index
       view_string(:tag_index, :tags => Tag_Index.all.entities)
     end
@@ -222,7 +229,6 @@ module Main
       use_decorator(:blank)
       set_http_header('expires' => Time.now-24*60*60)
 
-      log('logout user')
       Aurita.session.close()
 
       render_view(:after_logout)
@@ -234,7 +240,7 @@ module Main
 
     def find_all
       components = plugin_get(Hook.main.find_all, :key => param(:key))
-      components = tl(:no_results) if components.first.nil? 
+      components = HTML.div { tl(:no_results) } if components.first.nil? 
 
       Page.new(:header => tl(:all_search_results)) { 
         components.map { |c| c.string }.join('')
@@ -244,7 +250,7 @@ module Main
 
     def find_full
       components = plugin_get(Hook.main.find_full, :key => param(:key))
-      components = tl(:no_results) if components.first.nil? 
+      components = HTML.div { tl(:no_results) } if components.first.nil? 
 
       Page.new(:header => tl(:fulltext_search_results)) { 
         components.map { |c| c.string }.join('')

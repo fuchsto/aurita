@@ -32,14 +32,14 @@ module Cache
     def initialize(controller_class)
       @controller       = controller_class
       @dependencies     = []
-      @ignored_params   = [:controller, :action, :mode, :_request, :_session]
+      @ignored_params   = [:controller, :action, :mode, :_controller, :_request, :_session]
     end
 
     def depends_on(*models)
       @dependencies = models
     end
 
-    def store(params={}, &bock)
+    def store(params={}, &block)
       cache_content = yield
       File.open(Aurita.project.base_path + 'cache/' + cache_name(params), "w") { |f|
         f.write(Marshal.dump(cache_content))
@@ -82,7 +82,7 @@ module Cache
     def cache_name(params={})
       param_parts = []
       params.each_pair { |k,v| 
-        param_parts << "#{k}-#{v}" unless @ignored_params.include?(k)
+        param_parts << "#{k}-#{v}" unless @ignored_params.include?(k.to_sym)
       }
       params_string = param_parts.join('_')
       

@@ -234,9 +234,10 @@ class Aurita::Base_Controller
   # Also renders invalid model parameters to GUI output. 
   # Also see Base_Controller.notify_invalid_params. 
   #
-  def call_guarded(method, args=[])
+  def call_guarded(method, *args)
   # {{{
-    log('Guarded call of ' << self.class.to_s + '.' << method.to_s)
+    log { "Guarded call of #{self.class.to_s}.#{method.to_s}" }
+    args = args.flatten
     
     method = method.to_sym
     permission = true
@@ -250,8 +251,6 @@ class Aurita::Base_Controller
     if permission then
       begin
         raise ::Exception.new("No such method: #{self.class.to_s}.#{method}") unless (respond_to?(method) || self.class.respond_to?(method))
-
-        log('Guards passed')
 
         Aurita::Plugin_Register.call(Hook.__send__(self.class.to_s.downcase.gsub('::','__')).__send__("before_#{method}"), self)
         
@@ -267,7 +266,7 @@ class Aurita::Base_Controller
           if result then
             @response = result
             log('Controller cache hit') 
-            return
+            return # @response
           else 
             log('Controller cache miss') 
             result = __send__(method, *args) 
@@ -278,7 +277,7 @@ class Aurita::Base_Controller
             controller_cache.store(cache_params) { @response } 
           end
         else
-          log('No controller cache')
+          log('No controller cache defined')
           result = __send__(method, *args) 
         end
         
@@ -296,7 +295,10 @@ class Aurita::Base_Controller
         ikp.log()
         notify_invalid_params(ikp)
       rescue ::Exception => excep
-        log('Exception: ' << excep.inspect)
+        log('Exception: ' << excep.message)
+        excep.backtrace.each { |l|
+          log(l)
+        }
         raise excep
       end
     else
@@ -518,7 +520,7 @@ class Aurita::Base_Controller
   #   end
   #
   def self.method_missing(meth, *params)
-    result = self.new.call_guarded(meth, params) 
+    result = self.new.call_guarded(meth, *params) 
     return result
   end
 

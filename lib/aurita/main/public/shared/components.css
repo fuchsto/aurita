@@ -541,6 +541,11 @@ tr.highlighted td {
   background-color: #dedede; 
   background: url('/aurita/images/icons/box_header_bg.png'); 
 }
+
+.section_content .box_header { 
+  background: transparent url('/aurita/images/icons/box_header_bright_bg.png') repeat-x scroll 0 0;
+}
+
 .box_header .header {
   font-family: Verdana, sans-serif; 
 }

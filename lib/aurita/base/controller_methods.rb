@@ -209,22 +209,6 @@ module Aurita
 
     public
 
-    # Enforce HTTP caching of this request in the client's browser 
-    # by setting HTTP headers 'Expires' and 'Last-Modified' 
-    # appropriately. 
-    def force_http_cache
-      @response[:force_cache] = true
-      @response[:no_cache]    = false
-    end
-
-    # Forbid HTTP caching of this request in the client's browser 
-    # by setting HTTP headers 'Expires' and 'Last-Modified' 
-    # appropriately. 
-    def no_http_cache
-      @response[:force_cache] = false
-      @response[:no_cache]    = true
-    end
-
     # Set HTTP response header entries. 
     # Example: 
     #
@@ -257,6 +241,23 @@ module Aurita
     #
     def set_content_type(type)
       set_http_header('type' => type)
+    end
+
+    # Enforce HTTP caching of this request in the client's browser 
+    # by setting HTTP headers 'Expires' and 'Last-Modified' 
+    # appropriately. 
+    def force_http_cache
+      set_http_header('expires'       => (Time.now + (100 * 24 * 60 * 60)).to_s, 
+                      'Last-Modified' => (Time.now - (1 * 24 * 60 * 60)).to_s)
+    end
+
+    # Forbid HTTP caching of this request in the client's browser 
+    # by setting HTTP headers 'Expires' and 'Last-Modified' 
+    # appropriately. 
+    def no_http_cache
+      set_http_header('expires'       => (Time.now - (1 * 24 * 60 * 60)).to_s,
+                      'Last-Modified' => (Time.now).to_s, 
+                      'pragma'        => 'No-cache')
     end
 
     # Ajax redirect. 
@@ -476,6 +477,25 @@ module Aurita
         GC.disable
         raise excep
       end
+    end # }}} 
+
+    def send_file(file, as_filename=nil)
+    # {{{
+      filename = as_filename
+      filesize = 0
+      case file
+      when String then
+         filesize   = File.size(file)
+         filename ||= File.basename(file)
+      when File then
+         filesize   = file.size
+         filename ||= file.basename
+      end
+      set_http_header('Content-Type'        => "application/force-download", 
+                      'Content-Disposition' => "attachment; filename=\"#{filename}\"", 
+                      'Content-Length'      => filesize, 
+                      "X-Aurita-Sendfile"   => filename, 
+                      "X-Aurita-Filesize"   => filesize)
     end # }}} 
 
     private
@@ -700,7 +720,6 @@ module Aurita
       form.readonly! 
       render_form(form)
     end # def }}}
-
 
   end # class
 

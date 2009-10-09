@@ -10,6 +10,7 @@ Aurita.import_module :gui, :erb_template
 Aurita.import_module :gui, :async_form_decorator
 Aurita.import_module :cache, :simple
 Aurita.import(:base, :plugin_register)
+Aurita.import(:base, :controller_response)
 
 
 # All controller classes are derived from Aurita::Base_Controller. 
@@ -237,77 +238,99 @@ class Aurita::Base_Controller
   def call_guarded(method, *args)
   # {{{
     log { "Guarded call of #{self.class.to_s}.#{method.to_s}" }
-    args = args.flatten
-    
-    method = method.to_sym
+
+    args       = args.flatten
+    method     = method.to_sym
     permission = true
+    result     = nil
+
     if self.class.guards_for(method) then
       self.class.guards_for(method).each { |g| 
         permission = permission && (g.call(self))
       }
     end
     
-    result = nil
-    if permission then
-      begin
-        raise ::Exception.new("No such method: #{self.class.to_s}.#{method}") unless (respond_to?(method) || self.class.respond_to?(method))
-
-        Aurita::Plugin_Register.call(Hook.__send__(self.class.to_s.downcase.gsub('::','__')).__send__("before_#{method}"), self)
-        
-        controller_cache = self.class.cache
-        cached_actions   = self.class.cached_actions
-
-        if cached_actions.include?(method.to_sym) then
-          cache_params = @params.to_hash.update(:action => method)
-
-          log('Using controller cache ' << controller_cache.inspect) 
-          result = controller_cache.get(cache_params)
-          log('Cached response found') if result
-          if result then
-            @response = result
-            log('Controller cache hit') 
-            return # @response
-          else 
-            log('Controller cache miss') 
-            result = __send__(method, *args) 
-            if @response[:html] == '' && result.respond_to?(:string) then
-              @response[:html]    = result.string 
-              @response[:script] << result.script if result.respond_to?(:script)
-            end
-            controller_cache.store(cache_params) { @response } 
-          end
-        else
-          log('No controller cache defined')
-          result = __send__(method, *args) 
-        end
-        
-        after_hooks = self.class.hooks_after(method)
-        if after_hooks then 
-          log("Calling hook after method #{method}")
-          after_hooks.each { |hook| hook.call(self) }
-        end
-
-        Aurita::Plugin_Register.call(Hook.__send__(self.class.to_s.downcase.gsub('::','__')).__send__("after_#{method}"), self)
-
-        log('Call finished')
-      rescue Lore::Exceptions::Validation_Failure => ikp
-        log('Validation failure in call_guarded')
-        ikp.log()
-        notify_invalid_params(ikp)
-      rescue ::Exception => excep
-        log('Exception: ' << excep.message)
-        excep.backtrace.each { |l|
-          log(l)
-        }
-        raise excep
-      end
-    else
+    if !permission then
       raise Aurita::Auth_Exception.new('No permission to call \'' << method.to_s + '\'')
+    end
+    if !(respond_to?(method) || self.class.respond_to?(method)) then
+      raise ::Exception.new("No such method: #{self.class.to_s}.#{method}") 
+    end
+
+    begin
+
+      Aurita::Plugin_Register.call(Hook.__send__(self.class.to_s.downcase.gsub('::','__')).__send__("before_#{method}"), self)
+      
+      controller_cache = self.class.cache
+      cached_actions   = self.class.cached_actions
+
+      if cached_actions.include?(method.to_sym) then
+        cache_params = @params.to_hash.update(:action => method)
+
+        log('Using controller cache ' << controller_cache.inspect) 
+        cached = controller_cache.get(cache_params)
+        if cached then
+          log('Controller cache hit') 
+          result    = cached[:result]
+          @response = cached[:response] 
+          return result
+        else 
+          log('Controller cache miss') 
+          result    = __send__(method, *args)
+          controller_cache.store(cache_params) { { :response => @response, 
+                                                   :result   => result } } 
+        end
+      else
+        log('No controller cache defined')
+        result = __send__(method, *args)
+      end
+
+      @response = Controller_Response.unify(result, @response)
+      
+      after_hooks = self.class.hooks_after(method)
+      if after_hooks then 
+        log("Calling hook after method #{method}")
+        after_hooks.each { |hook| hook.call(self) }
+      end
+
+      Aurita::Plugin_Register.call(Hook.__send__(self.class.to_s.downcase.gsub('::','__')).__send__("after_#{method}"), self)
+
+      log("Call finished (#{method}), query count is #{Lore::Connection.query_count}")
+    rescue Lore::Exceptions::Validation_Failure => ikp
+      log('Validation failure in call_guarded')
+      ikp.log()
+      notify_invalid_params(ikp)
+    rescue ::Exception => excep
+      log('Exception: ' << excep.message)
+      excep.backtrace.each { |l|
+        log(l)
+      }
+      raise excep
     end
 
     return result
   end # }}}
   
+  # Unguarded, uncached controller call. 
+  # This call method is for pollers, like autocompletion, and does not check 
+  # the user's permissions to call a method. 
+  # It also skips caching mechanisms and model validations. 
+  #
+  # #call_unguarded is used by Aurita::Dispatcher instances with @poller flag 
+  # set. 
+  # See Aurita::Handler::Aurita_Poller_Application for details. 
+  #
+  def call_unguarded(method, *args)
+  # {{{
+    log { "Unguarded call of #{self.class.to_s}.#{method.to_s}" }
+
+    args      = args.flatten
+    result    = __send__(method.to_sym, *args) 
+    @response = Controller_Response.unify(result, @response)
+
+    return result
+  end # }}}
+
   public
 
   # Returns guard blocks for a specific controller method. 

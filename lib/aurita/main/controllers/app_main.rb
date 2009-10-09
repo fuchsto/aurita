@@ -24,18 +24,15 @@ module Main
     }
 
     def on_request_finish(params={})
-    # return if params[:controller].is_a?(Aurita::Main::Async_Feedback_Controller)
-
-      User_Action.create(:controller => params[:controller].class.to_s, 
-                         :method => params[:action], 
+      User_Action.create(:controller    => params[:controller].class.to_s, 
+                         :method        => params[:action], 
+                         :runmode       => Aurita.runmode.to_s.at(0), 
                          :user_group_id => Aurita.user.user_group_id, 
-                         :duration => params[:time], 
-                         :num_queries => params[:num_queries], 
-                         :num_tuples => params[:num_tuples])
-      log { "Queries: #{params[:num_queries]}, Tuples: #{params[:num_tuples]}, Time: #{params[:time]}" }
+                         :duration      => params[:time], 
+                         :num_queries   => params[:num_queries], 
+                         :num_tuples    => params[:num_tuples])
 
-      @response[:debug] = '' unless @response[:debug]
-      @response[:debug] <<  "{ queries: #{params[:num_queries]}, tuples: #{params[:num_tuples]}, time: '#{params[:time]}' }" 
+      log { "Queries: #{params[:num_queries]}, Tuples: #{params[:num_tuples]}, Time: #{params[:time]}" }
     end
 
     def ping

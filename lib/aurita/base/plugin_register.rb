@@ -72,12 +72,12 @@ module Aurita
           caller_params ||= {}
           if call_params.size > 0 then
           # TODO: Should be: 
-          # result = component.controller.new(caller_params).call_guarded(component.method, call_params) 
-            result = component.controller.new(caller_params).__send__(component.method, call_params) 
+            result = component.controller.new(caller_params).call_guarded(component.method, call_params) 
+          # result = component.controller.new(caller_params).__send__(component.method, call_params) 
           else
           # TODO: Should be: 
-          # result = component.controller.new(caller_params).call_guarded(component.method)
-            result = component.controller.new(caller_params).__send__(component.method)
+            result = component.controller.new(caller_params).call_guarded(component.method)
+          # result = component.controller.new(caller_params).__send__(component.method)
           end
           if result then
             if result.is_a?(Hash) || result.is_a?(String) || result.is_a?(Aurita::GUI::Element) || result.respond_to?(:aurita_gui_element) then

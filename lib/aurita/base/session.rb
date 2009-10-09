@@ -28,7 +28,7 @@ module Aurita
   #
   #   Aurita.session['your_param'] = 'value'
   #
-  # .. and read via: 
+  # ... and read via: 
   #
   #   session_param = Aurita.session['your_param']
   #
@@ -101,10 +101,10 @@ module Aurita
     def close() 
     # {{{
       @@logger.log("delete user login cookie")
-      @env['rack.session'][:drop] = true
       @env['rack.session'][:close] = true
-      @env['rack.session.options'][:drop] = true
+      @env['rack.session'][:drop]  = true
       @env['rack.session.options'][:close] = true
+      @env['rack.session.options'][:drop]  = true
     end # def }}}
     
     # Returns active interface language for this session
@@ -120,7 +120,7 @@ module Aurita
   class Mock_Session < Session
 
     begin
-      @@guest_user = Aurita::Main::User_Login_Data.create_shallow({ :user_group_id => 0, :user_group_name => 'guest' }) 
+      @@guest_user = Aurita::Main::User_Login_Data.create_shallow({ :user_group_id => 0, :user_group_name => 'guest', :login => '', :pass => '' }) 
     rescue ::Exception => ignore
     end
 

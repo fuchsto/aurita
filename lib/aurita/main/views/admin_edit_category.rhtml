@@ -1,15 +1,7 @@
 
-<div class="form_box">
+<h2><%= category.category_name %></h2>
+<%= update_form %>
 
-<h2><%= tl(:category) %>: <%= category.category_name %></h2>
-<% form_for(:instance => category, :action => :perform_update, :id => :category_form) do |f| %>
-  <%= f.text(:name => :category_name, :value => category.category_name, :required => true, :label => tl(:category_name)) %>
-  <button class="submit" type="button" onClick="Aurita.submit_form('category_form');">
-    ok
-  </button>
-<% end %>
-
-</div>
 <br />
 <div class="form_box">
   <div id="user_category_list">

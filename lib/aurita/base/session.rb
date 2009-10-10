@@ -79,9 +79,8 @@ module Aurita
     def user
       return @user if @user
       marshal = param('user')
-      if marshal.is_a?(Hash) then
-        model = eval(marshal[:klass])
-        @user = model.new(marshal[:values], marshal[:joined], :cached)
+      if marshal then
+        @user = Marshal.load(marshal)
         return @user if @user
       end
 

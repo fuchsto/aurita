@@ -17,25 +17,44 @@ module Main
     }
 
     def add
+
+      perms = {}
+      
       form = add_form(Role)
-
-      form.add(Text_Field.new(:name     => Role.role_name, 
-                              :label    => tl(Role.role_name), 
-                              :required => true))
-      form.add(Boolean_Radio_Field.new(:name  => :is_super_admin, 
-                                       :label => tl(:is_super_admin), 
-                                       :value => false))
-      form.add(Boolean_Radio_Field.new(:name  => :is_admin, 
-                                       :label => tl(:is_admin), 
-                                       :value => false))
-
+      form.delete_field(Role.role_name)
+      
+      main_permissions_fieldset = Fieldset.new(:name => :main_role_fieldset, 
+                                               :legend => tl(:main_role_fieldset))
+      
+      main_permissions_fieldset.add(Text_Field.new(:name     => Role.role_name, 
+                                                   :label    => tl(Role.role_name), 
+                                                   :required => true))
+      
+      main_permissions_fieldset.add(Boolean_Radio_Field.new(:name  => :is_super_admin, 
+                                                            :value => 'false', 
+                                                            :label => tl(:is_super_admin)))
+      main_permissions_fieldset.add(Boolean_Radio_Field.new(:name  => :is_admin, 
+                                                            :value => 'false', 
+                                                            :label => tl(:is_admin)))
+      form.add(main_permissions_fieldset)
+      
+      permission_field_names = [ Role.role_name, :is_super_admin, :is_admin ]
       Plugin_Register.permissions.each_pair { |plugin, permissions|
+        permission_fields = []
         permissions.each { |p|
-          form.add(p.element)
-          form.fields << p.name
+          e = p.element
+          permission_field_names << e.name
+          permission_fields << e
         }
+        fieldset = GUI::Fieldset.new(:name   => "fieldset_#{plugin}", 
+                                     :legend => Lang.get(plugin, :plugin_name)) { permission_fields }
+        form.add(fieldset)
       }
-      render_form(form, :title => tl(:add_role))
+      form.fields = permission_field_names
+      form.add(GUI::Hidden_Field.new(:name => :controller, :value => 'Role'))
+      form.add(GUI::Hidden_Field.new(:name => :action, :value => 'perform_add'))
+
+      return Page.new(:header => tl(:add_role)) { form }
     end
 
     def update

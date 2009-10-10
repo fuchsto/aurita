@@ -48,6 +48,12 @@ your_private_category : Ihre private Kategorie
 your_categories : Ihre Kategorien
 category_name_already_used : Eine Kategorie mit diesem Namen existiert bereits
 
+read_access : Schreibberechtigung f&uuml;r
+write_access : Leseberechtigung f&uuml;r
+everyone : jeden
+registered_users : registrierte Benutzer
+members_of_category : Mitglieder der Kategorie
+
 division : Firma
 forename : Vorname
 surname : Nachname

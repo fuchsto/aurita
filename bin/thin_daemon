@@ -27,7 +27,7 @@ gatling   = false
 short     = false
 killold   = false
 verbosive = false
-deflate   = false
+deflate   = true
 
 opts.each { |opt, arg| 
   case opt

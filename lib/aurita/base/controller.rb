@@ -53,6 +53,10 @@ Aurita.import(:base, :controller_response)
 #
 # == Views
 #
+# Views should be avoided in favor of GUI::Widget instances, 
+# but sometimes a plain, old view is just fine. They are also 
+# a bit faster since views are precompiled strings, of course. 
+#
 # Search path for views is: 
 #
 #   - project (the_project/views/the_view.rhtml)
@@ -239,6 +243,10 @@ class Aurita::Base_Controller
   # {{{
     log { "Guarded call of #{self.class.to_s}.#{method.to_s}" }
 
+    if method.empty? || !(respond_to?(method.to_sym) || self.class.respond_to?(method.to_sym)) then
+      raise ::Exception.new("No such method: #{self.class.to_s}.#{method}") 
+    end
+
     args       = args.flatten
     method     = method.to_sym
     permission = true
@@ -252,9 +260,6 @@ class Aurita::Base_Controller
     
     if !permission then
       raise Aurita::Auth_Exception.new('No permission to call \'' << method.to_s + '\'')
-    end
-    if !(respond_to?(method) || self.class.respond_to?(method)) then
-      raise ::Exception.new("No such method: #{self.class.to_s}.#{method}") 
     end
 
     begin

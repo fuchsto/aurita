@@ -529,6 +529,17 @@ JS
     end
   end
 
+  class Category_Access_Options_Field < Select_Field
+  include Aurita::GUI::I18N_Helpers
+
+    def initialize(params)
+      params[:option_values] = [ :public, :registered, :members ]
+      params[:option_labels] = [ tl(:everyone), tl(:registered_users), tl(:members_of_category) ]
+      params[:value]         = :members unless params[:value]
+      super(params)
+    end
+  end
+
   class Country_Select_Field < Select_Field
     def initialize(params={}, &block)
       options = YAML.load(File.open(Aurita::Application.base_path + 'modules/gui/countries.yaml'))

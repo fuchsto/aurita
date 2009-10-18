@@ -15,8 +15,23 @@
 # 
 # ----
 #
-# A typical Aurita application consists of the following layers: 
+# == Who is developing Aurita?
 #
+# We are a small software company in Munich, Germany. We develop 
+# web applications of any flavor since 2000. 
+# We develop custom-fitted applications for mostly medium-sized 
+# companies (200-500 employees or so). 
+# As we are small, we need tools that support fast and agile 
+# development cycles. That's why Tobias Fuchs (fuchsqwortundform.de) 
+# started Aurita, about three years ago (There is a whole bunch of 
+# reasons why we didn't just go for Rails). 
+# Our products are open source, and so is our framework. 
+#
+# ----
+#
+# == What does Aurita do, in general? 
+#
+# A typical Aurita application consists of the following layers: 
 #
 # 1. Web server (lighttpd, mongrel, webrick, ...)
 # 2. Middleware (rack or custom handler) 
@@ -24,9 +39,15 @@
 # 4. Model / View / Controller 
 #
 # Aurita itself implements layers 2, 3 and 4. 
-# As middleware, it also offers custom FCGI handler as interface 
-# to the web server, which is used by default. A Rack implementation 
-# is on its way. 
+# Middleware tasks are implemented by a Aurita-specific Rack 
+# middleware (Aurita::Handler::Aurita_Application), so it is 
+# compatible with web servers like Thin, Mongrel, Lighttpd, 
+# Apache and many more. 
+# There are specific adapters for Thin (Aurita::Thin_Daemon) and 
+# Mongrel (Aurita::Mongrel_Daemon). 
+# Thin is recommended and used by default. 
+# Of course, Aurita + Thin can be used behind HAProxy and Unicorn, 
+# which is recommended for enterprisey production environments. 
 # 
 # == Controllers
 #

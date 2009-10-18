@@ -332,11 +332,17 @@ JS
         @readonly_permission = @parent.readonly_permissions[@value.to_s]
       end
       def element
-        readonly_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_readonly", 
-                                                            :options => { 'true' => tl(:readonly_permission) }, 
-                                                            :value => @readonly_permission ).element
-        readonly_checkbox.each { |e| 
+        read_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_readonly", 
+                                                        :options => { 'true' => tl(:read_permission) }, 
+                                                        :value => @readonly_permission.to_s ).element
+        write_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_readonly", 
+                                                         :options => { 'true' => tl(:write_permission) }, 
+                                                         :value => @readonly_permission.to_s ).element
+        read_checkbox.each { |e| 
           e.first.onclick = "Aurita.call('User_Category/toggle_readonly/user_group_id=#{@value}&category_id=#{@category.category_id}');"
+        }
+        write_checkbox.each { |e| 
+          e.first.onclick = "Aurita.call('User_Category/toggle_write/user_group_id=#{@value}&category_id=#{@category.category_id}');"
         }
 
         HTML.div { 
@@ -344,8 +350,10 @@ JS
                     :onclick => "Aurita.call({ method: 'POST', 
                                                onload: function() { Aurita.load({ element: 'user_category_list', 
                                                                                   action: 'User_Category/user_list/category_id=#{@category.category_id}' }); }, 
-                                               action: 'User_Category/perform_delete/user_group_id=#{@value}&category_id=#{@category.category_id}' });") { 'X ' } + 
-          @label.to_s + HTML.div { readonly_checkbox }
+                                               action: 'User_Category/perform_delete/user_group_id=#{@value}&category_id=#{@category.category_id}' });") { 
+            HTML.img(:class => :icon, :src => '/aurita/images/icons/delete_small.png')
+          } + 
+          @label.to_s + HTML.div { read_checkbox } + HTML.div { write_checkbox } 
         }
       end
     end

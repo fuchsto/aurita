@@ -28,20 +28,26 @@ module Main
       use_decorator(:async)
       
       widget_parts = param(:widget).to_s.split('::')
-      if widget_parts.length > 1 then       # plugin widget
+      if widget_parts.length > 1 then 
+      # plugin widget
         begin
           Aurita.import_plugin_module(widget_parts[0].downcase.to_sym, "gui/#{widget_parts[1].downcase}")
         rescue ::Exception => ignore_load_error
         end
         widget = Aurita::Plugins.const_get(widget_parts[0]).const_get('GUI').const_get(widget_parts[1])
-      elsif widget_parts.length == 1 then   # main widget
-        Aurita.import_module :gui, widget_parts[0].downcase
+      elsif widget_parts.length == 1 then 
+      # main widget
+        begin
+          Aurita.import_module :gui, widget_parts[0].downcase
+        rescue ::Exception => ignore_load_error
+        end
         widget = Aurita::GUI.const_get(widget_parts[0])
       end
       
       raise ::Exception.new("Could not resolve widget #{param(:widget).inspect}") unless widget
       
       ctor_args = @params.clean
+      ctor_args.delete(:widget)
       begin
         instance  = widget.new(ctor_args)
       rescue ::Exception => excep

@@ -57,6 +57,10 @@ module Main
       u =   User_Group.load(:user_group_id => user_group_id)
       u ||= User_Group.load(:user_group_id => 5)
     end
+    def user_profile
+      u =   User_Profile.load(:user_group_id => user_group_id)
+      u ||= User_Profile.load(:user_group_id => 5)
+    end
     
     # CMS Worldwide Hype, Ajax => {cms,worldwide,hype,ajax}
     add_input_filter(:tags) { |tags| 

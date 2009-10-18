@@ -659,6 +659,7 @@ img.icon {
   margin: -1px; 
   color: #000000;
   background-color: #cccccc; 
+  background: transparent url('/aurita/images/icons/box_header_bg.png') repeat scroll 0 0;
   font-size: 10px;
   cursor: move; 
 }
@@ -1011,7 +1012,9 @@ td.profile_right_column {
   background-color: #dedede; 
   margin: 1px; 
   padding: 1px;
-  width: auto !important; 
+/*  width: auto !important; */
+  width: 70px; 
+  height: 70px; 
   text-align: center; 
   clear: both; 
 }
@@ -1900,15 +1903,23 @@ table.listing_2_columns {
   margin-right: -3px;
 } 
 
-span.button, div.button { 
+a.button, span.button, div.button { 
   cursor: pointer; 
   background: url('/aurita/images/icons/button_normal.gif') repeat-x;
   background-color: #c0c0c0; 
-  padding: 3px; 
-  border: 1px outset white; 
+  padding: 2px; 
+  padding-left: 5px; 
+  padding-right: 5px; 
+/*  border: 1px outset white; */
+  border-width: 1px; 
+  border-style: solid; 
+  border-color: #898989 #343434 #343434 #898989;
   margin-left: 5px; 
-  font-size: 10px; 
+  font-size: 0.8em;
   text-align: center; 
+}
+a.button:hover { 
+  background: url('/aurita/images/icons/button_hover.gif') repeat-x;
 }
 
 span.inline_button, div.inline_button { 
@@ -1925,3 +1936,14 @@ span.inline_button, div.inline_button {
   z-index: 450; 
   text-align: center; 
 }
+
+a.delete_button { 
+}
+
+a.add_button { 
+}
+
+a.add_file_button { 
+  margin: 5px; 
+}
+

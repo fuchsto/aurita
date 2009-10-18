@@ -41,7 +41,7 @@ module GUI
     def element
       form_box = HTML.div.form_box { 
         HTML.div.form_content { @form } + 
-        HTML.div.form_button_bar(:id => @form.dom_id + '_buttons')  {
+        HTML.div.form_button_bar(:id => "#{@form.dom_id}_buttons")  {
           Button.new(:class => :submit, :onclick => Javascript.Aurita.submit_form(@form.dom_id.to_s), :icon => :ok) { 
             HTML.img(:src => '/aurita/images/icons/button_ok.gif') + tl(:ok) 
           } + 

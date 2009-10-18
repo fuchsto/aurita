@@ -580,3 +580,8 @@ fieldset legend {
   border:1px solid #ffffff;
   background-color: #fafafa;
 }
+
+ul.form_fields .multi_file_entry input { 
+  width: 312px; 
+}
+

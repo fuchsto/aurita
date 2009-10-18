@@ -13,6 +13,8 @@ role_preferences : Einstellungen
 manage_users : Benutzerverwaltung
 
 readonly_permission : Nur Lesen
+read_permission : Lesen
+write_permission : Schreiben
 
 role : Rolle
 internal.role.role_name : Name
@@ -47,6 +49,8 @@ delete_category_and_move_contents_to : L&ouml;schen und Inhalte verschieben nach
 your_private_category : Ihre private Kategorie
 your_categories : Ihre Kategorien
 category_name_already_used : Eine Kategorie mit diesem Namen existiert bereits
+in_category : in Kategorie
+in_categories : in Kategorien
 
 read_access : Schreibberechtigung f&uuml;r
 write_access : Leseberechtigung f&uuml;r

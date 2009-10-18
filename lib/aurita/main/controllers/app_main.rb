@@ -182,7 +182,7 @@ module Main
       return components
     end
 
-    def recent_changes
+    def recent_changes_in_categories
       count      = 0
       result     = HTML.ul(:class => :no_bullets, :id => :recent_category_changes) { } 
       # Load GUI component positions: 
@@ -224,9 +224,27 @@ module Main
         end
       }
       return unless count > 0
+      viewmode_icon = link_to(:controller => 'Content_History', 
+                              :action     => :list, 
+                              :element    => 'recent_changes_page_content') { 
+                        HTML.img(:src => '/aurita/images/icons/clock.png') 
+                      } 
+      exec_js("$('recent_changes_viewmode_icon').innerHTML = #{viewmode_icon}")
+      return result
+    end
+
+    def recent_changes
+      viewmode_icon = link_to(:controller => 'Content_History', 
+                              :action     => :list, 
+                              :element    => 'recent_changes_page_content') { 
+                        HTML.img(:src => '/aurita/images/icons/clock.png') 
+                      } 
       return Page.new(:header   => tl(:recent_changes), 
                       :sortable => true, 
-                      :id       => :recent_changes_page) { result } 
+                      :tools    => HTML.span(:id => :recent_changes_viewmode_icon) { 
+                                     viewmode_icon
+                                   }, 
+                      :id       => :recent_changes_page) { recent_changes_in_categories } 
     end
     
     def tag_index

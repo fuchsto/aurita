@@ -155,18 +155,32 @@ module Aurita
   # modules, permission configuration, and its language packs. 
   def self.import_plugin(plugin_name)
     if File.exists?("#{project_path()}/plugins/#{plugin_name.to_s}.rb") then
+
       Lang.add_plugin_language_pack(plugin_name)
-      if File.exists?("#{project_path()}/plugins/#{plugin_name.to_s}/lang/") then
-        Lang.add_project_language_pack(plugin_name)
-      end
-      Aurita.log('Importing plugin ' << plugin_name.to_s)
-      Aurita.import_folder "#{Aurita::Configuration.plugins_path}#{plugin_name.to_s}/lang/"
-      Aurita.import_folder "#{Aurita::Configuration.plugins_path}#{plugin_name.to_s}/modules/"
-      Aurita.import_folder "#{Aurita::Configuration.plugins_path}#{plugin_name.to_s}/model/"
-      Aurita.import_folder "#{Aurita::Configuration.plugins_path}#{plugin_name.to_s}/controllers/"
-      perms_file = "#{Aurita::Configuration.plugins_path}#{plugin_name.to_s}/permissions.rb"
-      if File.exists?(perms_file) then
-        require perms_file
+
+      begin
+        require("aurita-#{plugin_name}-plugin")
+        require("aurita-#{plugin_name}-plugin/plugin.rb")
+      rescue ::Exception => no_gem_found
+        # No gem found, so try to load from Aurita::Configuration.plugins_path.
+      
+        if(File.exists?("#{Aurita::Configuration.plugins_path}#{plugin_name.to_s}/lib")) then
+          plugin_name = "#{plugin_name}/lib"
+        end
+
+        if File.exists?("#{project_path()}/plugins/#{plugin_name}/lang/") then
+          Lang.add_project_language_pack(plugin_name)
+        end
+        Aurita.log('Importing plugin ' << plugin_name.to_s)
+        Aurita.import_folder "#{Aurita::Configuration.plugins_path}#{plugin_name}/lang/"
+        Aurita.import_folder "#{Aurita::Configuration.plugins_path}#{plugin_name}/modules/"
+        Aurita.import_folder "#{Aurita::Configuration.plugins_path}#{plugin_name}/model/"
+        Aurita.import_folder "#{Aurita::Configuration.plugins_path}#{plugin_name}/controllers/"
+
+        perms_file = "#{Aurita::Configuration.plugins_path}#{plugin_name}/permissions.rb"
+        if File.exists?(perms_file) then
+          require perms_file
+        end
       end
     end
 

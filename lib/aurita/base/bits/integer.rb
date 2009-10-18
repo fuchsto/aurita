@@ -1,4 +1,6 @@
 
+require('aurita/base/bits/float')
+
 class Integer
 
   def filesize
@@ -18,7 +20,7 @@ class Integer
       size = size / 1024.0
       size_suffix = ' Gib'
     end
-    size = (size.round(2)).to_s << size_suffix
+    size = (size.round_to(2)).to_s << size_suffix
     size
   end
 

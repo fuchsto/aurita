@@ -10,7 +10,7 @@ module Aurita
     @@admin_emails       = [ 'root@localhost' ]
     @@base_path          = @@app_base_path + 'aurita/lib/aurita/'
     @@projects_base_path = @@app_base_path + 'aurita_projects/'
-    @@plugins_path       = @@app_base_path + 'aurita_plugins/'
+    @@plugins_path       = @@app_base_path + 'aurita-plugins/'
 
     @@sys_log_path = '/var/log/aurita/sys.log'
     @@run_log_path = '/var/log/aurita/sys.log'

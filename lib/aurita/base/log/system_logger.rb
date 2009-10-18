@@ -29,7 +29,9 @@ module Log
     
     def log(message=nil, &block)
       return if @disabled 
-      message = yield if block_given?
+      if block_given? then
+        message = yield 
+      end
       @logger.info { format_message(message) } 
     end
 

@@ -28,6 +28,9 @@ class Lang
 
   def self.add_plugin_language_pack(plugin_name)
     yaml_path = Aurita::Configuration.plugins_path + plugin_name + '/lang/'
+    if !File.exists?(yaml_path) then
+      yaml_path = Aurita::Configuration.plugins_path + plugin_name + '/lib/lang/'
+    end
     plugin_name = plugin_name.downcase.to_sym
     @@language_packs[plugin_name] = {}
     Dir.glob(yaml_path + '*.yaml').each { |f|
@@ -40,6 +43,9 @@ class Lang
 
   def self.add_project_language_pack(plugin_name)
     yaml_path = Aurita.project.base_path + 'plugins/' << plugin_name + '/lang/'
+    if !File.exists?(yaml_path) then
+      yaml_path = Aurita.project.base_path + 'plugins/' << plugin_name + '/lib/lang/'
+    end
     plugin_name = plugin_name.downcase.to_sym
     @@language_packs[plugin_name] = {}
     Dir.glob(yaml_path + '*.yaml').each { |f|

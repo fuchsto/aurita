@@ -74,9 +74,6 @@ if !project_name then
   exit
 end
 
-if verbosive then
-end
-
 logfile = "/var/log/aurita/aurita_#{project_name}_#{port}_#{mode}.log"
 
 if verbosive then

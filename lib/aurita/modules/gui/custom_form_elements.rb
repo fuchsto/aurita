@@ -259,46 +259,55 @@ JS
   class User_Category_Selection_List_Field < Selection_List_Field
   include Aurita::GUI::I18N_Helpers
 
-    attr_accessor :user, :readonly_permissions
+    attr_accessor :user, :read_access, :write_access
 
     class User_Category_Selection_List_Option_Field < Selection_List_Option_Field
     include Aurita::GUI::I18N_Helpers
 
       def initialize(params={})
         super(params)
-        @user                = @parent.user
-        @readonly_permission = @parent.readonly_permissions[@value.to_s]
+        @user     = @parent.user
+        @read     = @parent.read_access[@value.to_s]
+        @write    = @parent.write_access[@value.to_s]
       end
       def element
-        readonly_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "category_#{@value}_readonly", 
-                                                            :options => { 't' => tl(:readonly_permission) }, 
-                                                            :value => @readonly_permission ).element
-        readonly_checkbox.each { |e| 
-          e.first.onclick = "Aurita.call('User_Category/toggle_readonly/user_group_id=#{@user.user_group_id}&category_id=#{@value}');"
+        read_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_readonly", 
+                                                        :options => { 'true' => tl(:read_permission) }, 
+                                                        :value => @read.to_s ).element
+        write_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_readonly", 
+                                                         :options => { 'true' => tl(:write_permission) }, 
+                                                         :value => @write.to_s ).element
+        read_checkbox.each { |e| 
+          e.first.onclick = "Aurita.call('User_Category/toggle_read_permission/user_group_id=#{@user.user_group_id}&category_id=#{@value}');"
+        }
+        write_checkbox.each { |e| 
+          e.first.onclick = "Aurita.call('User_Category/toggle_write_permission/user_group_id=#{@user.user_group_id}&category_id=#{@value}');"
         }
 
         HTML.div { 
-          HTML.span(:class => :link, 
-                    :onclick => "Aurita.load({ element: 'dispatcher', 
-                                               onload: function() { Aurita.load({ element: 'user_category_list', 
-                                                                                  action: 'User_Category/category_list/user_group_id=#{@user.user_group_id}' }); }, 
-                                               action: 'User_Category/perform_delete/user_group_id=#{@user.user_group_id}&category_id=#{@value}' });") { 
+          HTML.a(:class => :icon, 
+                 :onclick => "Aurita.load({ element: 'dispatcher', 
+                                            onload: function() { Aurita.load({ element: 'user_category_list', 
+                                                                               action: 'User_Category/category_list/user_group_id=#{@user.user_group_id}' }); }, 
+                                            action: 'User_Category/perform_delete/user_group_id=#{@user.user_group_id}&category_id=#{@value}' });") { 
             HTML.img(:src => '/aurita/images/icons/delete_small.png') 
           } + 
-          @label.to_s + HTML.div { readonly_checkbox }
+          @label.to_s + HTML.div { read_checkbox } + HTML.div { write_checkbox } 
         }
       end
     end
 
     def initialize(params={})
-      @user = params[:user]
-      @readonly_permissions = {}
+      @user         = params[:user]
+      @read_access  = {}
+      @write_access = {}
       params.delete(:user)
       active_categories = []
-      @user.categories.each { |c|
+      User_Category.categories_of(@user).each { |c|
         if c.is_private != 't' then
           active_categories << c.category_id
-          @readonly_permissions[c.category_id.to_s] = c.readonly
+          @read_access[c.category_id.to_s]  = c.read_permission
+          @write_access[c.category_id.to_s] = c.write_permission
         end
       }
       options = []
@@ -325,37 +334,38 @@ JS
   class Category_User_Selection_List_Field < Selection_List_Field
   include Aurita::GUI::I18N_Helpers
 
-    attr_accessor :category, :readonly_permissions
+    attr_accessor :category, :read_access, :write_access
 
     class Category_User_Selection_List_Option_Field < Selection_List_Option_Field
     include Aurita::GUI::I18N_Helpers
 
       def initialize(params={})
         super(params)
-        @category            = @parent.category
-        @readonly_permission = @parent.readonly_permissions[@value.to_s]
+        @category = @parent.category
+        @read     = @parent.read_access[@value.to_s]
+        @write    = @parent.write_access[@value.to_s]
       end
       def element
-        read_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_readonly", 
+        read_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_read", 
                                                         :options => { 'true' => tl(:read_permission) }, 
-                                                        :value => @readonly_permission.to_s ).element
-        write_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_readonly", 
+                                                        :value => @read.to_s ).element
+        write_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_write", 
                                                          :options => { 'true' => tl(:write_permission) }, 
-                                                         :value => @readonly_permission.to_s ).element
+                                                         :value => @write.to_s ).element
         read_checkbox.each { |e| 
-          e.first.onclick = "Aurita.call('User_Category/toggle_readonly/user_group_id=#{@value}&category_id=#{@category.category_id}');"
+          e.first.onclick = "Aurita.call('User_Category/toggle_read_permission/user_group_id=#{@value}&category_id=#{@category.category_id}');"
         }
         write_checkbox.each { |e| 
-          e.first.onclick = "Aurita.call('User_Category/toggle_write/user_group_id=#{@value}&category_id=#{@category.category_id}');"
+          e.first.onclick = "Aurita.call('User_Category/toggle_write_permission/user_group_id=#{@value}&category_id=#{@category.category_id}');"
         }
 
         HTML.div { 
-          HTML.span(:class => :link, 
-                    :onclick => "Aurita.call({ method: 'POST', 
-                                               onload: function() { Aurita.load({ element: 'user_category_list', 
-                                                                                  action: 'User_Category/user_list/category_id=#{@category.category_id}' }); }, 
-                                               action: 'User_Category/perform_delete/user_group_id=#{@value}&category_id=#{@category.category_id}' });") { 
-            HTML.img(:class => :icon, :src => '/aurita/images/icons/delete_small.png')
+          HTML.a(:class => :icon, 
+                 :onclick => "Aurita.call({ method: 'POST', 
+                                            onload: function() { Aurita.load({ element: 'user_category_list', 
+                                                                               action: 'User_Category/user_list/category_id=#{@category.category_id}' }); }, 
+                                            action: 'User_Category/perform_delete/user_group_id=#{@value}&category_id=#{@category.category_id}' });") { 
+            HTML.img(:src => '/aurita/images/icons/delete_small.png')
           } + 
           @label.to_s + HTML.div { read_checkbox } + HTML.div { write_checkbox } 
         }
@@ -363,13 +373,15 @@ JS
     end
 
     def initialize(params={})
-      @category = params[:category]
-      @readonly_permissions = {}
+      @category     = params[:category]
+      @read_access  = {}
+      @write_access = {}
       params.delete(:category)
       users = []
-      @category.users.each { |u|
+      User_Category.members_of(@category).each { |u|
           users << u.user_group_id
-          @readonly_permissions[u.user_group_id.to_s] = u.readonly
+          @read_access[u.user_group_id.to_s]  = u.read_permission
+          @write_access[u.user_group_id.to_s] = u.write_permission
       }
       options        = []
       user_group_ids = []

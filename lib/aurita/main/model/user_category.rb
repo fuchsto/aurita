@@ -39,6 +39,19 @@ module Main
     # at first. 
     def self.before_create(args)
       args[:readonly] = true
+      args[:write_permission] = false
+      args[:read_permission]  = false
+    end
+
+    def self.members_of(cat)
+      select { |u|
+        u.where(category_id == cat.category_id)
+      }
+    end
+    def self.categories_of(user)
+      select { |c|
+        c.where(user_group_id == user.user_group_id)
+      }
     end
 
   end

@@ -8,6 +8,8 @@ module GUI
 
     attr_accessor :entries
 
+    @@pseudo_index = 0
+
     def initialize(params={})
       @entries   = params[:entries]
       @entries ||= []
@@ -22,10 +24,9 @@ module GUI
       add_css_class(:autocomplete_default)
     end
     def element
-      count = 0
       list_elements = []
       default_classes = css_classes
-      @entries.each { |e|
+      @entries.each_with_index { |e,count|
         if count == 0 then
           classes = default_classes + [:autocomplete_first_entry] 
         elsif count == @entries.length then
@@ -40,15 +41,16 @@ module GUI
                       HTML.b { e[:title] } + 
                       HTML.span(:class => :informal) { HTML.br + e[:informal] } 
                     }
-        list_elements << HTML.div(:class => :delimiter) { e[:header] } if count == 0
+
+        # Delimiters must provide an id, too! 
+        list_elements << HTML.li(:class => :delimiter, :id => "none_#{@@pseudo_index}") { e[:header] } if count == 0
         list_elements << HTML.li(:class => classes, 
                                  :style => 'width: 419px;', 
                                  :id    => e[:id]) { 
           element
         }
-        
-        count += 1
       }
+      @@pseudo_index += 1
       list_elements
     end
   end

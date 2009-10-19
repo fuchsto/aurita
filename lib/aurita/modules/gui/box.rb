@@ -51,11 +51,11 @@ module GUI
                  HTML.div.header(:onclick => toggle, :style => "#{@header_style.to_s} width: 90%; float:left; clear: none;") { @header.to_s } + 
                  HTML.div(:style => 'clear: none; float: right; cursor: pointer;') { header_buttons }
                }
-#     header.onclick = "Aurita.GUI.toggle_box('#{attrib[:id]}');"
+      
       header.add_css_class("#{@type}_header") if @type
 
       header = Context_Menu_Element.new(header, 
-                                        :typei  => @type, :highlight_id => dom_id(), 
+                                        :type   => @type, :highlight_id => dom_id(), 
                                         :params => @context_menu_params) unless @type == :none
 
       body_args = @attrib.dup
@@ -69,7 +69,7 @@ module GUI
       body_args[:id]      = dom_id().to_s + '_body'
       body = Element.new(body_args) 
 
-      set_content(header.string + body.string) 
+      set_content(HTML.div { header.string + body.string }) 
       super()
     end # def
 

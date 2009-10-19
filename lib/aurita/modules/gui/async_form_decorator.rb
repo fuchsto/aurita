@@ -42,12 +42,14 @@ module GUI
       form_box = HTML.div.form_box { 
         HTML.div.form_content { @form } + 
         HTML.div.form_button_bar(:id => "#{@form.dom_id}_buttons")  {
-          Button.new(:class => :submit, :onclick => Javascript.Aurita.submit_form(@form.dom_id.to_s), :icon => :ok) { 
-            HTML.img(:src => '/aurita/images/icons/button_ok.gif') + tl(:ok) 
-          } + 
-          Button.new(:class => :cancel, :onclick => Javascript.Aurita.cancel_form(@form.dom_id.to_s), :icon => :cancelAA) { 
-            HTML.img(:src => '/aurita/images/icons/button_cancel.gif') + tl(:cancel) 
-          }
+          Text_Button.new(:class   => :submit, 
+                          :onclick => Javascript.Aurita.submit_form(@form.dom_id.to_s), 
+                          :icon    => 'button_ok.gif', 
+                          :label   => tl(:ok)).string +
+          Text_Button.new(:class   => :cancel, 
+                          :onclick => Javascript.Aurita.cancel_form(@form.dom_id.to_s), 
+                          :icon    => 'button_cancel.gif', 
+                          :label   => tl(:cancel)).string
         }
       }
       if @params[:header] then

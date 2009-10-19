@@ -24,11 +24,11 @@ module GUI
     end
 
     def element
+      @tools ||= []
       if @sortable then
-        @tools ||= []
         @tools << HTML.img(:src => '/aurita/images/icons/move.gif', :class => [ :moveable, :box_sort_handle ])
       end
-      tools = @tools.map { |t| HTML.div.section_header_right { t } } if @tools
+      tools = @tools.map { |t| HTML.div.section_header_right { t } } if @tools.length > 0
       head  = HTML.div.section_header_left  { HTML.h1 { @header } } 
       head  = tools + head if tools
       HTML.div.section_header(:id => @params[:id]) { 

@@ -41,7 +41,8 @@ ul li.form_field {
 .section_content fieldset legend { 
   height: 15px; 
   margin: 0px; 
-  padding-left: 0px; 
+  margin-left: -18px; 
+  padding-left: 10px; 
   background-color: transparent; 
 }
 

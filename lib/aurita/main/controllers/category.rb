@@ -1,5 +1,6 @@
 
 require('aurita/controller')
+Aurita.import_module :gui, :custom_form_elements
 
 module Aurita
 module Main

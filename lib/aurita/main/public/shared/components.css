@@ -573,21 +573,25 @@ tr.highlighted td {
 }
 
 a.icon { 
-  padding: 3px; 
-  margin-left: 0px; 
-  margin-right: 4px; 
-}
-.box_body a.icon { 
   padding: 4px; 
   margin-left: -2px; 
   margin-right: -2px; 
+}
+.box_body a.icon { 
   display: block; 
 }
-a.icon img { 
+a.icon img, a.button img { 
   margin: -3px 4px 0px 0px; 
   display: inline !important; 
   vertical-align: middle; 
 }
+a.icon_button img { 
+  margin: -3px 0px 0px 0px; 
+}
+a.icon_button .button_label { 
+  margin-left: 4px; 
+}
+
 a.icon:hover { 
   background-color: #f8f8f8; 
 }
@@ -1777,7 +1781,7 @@ table.message_table {
   border-left: 1px solid #afafaf; 
   border-right: 1px solid #afafaf; 
   margin: -1px -1px 0px 0px; 
-  background: transparent url(/aurita/images/icons/box_header_bg.png) repeat-x scroll 0 0; 
+  background: #c4c6c7 url(/aurita/images/icons/box_header_bg.png) repeat-x scroll 0 0; 
 }
 .message_table .mail_view .mail_body { 
   height: 90px; 
@@ -1905,18 +1909,23 @@ table.listing_2_columns {
 
 a.button, span.button, div.button { 
   cursor: pointer; 
-  background: url('/aurita/images/icons/button_normal.gif') repeat-x;
+  background: transparent url(/aurita/images/icons/box_header_bright_bg.png) repeat-x scroll 0 0;
+  color: #000000 !important; 
   background-color: #c0c0c0; 
   padding: 2px; 
   padding-left: 5px; 
   padding-right: 5px; 
 /*  border: 1px outset white; */
   border-width: 1px; 
-  border-style: solid; 
-  border-color: #898989 #343434 #343434 #898989;
-  margin-left: 5px; 
+  border-style: outset; 
+  border-color: #afafaf; 
+/*  border-color: #898989 #343434 #343434 #898989; */
+/*  margin-left: 5px; */
   font-size: 0.8em;
   text-align: center; 
+}
+a.icon_button, a.icon_button:hover { 
+  padding: 4px;
 }
 a.button:hover { 
   background: url('/aurita/images/icons/button_hover.gif') repeat-x;

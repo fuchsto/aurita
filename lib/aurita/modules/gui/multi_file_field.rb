@@ -18,12 +18,12 @@ module GUI
     def element
       first       = super()
       entries_id  = @attrib[:id] + '_entries'
-      append_file = "Aurita.load_widget('Wiki::Multi_File_Entry_Field', 
-                                              { 
-                                                name: '#{@attrib[:name]}', 
-                                                id: '#{@attrib[:id]}_entry' 
-                                              }, 
-                                              Aurita.append_widget_to('#{entries_id}'));"
+      append_file = "Aurita.load_widget('Multi_File_Entry_Field', 
+                                        { 
+                                          name: '#{@attrib[:name]}', 
+                                          id: '#{@attrib[:id]}_entry' 
+                                        }, 
+                                        Aurita.append_widget_to('#{entries_id}'));"
       HTML.div(:id => @attrib[:id]) { 
         first + 
         HTML.div(:id => entries_id) { ' ' } +

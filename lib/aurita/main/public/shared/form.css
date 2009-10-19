@@ -230,8 +230,26 @@ input.inline, textarea.inline {
 */
   margin-top: 12px; 
   margin-left: 0px; 
+  height: 22px; 
   clear: both; 
 }
+
+.form_button_bar .button, .form_button_bar .button:hover { 
+  width: 138px; 
+  float: left; 
+  padding: 1px 12px; 
+  background: transparent url(/aurita/images/icons/button_normal.gif) repeat-x scroll 0 0
+}
+.form_button_bar .button:hover { 
+  background: transparent url(/aurita/images/icons/button_hover.gif) repeat-x scroll 0 0
+}
+.form_button_bar button.submit, .form_button_bar .submit { 
+  margin-right: 10px; 
+}
+.form_button_bar button.cancel, .form_button_bar .cancel { 
+  margin-right: 0px; 
+}
+
 
 button { 
 /*  background: url('/aurita/images/icons/button_grey_bg.png'); */
@@ -263,13 +281,6 @@ button:active, button:focus {
 button:hover { 
   background-color: #F9DBA8; 
   background: url('/aurita/images/icons/button_hover.gif') repeat-x; 
-}
-
-.form_button_bar button.submit { 
-  margin-right: 2px; 
-}
-.form_button_bar button.cancel { 
-  margin-right: 0px; 
 }
 
 button.submit:hover, button.submit:active { 

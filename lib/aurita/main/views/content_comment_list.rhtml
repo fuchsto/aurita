@@ -6,7 +6,7 @@
         <%= f.textarea(:name => :message, :class => :comment, :force_closing_tag => true, :label => tl(:add_comment)) %>
       <% end %>
       <%= gui.button(:class => 'submit', 
-                     :icon => 'add', 
+                     :icon => 'button_add.gif', 
                      :onclick => "Aurita.submit_form('content_comment_form'); ") { 
             tl(:send)
           } 

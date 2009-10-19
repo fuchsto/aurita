@@ -5,6 +5,6 @@
   <%= f.custom(:element => User_Role_Selection_List_Field, 
                :name    => :role_id, 
                :user    => user) %>
-  <button type="button" class="submit varwidth" onclick="Aurita.submit_form('user_role_form')">+</button> 
+  <%= gui.button(:onclick => "Aurita.submit_form('user_role_form')") { '+' } %>
 <% end %>
 

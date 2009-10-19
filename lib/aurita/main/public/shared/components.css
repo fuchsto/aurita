@@ -1226,7 +1226,8 @@ table.media_asset_table th {
   padding-left: 10px; 
   border-bottom: 1px solid #343434; 
   border-left: 1px solid #898989; 
-  background: transparent url(/aurita/images/button_bg.gif) repeat scroll 0 0; 
+/*  background: transparent url(/aurita/images/button_bg.gif) repeat scroll 0 0; */
+  background: transparent url(/aurita/images/icons/box_header_bg.png) repeat scroll 0 0; 
   cursor: default; 
 }
 table #0_col_header { 

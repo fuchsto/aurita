@@ -13,7 +13,7 @@ module GUI
     def initialize(params={}, &block)
       @header   = params[:header]
       @tools    = params[:tools] 
-      @tools    = [ @tools ] unless @tools.is_a?(Array)
+      @tools    = [ @tools ] if @tools && !@tools.is_a?(Array)
       params.delete(:header)
       @content  = yield
       @params   = params
@@ -28,9 +28,9 @@ module GUI
       if @sortable then
         @tools << HTML.img(:src => '/aurita/images/icons/move.gif', :class => [ :moveable, :box_sort_handle ])
       end
-      tools = @tools.map { |t| HTML.div.section_header_right { t } } if @tools.length > 0
-      head  = HTML.div.section_header_left  { HTML.h1 { @header } } 
-      head  = tools + head if tools
+      tools = @tools.map { |t| HTML.div.section_header_right { t } } 
+      head  = HTML.div.section_header_left { HTML.h1 { @header } } 
+      head  = tools + head if tools && tools.length > 0
       HTML.div.section_header(:id => @params[:id]) { 
         head + 
         HTML.div(:style => 'clear: both;') +

@@ -126,12 +126,14 @@ JS
                  :src => "/aurita/assets/medium/asset_#{@value}.jpg", 
                  :class => :picture_asset_element_preview, 
                  :style => "display: #{visibility}") + 
-        Button.new(:onclick => "Aurita.Wiki.select_media_asset({ hidden_field: '#{dom_id()}',
-                                                          user_id: ''});") { tl(:select_image) } + 
-        Button.new(:onclick => "Aurita.load({ action: 'Wiki::Media_Asset/add_profile_image/' });", 
-                   :id => "upload_profile_image_button_#{dom_id()}" ) { tl(:upload_image) }+ 
-        Button.new(:onclick => "Aurita.Wiki.select_media_asset_click(0, '#{dom_id()}');", 
-                   :id => "clear_selected_image_button_#{dom_id()}" ) { tl(:clear_image) }+ 
+        HTML.div.button_bar { 
+          Text_Button.new(:onclick => "Aurita.Wiki.select_media_asset({ hidden_field: '#{dom_id()}',
+                                                                        user_id: ''});") { tl(:select_image) } + 
+          Text_Button.new(:onclick => "Aurita.load({ action: 'Wiki::Media_Asset/add_profile_image/' });", 
+                          :id => "upload_profile_image_button_#{dom_id()}" ) { tl(:upload_image) }+ 
+          Text_Button.new(:onclick => "Aurita.Wiki.select_media_asset_click(0, '#{dom_id()}');", 
+                          :id => "clear_selected_image_button_#{dom_id()}" ) { tl(:clear_image) } 
+        } + 
         Hidden_Field.new(:id => dom_id(), :value => @value, :name => @attrib[:name]) + 
         HTML.div(:class => :media_asset_selection, :id => "select_box_#{dom_id()}", :force_no_close => true)
       }
@@ -161,8 +163,8 @@ JS
     def element
       select_field = Select_Field.new(@attrib)
       if @parent then
-        button       = Button.new(:class   => :add_category_button, 
-                                  :onclick => "Aurita.Main.category_selection_add('#{@parent.dom_id}');") { '+' }
+        button       = Text_Button.new(:class   => :add_category_button, 
+                                       :onclick => "Aurita.Main.category_selection_add('#{@parent.dom_id}');") { '+' }
         return HTML.div.category_select_field { 
           select_field
         }
@@ -182,7 +184,7 @@ JS
       def element
         HTML.div { 
           Hidden_Field.new(:name => 'category_ids[]', :value => @value) + 
-          HTML.span(:onclick => "Element.remove('#{@parent.dom_id}');", :class => :link) { 'X ' } + HTML.span { @label.to_s }
+          HTML.a(:onclick => "Element.remove('#{@parent.dom_id}');", :class => :icon) { HTML.img(:src => '/aurita/images/icons/delete_small.png') } + HTML.span { @label }
         }
       end
     end
@@ -280,7 +282,9 @@ JS
                     :onclick => "Aurita.load({ element: 'dispatcher', 
                                                onload: function() { Aurita.load({ element: 'user_category_list', 
                                                                                   action: 'User_Category/category_list/user_group_id=#{@user.user_group_id}' }); }, 
-                                               action: 'User_Category/perform_delete/user_group_id=#{@user.user_group_id}&category_id=#{@value}' });") { 'X ' } + 
+                                               action: 'User_Category/perform_delete/user_group_id=#{@user.user_group_id}&category_id=#{@value}' });") { 
+            HTML.img(:src => '/aurita/images/icons/delete_small.png') 
+          } + 
           @label.to_s + HTML.div { readonly_checkbox }
         }
       end
@@ -402,7 +406,7 @@ JS
         element_id = 'user_selection_option_' + @value if @parent
         HTML.div(:id => element_id) { 
           Hidden_Field.new(:name => 'user_group_ids[]', :value => @value) + 
-          HTML.span(:onclick => "Element.remove('#{element_id}');", :class => :link) { 'X ' } + HTML.span { @label.to_s }
+          HTML.span(:onclick => "Element.remove('#{element_id}');", :class => :link) { HTML.img(:src => '/aurita/images/icons/delete_small.png') } + HTML.span { @label.to_s }
         }
       end
     end
@@ -434,7 +438,7 @@ JS
       def element
         HTML.div { 
           HTML.span(:class => :link, 
-                    :onclick => "Aurita.call({ action: 'User_Role/perform_delete/user_group_id=#{@user.user_group_id}&role_id=#{@value}' });") { 'X ' } + 
+                    :onclick => "Aurita.call({ action: 'User_Role/perform_delete/user_group_id=#{@user.user_group_id}&role_id=#{@value}' });") { HTML.img(:src => '/aurita/images/icons/delete_small.png') } + 
           @label.to_s
         }
       end
@@ -495,13 +499,11 @@ JS
       @attrib[:onclick] = trigger_onclick
       HTML.div { 
         Input_Field.new(@attrib.update(:value => @value, :readonly => true, :id => name)) + 
-        HTML.button(:class => :datepick_clear, 
-                    :type => :button, 
-                    :onclick => clear_onclick) { 'X' }  + 
-        HTML.button(:id => trigger_name, 
-                    :class => :datepick, 
-                    :type => :button, 
-                    :onclick => trigger_onclick) { tl(:choose_date) } 
+        Text_Button.new(:class   => :datepick_clear, 
+                        :onclick => clear_onclick) { 'X' }  + 
+        Text_Button.new(:id      => trigger_name, 
+                        :class   => :datepick, 
+                        :onclick => trigger_onclick) { tl(:choose_date) } 
       }
     end
   end

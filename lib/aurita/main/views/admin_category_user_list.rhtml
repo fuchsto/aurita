@@ -4,12 +4,10 @@
   <%= f.custom(:element  => Category_User_Selection_List_Field, 
                :name     => :user_group_id, 
                :category => category) %>
-  <button type="button" class="submit varwidth" 
-    onclick="Aurita.submit_form('user_category_form', { onload: function() { Aurita.load({ element: 'user_category_list',  
-                                                                                           action: 'User_Category/user_list/category_id=<%= category.category_id %>'}); 
-                                                                }
-                                });">
-    +
-  </button> 
+  <%= gui.button(:onclick => "Aurita.submit_form('user_category_form', { onload: function() { Aurita.load({ element: 'user_category_list',  
+                                                                                                            action: 'User_Category/user_list/category_id=#{category.category_id}'}); 
+                                                                                 }
+                              });") { '+' }
+  %>
 <% end %>
 

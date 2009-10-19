@@ -223,11 +223,21 @@ input.inline, textarea.inline {
   border: 1px solid #000000; 
 }
 
+.button_bar { 
+  margin-bottom: 10px; 
+  clear: both; 
+  height: 23px; 
+}
+.button_bar .button, .button_bar .button:hover { 
+  margin-right: 4px; 
+  margin-left: 1px; 
+  padding-left: 7px; 
+  padding-right: 7px; 
+  padding: 3px 12px; 
+  float: left; 
+}
+
 .form_button_bar { 
-/*
-  text-align: left; 
-  margin-left: 124px;
-*/
   margin-top: 12px; 
   margin-left: 0px; 
   height: 22px; 
@@ -238,6 +248,8 @@ input.inline, textarea.inline {
   width: 138px; 
   float: left; 
   padding: 1px 12px; 
+  line-height: 21px; 
+  font-size: 1em; 
   background: transparent url(/aurita/images/icons/button_normal.gif) repeat-x scroll 0 0
 }
 .form_button_bar .button:hover { 
@@ -417,14 +429,14 @@ ul.form_fields textarea.comment {
 }
 
 input.datepick { 
+  margin-left: 4px; 
   width: 219px !important; 
 }
-button.datepick { 
-  width: 70px !important; 
-}
-button.datepick_clear { 
-  margin-left: 2px; 
-  width: 30px !important; 
+.button.datepick, .button.datepick_clear { 
+  margin-left: 4px; 
+  line-height: 19px; 
+  position: relative; 
+  top: -1px; 
 }
 
 div.timespan { 
@@ -593,6 +605,6 @@ fieldset legend {
 }
 
 ul.form_fields .multi_file_entry input { 
-  width: 312px; 
+/*  width: 312px; */
 }
 

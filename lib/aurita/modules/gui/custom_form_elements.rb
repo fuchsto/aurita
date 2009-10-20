@@ -267,22 +267,20 @@ JS
       def initialize(params={})
         super(params)
         @user     = @parent.user
-        @read     = @parent.read_access[@value.to_s]
-        @write    = @parent.write_access[@value.to_s]
+        @read     = @parent.read_access[@value.to_s]? 'read' : nil
+        @write    = @parent.write_access[@value.to_s]? 'write' : nil
       end
       def element
-        read_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_readonly", 
-                                                        :options => { 'true' => tl(:read_permission) }, 
-                                                        :value => @read.to_s ).element
-        write_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_readonly", 
-                                                         :options => { 'true' => tl(:write_permission) }, 
-                                                         :value => @write.to_s ).element
-        read_checkbox.each { |e| 
-          e.first.onclick = "Aurita.call('User_Category/toggle_read_permission/user_group_id=#{@user.user_group_id}&category_id=#{@value}'); return true; "
-        }
-        write_checkbox.each { |e| 
-          e.first.onclick = "Aurita.call('User_Category/toggle_write_permission/user_group_id=#{@user.user_group_id}&category_id=#{@value}'); return true; "
-        }
+        access_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_permissions", 
+                                                          :id   => "user_#{@value}_permissions", 
+                                                          :option_values => [ 'read', 'write' ], 
+                                                          :option_labels => [ tl(:read_permission), tl(:write_permission) ], 
+                                                          :value => [ @read.to_s, @write.to_s ] ).element
+
+        toggle_read  = "Aurita.call('User_Category/toggle_read_permission/user_group_id=#{@user.user_group_id}&category_id=#{@value}'); return true; "
+        toggle_write = "Aurita.call('User_Category/toggle_write_permission/user_group_id=#{@user.user_group_id}&category_id=#{@value}'); return true; "
+        access_checkbox[0].first.onclick = toggle_read
+        access_checkbox[1].first.onclick = toggle_write
 
         HTML.div { 
           HTML.a(:class => :icon, 
@@ -292,7 +290,7 @@ JS
                                             action: 'User_Category/perform_delete/user_group_id=#{@user.user_group_id}&category_id=#{@value}' });") { 
             HTML.img(:src => '/aurita/images/icons/delete_small.png') 
           } + 
-          @label.to_s + HTML.div { read_checkbox } + HTML.div { write_checkbox } 
+          @label.to_s + HTML.div { read_checkbox } + HTML.div { access_checkbox } 
         }
       end
     end
@@ -342,22 +340,21 @@ JS
       def initialize(params={})
         super(params)
         @category = @parent.category
-        @read     = @parent.read_access[@value.to_s]
-        @write    = @parent.write_access[@value.to_s]
+        @read     = @parent.read_access[@value.to_s]? 'read' : nil
+        @write    = @parent.write_access[@value.to_s]? 'write' : nil
       end
       def element
-        read_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_read", 
-                                                        :options => { 'true' => tl(:read_permission) }, 
-                                                        :value => @read.to_s ).element
-        write_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_write", 
-                                                         :options => { 'true' => tl(:write_permission) }, 
-                                                         :value => @write.to_s ).element
-        read_checkbox.each { |e| 
-          e.first.onclick = "Aurita.call('User_Category/toggle_read_permission/user_group_id=#{@value}&category_id=#{@category.category_id}'); return true; "
-        }
-        write_checkbox.each { |e| 
-          e.first.onclick = "Aurita.call('User_Category/toggle_write_permission/user_group_id=#{@value}&category_id=#{@category.category_id}'); return true; "
-        }
+
+        access_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_permissions", 
+                                                          :id   => "user_#{@value}_permissions", 
+                                                          :option_values => [ 'read', 'write' ], 
+                                                          :option_labels => [ tl(:read_permission), tl(:write_permission) ], 
+                                                          :value => [ @read.to_s, @write.to_s ] ).element
+
+        toggle_read  = "Aurita.call('User_Category/toggle_read_permission/user_group_id=#{@value}&category_id=#{@category.category_id}'); return true; "
+        toggle_write = "Aurita.call('User_Category/toggle_write_permission/user_group_id=#{@value}&category_id=#{@category.category_id}'); return true; "
+        access_checkbox[0].first.onclick = toggle_read
+        access_checkbox[1].first.onclick = toggle_write
 
         HTML.div { 
           HTML.a(:class => :icon, 
@@ -367,7 +364,7 @@ JS
                                             action: 'User_Category/perform_delete/user_group_id=#{@value}&category_id=#{@category.category_id}' });") { 
             HTML.img(:src => '/aurita/images/icons/delete_small.png')
           } + 
-          @label.to_s + HTML.div { read_checkbox } + HTML.div { write_checkbox } 
+          @label.to_s + HTML.div { read_checkbox } + HTML.div { access_checkbox } 
         }
       end
     end

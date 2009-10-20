@@ -69,7 +69,8 @@ module Main
       # }
       User_Profile.select { |u|
         u.where(User_Profile.user_group_id.in(User_Category.select(User_Category.user_group_id) { |uid|
-          uid.where(User_Category.category_id == category_id)
+          uid.where((User_Category.category_id == category_id) & 
+                    (User_Profile.hidden == 'f') & (User_Profile.locked == 'f'))
         }))
       }
     end # }}}

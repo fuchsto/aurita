@@ -284,19 +284,20 @@ table.list td.tab_left {
 .flag_button, .flag_button_active { 
   cursor: pointer; 
   width: 100px; 
-  height: 20px; 
+  height: 15px; 
   float: left; 
   font-size: 12px; 
   border-left: 1px solid #cccccc; 
   border-right: 1px solid #cccccc; 
   border-top: 1px solid #cccccc; 
-  border-bottom: 0px; 
-  padding: 3px; 
-  padding-bottom: 5px; 
+  border-bottom-width: 0px; 
+  padding: 7px; 
   margin-top: 3px; 
   margin-right: 3px; 
-  margin-bottom: 0px; 
-  background: #c3c3c3 url('/aurita/images/icons/box_header_bg.png') repeat-x
+  margin-bottom: -1px; 
+  background: #c3c3c3 url('/aurita/images/icons/box_header_bg.png') repeat-x; 
+  -moz-border-radius-topleft: 3px; 
+  -moz-border-radius-topright: 3px; 
 }
 .flag_button { 
   color: #232323; 

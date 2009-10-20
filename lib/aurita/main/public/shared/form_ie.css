@@ -101,6 +101,7 @@ ul.form_fields .button {
 
 a.icon_button img { 
   margin: 0px 0px 0px 0px; 
+  padding-right: 5px; 
 }
 
 ul.form_fields .timespan select { 

@@ -15,8 +15,10 @@
     <%= f.text(:name => :division, :value => user.division, :label => tl(:division), :required => false) %>
     <%= f.password(:name => :pass, :label => tl(:new_pass_optional)) %>
     <%= f.password(:name => :pass_confirm, :label => tl(:new_pass_optional_confirm)) %>
-    <button class="submit" type="button" onClick="Aurita.submit_form('user_login_data_form');">ok</button>
   <% end %>
+  <div class="form_button_bar">
+    <%= gui.button(:onclick => "Aurita.submit_form('user_login_data_form');") { tl(:ok) } %>
+  </div>
 
 <% end %>
 
@@ -46,10 +48,8 @@
       <br />
       <br />
       <% form_for(:model => User_Login_Data, :instance => user, :action => :perform_unlock, :id => :unlock_user_form) do |f| %>
-      <button class="green" type="button" onClick="Aurita.submit_form('unlock_user_form');">
-        <%= tl(:activate_user) %>
-      </button>
-      <% end %>
+      <%= gui.button(:class => [ :green, :form ], :onclick => "Aurita.submit_form('unlock_user_form');") { tl(:activate_user) } %>
+    <% end %>
 
     <% else %>
       <h2><%= tl(:deactivate_user) %></h2>
@@ -58,9 +58,7 @@
       <br />
       <br />
       <% form_for(:model => User_Login_Data, :instance => user, :action => :perform_lock, :id => :lock_user_form) do |f| %>
-      <button class="red" type="button" onClick="Aurita.submit_form('lock_user_form');">
-        <%= tl(:deactivate_user) %>
-      </button>
+      <%= gui.button(:class => [ :red, :form ], :onclick => "Aurita.submit_form('lock_user_form');") { tl(:deactivate_user) } %>
       <% end %>
 
     <% end %>
@@ -73,9 +71,7 @@
     <%= tl(:delete_user_hints) %>
     <br />
     <br />
-    <button class="critical" type="button" onClick="Aurita.load({ action: 'User_Login_Data/delete/user_group_id=<%= user.user_group_id %>' }); ">
-      <%= tl(:delete_user) %>
-    </button>
+    <%= gui.button(:class => [ :red, :form ], :onclick => "Aurita.load({ action: 'User_Login_Data/delete/user_group_id=#{user.user_group_id}' });") { tl(:delete_user) } %>
   </div>
 </div>
 

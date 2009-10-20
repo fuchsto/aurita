@@ -50,11 +50,9 @@ select {
   padding: 4px; 
   padding-left: 3px !important;
   width: 100%; 
-/*  line-height: 120%; */
   background-color: #eaeaea;
   border: 1px solid #dedede; 
   clear: both; 
-  display: block; 
 }
 
 .mceSelectList select { 
@@ -107,42 +105,6 @@ select:focus, select:active, select.focussed {
   outline: none; 
 }
 
-input.lore_file  {
-  height: 26px;   
-  font-size: 12px;  
-  width: 324px; 
-  border: 1px solid #cccccc;  
-  background-color: #eaeaea;
-  line-height: 120%; 
-  padding: 5px; 
-}
-input.lore_button, input.lore_small_button, input.lore_button_varwidth {
-  color: #000000;
-  border: 1px solid #cccccc;; 
-  margin-top: 0px; 
-  padding: 4px; 
-  background-color: #eaeaea;
-}
-input.lore_small_button { 
-  margin: 2px; 
-  padding: 0px; 
-}
-input.lore_button:hover, input.lore_small_button:hover,  input.lore_button_varwidth:hover { 
-  color: #990000;
-  border: 1px solid #990000
-}
-input.lore_button {
-  width: 100px; 
-}
-
-hr.lore {
-  border-width: 0px; 
-  height: 1px; 
-  color: #242424;
-  background-color: #242424;
-  width: 490px;
-}
-
 textarea.text_editor { 
   width: 306px; 
   height: 200px; 
@@ -164,16 +126,7 @@ textarea.text_editor:focus, textarea.text_editor:active {
   font-weight: lighter;
   padding: 3px;
 }
-.lore_radio_row, .lore_checkbox_row { 
-  display: block;
-  margin: 6px; 
-}
-.lore_radio_row { 
-  margin: 2px; 
-}
-.lore_radio_row .lore_readonly_wrap, .lore_checkbox_row .lore_readonly_wrap { 
-  padding: 2px; 
-}
+
 .form_elements .lore_readonly_wrap { 
   padding: 6px; 
 }
@@ -246,16 +199,16 @@ input.inline, textarea.inline {
   clear: both; 
 }
 
-.form_button_bar .button, .form_button_bar .button:hover { 
+.button.form, .form_button_bar .button, .form_button_bar .button:hover { 
   width: 138px; 
   float: left; 
-  padding: 1px 12px; 
+  padding: 0px 12px; 
   line-height: 21px; 
-  font-size: 1em; 
-  background: transparent url(/aurita/images/icons/button_normal.gif) repeat-x scroll 0 0
+  font-size: 0.8em;
+  background: transparent url(/aurita/images/icons/box_header_bg.png) repeat-x scroll 0 0;
 }
 .form_button_bar .button:hover { 
-  background: transparent url(/aurita/images/icons/button_hover.gif) repeat-x scroll 0 0
+  background: transparent url(/aurita/images/icons/button_hover.gif) repeat-x scroll 0px -1px;
 }
 .form_button_bar button.submit, .form_button_bar .submit { 
   margin-right: 10px; 
@@ -264,6 +217,52 @@ input.inline, textarea.inline {
   margin-right: 0px; 
 }
 
+a.button, span.button, div.button { 
+  cursor: pointer; 
+  background: transparent url(/aurita/images/icons/box_header_bright_bg.png) repeat-x scroll 0 0;
+  color: #000000 !important; 
+  background-color: #c0c0c0; 
+  padding: 2px; 
+  padding-left: 5px; 
+  padding-right: 5px; 
+  border-width: 1px; 
+  border-style: solid; 
+  border-color: #a0a0a0; 
+  font-size: 0.8em;
+  text-align: center; 
+  -moz-border-radius: 3px; 
+}
+a.button:hover { 
+  background: url('/aurita/images/icons/button_hover.gif') repeat-x scroll 0px -1px;
+}
+a.button:active { 
+  border-style: inset; 
+}
+
+button.icon_button {
+  width: 32px; 
+  height: 32px; 
+  margin: 1px; 
+  padding: 0px; 
+  border-top: 1px solid #efefef; 
+  border-left: 1px solid #efefef; 
+  border-bottom: 1px solid #5f5f5f; 
+  border-right: 1px solid #5f5f5f; 
+}
+button.icon_button img {
+  padding: 1px; 
+  margin: 0px; 
+}
+
+a.icon_button img { 
+  margin: -3px 0px 0px 0px; 
+}
+a.icon_button .button_label { 
+  margin-left: 4px; 
+}
+a.icon_button, a.icon_button:hover { 
+  padding: 4px;
+}
 
 button { 
 /*  background: url('/aurita/images/icons/button_grey_bg.png'); */
@@ -432,7 +431,7 @@ ul.form_fields textarea.comment {
 
 input.datepick { 
   margin-left: 4px; 
-  width: 219px !important; 
+  width: 248px !important; 
 }
 .button.datepick, .button.datepick_clear { 
   margin-left: 4px; 
@@ -454,8 +453,7 @@ ul.radio_options {
   margin-left: 9px; 
   padding-left: 3px; 
 }
-ul.radio_options label { 
-}
+
 ul.radio_options input { 
   float: left; 
   margin-right: 6px; 

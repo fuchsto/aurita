@@ -54,14 +54,14 @@ ul li.form_field {
   top: -15px; 
 }
 
-ul.radio_options li, ul.checkbox_options li { 
+ul.checkbox_options li { 
   margin-left: -7px; 
 }
 ul.radio_options, ul.checkbox_options { 
   margin: 0px; 
   margin-bottom: 0px; 
 }
-ul.radio_options input, ul.checkbox_options li input { 
+ul.checkbox_options li input { 
   margin: 0px; 
   padding: 0px; 
   /* TODO: This is dirty! */
@@ -69,7 +69,23 @@ ul.radio_options input, ul.checkbox_options li input {
   top: -14px; 
   float: none; 
 }
-ul.radio_options li label, ul.checkbox_options li label { 
+ul.radio_options li { 
+  padding: 0px; 
+  margin-bottom: 0px; 
+  margin-top: 0px; 
+}
+ul.radio_options li input { 
+  margin: 0px; 
+  margin-right: 4px; 
+  padding: 0px; 
+}
+ul.radio_options li label { 
+  margin: 0px; 
+  padding: 0px; 
+  display: inline; 
+  float: left; 
+}
+ul.checkbox_options li label { 
   margin-right: 20px; 
 }
 
@@ -82,3 +98,12 @@ ul.form_fields .button {
 .button.datepick, .button.datepick_clear { 
   top: -4px; 
 }
+
+a.icon_button img { 
+  margin: 0px 0px 0px 0px; 
+}
+
+ul.form_fields .timespan select { 
+  margin-top: 6px; 
+}
+

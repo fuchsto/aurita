@@ -553,9 +553,7 @@ fieldset legend {
 .section_content fieldset { 
   border: 1px solid #dfdfdf; 
   padding: 10px; 
-  margin: 0px; 
-  margin-top: 29px; 
-  margin-bottom: 0px; 
+  margin-top: 32px; 
   background-color: #fafafa; 
 }
 .section_content fieldset legend { 

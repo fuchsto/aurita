@@ -1931,6 +1931,9 @@ a.icon_button, a.icon_button:hover {
 a.button:hover { 
   background: url('/aurita/images/icons/button_hover.gif') repeat-x;
 }
+a.button:active { 
+  border-style: inset; 
+}
 
 span.inline_button, div.inline_button { 
   cursor: pointer; 

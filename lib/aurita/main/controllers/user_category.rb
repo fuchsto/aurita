@@ -24,10 +24,9 @@ module Main
       HTML.div { view_string(:admin_category_user_list, :category => category) }
     end
 
-
     def index
       return Page.new(:header => tl(:your_categories)) { 
-        Aurita.user.categories.map { |c| 
+        Aurita.user.readable_categories.map { |c| 
           HTML.div.category_thumb { 
             link_to(c, :controller => 'Category') { c.category_name }
           }

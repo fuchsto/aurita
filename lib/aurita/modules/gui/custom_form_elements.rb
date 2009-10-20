@@ -278,10 +278,10 @@ JS
                                                          :options => { 'true' => tl(:write_permission) }, 
                                                          :value => @write.to_s ).element
         read_checkbox.each { |e| 
-          e.first.onclick = "Aurita.call('User_Category/toggle_read_permission/user_group_id=#{@user.user_group_id}&category_id=#{@value}');"
+          e.first.onclick = "Aurita.call('User_Category/toggle_read_permission/user_group_id=#{@user.user_group_id}&category_id=#{@value}'); return true; "
         }
         write_checkbox.each { |e| 
-          e.first.onclick = "Aurita.call('User_Category/toggle_write_permission/user_group_id=#{@user.user_group_id}&category_id=#{@value}');"
+          e.first.onclick = "Aurita.call('User_Category/toggle_write_permission/user_group_id=#{@user.user_group_id}&category_id=#{@value}'); return true; "
         }
 
         HTML.div { 
@@ -353,10 +353,10 @@ JS
                                                          :options => { 'true' => tl(:write_permission) }, 
                                                          :value => @write.to_s ).element
         read_checkbox.each { |e| 
-          e.first.onclick = "Aurita.call('User_Category/toggle_read_permission/user_group_id=#{@value}&category_id=#{@category.category_id}');"
+          e.first.onclick = "Aurita.call('User_Category/toggle_read_permission/user_group_id=#{@value}&category_id=#{@category.category_id}'); return true; "
         }
         write_checkbox.each { |e| 
-          e.first.onclick = "Aurita.call('User_Category/toggle_write_permission/user_group_id=#{@value}&category_id=#{@category.category_id}');"
+          e.first.onclick = "Aurita.call('User_Category/toggle_write_permission/user_group_id=#{@value}&category_id=#{@category.category_id}'); return true; "
         }
 
         HTML.div { 

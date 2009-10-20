@@ -45,21 +45,44 @@ ul li.form_field {
   padding-left: 10px; 
   background-color: transparent; 
 }
+/*
+ul.radio_options li { 
+  margin-left: -7px; 
+}
+ul.checkbox_options { 
+  margin: 0px; 
+  margin-bottom: 3px; 
+}
+ul.radio_options label, ul.checkbox_options label { 
+  padding: 0px 5px 0px 0px; 
+  margin-top: 0px; 
+  display: inline; 
+}
+ul.radio_options input, ul.checkbox_options input { 
+  padding: 0px 5px 0px 0px; 
+  float: none; 
+  clear: both; 
+}
+*/
 
 ul.radio_options li { 
   margin-left: -7px; 
 }
 ul.checkbox_options { 
   margin: 0px; 
-  margin-bottom: 7px; 
+  margin-bottom: 0px; 
 }
 ul.radio_options label, ul.checkbox_options label { 
-  padding: 2px 5px 0px 0px; 
-  margin-top: 3px; 
-  display: inline; 
+  padding: 0px 0px 0px 0px; 
+  margin-top: 0px; 
 }
 ul.radio_options input, ul.checkbox_options input { 
-  padding: 2px 5px 0px 0px; 
+  padding: 0px 0px 0px 0px; 
   float: none; 
   clear: both; 
+}
+
+
+.button.datepick, .button.datepick_clear { 
+  top: -4px; 
 }

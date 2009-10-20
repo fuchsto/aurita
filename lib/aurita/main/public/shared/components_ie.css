@@ -77,3 +77,10 @@
 .box_hierarchy_entry_level_6 .label { 
   padding-left: 66; 
 }
+
+.user_category_selection_list_field_wrap li a.icon img, .user_role_selection_list_field_wrap li a.icon img, .category_user_selection_list_field_wrap li a.icon img { 
+  margin: 0px; 
+  padding: 0px; 
+  position: relative; 
+  top: -14px; 
+}

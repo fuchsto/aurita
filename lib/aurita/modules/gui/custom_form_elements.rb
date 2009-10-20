@@ -279,8 +279,8 @@ JS
 
         toggle_read  = "Aurita.call('User_Category/toggle_read_permission/user_group_id=#{@user.user_group_id}&category_id=#{@value}'); return true; "
         toggle_write = "Aurita.call('User_Category/toggle_write_permission/user_group_id=#{@user.user_group_id}&category_id=#{@value}'); return true; "
-        access_checkbox[0].first.onclick = toggle_read
-        access_checkbox[1].first.onclick = toggle_write
+        access_checkbox[0].first.onchange = toggle_read
+        access_checkbox[1].first.onchange = toggle_write
 
         HTML.div { 
           HTML.a(:class => :icon, 
@@ -353,8 +353,8 @@ JS
 
         toggle_read  = "Aurita.call('User_Category/toggle_read_permission/user_group_id=#{@value}&category_id=#{@category.category_id}'); return true; "
         toggle_write = "Aurita.call('User_Category/toggle_write_permission/user_group_id=#{@value}&category_id=#{@category.category_id}'); return true; "
-        access_checkbox[0].first.onclick = toggle_read
-        access_checkbox[1].first.onclick = toggle_write
+        access_checkbox[0].first.onchange = toggle_read
+        access_checkbox[1].first.onchange = toggle_write
 
         HTML.div { 
           HTML.a(:class => :icon, 
@@ -446,8 +446,8 @@ JS
       end
       def element
         HTML.div { 
-          HTML.span(:class => :link, 
-                    :onclick => "Aurita.call({ action: 'User_Role/perform_delete/user_group_id=#{@user.user_group_id}&role_id=#{@value}' });") { HTML.img(:src => '/aurita/images/icons/delete_small.png') } + 
+          HTML.a(:class => :icon, 
+                 :onclick => "Aurita.call({ action: 'User_Role/perform_delete/user_group_id=#{@user.user_group_id}&role_id=#{@value}' });") { HTML.img(:src => '/aurita/images/icons/delete_small.png') } + 
           @label.to_s
         }
       end

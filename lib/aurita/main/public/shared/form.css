@@ -50,9 +50,11 @@ select {
   padding: 4px; 
   padding-left: 3px !important;
   width: 100%; 
-  line-height: 120%; 
+/*  line-height: 120%; */
   background-color: #eaeaea;
   border: 1px solid #dedede; 
+  clear: both; 
+  display: block; 
 }
 
 .mceSelectList select { 
@@ -508,6 +510,8 @@ li ul.checkbox_options input {
 }
 li ul.checkbox_options label { 
   display: inline; 
+  position: relative; 
+  top: -1px; 
 }
 
 fieldset.list table.list { 
@@ -565,11 +569,11 @@ fieldset legend {
   border-bottom: 1px solid transparent; 
   background-color: #fafafa; 
 }
+
 .section_content form { 
   padding: 10px; 
   margin: -10px; 
 }
-
 
 .tag_autocomplete_field_wrap li.autocomplete { 
   width: 100% !important; 
@@ -590,7 +594,10 @@ fieldset legend {
   padding-bottom: 2px !important; 
 }
 
-
+.selection_list_field ul ul.checkbox_options { 
+  margin-left: 25px; 
+  margin-bottom: 5px; 
+}
 
 
 #context_menu ul.form_fields input, #context_menu ul.form_fields textarea, #context_menu ul.form_fields select { 

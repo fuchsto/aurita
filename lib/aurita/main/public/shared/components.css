@@ -1127,7 +1127,7 @@ div.autocomplete ul {
   margin:0px;
   padding:0px;
 }
-div.autocomplete ul.autocomplete li.selected { 
+div.autocomplete ul.autocomplete li.autocomplete.selected { 
   background-color: #f9dba8 !important; 
 }
 div.autocomplete ul.autocomplete li.autocomplete {
@@ -1196,9 +1196,10 @@ li.autocomplete_first_entry {
   padding-left: 3px; 
 }
 
-.autocomplete .delimiter { 
+.autocomplete .delimiter, .autocomplete .delimiter.selected { 
   padding: 3px; 
   background-color: #cccccc; 
+  cursor: default; 
 }
 /*
 .autocomplete_article { 

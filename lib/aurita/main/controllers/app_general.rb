@@ -16,7 +16,7 @@ module Main
       account = Box.new(:type => :none, :class => :topic)
       account.header = tl(:account)
       if Aurita.user.is_registered? then
-        logout_string = HTML.a(:href => "/aurita/App_Main/logout/x=#{rand(10000)}") { 
+        logout_string = HTML.a(:href => "/aurita/App_Main/logout") { 
                           HTML.img(:src => '/aurita/images/icons/logout.gif') +  '&nbsp; Logout' 
                         }
         account.body = tl(:logged_in_as) + ' ' + link_to(:controller => 'User_Profile') { Aurita.user.user_group_name } + '<br /><br />' + logout_string

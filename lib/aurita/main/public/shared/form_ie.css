@@ -37,6 +37,15 @@ ul li.form_field {
   top: 2px; 
 }
 
+.toolbar a.button, .toolbar a.button:hover { 
+  position: relative; 
+  top: -6px; 
+  margin: 0px; 
+  padding: 7px; 
+  padding-top: 1px; 
+  padding-bottom: 1px; 
+} 
+
 .section_content fieldset { 
   width: 340px; 
   margin-top: 20px; 

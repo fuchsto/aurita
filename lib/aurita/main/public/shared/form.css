@@ -203,7 +203,7 @@ input.inline, textarea.inline {
   width: 138px; 
   padding: 4px 12px; 
   font-size: 0.8em;
-  background: transparent url(/aurita/images/icons/box_header_bg.png) repeat-x scroll 0 0;
+  background: transparent url(/aurita/images/icons/box_header_bg.png) repeat scroll 0 0;
 }
 .form_button_bar .button, .form_button_bar .button:hover { 
   float: left; 
@@ -211,7 +211,7 @@ input.inline, textarea.inline {
 } 
 
 .button.form:hover, .form_button_bar .button:hover { 
-  background: transparent url(/aurita/images/icons/button_hover.gif) repeat-x scroll 0px -1px;
+  background: transparent url(/aurita/images/icons/button_hover.gif) repeat scroll 0px -1px;
 }
 .form_button_bar button.submit, .form_button_bar .submit { 
   margin-right: 10px; 
@@ -222,7 +222,7 @@ input.inline, textarea.inline {
 
 a.button, span.button, div.button { 
   cursor: pointer; 
-  background: transparent url(/aurita/images/icons/box_header_bright_bg.png) repeat-x scroll 0 0;
+  background: transparent url(/aurita/images/icons/box_header_bright_bg.png) repeat scroll 0 0;
   color: #000000 !important; 
   background-color: #c0c0c0; 
   padding: 2px; 
@@ -236,10 +236,15 @@ a.button, span.button, div.button {
   -moz-border-radius: 3px; 
 }
 a.button:hover { 
-  background: url('/aurita/images/icons/button_hover.gif') repeat-x scroll 0px -1px;
+  background: url('/aurita/images/icons/button_hover.gif') repeat scroll 0px -1px;
 }
 a.button:active { 
   border-style: inset; 
+}
+
+.toolbar a.button, .toolbar a.button:hover { 
+  position: relative; 
+  top: -1px; 
 }
 
 button.icon_button {
@@ -271,7 +276,7 @@ button {
 /*  background: url('/aurita/images/icons/button_grey_bg.png'); */
   border-color: #898989 #343434 #343434 #898989; 
   background-color: #cfcfcf;
-  background: url('/aurita/images/icons/button_normal.gif') repeat-x;  
+  background: url('/aurita/images/icons/button_normal.gif') repeat;  
 /*  border-color: transparent;  */
   border-width: 1px; 
   line-height: 130%;
@@ -296,7 +301,7 @@ button:active, button:focus {
 }
 button:hover { 
   background-color: #F9DBA8; 
-  background: url('/aurita/images/icons/button_hover.gif') repeat-x; 
+  background: url('/aurita/images/icons/button_hover.gif') repeat; 
 }
 
 button.submit:hover, button.submit:active { 

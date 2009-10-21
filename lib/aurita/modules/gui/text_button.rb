@@ -22,7 +22,7 @@ module GUI
     def string()
       icon  = HTML.img(:src => "/aurita/images/icons/#{@icon}").string if @icon
       label = HTML.span.button_label { @label }.string if @label
-
+      
       set_content("#{icon}#{label}")
       super()
     end

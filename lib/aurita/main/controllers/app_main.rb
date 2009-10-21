@@ -137,7 +137,7 @@ module Main
     # set_http_header('Pragma' => 'no-cache');
     # @request.out('Cache-Control' => 'no-store, no-cache, must-revalidate, post-check=0,pre-check=0')
       
-    # set_http_header('expires' => Time.now-24*60*60)
+      set_http_header('expires' => (Time.now-24*60*60).to_s)
       
       positions  = Component_Position.select_values(:component_dom_id) { |i|
         i.where((Component_Position.user_group_id == Aurita.user.user_group_id) &
@@ -280,7 +280,8 @@ module Main
     
     def logout
       use_decorator(:blank)
-      set_http_header('expires' => Time.now-24*60*60)
+
+      set_http_header('expires' => (Time.now-24*60*60).to_s)
 
       Aurita.session.close()
 

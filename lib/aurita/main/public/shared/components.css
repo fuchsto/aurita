@@ -1861,8 +1861,7 @@ table.listing_2_columns {
 .media_asset_selection_list .toolbar { 
   background: url('/aurita/images/icons/box_header_bg.png') repeat-x;
   background-color: #c0c0c0; 
-  padding: 3px; 
-  padding-left: 6px; 
+  padding: 2px 5px 5px 6px;  
 }
 .media_asset_selection_list .toolbar img.icon { 
   position: relative; 

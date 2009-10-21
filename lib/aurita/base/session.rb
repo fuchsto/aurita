@@ -99,11 +99,14 @@ module Aurita
     # expiration time to a date in the past, then close this session. 
     def close() 
     # {{{
-      @@logger.log("delete user login cookie")
-      @env['rack.session'][:close] = true
-      @env['rack.session'][:drop]  = true
-      @env['rack.session.options'][:close] = true
-      @env['rack.session.options'][:drop]  = true
+      begin
+        @@logger.log("delete user login cookie")
+        @env['rack.session'][:close] = true
+        @env['rack.session'][:drop]  = true
+        @env['rack.session.options'][:close] = true
+        @env['rack.session.options'][:drop]  = true
+      rescue ::Exception => excep
+      end
     end # def }}}
     
     # Returns active interface language for this session
@@ -119,7 +122,10 @@ module Aurita
   class Mock_Session < Session
 
     begin
-      @@guest_user = Aurita::Main::User_Login_Data.create_shallow({ :user_group_id => 0, :user_group_name => 'guest', :login => '', :pass => '' }) 
+      @@guest_user = Aurita::Main::User_Login_Data.create_shallow({ :user_group_id   => 0, 
+                                                                    :user_group_name => 'guest', 
+                                                                    :login           => 'mock', 
+                                                                    :pass            => 'mock' }) 
     rescue ::Exception => ignore
     end
 

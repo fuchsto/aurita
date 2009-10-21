@@ -32,6 +32,11 @@ ul li.form_field {
   margin-right: 3pc; 
 }
 
+.button.form, .button.form:hover, .form_button_bar .button, .form_button_bar .button:hover { 
+  position: relative; 
+  top: 2px; 
+}
+
 .section_content fieldset { 
   width: 340px; 
   margin-top: 20px; 
@@ -89,7 +94,7 @@ ul.checkbox_options li label {
   margin-right: 20px; 
 }
 
-ul.form_fields .button { 
+ul.form_fields .button, ul.form_fields .button:hover { 
   position: relative; 
   top: -5px; 
   left: 1px; 

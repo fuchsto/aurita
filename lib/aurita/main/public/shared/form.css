@@ -199,15 +199,18 @@ input.inline, textarea.inline {
   clear: both; 
 }
 
-.button.form, .form_button_bar .button, .form_button_bar .button:hover { 
+.button.form, .button.form:hover, .form_button_bar .button, .form_button_bar .button:hover { 
   width: 138px; 
-  float: left; 
-  padding: 0px 12px; 
-  line-height: 21px; 
+  padding: 4px 12px; 
   font-size: 0.8em;
   background: transparent url(/aurita/images/icons/box_header_bg.png) repeat-x scroll 0 0;
 }
-.form_button_bar .button:hover { 
+.form_button_bar .button, .form_button_bar .button:hover { 
+  float: left; 
+  padding: 2px 12px; 
+} 
+
+.button.form:hover, .form_button_bar .button:hover { 
   background: transparent url(/aurita/images/icons/button_hover.gif) repeat-x scroll 0px -1px;
 }
 .form_button_bar button.submit, .form_button_bar .submit { 
@@ -597,7 +600,7 @@ fieldset legend {
   margin-bottom: 5px; 
 }
 
-
+/*
 #context_menu ul.form_fields input, #context_menu ul.form_fields textarea, #context_menu ul.form_fields select { 
   background-color: #ffffff; 
 }
@@ -606,6 +609,7 @@ fieldset legend {
   border:1px solid #ffffff;
   background-color: #fafafa;
 }
+*/
 
 ul.form_fields .multi_file_entry input { 
 /*  width: 312px; */

@@ -49,7 +49,7 @@ module GUI
       @data_type = false
     end
     def element
-      HTML.div { Input_Field.new(@attrib) + HTML.div(:id => :autocomplete_username_choices, :class => :autocomplete, :force_closing_tag => true) }
+      HTML.div { Input_Field.new(@attrib) + HTML.div(:id => :autocomplete_username_choices, :class => :autocomplete, :force_closing_tag => true, :style => 'position: relative !important;' ) }
     end
     def js_initialize()
 code =<<JS 
@@ -415,7 +415,9 @@ JS
         element_id = 'user_selection_option_' + @value if @parent
         HTML.div(:id => element_id) { 
           Hidden_Field.new(:name => 'user_group_ids[]', :value => @value) + 
-          HTML.span(:onclick => "Element.remove('#{element_id}');", :class => :link) { HTML.img(:src => '/aurita/images/icons/delete_small.png') } + HTML.span { @label.to_s }
+          HTML.a(:onclick => "Element.remove('#{element_id}');", :class => :icon) { 
+            HTML.img(:src => '/aurita/images/icons/delete_small.png') 
+          } + HTML.span { @label.to_s }
         }
       end
     end
@@ -447,7 +449,9 @@ JS
       def element
         HTML.div { 
           HTML.a(:class => :icon, 
-                 :onclick => "Aurita.call({ action: 'User_Role/perform_delete/user_group_id=#{@user.user_group_id}&role_id=#{@value}' });") { HTML.img(:src => '/aurita/images/icons/delete_small.png') } + 
+                 :onclick => "Aurita.call({ action: 'User_Role/perform_delete/user_group_id=#{@user.user_group_id}&role_id=#{@value}' });") { 
+            HTML.img(:src => '/aurita/images/icons/delete_small.png') 
+          } + 
           @label.to_s
         }
       end

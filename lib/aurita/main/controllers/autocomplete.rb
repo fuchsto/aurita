@@ -3,8 +3,6 @@ require('aurita')
 require('aurita/controller')
 Aurita.import_module :gui, :autocomplete_result
 Aurita.import_plugin_model :wiki, :article
-Aurita.import_plugin_model :wiki, :media_asset
-Aurita.import_plugin_model :bookmarking, :bookmark
 
 
 module Aurita

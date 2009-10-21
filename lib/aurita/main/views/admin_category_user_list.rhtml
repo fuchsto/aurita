@@ -1,15 +1,15 @@
 
-<h3><%= tl(:users) %></h3>
+<h3><%= tl(:members_of_category) %></h3>
 <% form_for(:model => User_Category, :action => :perform_add, :instance => category, :id => :user_category_form) do |f| %>
   <%= f.custom(:element  => Category_User_Selection_List_Field, 
                :name     => :user_group_id, 
-               :category => category) %>
-  <button type="button" class="submit varwidth" 
-    onclick="Aurita.submit_form('user_category_form', { onload: function() { Aurita.load({ element: 'user_category_list',  
-                                                                                           action: 'User_Category/user_list/category_id=<%= category.category_id %>'}); 
-                                                                }
-                                });">
-    +
-  </button> 
+               :category => category) 
+  %>
+  <%= f.custom(:element => Text_Button, 
+               :onclick => "Aurita.submit_form('user_category_form', { onload: function() { Aurita.load({ element: 'user_category_list',  
+                                                                                                          action: 'User_Category/user_list/category_id=#{category.category_id}'}); 
+                                                                                          }
+                            });") { '+' }
+  %>
 <% end %>
 

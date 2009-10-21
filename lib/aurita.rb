@@ -155,18 +155,36 @@ module Aurita
   # modules, permission configuration, and its language packs. 
   def self.import_plugin(plugin_name)
     if File.exists?("#{project_path()}/plugins/#{plugin_name.to_s}.rb") then
+
       Lang.add_plugin_language_pack(plugin_name)
-      if File.exists?("#{project_path()}/plugins/#{plugin_name.to_s}/lang/") then
-        Lang.add_project_language_pack(plugin_name)
-      end
-      Aurita.log('Importing plugin ' << plugin_name.to_s)
-      Aurita.import_folder "#{Aurita::Configuration.plugins_path}#{plugin_name.to_s}/lang/"
-      Aurita.import_folder "#{Aurita::Configuration.plugins_path}#{plugin_name.to_s}/modules/"
-      Aurita.import_folder "#{Aurita::Configuration.plugins_path}#{plugin_name.to_s}/model/"
-      Aurita.import_folder "#{Aurita::Configuration.plugins_path}#{plugin_name.to_s}/controllers/"
-      perms_file = "#{Aurita::Configuration.plugins_path}#{plugin_name.to_s}/permissions.rb"
-      if File.exists?(perms_file) then
-        require perms_file
+
+      begin
+        Aurita.log { "Trying to load #{plugin_name} from gem ..." } 
+        require("aurita-#{plugin_name}-plugin")
+        require("aurita-#{plugin_name}-plugin/plugin.rb")
+      rescue ::Exception => no_gem_found
+        Aurita.log { "Trying to load #{plugin_name} from #{Aurita::Configuration.plugins_path} ..." } 
+        # No gem found, so try to load from Aurita::Configuration.plugins_path.
+      
+        if(File.exists?("#{Aurita::Configuration.plugins_path}#{plugin_name.to_s}/lib")) then
+          plugin_path = "#{plugin_name}/lib"
+        else 
+          plugin_path = plugin_name.to_s.dup
+        end
+
+        if File.exists?("#{project_path()}/plugins/#{plugin_name}/lang/") then
+          Lang.add_project_language_pack(plugin_name)
+        end
+        Aurita.log { "Importing plugin #{plugin_name}" }
+        Aurita.import_folder "#{Aurita::Configuration.plugins_path}#{plugin_path}/lang/"
+        Aurita.import_folder "#{Aurita::Configuration.plugins_path}#{plugin_path}/modules/"
+        Aurita.import_folder "#{Aurita::Configuration.plugins_path}#{plugin_path}/model/"
+        Aurita.import_folder "#{Aurita::Configuration.plugins_path}#{plugin_path}/controllers/"
+
+        perms_file = "#{Aurita::Configuration.plugins_path}#{plugin_path}/permissions.rb"
+        if File.exists?(perms_file) then
+          require perms_file
+        end
       end
     end
 
@@ -183,7 +201,13 @@ module Aurita
   #   Aurita.import_plugin_model :wiki, :article
   #
   def self.import_plugin_model(plugin, model)
-    r = require("#{Aurita::Configuration.plugins_path}#{plugin.to_s}/model/#{model.to_s}")
+    r = false
+    begin
+      r = require("#{Aurita::Configuration.plugins_path}#{plugin}/model/#{model}")
+    rescue LoadError => e
+      plugin = "#{plugin}/lib"
+      r = require("#{Aurita::Configuration.plugins_path}#{plugin}/model/#{model}")
+    end
     Aurita.log "imported model #{plugin}/#{model}" if r
     r
   end
@@ -193,7 +217,13 @@ module Aurita
   #   Aurita.import_plugin_controller :wiki, :article
   #
   def self.import_plugin_controller(plugin, controller)
-    r = require("#{Aurita::Configuration.plugins_path}#{plugin.to_s}/controllers/#{controller.to_s}")
+    r = false
+    begin
+      r = require("#{Aurita::Configuration.plugins_path}#{plugin}/controllers/#{controller}")
+    rescue LoadError => e
+      plugin = "#{plugin}/lib"
+      r = require("#{Aurita::Configuration.plugins_path}#{plugin}/controllers/#{controller}")
+    end
     Aurita.log "imported controller #{plugin}/#{controller}" if r
     r
   end
@@ -203,7 +233,13 @@ module Aurita
   #   Aurita.import_plugin_module :wiki, :article_hierarchy_default_decorator
   #
   def self.import_plugin_module(plugin, module_name)
-    r = require("#{Aurita::Configuration.plugins_path}#{plugin.to_s}/modules/#{module_name.to_s}")
+    r = false
+    begin
+      r = require("#{Aurita::Configuration.plugins_path}#{plugin}/modules/#{module_name}")
+    rescue LoadError => e
+      plugin = "#{plugin}/lib"
+      r = require("#{Aurita::Configuration.plugins_path}#{plugin}/modules/#{module_name}")
+    end
     Aurita.log "imported module #{plugin}/#{module_name}" if r
     r
   end

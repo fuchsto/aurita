@@ -1,5 +1,6 @@
 
 require('aurita/controller')
+Aurita.import_module :gui, :custom_form_elements
 
 module Aurita
 module Main
@@ -12,30 +13,78 @@ module Main
     
     def form_groups
       [
-       Category.category_name
+       Category.category_name, 
+       :read_access, 
+       :write_access
       ]
     end
-
-    guard_interface(:perform_delete, :perform_add, :perform_update) { 
-      Aurita.user.is_admin? 
-    }
 
     after(:perform_update, :perform_delete) { |c|
       c.redirect_to(:controller => 'App_Main', :action => :blank)
       c.redirect(:element => :admin_categories_box_body, :to => :admin_box_body)
     }
 
+    private
+
+    def resolve_access
+      case param(:read_access)
+      when 'public' then
+        set_params(:public_readable     => true, 
+                   :registered_readable => false)
+      when 'registered' then
+        set_params(:public_readable     => false, 
+                   :registered_readable => true)
+      else
+        set_params(:public_readable     => false, 
+                   :registered_readable => false)
+      end
+
+      case param(:write_access)
+      when 'public' then
+        set_params(:public_writeable     => true, 
+                   :registered_writeable => false)
+      when 'registered' then
+        set_params(:public_writeable     => false, 
+                   :registered_writeable => true)
+      else
+        set_params(:public_writeable     => false, 
+                   :registered_writeable => false)
+      end
+    end
+
+    public
+
     def add
       form = add_form
-      render_form(add_form, :title => tl(:add_category))
+      form.add(GUI::Category_Access_Options_Field.new(:label => tl(:read_access), 
+                                                      :name  => :read_access))
+      form.add(GUI::Category_Access_Options_Field.new(:label => tl(:write_access), 
+                                                      :name  => :write_access))
+      
+      Page.new(:header => tl(:add_category)) { decorate_form(form) }
     end
 
     def update
-      category_id = param(:category_id)
-      components  = plugin_get(Hook.admin.category.show, :category_id => param(:category_id))
+      category     = load_instance()
+      category_id  = param(:category_id)
+      components   = plugin_get(Hook.admin.category.show, :category_id => param(:category_id))
+      update_form  = update_form() 
+      write_access = :members
+      write_access = :public if category.public_writeable
+      write_access = :registered if category.registered_writeable
+      read_access  = :members
+      read_access  = :public if category.public_readable
+      read_access  = :registered if category.registered_readable
+      update_form.add(GUI::Category_Access_Options_Field.new(:label => tl(:read_access), 
+                                                             :value => read_access, 
+                                                             :name  => :read_access))
+      update_form.add(GUI::Category_Access_Options_Field.new(:label => tl(:write_access), 
+                                                             :value => write_access, 
+                                                             :name  => :write_access))
       form = view_string(:admin_edit_category, 
-                         :category => Category.load(:category_id => param(:category_id)), 
-                         :category_users => User_Category_Controller.user_list(category_id), 
+                         :update_form         => decorate_form(update_form).string, 
+                         :category            => Category.load(:category_id => param(:category_id)), 
+                         :category_users      => User_Category_Controller.user_list(category_id), 
                          :category_components => components)
       page = Page.new(:header => tl(:edit_category)) { form }
       page.add_css_class(:form_section)
@@ -73,9 +122,16 @@ module Main
         return
       end
 
+      resolve_access()
       instance = super()
 
       redirect_to(instance)
+    end
+
+    def perform_update
+      resolve_access()
+      super()
+      redirect_to(:blank)
     end
 
     def admin_box_body

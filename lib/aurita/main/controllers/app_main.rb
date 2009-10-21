@@ -1,3 +1,4 @@
+
 require('aurita/controller')
 require('aurita-gui/javascript')
 Aurita.import_module :gui, :context_menu
@@ -23,18 +24,15 @@ module Main
     }
 
     def on_request_finish(params={})
-    # return if params[:controller].is_a?(Aurita::Main::Async_Feedback_Controller)
-
-      User_Action.create(:controller => params[:controller].class.to_s, 
-                         :method => params[:action], 
+      User_Action.create(:controller    => params[:controller].class.to_s, 
+                         :method        => params[:action], 
+                         :runmode       => Aurita.runmode.to_s.at(0), 
                          :user_group_id => Aurita.user.user_group_id, 
-                         :duration => params[:time], 
-                         :num_queries => params[:num_queries], 
-                         :num_tuples => params[:num_tuples])
-      log { "Queries: #{params[:num_queries]}, Tuples: #{params[:num_tuples]}, Time: #{params[:time]}" }
+                         :duration      => params[:time], 
+                         :num_queries   => params[:num_queries], 
+                         :num_tuples    => params[:num_tuples])
 
-      @response[:debug] = '' unless @response[:debug]
-      @response[:debug] <<  "{ queries: #{params[:num_queries]}, tuples: #{params[:num_tuples]}, time: '#{params[:time]}' }" 
+      log { "Queries: #{params[:num_queries]}, Tuples: #{params[:num_tuples]}, Time: #{params[:time]}" }
     end
 
     def ping
@@ -45,7 +43,6 @@ module Main
       puts '&nbsp;'
     end
 
-    
     def login
       exec_js("Effect.Appear('login_box', { afterFinish: function() { $('login').focus(); } }); ")
       render_view(:login)
@@ -140,19 +137,43 @@ module Main
     # set_http_header('Pragma' => 'no-cache');
     # @request.out('Cache-Control' => 'no-store, no-cache, must-revalidate, post-check=0,pre-check=0')
       
-      set_http_header('expires' => Time.now-24*60*60)
+      set_http_header('expires' => (Time.now-24*60*60).to_s)
+      
+      positions  = Component_Position.select_values(:component_dom_id) { |i|
+        i.where((Component_Position.user_group_id == Aurita.user.user_group_id) &
+                (Component_Position.gui_context == 'workspace_components'))
+        i.order_by(:position, :asc)
+      }.flatten.map { |dom_id| "component_#{dom_id}" }
+      log { "Positions are: #{positions.inspect}" } 
 
-      result = ''
-      count = 0
+      # Maps dom_id to their components
+      components = {}
+      sorted     = []
       plugin_get(Hook.main.workspace.top).each { |component|
-        result << HTML.li(:id => 'component_' << count.to_s) { component.string }.string
-        count += 1
+        component.sortable = true if component.respond_to?(:sortable) 
+        dom_id = 'component_' << component.dom_id.to_s
+        sorted << dom_id 
+        components[dom_id] = HTML.li(:id => dom_id) { component.string }.string
       }
       plugin_get(Hook.main.workspace).each { |component|
-        result << HTML.span(:id => 'component_' << count.to_s) { component }.string
-        count += 1
+        component.sortable = true if component.respond_to?(:sortable) 
+        dom_id = 'component_' << component.dom_id.to_s
+        sorted << dom_id 
+        components[dom_id] = HTML.li(:id => dom_id) { component.string }.string
       }
-      puts HTML.ul(:id => 'workspace_components', :class => 'no_bullets' ) { result }.string
+
+      if positions.length == 0 then
+        positions = sorted
+      end
+
+      result = []
+      positions.each { |dom_id|
+        result << components[dom_id]
+      }
+
+      puts HTML.ul(:id => 'workspace_components', :class => 'no_bullets' ) { result.join("\n") }.string
+      exec_js("Aurita.GUI.init_sortable_components('workspace_components', { handle: 'box_sort_handle' } ); ")
+      exec_js("Aurita.GUI.init_sortable_components('recent_category_changes', { handle: 'box_sort_handle' } ); ")
     end
 
     def frontpage
@@ -161,32 +182,71 @@ module Main
       return components
     end
 
-    def recent_changes
-      count = 0
-      result = HTML.ul.no_bullets { } 
-      Aurita.user.categories.each { |cat| 
+    def recent_changes_in_categories
+      count      = 0
+      result     = HTML.ul(:class => :no_bullets, :id => :recent_category_changes) { } 
+      # Load GUI component positions: 
+      positions  = Component_Position.select_values(:component_dom_id) { |i|
+        i.where((Component_Position.user_group_id == Aurita.user.user_group_id) &
+                (Component_Position.gui_context == 'recent_category_changes'))
+        i.order_by(:position, :asc)
+      }.flatten.map { |dom_id| dom_id.split('_').last.to_i }
+
+      # Map categories to Hash, so we can iterate over positions
+      categories = {}
+      Aurita.user.categories.each { |c|
+        categories[c.category_id] = c
+      }
+      # If there aren't any user defined positions, default them to 
+      # their natural order: 
+      if positions.length == 0 then
+        positions = categories.keys
+      end
+      
+      positions.each { |cat_id|
+        cat = categories[cat_id]
         cat_result = ''
-        components = plugin_get(Hook.main.workspace.recent_changes_in_category, :category_id => cat.category_id)
+        components = plugin_get(Hook.main.workspace.recent_changes_in_category, :category_id => cat_id)
         components.each { |component|
           cat_result << HTML.span(:id => 'component_' << count.to_s) { component.string }.string
           count += 1
         }
         if components.length > 0 then
-          cat_id = cat.category_id
-          box = Box.new(:type => :category, 
-                        :class => :topic_inline, 
-                        :id => "category_#{cat_id}", 
-                        :params => { :category_id => cat_id } )
+          box = Box.new(:type     => :category, 
+                        :class    => :topic_inline, 
+                        :sortable => true, 
+                        :id       => "category_#{cat_id}", 
+                        :params   => { :category_id => cat_id } )
           box.header = tl(:category) + ' ' << cat.category_name 
           box.body = cat_result
-          result << HTML.li(:id => "component_#{count}") { box.string }.string
+          result << HTML.li(:id => "component_category_box_#{cat_id}") { box.string }.string
           count += 1
         end
       }
       return unless count > 0
-      return Page.new(:header => tl(:recent_changes)) { result } 
+      viewmode_icon = link_to(:controller => 'Content_History', 
+                              :action     => :list, 
+                              :element    => 'recent_changes_page_content') { 
+                        HTML.img(:src => '/aurita/images/icons/clock.png') 
+                      } 
+      exec_js("$('recent_changes_viewmode_icon').innerHTML = #{viewmode_icon}")
+      return result
     end
 
+    def recent_changes
+      viewmode_icon = link_to(:controller => 'Content_History', 
+                              :action     => :list, 
+                              :element    => 'recent_changes_page_content') { 
+                        HTML.img(:src => '/aurita/images/icons/clock.png') 
+                      } 
+      return Page.new(:header   => tl(:recent_changes), 
+                      :sortable => true, 
+                      :tools    => HTML.span(:id => :recent_changes_viewmode_icon) { 
+                                     viewmode_icon
+                                   }, 
+                      :id       => :recent_changes_page) { recent_changes_in_categories } 
+    end
+    
     def tag_index
       view_string(:tag_index, :tags => Tag_Index.all.entities)
     end
@@ -220,9 +280,9 @@ module Main
     
     def logout
       use_decorator(:blank)
-      set_http_header('expires' => Time.now-24*60*60)
 
-      log('logout user')
+      set_http_header('expires' => (Time.now-24*60*60).to_s)
+
       Aurita.session.close()
 
       render_view(:after_logout)
@@ -234,7 +294,7 @@ module Main
 
     def find_all
       components = plugin_get(Hook.main.find_all, :key => param(:key))
-      components = tl(:no_results) if components.first.nil? 
+      components = [ HTML.div { tl(:no_results) } ] if components.first.nil? 
 
       Page.new(:header => tl(:all_search_results)) { 
         components.map { |c| c.string }.join('')
@@ -244,7 +304,7 @@ module Main
 
     def find_full
       components = plugin_get(Hook.main.find_full, :key => param(:key))
-      components = tl(:no_results) if components.first.nil? 
+      components = [ HTML.div { tl(:no_results) } ] if components.first.nil? 
 
       Page.new(:header => tl(:fulltext_search_results)) { 
         components.map { |c| c.string }.join('')

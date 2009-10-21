@@ -209,22 +209,6 @@ module Aurita
 
     public
 
-    # Enforce HTTP caching of this request in the client's browser 
-    # by setting HTTP headers 'Expires' and 'Last-Modified' 
-    # appropriately. 
-    def force_http_cache
-      @response[:force_cache] = true
-      @response[:no_cache]    = false
-    end
-
-    # Forbid HTTP caching of this request in the client's browser 
-    # by setting HTTP headers 'Expires' and 'Last-Modified' 
-    # appropriately. 
-    def no_http_cache
-      @response[:force_cache] = false
-      @response[:no_cache]    = true
-    end
-
     # Set HTTP response header entries. 
     # Example: 
     #
@@ -257,6 +241,23 @@ module Aurita
     #
     def set_content_type(type)
       set_http_header('type' => type)
+    end
+
+    # Enforce HTTP caching of this request in the client's browser 
+    # by setting HTTP headers 'Expires' and 'Last-Modified' 
+    # appropriately. 
+    def force_http_cache
+      set_http_header('expires'       => (Time.now + (100 * 24 * 60 * 60)).to_s, 
+                      'Last-Modified' => (Time.now - (1 * 24 * 60 * 60)).to_s)
+    end
+
+    # Forbid HTTP caching of this request in the client's browser 
+    # by setting HTTP headers 'Expires' and 'Last-Modified' 
+    # appropriately. 
+    def no_http_cache
+      set_http_header('expires'       => (Time.now - (1 * 24 * 60 * 60)).to_s,
+                      'Last-Modified' => (Time.now).to_s, 
+                      'pragma'        => 'No-cache')
     end
 
     # Ajax redirect. 
@@ -376,7 +377,7 @@ module Aurita
     # Upload a file from CGI multipart request. 
     # Example (file form field has name 'file_to_upload'): 
     #
-    #   receive_file(:form_file_tag_name => :file_to_upload, 
+    #   receive_file(param(:file_to_upload), 
     #                :relative_path      => :uploads, 
     #                :server_filename    => 'document')
     #
@@ -391,10 +392,9 @@ module Aurita
     #   :server_filepath   => Absolute file system path of file on server
     #   :type              => MIME type of uploaded file
     #
-    def receive_file(params)
+    def receive_file(file_upload_request, params={})
     # {{{
       
-      form_file_tag_name = params[:from_param]
       relative_path      = params[:relative_path]
       server_filename    = params[:server_filename]
       md5_checksum       = false
@@ -403,34 +403,20 @@ module Aurita
 
       begin
 
-        # Be compatible to Rack and CGI requests: 
-        if @request.is_a?(Rack::Request) then
-          file_info         = @request.params[form_file_tag_name.to_s]
-          tmpfile           = file_info[:tempfile] 
-          original_filename = file_info[:filename]
-          filetype          = file_info[:type]
-        else 
-          # Assuming CGI request
-          tmpfile           = @request.params[form_file_tag_name.to_s].first
-          filetype          = tmpfile.content_type
-          original_filename = tmpfile.original_filename
-          filetype.gsub!("\r",'')
-          filetype.gsub!("\n",'')
-          filetype.gsub!(' ','')
-        end
+      # file_info         = @request.params[form_file_tag_name.to_s]
+        file_info         = file_upload_request
+        tmpfile           = file_info[:tempfile] 
+        original_filename = file_info[:filename]
+        filetype          = file_info[:type]
 
         path_from = nil
         original_filename = sanitize_filename(original_filename) 
         server_filename ||= original_filename
 
-        if tmpfile.instance_of?(StringIO) then
-          # not existing, not needed
-        elsif tmpfile.instance_of?(Tempfile) then
-          # Fix permissions of tempfile in CGI's tmp/ directory: 
-          path_from   = tmpfile.local_path if tmpfile.respond_to?(:local_path)
-          path_from ||= tmpfile.path
-          File.chmod(0777, path_from)
-        end
+        # Fix permissions of tempfile in CGI's tmp/ directory: 
+        path_from   = tmpfile.local_path if tmpfile.respond_to?(:local_path)
+        path_from ||= tmpfile.path
+        File.chmod(0777, path_from)
         
         path_to  = Aurita.project_path + '/public/assets/tmp/'
         path_to += relative_path+'/' if relative_path
@@ -442,7 +428,6 @@ module Aurita
         Aurita.log { 'UPLOAD: path_to ' << path_to.inspect } 
         Aurita.log { 'UPLOAD: path from ' << path_to.inspect }
         Aurita.log { 'UPLOAD: filetype ' << filetype.inspect }
-        Aurita.log { 'UPLOAD: info ' << info.inspect }
         
         info[:type]              = filetype
         info[:original_filename] = original_filename
@@ -476,6 +461,25 @@ module Aurita
         GC.disable
         raise excep
       end
+    end # }}} 
+
+    def send_file(file, as_filename=nil)
+    # {{{
+      filename = as_filename
+      filesize = 0
+      case file
+      when String then
+         filesize   = File.size(file)
+         filename ||= File.basename(file)
+      when File then
+         filesize   = file.size
+         filename ||= file.basename
+      end
+      set_http_header('Content-Type'        => "application/force-download", 
+                      'Content-Disposition' => "attachment; filename=\"#{filename}\"", 
+                      'Content-Length'      => filesize, 
+                      "X-Aurita-Sendfile"   => filename, 
+                      "X-Aurita-Filesize"   => filesize)
     end # }}} 
 
     private
@@ -700,7 +704,6 @@ module Aurita
       form.readonly! 
       render_form(form)
     end # def }}}
-
 
   end # class
 

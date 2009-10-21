@@ -32,6 +32,20 @@ ul li.form_field {
   margin-right: 3pc; 
 }
 
+.button.form, .button.form:hover, .form_button_bar .button, .form_button_bar .button:hover { 
+  position: relative; 
+  top: 2px; 
+}
+
+.toolbar a.button, .toolbar a.button:hover { 
+  position: relative; 
+  top: -6px; 
+  margin: 0px; 
+  padding: 7px; 
+  padding-top: 1px; 
+  padding-bottom: 1px; 
+} 
+
 .section_content fieldset { 
   width: 340px; 
   margin-top: 20px; 
@@ -41,24 +55,70 @@ ul li.form_field {
 .section_content fieldset legend { 
   height: 15px; 
   margin: 0px; 
-  padding-left: 0px; 
+  margin-left: -18px; 
+  padding-left: 10px; 
   background-color: transparent; 
 }
 
-ul.radio_options li { 
+.user_category_selection_list_field_wrap select, .user_role_selection_list_field_wrap select, .category_user_selection_list_field_wrap select { 
+  margin: 0px !important; 
+  padding: 0px !important; 
+  /* TODO: This is dirty! */
+  position: relative; 
+  top: -15px; 
+}
+
+ul.checkbox_options li { 
   margin-left: -7px; 
 }
-ul.checkbox_options { 
+ul.radio_options, ul.checkbox_options { 
   margin: 0px; 
-  margin-bottom: 7px; 
+  margin-bottom: 0px; 
 }
-ul.radio_options label, ul.checkbox_options label { 
-  padding: 2px 5px 0px 0px; 
-  margin-top: 3px; 
-  display: inline; 
-}
-ul.radio_options input, ul.checkbox_options input { 
-  padding: 2px 5px 0px 0px; 
+ul.checkbox_options li input { 
+  margin: 0px; 
+  padding: 0px; 
+  /* TODO: This is dirty! */
+  position: relative; 
+  top: -14px; 
   float: none; 
-  clear: both; 
 }
+ul.radio_options li { 
+  padding: 0px; 
+  margin-bottom: 0px; 
+  margin-top: 0px; 
+}
+ul.radio_options li input { 
+  margin: 0px; 
+  margin-right: 4px; 
+  padding: 0px; 
+}
+ul.radio_options li label { 
+  margin: 0px; 
+  padding: 0px; 
+  display: inline; 
+  float: left; 
+}
+ul.checkbox_options li label { 
+  margin-right: 20px; 
+}
+
+ul.form_fields .button, ul.form_fields .button:hover { 
+  position: relative; 
+  top: -5px; 
+  left: 1px; 
+} 
+
+.button.datepick, .button.datepick_clear { 
+  top: -4px; 
+}
+
+a.icon_button img { 
+  margin: 0px 0px 0px 0px; 
+  padding-right: 5px; 
+}
+
+ul.form_fields .timespan select { 
+  margin-top: 6px; 
+}
+

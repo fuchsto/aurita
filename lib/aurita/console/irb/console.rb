@@ -1,5 +1,6 @@
 
 require 'aurita'
+require 'rio'
 Aurita.import 'console/console_runner'
 
 begin
@@ -84,7 +85,7 @@ def commands
 end
 
 def list_modules
-  rio(Aurita.base_path + 'bin/console_modules').each { |file|
+  rio(Aurita.base_path + 'console/console_modules').each { |file|
     puts ">>   " << file.to_s.split('/').last.gsub('.rb','') if file.to_s[-3..-1] == '.rb'
   }
   return

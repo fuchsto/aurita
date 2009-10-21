@@ -284,19 +284,20 @@ table.list td.tab_left {
 .flag_button, .flag_button_active { 
   cursor: pointer; 
   width: 100px; 
-  height: 20px; 
+  height: 15px; 
   float: left; 
   font-size: 12px; 
   border-left: 1px solid #cccccc; 
   border-right: 1px solid #cccccc; 
   border-top: 1px solid #cccccc; 
-  border-bottom: 0px; 
-  padding: 3px; 
-  padding-bottom: 5px; 
+  border-bottom-width: 0px; 
+  padding: 7px; 
   margin-top: 3px; 
   margin-right: 3px; 
-  margin-bottom: 0px; 
-  background: #c3c3c3 url('/aurita/images/icons/box_header_bg.png') repeat-x
+  margin-bottom: -1px; 
+  background: #c3c3c3 url('/aurita/images/icons/box_header_bg.png') repeat-x; 
+  -moz-border-radius-topleft: 3px; 
+  -moz-border-radius-topright: 3px; 
 }
 .flag_button { 
   color: #232323; 
@@ -541,6 +542,11 @@ tr.highlighted td {
   background-color: #dedede; 
   background: url('/aurita/images/icons/box_header_bg.png'); 
 }
+
+.section_content .box_header { 
+  background: transparent url('/aurita/images/icons/box_header_bright_bg.png') repeat-x scroll 0 0;
+}
+
 .box_header .header {
   font-family: Verdana, sans-serif; 
 }
@@ -568,21 +574,23 @@ tr.highlighted td {
 }
 
 a.icon { 
-  padding: 3px; 
-  margin-left: 0px; 
-  margin-right: 4px; 
-}
-.box_body a.icon { 
-  padding: 4px; 
+  padding: 0px; 
+  padding-left: 4px; 
+  padding-right: 4px; 
+  padding-top: 4px; 
   margin-left: -2px; 
   margin-right: -2px; 
+  margin-bottom: 4px; 
+}
+.box_body a.icon { 
   display: block; 
 }
-a.icon img { 
-  margin: -3px 4px 0px 0px; 
+a.icon img, a.button img { 
+  margin: -2px 4px 0px 0px; 
   display: inline !important; 
   vertical-align: middle; 
 }
+
 a.icon:hover { 
   background-color: #f8f8f8; 
 }
@@ -654,6 +662,7 @@ img.icon {
   margin: -1px; 
   color: #000000;
   background-color: #cccccc; 
+  background: transparent url('/aurita/images/icons/box_header_bg.png') repeat scroll 0 0;
   font-size: 10px;
   cursor: move; 
 }
@@ -935,21 +944,6 @@ pre span {
   margin-right: 4px; 
 }
 
-button.icon_button {
-  width: 32px; 
-  height: 32px; 
-  margin: 1px; 
-  padding: 0px; 
-  border-top: 1px solid #efefef; 
-  border-left: 1px solid #efefef; 
-  border-bottom: 1px solid #5f5f5f; 
-  border-right: 1px solid #5f5f5f; 
-}
-button.icon_button img {
-  padding: 1px; 
-  margin: 0px; 
-}
-
 .bookmark_folder_box { 
   border: 1px solid #d7d7d7; 
 }
@@ -1006,7 +1000,9 @@ td.profile_right_column {
   background-color: #dedede; 
   margin: 1px; 
   padding: 1px;
-  width: auto !important; 
+/*  width: auto !important; */
+  width: 70px; 
+  height: 70px; 
   text-align: center; 
   clear: both; 
 }
@@ -1083,9 +1079,12 @@ input.autocomplete, input.autocomplete:focus {
 }
 div.autocomplete {
   position:absolute;
-  padding: 3px; 
+  padding: 2px; 
   margin: 0px; 
-  border: 1px solid #cccccc;
+  border-top: 1px solid #cfcfcf; 
+  border-left: 1px solid #cfcfcf; 
+  border-right: 1px solid #afafaf; 
+  border-bottom: 1px solid #afafaf; 
   background-color: white; 
 }
 span.informal {
@@ -1112,7 +1111,7 @@ div.autocomplete ul {
   margin:0px;
   padding:0px;
 }
-div.autocomplete ul.autocomplete li.selected { 
+div.autocomplete ul.autocomplete li.autocomplete.selected { 
   background-color: #f9dba8 !important; 
 }
 div.autocomplete ul.autocomplete li.autocomplete {
@@ -1125,15 +1124,17 @@ div.autocomplete ul.autocomplete li.autocomplete {
   padding-left: 7px; 
 }
 #autocomplete_choices { 
-  width: 420px; 
+  width: 419px; 
   top: 25px; 
-  left: -242px; 
+  left: -262px; 
   background-color: #efefef;
+/*
   opacity:.90; 
   filter: alpha(opacity=90); 
   -moz-opacity: 0.9; 
   -khtml-opacity:0.9; 
   color:rgba(0, 0, 0, 0.9);  
+*/
 }
 ul.autocomplete { 
 
@@ -1181,9 +1182,10 @@ li.autocomplete_first_entry {
   padding-left: 3px; 
 }
 
-.autocomplete .delimiter { 
+.autocomplete .delimiter, .autocomplete .delimiter.selected { 
   padding: 3px; 
   background-color: #cccccc; 
+  cursor: default; 
 }
 /*
 .autocomplete_article { 
@@ -1214,7 +1216,8 @@ table.media_asset_table th {
   padding-left: 10px; 
   border-bottom: 1px solid #343434; 
   border-left: 1px solid #898989; 
-  background: transparent url(/aurita/images/button_bg.gif) repeat scroll 0 0; 
+/*  background: transparent url(/aurita/images/button_bg.gif) repeat scroll 0 0; */
+  background: transparent url(/aurita/images/icons/box_header_bg.png) repeat scroll 0 0; 
   cursor: default; 
 }
 table #0_col_header { 
@@ -1769,7 +1772,7 @@ table.message_table {
   border-left: 1px solid #afafaf; 
   border-right: 1px solid #afafaf; 
   margin: -1px -1px 0px 0px; 
-  background: transparent url(/aurita/images/icons/box_header_bg.png) repeat-x scroll 0 0; 
+  background: #c4c6c7 url(/aurita/images/icons/box_header_bg.png) repeat-x scroll 0 0; 
 }
 .message_table .mail_view .mail_body { 
   height: 90px; 
@@ -1858,8 +1861,7 @@ table.listing_2_columns {
 .media_asset_selection_list .toolbar { 
   background: url('/aurita/images/icons/box_header_bg.png') repeat-x;
   background-color: #c0c0c0; 
-  padding: 3px; 
-  padding-left: 6px; 
+  padding: 2px 5px 5px 6px;  
 }
 .media_asset_selection_list .toolbar img.icon { 
   position: relative; 
@@ -1895,16 +1897,6 @@ table.listing_2_columns {
   margin-right: -3px;
 } 
 
-span.button, div.button { 
-  cursor: pointer; 
-  background: url('/aurita/images/icons/button_normal.gif') repeat-x;
-  background-color: #c0c0c0; 
-  padding: 3px; 
-  border: 1px outset white; 
-  margin-left: 5px; 
-  font-size: 10px; 
-  text-align: center; 
-}
 
 span.inline_button, div.inline_button { 
   cursor: pointer; 
@@ -1920,3 +1912,8 @@ span.inline_button, div.inline_button {
   z-index: 450; 
   text-align: center; 
 }
+
+a.add_file_button { 
+  margin: 5px; 
+}
+

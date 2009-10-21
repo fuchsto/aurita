@@ -6,7 +6,7 @@ module Main
 
   class User_Category_Controller < App_Controller
 
-    guard_interface(:list, :CUD, :toggle_readonly) { Aurita.user.is_admin? }
+    guard_interface(:list, :CUD, :toggle_read_permission, :toggle_write_permission) { Aurita.user.is_admin? }
 
     def list
       puts list_string(param(:user_group_id))
@@ -24,10 +24,9 @@ module Main
       HTML.div { view_string(:admin_category_user_list, :category => category) }
     end
 
-
     def index
       return Page.new(:header => tl(:your_categories)) { 
-        Aurita.user.categories.map { |c| 
+        Aurita.user.readable_categories.map { |c| 
           HTML.div.category_thumb { 
             link_to(c, :controller => 'Category') { c.category_name }
           }
@@ -42,12 +41,21 @@ module Main
       }
     end
 
-    def toggle_readonly
+    def toggle_write_permission
       user_cat = User_Category.find(1).with((User_Category.user_group_id == param(:user_group_id)) & (User_Category.category_id == param(:category_id))).entity
-      if user_cat.readonly then
-        user_cat.readonly = false
+      if user_cat.write_permission then
+        user_cat.write_permission = false
       else
-        user_cat.readonly = true
+        user_cat.write_permission = true
+      end
+      user_cat.commit
+    end
+    def toggle_read_permission
+      user_cat = User_Category.find(1).with((User_Category.user_group_id == param(:user_group_id)) & (User_Category.category_id == param(:category_id))).entity
+      if user_cat.read_permission then
+        user_cat.read_permission = false
+      else
+        user_cat.read_permission = true
       end
       user_cat.commit
     end

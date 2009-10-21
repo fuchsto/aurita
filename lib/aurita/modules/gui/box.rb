@@ -7,39 +7,56 @@ module GUI
 
   class Box < Element
     
-    attr_accessor :header, :body, :collapsed, :header_style, :type
+    attr_accessor :header, :body, :collapsed, :header_style, :type, :sortable
     
     def initialize(args)
       args[:tag]    = :div
       @collapsed    = false
       @header_style = 'font-size: 13px;' unless args[:class]
       @header_class = 'header'
+      @sortable     = args[:sortable]
+      @sortable     = false unless Aurita.user.is_registered?   
       @type         = args[:type]
       @type       ||= :none
       @context_menu_params   = args[:params]
       @context_menu_params ||= {}
       args[:id]     = 'box_' << @@element_count.to_s unless args[:id]
+      args.delete(:sortable)
       super(args)
     end
 
     def string()
       @body = @body.join(' ') if @body.instance_of? Array
 
+      toggle = "Aurita.GUI.toggle_box('#{attrib[:id]}');"
       if @collapsed then
-        collapse_icon = HTML.img(:src => "/aurita/images/icons/plus.gif",
-                                 :id  => "collapse_icon_#{dom_id()}")
+        collapse_icon = HTML.img(:src     => "/aurita/images/icons/plus.gif",
+                                 :onclick => toggle, 
+                                 :id      => "collapse_icon_#{dom_id()}")
       else
-        collapse_icon = HTML.img(:src => "/aurita/images/icons/minus.gif",
-                                 :id  => "collapse_icon_#{dom_id()}")
+        collapse_icon = HTML.img(:src     => "/aurita/images/icons/minus.gif",
+                                 :onclick => toggle, 
+                                 :id      => "collapse_icon_#{dom_id()}")
       end
+      move_icon = HTML.img(:src   => "/aurita/images/icons/move.gif", 
+                           :class => "moveable box_sort_handle")
+      header_buttons = []
+      if @sortable then
+        header_buttons = [ move_icon, collapse_icon ]
+      else
+        header_buttons = collapse_icon
+      end
+
       header = HTML.div.box_header(:id => dom_id().to_s+'_header', :style => 'cursor: pointer;') { 
-                 HTML.div.header(:style => "#{@header_style.to_s} float:left; clear: none;") { @header.to_s } + 
-                 HTML.div(:style => 'clear: none; float: right; cursor: pointer;') { collapse_icon }
+                 HTML.div.header(:onclick => toggle, :style => "#{@header_style.to_s} width: 90%; float:left; clear: none;") { @header.to_s } + 
+                 HTML.div(:style => 'clear: none; float: right; cursor: pointer;') { header_buttons }
                }
-      header.onclick = "Aurita.GUI.toggle_box('#{attrib[:id]}');"
+      
       header.add_css_class("#{@type}_header") if @type
 
-      header = Context_Menu_Element.new(header, :type => @type, :highlight_id => dom_id(), :params => @context_menu_params) unless @type == :none
+      header = Context_Menu_Element.new(header, 
+                                        :type   => @type, :highlight_id => dom_id(), 
+                                        :params => @context_menu_params) unless @type == :none
 
       body_args = @attrib.dup
       body_args[:type]    = "#{@type}_body" if @type
@@ -52,8 +69,8 @@ module GUI
       body_args[:id]      = dom_id().to_s + '_body'
       body = Element.new(body_args) 
 
-      set_content(header.string + body.string) # + '<div style="clear: both;"></div>' )
-      super() # + '<div style="clear: both;"></div>'
+      set_content(HTML.div { header.string + body.string }) 
+      super()
     end # def
 
   end # class 

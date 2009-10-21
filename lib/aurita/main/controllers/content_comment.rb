@@ -56,22 +56,25 @@ module Main
       comments = Content_Comment.find(amount).with((Content_Comment.is_accessible) & (Content_Comment.time > (Time.now - 7.days))).sort_by(:time, :desc).entities
       return unless comments.length > 0
       comments.each { |c|
-        concrete_content = Content.find(1).with(Content.content_id == c.content_id).entity.concrete_instance
-        comment_user     = User_Group.load(:user_group_id => c.user_group_id)
-        body << HTML.div(:class => [:index_entry, :comment_list_entry]) { 
-          HTML.div.image { 
-            link_to(comment_user) { comment_user.label } + 
-            " #{tl(:user_comment_to)} " +
-            link_to(concrete_content) { concrete_content.title }
-          } + 
-          HTML.div.text { 
-            if c.message.to_s.length > 196 then
-              c.message.to_s.strip[0..200] + ' ...'
-            else
-              c.message.to_s
-            end
+        begin
+          concrete_content = Content.find(1).with(Content.content_id == c.content_id).entity.concrete_instance
+          comment_user     = User_Group.load(:user_group_id => c.user_group_id)
+          body << HTML.div(:class => [:index_entry, :comment_list_entry]) { 
+            HTML.div.image { 
+              link_to(comment_user) { comment_user.label } + 
+              " #{tl(:user_comment_to)} " +
+              link_to(concrete_content) { concrete_content.title }
+            } + 
+            HTML.div.text { 
+              if c.message.to_s.length > 196 then
+                c.message.to_s.strip[0..200] + ' ...'
+              else
+                c.message.to_s
+              end
+            }
           }
-        }
+        rescue ::Exception => content_deleted
+        end
       }
       box.body = body
       box

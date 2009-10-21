@@ -39,7 +39,7 @@ module Handler
   #
   class Aurita_Dispatch_Application
 
-    attr_accessor :logger, :gc_after_calls
+    attr_accessor :logger, :gc_after_calls, :dispatcher
     attr_reader :calls
 
     def initialize(logger=nil)
@@ -47,7 +47,7 @@ module Handler
       @logger       ||= ::Logger.new(STDERR) 
       @dispatcher     = Aurita::Dispatcher.new()
       @calls          = 0
-      @gc_after_calls = 40
+      @gc_after_calls = 60
     end
 
     public
@@ -65,7 +65,11 @@ module Handler
         GC.start
         GC.disable
       end
-      return @dispatcher.dispatch(Rack::Request.new(Aurita::Routing.new.route(env)))
+      response = @dispatcher.dispatch(Rack::Request.new(Aurita::Routing.new.route(env)))
+      response[1]['Accept-Charset'] = 'utf-8' 
+      response[1]['type']           = 'text/html; charset=utf-8' 
+      response[1]['Cache-Control']  = 'private'
+      return response
     end
 
   end
@@ -75,8 +79,9 @@ module Handler
   #
   # Uses several middlewares that are sensible in nearly every 
   # case, like ETag, Session (memcache or pool, preferring memcache), 
-  # Reloader (in :test and :development mode), Chunked, Deflater
-  # and ConditionalGet. 
+  # Reloader (in :test and :development mode), Chunked, and ConditionalGet. 
+  # Deflater and Chunked can be enabled / disabled by setting options 
+  # :compress and :chunked to true or false. 
   #
   class Aurita_Application < Aurita_Rack_Application
     def initialize(options={})
@@ -85,10 +90,10 @@ module Handler
       @logger      = options[:logger]
       @logger    ||= ::Logger.new(STDERR) 
 
-      @app = Aurita::Handler::Aurita_Dispatch_Application.new(@logger)
+      @app = Aurita_Dispatch_Application.new(@logger)
       @app = Rack::ETag.new(@app)
       @app = Rack::ConditionalGet.new(@app)
-      @app = Rack::Deflater.new(@app) 
+      @app = Rack::Deflater.new(@app) if @options[:compress]
       @app = Rack::ContentLength.new(@app)
 
       unless options[:no_session] then
@@ -121,6 +126,7 @@ module Handler
       @logger    ||= ::Logger.new(STDERR) 
 
       @app = Aurita::Handler::Aurita_Dispatch_Application.new(@logger)
+      @app.dispatcher.poller = true
       @app = Rack::ContentLength.new(@app)
 
       unless options[:no_session] then

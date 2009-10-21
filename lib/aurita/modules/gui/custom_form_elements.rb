@@ -49,7 +49,7 @@ module GUI
       @data_type = false
     end
     def element
-      HTML.div { Input_Field.new(@attrib) + HTML.div(:id => :autocomplete_username_choices, :class => :autocomplete, :force_closing_tag => true) }
+      HTML.div { Input_Field.new(@attrib) + HTML.div(:id => :autocomplete_username_choices, :class => :autocomplete, :force_closing_tag => true, :style => 'position: relative !important;' ) }
     end
     def js_initialize()
 code =<<JS 
@@ -126,12 +126,14 @@ JS
                  :src => "/aurita/assets/medium/asset_#{@value}.jpg", 
                  :class => :picture_asset_element_preview, 
                  :style => "display: #{visibility}") + 
-        Button.new(:onclick => "Aurita.Wiki.select_media_asset({ hidden_field: '#{dom_id()}',
-                                                          user_id: ''});") { tl(:select_image) } + 
-        Button.new(:onclick => "Aurita.load({ action: 'Wiki::Media_Asset/add_profile_image/' });", 
-                   :id => "upload_profile_image_button_#{dom_id()}" ) { tl(:upload_image) }+ 
-        Button.new(:onclick => "Aurita.Wiki.select_media_asset_click(0, '#{dom_id()}');", 
-                   :id => "clear_selected_image_button_#{dom_id()}" ) { tl(:clear_image) }+ 
+        HTML.div.button_bar { 
+          Text_Button.new(:onclick => "Aurita.Wiki.select_media_asset({ hidden_field: '#{dom_id()}',
+                                                                        user_id: ''});") { tl(:select_image) } + 
+          Text_Button.new(:onclick => "Aurita.load({ action: 'Wiki::Media_Asset/add_profile_image/' });", 
+                          :id => "upload_profile_image_button_#{dom_id()}" ) { tl(:upload_image) }+ 
+          Text_Button.new(:onclick => "Aurita.Wiki.select_media_asset_click(0, '#{dom_id()}');", 
+                          :id => "clear_selected_image_button_#{dom_id()}" ) { tl(:clear_image) } 
+        } + 
         Hidden_Field.new(:id => dom_id(), :value => @value, :name => @attrib[:name]) + 
         HTML.div(:class => :media_asset_selection, :id => "select_box_#{dom_id()}", :force_no_close => true)
       }
@@ -161,8 +163,8 @@ JS
     def element
       select_field = Select_Field.new(@attrib)
       if @parent then
-        button       = Button.new(:class   => :add_category_button, 
-                                  :onclick => "Aurita.Main.category_selection_add('#{@parent.dom_id}');") { '+' }
+        button       = Text_Button.new(:class   => :add_category_button, 
+                                       :onclick => "Aurita.Main.category_selection_add('#{@parent.dom_id}');") { '+' }
         return HTML.div.category_select_field { 
           select_field
         }
@@ -182,7 +184,7 @@ JS
       def element
         HTML.div { 
           Hidden_Field.new(:name => 'category_ids[]', :value => @value) + 
-          HTML.span(:onclick => "Element.remove('#{@parent.dom_id}');", :class => :link) { 'X ' } + HTML.span { @label.to_s }
+          HTML.a(:onclick => "Element.remove('#{@parent.dom_id}');", :class => :icon) { HTML.img(:src => '/aurita/images/icons/delete_small.png') } + HTML.span { @label }
         }
       end
     end
@@ -257,44 +259,53 @@ JS
   class User_Category_Selection_List_Field < Selection_List_Field
   include Aurita::GUI::I18N_Helpers
 
-    attr_accessor :user, :readonly_permissions
+    attr_accessor :user, :read_access, :write_access
 
     class User_Category_Selection_List_Option_Field < Selection_List_Option_Field
     include Aurita::GUI::I18N_Helpers
 
       def initialize(params={})
         super(params)
-        @user                = @parent.user
-        @readonly_permission = @parent.readonly_permissions[@value.to_s]
+        @user     = @parent.user
+        @read     = @parent.read_access[@value.to_s]? 'read' : nil
+        @write    = @parent.write_access[@value.to_s]? 'write' : nil
       end
       def element
-        readonly_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "category_#{@value}_readonly", 
-                                                            :options => { 't' => tl(:readonly_permission) }, 
-                                                            :value => @readonly_permission ).element
-        readonly_checkbox.each { |e| 
-          e.first.onclick = "Aurita.call('User_Category/toggle_readonly/user_group_id=#{@user.user_group_id}&category_id=#{@value}');"
-        }
+        access_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_permissions", 
+                                                          :id   => "user_#{@value}_permissions", 
+                                                          :option_values => [ 'read', 'write' ], 
+                                                          :option_labels => [ tl(:read_permission), tl(:write_permission) ], 
+                                                          :value => [ @read.to_s, @write.to_s ] ).element
+
+        toggle_read  = "Aurita.call('User_Category/toggle_read_permission/user_group_id=#{@user.user_group_id}&category_id=#{@value}'); return true; "
+        toggle_write = "Aurita.call('User_Category/toggle_write_permission/user_group_id=#{@user.user_group_id}&category_id=#{@value}'); return true; "
+        access_checkbox[0].first.onchange = toggle_read
+        access_checkbox[1].first.onchange = toggle_write
 
         HTML.div { 
-          HTML.span(:class => :link, 
-                    :onclick => "Aurita.load({ element: 'dispatcher', 
-                                               onload: function() { Aurita.load({ element: 'user_category_list', 
-                                                                                  action: 'User_Category/category_list/user_group_id=#{@user.user_group_id}' }); }, 
-                                               action: 'User_Category/perform_delete/user_group_id=#{@user.user_group_id}&category_id=#{@value}' });") { 'X ' } + 
-          @label.to_s + HTML.div { readonly_checkbox }
+          HTML.a(:class => :icon, 
+                 :onclick => "Aurita.load({ element: 'dispatcher', 
+                                            onload: function() { Aurita.load({ element: 'user_category_list', 
+                                                                               action: 'User_Category/category_list/user_group_id=#{@user.user_group_id}' }); }, 
+                                            action: 'User_Category/perform_delete/user_group_id=#{@user.user_group_id}&category_id=#{@value}' });") { 
+            HTML.img(:src => '/aurita/images/icons/delete_small.png') 
+          } + 
+          @label.to_s + HTML.div { read_checkbox } + HTML.div { access_checkbox } 
         }
       end
     end
 
     def initialize(params={})
-      @user = params[:user]
-      @readonly_permissions = {}
+      @user         = params[:user]
+      @read_access  = {}
+      @write_access = {}
       params.delete(:user)
       active_categories = []
-      @user.categories.each { |c|
+      User_Category.categories_of(@user).each { |c|
         if c.is_private != 't' then
           active_categories << c.category_id
-          @readonly_permissions[c.category_id.to_s] = c.readonly
+          @read_access[c.category_id.to_s]  = c.read_permission
+          @write_access[c.category_id.to_s] = c.write_permission
         end
       }
       options = []
@@ -321,43 +332,53 @@ JS
   class Category_User_Selection_List_Field < Selection_List_Field
   include Aurita::GUI::I18N_Helpers
 
-    attr_accessor :category, :readonly_permissions
+    attr_accessor :category, :read_access, :write_access
 
     class Category_User_Selection_List_Option_Field < Selection_List_Option_Field
     include Aurita::GUI::I18N_Helpers
 
       def initialize(params={})
         super(params)
-        @category            = @parent.category
-        @readonly_permission = @parent.readonly_permissions[@value.to_s]
+        @category = @parent.category
+        @read     = @parent.read_access[@value.to_s]? 'read' : nil
+        @write    = @parent.write_access[@value.to_s]? 'write' : nil
       end
       def element
-        readonly_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_readonly", 
-                                                            :options => { true => tl(:readonly_permission) }, 
-                                                            :value => @readonly_permission ).element
-        readonly_checkbox.each { |e| 
-          e.first.onclick = "Aurita.call('User_Category/toggle_readonly/user_group_id=#{@value}&category_id=#{@category.category_id}');"
-        }
+
+        access_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_permissions", 
+                                                          :id   => "user_#{@value}_permissions", 
+                                                          :option_values => [ 'read', 'write' ], 
+                                                          :option_labels => [ tl(:read_permission), tl(:write_permission) ], 
+                                                          :value => [ @read.to_s, @write.to_s ] ).element
+
+        toggle_read  = "Aurita.call('User_Category/toggle_read_permission/user_group_id=#{@value}&category_id=#{@category.category_id}'); return true; "
+        toggle_write = "Aurita.call('User_Category/toggle_write_permission/user_group_id=#{@value}&category_id=#{@category.category_id}'); return true; "
+        access_checkbox[0].first.onchange = toggle_read
+        access_checkbox[1].first.onchange = toggle_write
 
         HTML.div { 
-          HTML.span(:class => :link, 
-                    :onclick => "Aurita.load({ element: 'dispatcher', 
-                                               onload: function() { Aurita.load({ element: 'user_category_list', 
-                                                                                  action: 'User_Category/user_list/category_id=#{@category.category_id}' }); }, 
-                                               action: 'User_Category/perform_delete/user_group_id=#{@value}&category_id=#{@category.category_id}' });") { 'X ' } + 
-          @label.to_s + HTML.div { readonly_checkbox }
+          HTML.a(:class => :icon, 
+                 :onclick => "Aurita.call({ method: 'POST', 
+                                            onload: function() { Aurita.load({ element: 'user_category_list', 
+                                                                               action: 'User_Category/user_list/category_id=#{@category.category_id}' }); }, 
+                                            action: 'User_Category/perform_delete/user_group_id=#{@value}&category_id=#{@category.category_id}' });") { 
+            HTML.img(:src => '/aurita/images/icons/delete_small.png')
+          } + 
+          @label.to_s + HTML.div { read_checkbox } + HTML.div { access_checkbox } 
         }
       end
     end
 
     def initialize(params={})
-      @category = params[:category]
-      @readonly_permissions = {}
+      @category     = params[:category]
+      @read_access  = {}
+      @write_access = {}
       params.delete(:category)
       users = []
-      @category.users.each { |u|
+      User_Category.members_of(@category).each { |u|
           users << u.user_group_id
-          @readonly_permissions[u.user_group_id.to_s] = u.readonly
+          @read_access[u.user_group_id.to_s]  = u.read_permission
+          @write_access[u.user_group_id.to_s] = u.write_permission
       }
       options        = []
       user_group_ids = []
@@ -394,7 +415,9 @@ JS
         element_id = 'user_selection_option_' + @value if @parent
         HTML.div(:id => element_id) { 
           Hidden_Field.new(:name => 'user_group_ids[]', :value => @value) + 
-          HTML.span(:onclick => "Element.remove('#{element_id}');", :class => :link) { 'X ' } + HTML.span { @label.to_s }
+          HTML.a(:onclick => "Element.remove('#{element_id}');", :class => :icon) { 
+            HTML.img(:src => '/aurita/images/icons/delete_small.png') 
+          } + HTML.span { @label.to_s }
         }
       end
     end
@@ -425,8 +448,10 @@ JS
       end
       def element
         HTML.div { 
-          HTML.span(:class => :link, 
-                    :onclick => "Aurita.call({ action: 'User_Role/perform_delete/user_group_id=#{@user.user_group_id}&role_id=#{@value}' });") { 'X ' } + 
+          HTML.a(:class => :icon, 
+                 :onclick => "Aurita.call({ action: 'User_Role/perform_delete/user_group_id=#{@user.user_group_id}&role_id=#{@value}' });") { 
+            HTML.img(:src => '/aurita/images/icons/delete_small.png') 
+          } + 
           @label.to_s
         }
       end
@@ -487,13 +512,11 @@ JS
       @attrib[:onclick] = trigger_onclick
       HTML.div { 
         Input_Field.new(@attrib.update(:value => @value, :readonly => true, :id => name)) + 
-        HTML.button(:class => :datepick_clear, 
-                    :type => :button, 
-                    :onclick => clear_onclick) { 'X' }  + 
-        HTML.button(:id => trigger_name, 
-                    :class => :datepick, 
-                    :type => :button, 
-                    :onclick => trigger_onclick) { tl(:choose_date) } 
+        Text_Button.new(:class   => :datepick_clear, 
+                        :onclick => clear_onclick) { 'X' }  + 
+        Text_Button.new(:id      => trigger_name, 
+                        :class   => :datepick, 
+                        :onclick => trigger_onclick) { tl(:choose_date) } 
       }
     end
   end
@@ -526,6 +549,17 @@ JS
         HTML.div(:style => 'clear: both;') { ' '}
       }
 
+    end
+  end
+
+  class Category_Access_Options_Field < Select_Field
+  include Aurita::GUI::I18N_Helpers
+
+    def initialize(params)
+      params[:option_values] = [ :public, :registered, :members ]
+      params[:option_labels] = [ tl(:everyone), tl(:registered_users), tl(:members_of_category) ]
+      params[:value]         = :members unless params[:value]
+      super(params)
     end
   end
 

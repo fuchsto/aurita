@@ -5,6 +5,7 @@ Aurita.import_module :gui, :helpers
 Aurita.import_module :gui, :datetime_helpers
 Aurita.import_module :gui, :context_menu_helpers
 Aurita.import_module :gui, :link_helpers
+Aurita.import_module :gui, :text_button
 
 module Aurita
 module GUI
@@ -30,28 +31,11 @@ module GUI
     end
 
     def self.button(args, &block)
-      icon = ''
-      icon = '<img src="/aurita/images/icons/button_' << args[:icon].to_s + '.gif" alt="" />' if args[:icon]
-      if args[:action] then
-        onclick = "Aurita.load({ element: 'app_main_content', action: '#{args[:action]}' }); "
-      elsif args[:onclick] then
-        onclick = args[:onclick]
-      elsif args[:hashcode] then
-        onclick = "Aurita.set_hashcode('#{args[:hashcode]}'); "
-      else 
-        onclick = ''
-        args.each_pair { |k,v|
-          onclick <<  "Aurita.load({ element: '#{k}', action: '#{v}' }); " unless [:icon, :class, :type].include?(k)
-        }
-      end
-      label = yield()
-      label = tl_main(label) if label.kind_of?(Symbol)
-      args[:type] = 'button' unless args[:type]
-      args[:onclick] = onclick unless onclick == '' 
-      args[:class] = 'lore_button_varwidth' unless args[:class]
-      args.delete(:action)
-      args.delete(:icon)
-      HTML.button(args) { icon + label }
+      label   = yield if block_given?
+      label ||= args[:label]
+      label   = tl_main(label) if label.kind_of?(Symbol)
+      args[:label] = label
+      return GUI::Text_Button.new(args).string
     end
 
 

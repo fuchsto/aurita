@@ -10,7 +10,7 @@ module Aurita
     @@admin_emails       = [ 'root@localhost' ]
     @@base_path          = @@app_base_path + 'aurita/lib/aurita/'
     @@projects_base_path = @@app_base_path + 'aurita_projects/'
-    @@plugins_path       = @@app_base_path + 'aurita_plugins/'
+    @@plugins_path       = @@app_base_path + 'aurita-plugins/'
 
     @@sys_log_path = '/var/log/aurita/sys.log'
     @@run_log_path = '/var/log/aurita/sys.log'
@@ -30,19 +30,6 @@ module Aurita
     def self.plugins_path
       @@plugins_path
     end
-    def self.run_log_path
-      @@run_log_path
-    end
-    def self.sys_log_path
-      @@sys_log_path
-    end
-    def self.run_log_path=(file)
-      @@run_log_path = file
-    end
-    def self.sys_log_path=(file)
-      @@sys_log_path = file
-    end
-
   end
 
 end

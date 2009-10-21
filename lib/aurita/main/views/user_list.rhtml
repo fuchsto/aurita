@@ -1,12 +1,12 @@
 
-<div style="height: 200px; overflow-y: auto;">
+<div style="height: 200px; overflow-y: auto; ">
   <% users.each do |user| %>
-    <div class="user_icon">
+    <div class="user_icon" style="border: 1px solid white; padding: 0px; ">
     <%= gui.link_to(user) { 
-       "<div class=\"image\">" << 
+        "<div class=\"image\" >" << 
        "  <img src=\"/aurita/assets/small/asset_#{user.picture_asset_id}.jpg\" />" << 
        "</div>" << 
-       "<div style=\"text-align: center;\">#{user.user_group_name}</div>"
+       "<div style=\"text-align: center; height: 35px; background-color: white; \">#{user.forename} #{user.surname}</div>"
     }
     %>
     </div>

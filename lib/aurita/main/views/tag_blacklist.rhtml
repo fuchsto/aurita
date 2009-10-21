@@ -1,9 +1,13 @@
 
 
 <div id="new_blacklist_entry_form">
-<button class="submit" onclick="Aurita.load({ element: 'new_blacklist_entry_form', action: 'Tag_Blacklist/add' }); ">
-  <%= tl(:new_tag_blacklist_entry) %>
-</button>
+  <div class="button_bar">
+    <%= gui.button(:onclick => "Aurita.load({ element: 'new_blacklist_entry_form', action: 'Tag_Blacklist/add' });", 
+                   :icon    => 'button_add.gif') { 
+          tl(:new_tag_blacklist_entry) 
+        } 
+    %>
+  </div>
 </div>
 
 <hr />

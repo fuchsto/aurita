@@ -16,10 +16,10 @@
     <%= f.textarea(:name => :message, :style => "height: 50px;", :label => tl(:comment)) %>
 
     <div class="form_button_bar">
-      <%= gui.button(:type => 'button', :icon => 'ok', :class => 'submit', 
+      <%= gui.button(:type => 'button', :icon => 'button_ok.gif', :class => 'submit', 
                      :onclick => "Aurita.submit_form('content_recommendation_editor'); ") { tl(:submit) } %>
 
-      <%= gui.button(:type => 'button', :icon => 'cancel', :class => 'cancel', 
+      <%= gui.button(:type => 'button', :icon => 'button_cancel.gif', :class => 'cancel', 
                      :onclick => "Aurita.cancel_form('content_recommendation_editor');") { tl(:cancel) } %>
     </div>
 

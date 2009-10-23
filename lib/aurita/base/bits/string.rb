@@ -68,14 +68,16 @@ class String
     self.gsub!('\"','"')
   end
 
+  def pg_encode
+    rep = split(//).map { |char|
+      case char[0]
+      when (0..31),39,92,(127..255)
+        "\\#{sprintf("%03o", char[0])}"
+      else
+        char
+      end
+    }.join
+    self.replace(rep)
+  end
+
 end # class
-
-class NilClass
-  def nonempty? 
-    false
-  end
-
-  def empty?
-    true
-  end
-end

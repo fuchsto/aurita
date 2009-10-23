@@ -1,11 +1,14 @@
 
-class Nil
+class NilClass
 
   # To prevent
   #  
   #   param(:set_of_values).each { ... } 
   #
-  # from bailing out. 
+  # from bailing out with 
+  #
+  #   Undefined method 'each' for nil:NilClass
+  #
   # This can also be prevented by setting an empty 
   # Array instance as default value: 
   #
@@ -27,4 +30,13 @@ class Nil
   def each_with_index(&block)
   end
 
+  def nonempty? 
+    false
+  end
+
+  def empty?
+    true
+  end
+
 end
+

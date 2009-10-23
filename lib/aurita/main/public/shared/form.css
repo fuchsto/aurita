@@ -188,7 +188,7 @@ input.inline, textarea.inline {
   margin-left: 1px; 
   padding-left: 7px; 
   padding-right: 7px; 
-  padding: 3px 12px; 
+  padding: 2px 12px; 
   float: left; 
 }
 
@@ -201,7 +201,7 @@ input.inline, textarea.inline {
 
 .button.form, .button.form:hover, .form_button_bar .button, .form_button_bar .button:hover { 
   width: 138px; 
-  padding: 4px 12px; 
+  padding: 2px 12px; 
   font-size: 0.8em;
   background: transparent url(/aurita/images/icons/box_header_bg.png) repeat scroll 0 0;
 }
@@ -269,7 +269,9 @@ a.icon_button .button_label {
   margin-left: 4px; 
 }
 a.icon_button, a.icon_button:hover { 
-  padding: 4px;
+/*  padding: 4px; */
+  padding: 3px; 
+  padding-top: 5px; 
 }
 
 button { 

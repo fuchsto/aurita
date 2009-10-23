@@ -353,9 +353,11 @@ div.article_view div.article_info {
   line-height: 15px; 
   font-weigth: lighter; 
   color: #676767;
+  /*
   margin-left: -7px; 
   margin-right: -7px; 
   padding-left: 4px; 
+  */
 }
 
 .article_view .article_info input, .article_view .article_info select, .article_view .article_info input:focus, .article_view .article_info select:focus { 
@@ -574,10 +576,13 @@ tr.highlighted td {
 }
 
 a.icon { 
+  /*
   padding: 0px; 
   padding-left: 4px; 
   padding-right: 4px; 
   padding-top: 4px; 
+  */
+  padding: 2px; 
   margin-left: -2px; 
   margin-right: -2px; 
   margin-bottom: 4px; 
@@ -1762,17 +1767,16 @@ table.message_table {
 }
 
 .message_table .mail_view {
-  margin-left: 25px; 
+  margin-left: 33px; 
   background-color: white; 
 }
 
 .message_table .mail_view .mail_toolbar { 
-  padding: 1px; 
-  padding-top: 3px; 
+  padding: 7px; 
   border-left: 1px solid #afafaf; 
   border-right: 1px solid #afafaf; 
-  margin: -1px -1px 0px 0px; 
-  background: #c4c6c7 url(/aurita/images/icons/box_header_bg.png) repeat-x scroll 0 0; 
+  margin: -0px -1px 0px 0px; 
+  background: #d2d2d2 url(/aurita/images/icons/box_header_bright_bg.png) repeat-x scroll 0 0; 
 }
 .message_table .mail_view .mail_body { 
   height: 90px; 
@@ -1780,6 +1784,7 @@ table.message_table {
   overflow-y: auto; 
   border: 1px solid #afafaf; 
   margin: -1px -1px -1px 0px; 
+  border-top: 0px solid transparent; 
   padding: 7px; 
 }
 

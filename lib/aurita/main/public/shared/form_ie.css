@@ -113,9 +113,17 @@ ul.form_fields .button, ul.form_fields .button:hover {
   top: -4px; 
 }
 
-a.icon_button img { 
+a.button { 
+  margin-top: 2px; 
+}
+
+a.icon_button, a.icon_button:hover { 
+  padding: 2px; 
+}
+a.icon_button img, a.icon_button:hover img { 
   margin: 0px 0px 0px 0px; 
-  padding-right: 5px; 
+  padding: 0px; 
+  padding-right: 3px; 
 }
 
 ul.form_fields .timespan select { 

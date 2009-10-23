@@ -56,9 +56,19 @@ module Aurita
     # 
     # 
     # 
-    def self.get(hook, calling_controller=nil, params=nil)
+    def self.get(hook, *args)
       Aurita.log {  'PLUGIN REGISTER GET: ' << hook.inspect }
-      components = []
+
+      components         = []
+      params             = {}
+      calling_controller = false
+      if args[0].is_a?(Hash) then
+        params             = calling_controller
+      else 
+        calling_controller = args[0]
+        params             = args[1]
+      end
+      
       plugin_call = @@register[hook.to_s]
       return components unless plugin_call
       plugin_call.each { |component| 
@@ -103,9 +113,18 @@ module Aurita
     #    plugin_call(Hook.main.user_group.after_add, :user => instance)
     #  end
     #
-    def self.call(hook, calling_controller=nil, params=nil)
+    def self.call(hook, *args)
       Aurita.log { 'PLUGIN REGISTER CALL: ' << hook.inspect }
-      plugin_call = @@register[hook.to_s]
+
+      plugin_call        = @@register[hook.to_s]
+      params             = {}
+      calling_controller = false
+      if args[0].is_a?(Hash) then
+        params             = calling_controller
+      else 
+        calling_controller = args[0]
+        params             = args[1]
+      end
       return unless plugin_call
       plugin_call.each { |component| 
         if !component.constraint || component.constraint.call then

@@ -27,7 +27,7 @@ module Main
           message = tl(:asset_recommendation_message)
           subject = tl(:asset_recommendation_subject)
       end
-      param(:user_group_ids).each { |uid| 
+      param(:user_group_ids, []).each { |uid| 
         Content_Recommendation.create(:content_id => param(:content_id), 
                                       :user_group_id => uid, 
                                       :type => param(:type), 

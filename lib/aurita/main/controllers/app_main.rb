@@ -26,7 +26,7 @@ module Main
     def on_request_finish(params={})
       User_Action.create(:controller    => params[:controller].class.to_s, 
                          :method        => params[:action], 
-                         :runmode       => Aurita.runmode.to_s.at(0), 
+                         :runmode       => Aurita.runmode.to_s[0], 
                          :user_group_id => Aurita.user.user_group_id, 
                          :duration      => params[:time], 
                          :num_queries   => params[:num_queries], 

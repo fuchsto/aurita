@@ -134,7 +134,7 @@ p {
   background-color: #f0f0f0;
 }
 
-div.warning_box { 
+div.warning_box, div.message_box.confirmation { 
   background-color: #FB7070; 
   border-color: #D43C3C; 
   color: #FFFFFF; 
@@ -438,7 +438,7 @@ div.article_view div.article_info {
   border: 1px dotted #cccccc;
 }
 
-.article_container { 
+.article_container, .article_partial { 
   padding: 0px; 
   padding-top: 4px; 
   padding-bottom: 4px; 
@@ -1920,5 +1920,21 @@ span.inline_button, div.inline_button {
 
 a.add_file_button { 
   margin: 5px; 
+}
+
+.article_content li.sortable { 
+  list-style-type: none; 
+  background-color: #eaeaea; 
+  border: 1px solid #989898; 
+  max-height: 120px; 
+  overflow: hidden; 
+  padding: 4px; 
+  margin: -3px; 
+  margin-bottom: 6px; 
+  cursor: n-resize; 
+}
+.article_content ul.sortable { 
+  margin: 3px; 
+  padding: 0px; 
 }
 

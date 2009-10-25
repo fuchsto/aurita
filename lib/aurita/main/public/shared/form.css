@@ -237,6 +237,7 @@ a.button, span.button, div.button {
 }
 a.button:hover { 
   background: url('/aurita/images/icons/button_hover.gif') repeat scroll 0px -1px;
+  border-color: #676767; 
 }
 a.button:active { 
   border-style: inset; 

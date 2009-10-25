@@ -25,10 +25,12 @@ module Main
         tr.set(:hits => Lore::Clause.new('hits + 1')) 
         tr.where(Tag_Relevance.tag.in(tags))
       }
-      exists = find(1).with(Tag_Relevance.tag == tag).entity
-      if !exists then
-        create(:tag => tag, :hits => 1)
-      end
+      tags.each { |tag|
+        exists = find(1).with(Tag_Relevance.tag == tag).entity
+        if !exists then
+          create(:tag => tag, :hits => 1)
+        end
+      }
     end
 
   end 

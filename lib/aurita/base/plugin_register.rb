@@ -63,7 +63,7 @@ module Aurita
       params             = {}
       calling_controller = false
       if args[0].is_a?(Hash) then
-        params             = calling_controller
+        params             = args[0]
       else 
         calling_controller = args[0]
         params             = args[1]
@@ -72,7 +72,7 @@ module Aurita
       plugin_call = @@register[hook.to_s]
       return components unless plugin_call
       plugin_call.each { |component| 
-        if !component.constraint || component.constraint.call then
+        if !component.constraint || component.constraint.call(params) then
           # Call params consists of params passed to plugin_get (params) 
           # and those provided in the plugin manifest statically (component.params): 
           call_params = {}
@@ -120,14 +120,14 @@ module Aurita
       params             = {}
       calling_controller = false
       if args[0].is_a?(Hash) then
-        params             = calling_controller
+        params             = args[0]
       else 
         calling_controller = args[0]
         params             = args[1]
       end
       return unless plugin_call
       plugin_call.each { |component| 
-        if !component.constraint || component.constraint.call then
+        if !component.constraint || component.constraint.call(params) then
           # Call params consists of params passed to plugin_get (params) 
           # and those provided in the plugin manifest statically (component.params): 
           call_params = {}

@@ -103,11 +103,11 @@ module Aurita
       }
       syn_constraints = Lore::Clause.new('')
 			tags.each { |k|
-        constraints = constraints & (self.tags.has_element_ilike("%#{k}%"))
+        constraints = constraints & (self.tags.has_element_ilike("#{k}%"))
         if syn[k] then
           syn[k].each { |s|
             constraints = constraints |
-                          (self.tags.has_element_ilike("%#{s}%"))
+                          (self.tags.has_element_ilike("#{s}%"))
           }
         end
 			}

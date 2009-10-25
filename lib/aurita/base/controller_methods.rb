@@ -295,7 +295,7 @@ module Aurita
         params ||= {}
         params[:action]     = action
         params[:controller] = entity.model_name
-        params.update(:id => entity.pkey)
+        params.update(:id => entity.key.values.first)
       else
         params = args.at(0)
       end

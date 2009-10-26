@@ -306,6 +306,8 @@ module Aurita
       params[:action]     = :show unless params[:action]
       params.delete(:to)
 
+      onload = params[:onload]
+
       url = "#{params[:controller]}/#{params[:action]}/"
       target   = params[:target]
       target ||= params[:element]
@@ -313,6 +315,7 @@ module Aurita
       params.delete(:action)
       params.delete(:target)
       params.delete(:element)
+      params.delete(:onload)
       
       if params.size > 0 then
         get_params = []
@@ -320,12 +323,13 @@ module Aurita
           get_params << "#{k}=#{v}"
         }
       end
+
+      call_target = ", element: '#{target}'" if target
+      call_onload = ", onload: '#{onload}'" if onload
+
       url << get_params.join('&') if get_params
-      if target then
-        exec_js("Aurita.load({ action: '#{url}', element: '#{target}' });")
-      else
-        exec_js("Aurita.load({ action: '#{url}' });")
-      end
+
+      exec_js("Aurita.load({ action: '#{url}' #{call_target}#{call_onload}});")
     end
     alias redirect redirect_to
 

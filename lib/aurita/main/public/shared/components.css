@@ -439,9 +439,7 @@ div.article_view div.article_info {
 }
 
 .article_container, .article_partial { 
-  padding: 0px; 
-  padding-top: 4px; 
-  padding-bottom: 4px; 
+  padding: 4px; 
 }
 
 .article_container_files { 
@@ -1446,6 +1444,20 @@ div.calculation_totals .totals {
   background: url('/aurita/images/icons/loading.gif') no-repeat scroll 88px 11px; 
 }
 
+.media_asset_thumbnail.medium .image { 
+  height: 240px; 
+}
+.media_asset_thumbnail.medium .info { 
+  height: 52px; 
+}
+
+.media_asset_thumbnail.medium { 
+  width: 324px; 
+  background-color: white; 
+  height: 302px; 
+  margin-left: 4px; 
+  margin-bottom: 3px; 
+}
 .media_asset_thumbnail.tiny { 
   width: 180px; 
   background-color: white; 
@@ -1936,5 +1948,24 @@ a.add_file_button {
 .article_content ul.sortable { 
   margin: 3px; 
   padding: 0px; 
+}
+
+.defaultSkin table.mceLayout {
+  border: 0px !important; 
+  border-style: none; 
+}
+.defaultSkin table.mceLayout tr.mceFirst td { 
+  border: 0px !important; 
+}
+.defaultSkin table.mceLayout tr.mceLast td { 
+  border-bottom-width: 0px; 
+  border: 0px !important; 
+  border-style: none; 
+}
+.defaultSkin .mceIframeContainer { 
+  border-top-width: 0px; 
+  border-bottom-width: 0px; 
+  border: 0px !important; 
+  border-style: none; 
 }
 

@@ -1877,7 +1877,7 @@ table.listing_2_columns {
 }
 .media_asset_selection_list .toolbar { 
   background: url('/aurita/images/icons/box_header_bg.png') repeat-x;
-  background-color: #c0c0c0; 
+  background-color: #c5c5c5; 
   padding: 2px 5px 5px 6px;  
 }
 .media_asset_selection_list .toolbar img.icon { 
@@ -1889,6 +1889,24 @@ table.listing_2_columns {
 .media_asset_selection_list #autocomplete_media, 
 .media_asset_selection_list .toolbar button { 
   padding: 2px;
+}
+
+.article_content td.mceToolbar { 
+  background: url('/aurita/images/icons/box_header_bg.png') repeat-x;
+  background-color: #c5c5c5; 
+}
+.article_content .mceLayout, .article_content .defaultSkin table.mceLayout { 
+  border: 1px outset white; 
+}
+.defaultSkin .mceButton { 
+  border-color: transparent !important; 
+}
+.article_content .defaultSkin table, .article_content .defaultSkin table.mceLayout { 
+  background: none !important; 
+  background-color: transparent; 
+}
+.defaultSkin .mceSplitButton a { 
+  border-color: transparent !important; 
 }
 
 #debug_box { 
@@ -1950,10 +1968,6 @@ a.add_file_button {
   padding: 0px; 
 }
 
-.defaultSkin table.mceLayout {
-  border: 0px !important; 
-  border-style: none; 
-}
 .defaultSkin table.mceLayout tr.mceFirst td { 
   border: 0px !important; 
 }
@@ -1968,4 +1982,5 @@ a.add_file_button {
   border: 0px !important; 
   border-style: none; 
 }
+
 

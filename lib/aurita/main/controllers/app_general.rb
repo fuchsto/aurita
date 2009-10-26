@@ -51,11 +51,11 @@ module Main
     def users_online_box_body
       body = HTML.ul(:class => :no_bullets)
       User_Online.current_users.each { |user|
-        body << HTML.li { link_to(user) { "#{user.forename} #{user.surname}" } }
+        body << HTML.li { link_to(user) { user.label } }
       }
       body
     end
-    
+
   end # class
   
 end # module

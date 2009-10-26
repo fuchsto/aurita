@@ -116,7 +116,7 @@ module Main
 
     def perform_add
 
-      check = Category.find(1).with(Category.category_name.ilike("%#{param(:category_name)}%")).entity
+      check = Category.find(1).with(Category.category_name.ilike("#{param(:category_name)}")).entity
       if check then
         exec_js(js.alert(tl(:category_name_already_used)))
         return

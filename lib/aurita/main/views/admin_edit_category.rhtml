@@ -22,10 +22,16 @@
   <h2><%= tl(:delete_category) %></h2>
 
   <% form_for(:instance => category, :action => :perform_delete, :id => :delete_category_form) do |f| %>
-    <%= f.custom(:element => Category_Select_Field, :name => :new_category_id, :label => tl(:delete_category_and_move_contents_to)) %>
-    <button class="delete" type="button" onclick="Aurita.submit_form('delete_category_form');">
-      <%= tl(:delete_category) %>
-    </button>
+    <%= f.custom(:element => Category_Select_Field, 
+                 :name    => :new_category_id, 
+                 :label   => tl(:delete_category_and_move_contents_to)) %>
+    <%= 
+      gui.button(:class   => :delete, 
+                 :icon    => 'button_cancel.gif', 
+                 :onclick => "Aurita.submit_form('delete_category_form');") { 
+        tl(:delete_category) 
+      } 
+    %>
   <% end %>
 
 </div>

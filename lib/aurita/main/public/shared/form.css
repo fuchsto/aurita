@@ -521,6 +521,7 @@ li ul.checkbox_options label {
   display: inline; 
   position: relative; 
   top: -1px; 
+  color: #898989; 
 }
 
 fieldset.list table.list { 

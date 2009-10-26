@@ -349,7 +349,7 @@ JS
                                                           :id   => "user_#{@value}_permissions", 
                                                           :option_values => [ 'read', 'write' ], 
                                                           :option_labels => [ tl(:read_permission), tl(:write_permission) ], 
-                                                          :value => [ @read.to_s, @write.to_s ] ).element
+                                                          :value => [ @read, @write ] ).element
 
         toggle_read  = "Aurita.call('User_Category/toggle_read_permission/user_group_id=#{@value}&category_id=#{@category.category_id}'); return true; "
         toggle_write = "Aurita.call('User_Category/toggle_write_permission/user_group_id=#{@value}&category_id=#{@category.category_id}'); return true; "

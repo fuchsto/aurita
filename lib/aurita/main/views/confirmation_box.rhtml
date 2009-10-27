@@ -1,7 +1,7 @@
 <div>
 	<%= tl(message.to_sym) if message %>
 </div>
-<div style="margin-top: 7px; text-align: center; ">
-  <button type="button" class="submit" style="width: 80px; " onclick="Aurita.confirm_action(); "><%= tl(:ok) %></button>
-    <button type="button" class="cancel" style="width: 80px; " onclick="Aurita.cancel_action(); "><%= tl(:cancel) %></button>
+<div style="margin-top: 17px; text-align: center; ">
+  <%= gui.button(:class => :ok, :onclick => "Aurita.confirm_action();") { tl(:ok) } %>
+  <%= gui.button(:class => :cancel, :onclick => "Aurita.cancel_action();") { tl(:cancel) } %>
 </div>

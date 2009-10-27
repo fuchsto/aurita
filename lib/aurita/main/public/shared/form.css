@@ -164,7 +164,8 @@ input.inline, textarea.inline {
   background-color: #f4f4f4; 
 }
 .section_content .form_box { 
-  padding: 0px; 
+  padding: 10px; 
+  margin: -10px; 
 }
 
 .form_inline_box { 

@@ -11,8 +11,9 @@ module Console
   class Generate_Image_Variants
 
     def initialize(argv)
-      @media_asset_id_from = argv[0].to_i if argv[0]
-      @media_asset_id_to   = argv[1].to_i if argv[1]
+      @variant             = argv[0].to_sym
+      @media_asset_id_from = argv[1].to_i if argv[1]
+      @media_asset_id_to   = argv[2].to_i if argv[2]
     end
 
     def run
@@ -20,7 +21,7 @@ module Console
       assets = Wiki::Media_Asset.all_with(Wiki::Media_Asset.media_asset_id >= @media_asset_id_from) if @media_asset_id_from
       assets = Wiki::Media_Asset.all_with((Wiki::Media_Asset.media_asset_id >= @media_asset_id_from) &
                                           (Wiki::Media_Asset.media_asset_id <= @media_asset_id_to)) if @media_asset_id_to
-      variant = { :website => Wiki::Media_Asset_Importer.image_variants[:website] }
+      variant = { @variant => Wiki::Media_Asset_Importer.image_variants[@variant] }
       assets.sort_by(:media_asset_id, :asc).each { |media_asset|
         asset_id = media_asset.media_asset_id
 

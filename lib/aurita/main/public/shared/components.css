@@ -1446,8 +1446,22 @@ div.calculation_totals .totals {
   background: url('/aurita/images/icons/loading.gif') no-repeat scroll 88px 11px; 
 }
 
+.media_asset_thumbnail.preview .image { 
+  height: 150px; 
+}
+.media_asset_thumbnail.preview .info { 
+  height: 52px; 
+}
+
+.media_asset_thumbnail.preview { 
+  width: 250px; 
+  background-color: white; 
+  height: 212px; 
+  margin-left: 4px; 
+  margin-bottom: 3px; 
+}
 .media_asset_thumbnail.medium .image { 
-  height: 318px; 
+  height: 200; 
 }
 .media_asset_thumbnail.medium .info { 
   height: 52px; 
@@ -1480,7 +1494,7 @@ div.calculation_totals .totals {
   padding: 2px; 
   background: url('/aurita/images/icons/loading.gif') no-repeat scroll 80px 11px; 
 }
-.media_asset_thumbnail.highlighted .image { 
+.highlighted .image { 
   background: none; 
 }
 .media_asset_thumbnail.tiny .image { 

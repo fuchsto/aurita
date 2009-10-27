@@ -150,7 +150,6 @@ module Main
       components = {}
       sorted     = []
       plugin_get(Hook.main.workspace.top).each { |component|
-        STDERR.puts "COMPONENT: #{component.inspect}"
         component.sortable = true if component.respond_to?(:sortable) 
         dom_id = 'component_' << component.dom_id.to_s
         sorted << dom_id 

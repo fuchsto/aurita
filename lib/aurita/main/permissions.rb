@@ -9,6 +9,9 @@ module Main
     register_permission(:delete_hierarchies, 
                         :type    => :bool, 
                         :default => true)
+    register_permission(:view_recent_comments, 
+                        :type    => :bool, 
+                        :default => true)
 
   end
 

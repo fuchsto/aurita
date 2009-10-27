@@ -674,6 +674,8 @@ img.icon {
   padding-right: 0px; 
   border: 1px solid transparent; 
   border-bottom: 1px solid #dfdfdf; 
+  height: 26px; 
+  cursor: default; 
 }
 
 #message_box { 

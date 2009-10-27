@@ -51,7 +51,7 @@ module Main
     def users_online_box_body
       body = HTML.ul(:class => :no_bullets)
       User_Online.current_users.each { |user|
-        body << HTML.li { link_to(user) { user.label } }
+        body << HTML.li { link_to(user) { user.label } } unless (user.user_group_id == 100)
       }
       body
     end

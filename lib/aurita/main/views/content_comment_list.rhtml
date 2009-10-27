@@ -3,7 +3,7 @@
       <% form_for(:model => Content_Comment, :action => :perform_add, :id => :content_comment_form) do |f| %>
         <%= f.hidden(:name => :user_group_id, :value => Aurita.user.user_group_id) %>
         <%= f.hidden(:name => :content_id, :value => content.content_id) %>
-        <%= f.textarea(:name => :message, :class => :comment, :force_closing_tag => true, :label => tl(:add_comment)) %>
+        <%= f.textarea(:name => :message, :class => [ :comment ], :force_closing_tag => true, :label => tl(:add_comment)) %>
       <% end %>
       <%= gui.button(:class   => 'submit', 
                      :icon    => 'button_add.gif', 

@@ -598,7 +598,8 @@ fieldset legend {
 }
 
 .selection_list_field { 
-  border: 1px solid #dfdfdf; 
+/*  border: 1px solid #dfdfdf; */
+  background-color: #eaeaea; 
 }
 .selection_list_field ul { 
   padding-bottom: 2px !important; 

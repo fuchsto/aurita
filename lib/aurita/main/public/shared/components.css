@@ -594,7 +594,7 @@ a.icon img, a.button img {
   vertical-align: middle; 
 }
 
-a.icon:hover { 
+.toolbox_body a.icon:hover { 
   background-color: #f8f8f8; 
 }
 
@@ -1967,7 +1967,9 @@ a.add_file_button {
   margin: 3px; 
   padding: 0px; 
 }
-
+.defaultSkin table.mceLayout { 
+  border-style: none !important; 
+}
 .defaultSkin table.mceLayout tr.mceFirst td { 
   border: 0px !important; 
 }

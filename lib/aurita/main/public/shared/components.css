@@ -1967,7 +1967,7 @@ a.add_file_button {
   margin: 3px; 
   padding: 0px; 
 }
-.defaultSkin table.mceLayout { 
+.form_content .defaultSkin table.mceLayout { 
   border-style: none !important; 
 }
 .defaultSkin table.mceLayout tr.mceFirst td { 

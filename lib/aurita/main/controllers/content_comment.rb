@@ -47,13 +47,15 @@ module Main
     end
 
     def recent_comments_box(params={})
+
       amount   = params[:amount]
       amount ||= 3
 
       box = Box.new(:type => :none, :class => :topic_inline, :id => :content_comment_box)
       box.header = tl(:recent_comments)
       body = ''
-      comments = Content_Comment.find(amount).with((Content_Comment.is_accessible) & (Content_Comment.time > (Time.now - 7.days))).sort_by(:time, :desc).entities
+      comments = Content_Comment.find(amount).with((Content_Comment.is_accessible) & 
+                                                   (Content_Comment.time > (Time.now - 7.days))).sort_by(:time, :desc).entities
       return unless comments.length > 0
       comments.each { |c|
         begin
@@ -74,6 +76,7 @@ module Main
             }
           }
         rescue ::Exception => content_deleted
+          STDERR.puts content_deleted.message
         end
       }
       box.body = body

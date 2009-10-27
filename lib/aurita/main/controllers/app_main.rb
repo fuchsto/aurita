@@ -150,6 +150,7 @@ module Main
       components = {}
       sorted     = []
       plugin_get(Hook.main.workspace.top).each { |component|
+        STDERR.puts "COMPONENT: #{component.inspect}"
         component.sortable = true if component.respond_to?(:sortable) 
         dom_id = 'component_' << component.dom_id.to_s
         sorted << dom_id 
@@ -174,6 +175,7 @@ module Main
       puts HTML.ul(:id => 'workspace_components', :class => 'no_bullets' ) { result.join("\n") }.string
       exec_js("Aurita.GUI.init_sortable_components('workspace_components', { handle: 'box_sort_handle' } ); ")
       exec_js("Aurita.GUI.init_sortable_components('recent_category_changes', { handle: 'box_sort_handle' } ); ")
+      exec_js("Aurita.GUI.collapse_boxes(); ")
     end
 
     def frontpage

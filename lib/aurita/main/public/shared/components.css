@@ -113,7 +113,7 @@ p {
 }
 
 .highlighted .box_header { 
-  background: #f9cf88 url('/aurita/images/icons/box_header_highlighted_bg.png') repeat-x 
+  background: #f9cf88 url('/aurita/images/icons/box_header_highlighted_bg.png') repeat-x; 
 }
 .highlighted .box_body { 
   background-color: transparent;
@@ -1445,7 +1445,7 @@ div.calculation_totals .totals {
 }
 
 .media_asset_thumbnail.medium .image { 
-  height: 240px; 
+  height: 318px; 
 }
 .media_asset_thumbnail.medium .info { 
   height: 52px; 
@@ -1454,7 +1454,7 @@ div.calculation_totals .totals {
 .media_asset_thumbnail.medium { 
   width: 324px; 
   background-color: white; 
-  height: 302px; 
+  height: 380px; 
   margin-left: 4px; 
   margin-bottom: 3px; 
 }
@@ -1983,4 +1983,6 @@ a.add_file_button {
   border-style: none; 
 }
 
-
+.defaultSkin a.mceButtonActive, .defaultSkin a.mceButtonSelected { 
+  background: #f9cf88 url('/aurita/images/icons/box_header_highlighted_bg.png') repeat-x !important; 
+}

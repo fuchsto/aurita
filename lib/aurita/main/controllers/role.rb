@@ -54,7 +54,7 @@ module Main
       form.add(GUI::Hidden_Field.new(:name => :controller, :value => 'Role'))
       form.add(GUI::Hidden_Field.new(:name => :action, :value => 'perform_add'))
 
-      return Page.new(:header => tl(:add_role)) { form }
+      return Page.new(:header => tl(:add_role)) { decorate_form(form) }
     end
 
     def update

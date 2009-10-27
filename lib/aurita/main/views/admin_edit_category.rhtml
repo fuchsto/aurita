@@ -19,19 +19,44 @@
 </ul>
 
 <div class="form_box">
-  <h2><%= tl(:delete_category) %></h2>
+  <h3><%= tl(:delete_category) %></h3>
 
   <% form_for(:instance => category, :action => :perform_delete, :id => :delete_category_form) do |f| %>
-    <%= f.custom(:element => Category_Select_Field, 
-                 :name    => :new_category_id, 
-                 :label   => tl(:delete_category_and_move_contents_to)) %>
-    <%= 
-      gui.button(:class   => :delete, 
-                 :icon    => 'button_cancel.gif', 
-                 :onclick => "Aurita.submit_form('delete_category_form');") { 
-        tl(:delete_category) 
-      } 
-    %>
+    <div class="form_button_bar">
+      <%= 
+        gui.button(:class   => :delete, 
+                   :icon    => 'button_cancel.gif', 
+                   :onclick => "Aurita.submit_form('delete_category_form');") { 
+          tl(:delete_category) 
+        } 
+      %>
+    </div>
   <% end %>
 
 </div>
+
+<div class="form_box">
+  <h3><%= tl(:category_versions) %></h3>
+
+  <% form_for(:instance => category, :action => :toggle_versioned, :id => :category_versioned_form) do |f| %>
+    <div class="form_button_bar">
+      <%= if category.versioned then 
+          gui.button(:onclick => "Aurita.submit_form('category_versioned_form');", 
+                     :class   => :cancel, 
+                     :icon    => 'button_cancel.gif') { 
+            tl(:disable_category_versions) 
+          } 
+        else 
+          gui.button(:onclick => "Aurita.submit_form('category_versioned_form');", 
+                     :class   => :submit, 
+                     :icon    => 'button_ok.gif') { 
+            tl(:enable_category_versions) 
+          } 
+        end 
+      %>
+    </div>
+  <% end %>
+
+</div>
+
+

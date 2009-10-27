@@ -81,13 +81,13 @@ module Main
       instance = load_instance
       instance.locked = true
       instance.commit
-      redirect_to(:action => :update, :user_group_id => instance.pkey)
+      redirect_to(instance, :action => :update)
     end
     def perform_unlock
       instance = load_instance
       instance.locked = false
       instance.commit
-      redirect_to(:action => :update, :user_group_id => instance.pkey)
+      redirect_to(instance, :action => :update)
     end
 
     def delete

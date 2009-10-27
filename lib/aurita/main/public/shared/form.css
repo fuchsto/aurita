@@ -163,6 +163,10 @@ input.inline, textarea.inline {
   width: 340px; 
   background-color: #f4f4f4; 
 }
+.section_content .form_box { 
+  padding: 0px; 
+}
+
 .form_inline_box { 
   padding: 7px; 
   border: 1px solid #000000; 
@@ -451,15 +455,6 @@ input.datepick {
   top: -1px; 
 }
 
-div.timespan { 
-  float: left; 
-}
-div.timespan_delimiter { 
-  float: left; 
-  height: 25px; 
-  padding: 7px; 
-}
-
 ul.radio_options { 
   margin-left: 9px; 
   padding-left: 3px; 
@@ -476,9 +471,6 @@ ul.radio_options li {
   clear: both; 
 }
 
-ul.form_fields .timespan select { 
-  width: auto; 
-}
 
 .hidden_field_wrap { 
   display: none; 
@@ -540,7 +532,9 @@ fieldset.list legend {
 fieldset { 
   border: 1px solid #cdcdcd; 
   padding: 10px; 
-  margin: 10px -10px;
+  margin-left: 0px; 
+  margin-bottom: 10px; 
+  margin-top: 10px; 
 }
 fieldset legend { 
   font-size: 12px; 
@@ -582,7 +576,8 @@ fieldset legend {
 
 .section_content form { 
   padding: 10px; 
-  margin: -10px; 
+  margin-left: -10px; 
+  padding-top: 0px; 
 }
 
 .tag_autocomplete_field_wrap li.autocomplete { 
@@ -623,5 +618,25 @@ fieldset legend {
 
 ul.form_fields .multi_file_entry input { 
 /*  width: 312px; */
+}
+
+.datepick_field_wrap .datepick_field { 
+  background-color: #eaeaea; 
+}
+
+.timespan_field { 
+  background-color: #eaeaea; 
+}
+ul.form_fields .timespan select { 
+  width: auto; 
+}
+div.timespan { 
+  float: left; 
+}
+div.timespan_delimiter { 
+  float: left; 
+  padding: 4px; 
+  padding-left: 10px; 
+  padding-right: 10px; 
 }
 

@@ -15,13 +15,15 @@ module Main
     def category_list(user_group_id=nil)
       user_group_id ||= param(:user_group_id)
       user = User_Group.load(:user_group_id => user_group_id)
-      HTML.div { view_string(:admin_user_category_list, :user => user) }
+      HTML.div { view_string(:admin_user_category_list, 
+                             :user => user) }
     end
 
     def user_list(category_id=nil)
       category_id ||= param(:category_id)
       category = Category.load(:category_id => category_id)
-      HTML.div { view_string(:admin_category_user_list, :category => category) }
+      HTML.div { view_string(:admin_category_user_list, 
+                             :category => category) }
     end
 
     def index
@@ -42,7 +44,8 @@ module Main
     end
 
     def toggle_write_permission
-      user_cat = User_Category.find(1).with((User_Category.user_group_id == param(:user_group_id)) & (User_Category.category_id == param(:category_id))).entity
+      user_cat = User_Category.find(1).with((User_Category.user_group_id == param(:user_group_id)) & 
+                                            (User_Category.category_id == param(:category_id))).entity
       if user_cat.write_permission then
         user_cat.write_permission = false
       else
@@ -51,7 +54,8 @@ module Main
       user_cat.commit
     end
     def toggle_read_permission
-      user_cat = User_Category.find(1).with((User_Category.user_group_id == param(:user_group_id)) & (User_Category.category_id == param(:category_id))).entity
+      user_cat = User_Category.find(1).with((User_Category.user_group_id == param(:user_group_id)) & 
+                                            (User_Category.category_id == param(:category_id))).entity
       if user_cat.read_permission then
         user_cat.read_permission = false
       else

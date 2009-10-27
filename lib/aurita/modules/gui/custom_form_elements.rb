@@ -510,7 +510,7 @@ JS
       clear_onclick   = "$('#{name}').value = '';"
 
       @attrib[:onclick] = trigger_onclick
-      HTML.div { 
+      HTML.div.datepick_field { 
         Input_Field.new(@attrib.update(:value => @value, :readonly => true, :id => name)) + 
         Text_Button.new(:class   => :datepick_clear, 
                         :onclick => clear_onclick) { 'X' }  + 
@@ -542,10 +542,10 @@ JS
       from_name = "#{name}_begin"
       to_name   = "#{name}_end"
 
-      HTML.div { 
-        Time_Field.new(:name => from_name, :value => @from, :class => :timespan, :time_format => 'hm', :minute_range => @minute_range) + 
+      HTML.div.timespan_field { 
+        Time_Field.new(:name => from_name, :value => @from, :class => [ :timespan, :from ], :time_format => 'hm', :minute_range => @minute_range) + 
         HTML.div(:class => :timespan_delimiter) { tl(:timespan_to) } + 
-        Time_Field.new(:name => to_name, :value => @to, :class => :timespan, :time_format => 'hm', :minute_range => @minute_range) + 
+        Time_Field.new(:name => to_name, :value => @to, :class => [ :timespan, :to ], :time_format => 'hm', :minute_range => @minute_range) + 
         HTML.div(:style => 'clear: both;') { ' '}
       }
 

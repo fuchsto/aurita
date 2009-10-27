@@ -46,7 +46,7 @@
           <%= tl(:tags) %>
 	      </td>
 	      <td class="profile_right_column">
-          <%= user_profile.tags.split(' ').map { |tag| link_to(:controller => 'App_Main', :action => :find, :tag => tag) { tag} }.join(' ') %>
+          <%= user_profile.tags.split(' ').map { |tag| link_to(:controller => 'App_Main', :action => :find, :key => tag) { tag } }.join(' ') %>
 	      </td>
 	    </tr>
 <% if user_profile.last_seen_online then %>

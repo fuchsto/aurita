@@ -66,7 +66,7 @@ module Main
 
     def update
       category     = load_instance()
-      category_id  = param(:category_id)
+      category_id  = category.category_id
       components   = plugin_get(Hook.admin.category.show, :category_id => param(:category_id))
       update_form  = update_form() 
       write_access = :members
@@ -83,7 +83,7 @@ module Main
                                                              :name  => :write_access))
       form = view_string(:admin_edit_category, 
                          :update_form         => decorate_form(update_form).string, 
-                         :category            => Category.load(:category_id => param(:category_id)), 
+                         :category            => Category.load(:category_id => category_id), 
                          :category_users      => User_Category_Controller.user_list(category_id), 
                          :category_components => components)
       page = Page.new(:header => tl(:edit_category)) { form }
@@ -132,6 +132,17 @@ module Main
       resolve_access()
       super()
       redirect_to(:blank)
+    end
+
+    def toggle_versioned
+      category = load_instance()
+      if category.versioned then
+        category.versioned = false 
+      else
+        category.versioned = true 
+      end
+      category.commit
+      redirect_to(category, :action => :update)
     end
 
     def admin_box_body

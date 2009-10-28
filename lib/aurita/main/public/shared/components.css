@@ -2005,3 +2005,40 @@ a.add_file_button {
   background: #f9cf88 url('/aurita/images/icons/box_header_highlighted_bg.png') repeat-x !important; 
 }
 
+
+.context_menu_button { 
+  position: absolute; 
+  background: #efefef; 
+  border: 1px outset white; 
+  padding: 2px; 
+  margin-left: -21px; 
+  margin-top: 0px; 
+}
+.article_view .context_menu_button { 
+  margin-top: 0px; 
+  margin-left: -21px; 
+} 
+
+.highlighted .context_menu_button { 
+  display: none; 
+}
+
+.edit_button_right { 
+  float: right; 
+  padding: 2px; 
+  margin-top: -33px; 
+}
+
+.edit_button, .context_menu_button { 
+  background-color: #efefef; 
+  background: url('/aurita/images/icons/box_header_bright_bg.png');
+  border: 1px solid #999999; 
+  -moz-border-radius: 3px; 
+}
+
+.article_view .context_menu_element .article_text { 
+  border-left: 1px solid transparent; 
+}
+.article_view .context_menu_element .article_text.context_hover { 
+  border-left: 1px solid #dadada; 
+}

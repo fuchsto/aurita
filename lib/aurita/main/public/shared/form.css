@@ -166,6 +166,7 @@ input.inline, textarea.inline {
 .section_content .form_box { 
   padding: 10px; 
   margin: -10px; 
+  margin-top: 0px; 
 }
 
 .form_inline_box { 
@@ -200,6 +201,7 @@ input.inline, textarea.inline {
 .form_button_bar { 
   margin-top: 12px; 
   margin-left: 0px; 
+  margin-bottom: 6px; 
   height: 22px; 
   clear: both; 
 }

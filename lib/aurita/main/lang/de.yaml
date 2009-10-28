@@ -278,51 +278,6 @@ public--role_permissions--is_admin :
    t: yes
    f: no
 
-public--role_permissions--may_upload_files : 
-  Dateiupload: 
-   t: yes
-   f: no
-
-public--role_permissions--may_upload_large_files : 
-  Upload beliebig gro&szlig;er Dateien:
-   t: yes
-   f: no
-
-public--role_permissions--may_create_forum_groups : 
-  Diskussionsgruppen anlegen: 
-   t: yes
-   f: no
-
-public--role_permissions--may_moderate_foreign_forum_groups : 
-  Moderation fremder Diskussionsgruppen:
-   t: yes
-   f: no
-
-public--role_permissions--may_publish_articles : 
-  Neue Artikel anlegen:
-   t: yes
-   f: no
-
-public--role_permissions--may_edit_foreign_articles : 
-  Fremde Artikel bearbeiten:
-   t: yes
-   f: no
-
-public--role_permissions--may_create_events : 
-  Neue Ereignisse anlegen:
-   t: yes
-   f: no
-
-public--role_permissions--may_create_regular_events : 
-  Neue wiederholende Ereignisse anlegen:
-   t: yes
-   f: no
-
-public--role_permissions--may_edit_calendar : 
-  Kalender verwalten:
-   t: yes
-   f: no
-
 access_private : F&uuml;r mich
 access_public : F&uuml;r alle
 
@@ -354,7 +309,6 @@ error_header : Ein Fehler ist aufgetreten
 passwords_do_not_match : Die Passworte sind nicht identisch
 
 file_has_been_deleted : Datei wurde gel&ouml;scht
-article_has_been_deleted : Artikel wurde gel&ouml;scht
 
 add_another_file : Weitere Datei
 

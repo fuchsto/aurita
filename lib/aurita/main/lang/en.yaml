@@ -154,67 +154,13 @@ clear_image : No image
 internal--role--role_name : Name
 
 public--role_permissions--is_super_admin : 
- - Superadmin
+ - Super admin: 
  -
    t: yes
    f: no
 
 public--role_permissions--is_admin : 
- - Admin
- -
-   t: yes
-   f: no
-
-public--role_permissions--may_upload_files : 
- - File upload
- -
-   t: yes
-   f: no
-
-public--role_permissions--may_upload_large_files : 
- - Upload beliebig gro&szlig;er Dateien
- -
-   t: yes
-   f: no
-
-public--role_permissions--may_create_forum_groups : 
- - Diskussionsgruppen anlegen
- -
-   t: yes
-   f: no
-
-public--role_permissions--may_moderate_foreign_forum_groups : 
- - Moderation fremder Diskussionsgruppen
- -
-   t: yes
-   f: no
-
-public--role_permissions--may_publish_articles : 
- - Neue Artikel anlegen
- -
-   t: yes
-   f: no
-
-public--role_permissions--may_edit_foreign_articles : 
- - Fremde Artikel bearbeiten
- -
-   t: yes
-   f: no
-
-public--role_permissions--may_create_events : 
- - Neue Ereignisse anlegen
- -
-   t: yes
-   f: no
-
-public--role_permissions--may_create_regular_events : 
- - Neue wiederholende Ereignisse anlegen
- -
-   t: yes
-   f: no
-
-public--role_permissions--may_edit_calendar : 
- - Kalender verwalten
+ - Admin: 
  -
    t: yes
    f: no
@@ -222,3 +168,39 @@ public--role_permissions--may_edit_calendar :
 access_private : For me only
 access_public : For everyone
 
+select_image : Choose image
+clear_image : No image
+
+days : Days
+hours : Hours
+
+theme : Theme
+default_theme : Black
+custom_theme : Green
+
+media_statistics : Media statistics
+
+send : Send
+files_and_folders : Files and directories
+
+content_does_not_exist : Content does not exist
+
+email : eMail
+phone : Phone
+location : City
+mobile_phone : Mobile phone
+last_seen_online : Last seen online
+
+error_header : An error has occurred
+
+passwords_do_not_match : Password confirmation does not match
+
+file_has_been_deleted : File has been deleted
+
+add_another_file : Add another file
+
+category_versions : Versions
+enable_category_versions : activate
+disable_category_versions : deactivate
+
+confirm_empty_trash : Empty trash? 

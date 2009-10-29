@@ -92,8 +92,11 @@ p {
   border-color: #e3bb88; 
   background: #f9cf88 url(/aurita/images/icons/tall_row_highlighted_bg.png) repeat-x scroll 0 0px !important; 
 }
-
-.context_hover { 
+.informal { 
+  color: #787878; 
+}
+.informal a { 
+  color: #787878; 
 }
 
 .article_view .highlighted { 
@@ -1262,9 +1265,6 @@ table.media_asset_table td.info p {
 table.media_asset_table td.info p.name { 
   font-weight: bold; 
 }
-table.media_asset_table td.info p.tags { 
-  color: #787878; 
-}
 table.media_asset_table td.size { 
   text-align: right; 
   padding-right:  10px;
@@ -1475,7 +1475,7 @@ div.calculation_totals .totals {
   margin-bottom: 3px; 
 }
 .media_asset_thumbnail.tiny { 
-  width: 180px; 
+  width: 145px; 
   background-color: white; 
   height: 123px; 
   margin-left: 4px; 
@@ -1492,7 +1492,7 @@ div.calculation_totals .totals {
   height: 70px; 
   text-align: center; 
   padding: 2px; 
-  background: url('/aurita/images/icons/loading.gif') no-repeat scroll 80px 11px; 
+  background: url('/aurita/images/icons/loading.gif') no-repeat scroll 62px 11px; 
 }
 .highlighted .image { 
   background: none; 

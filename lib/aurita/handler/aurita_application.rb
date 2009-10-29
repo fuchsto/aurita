@@ -68,7 +68,11 @@ module Handler
       response = @dispatcher.dispatch(Rack::Request.new(Aurita::Routing.new.route(env)))
       response[1]['Accept-Charset'] = 'utf-8' 
       response[1]['type']           = 'text/html; charset=utf-8' 
+      response[1]['Connection']     = 'keep-alive'
       response[1]['Cache-Control']  = 'private'
+      response[1]['Expires']        = '-1'       # For aggressive caching in IE8
+      response[1]['pragma']         = 'no-cache' # For aggressive caching in IE8
+#     response[1]['Cache-Control']  = 'no-cache' # Does not seem to be necessary for IE8
       return response
     end
 

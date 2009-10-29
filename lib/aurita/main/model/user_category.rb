@@ -71,6 +71,7 @@ module Main
           uid.where((User_Category.category_id == category_id) & 
                     (User_Profile.hidden == 'f') & (User_Profile.locked == 'f'))
         }))
+        u.order_by(User_Profile.surname, :asc)
       }
     end # }}}
   end 

@@ -382,9 +382,9 @@ JS
       }
       options        = []
       user_group_ids = []
-      User_Login_Data.all_with(User_Login_Data.deleted == 'f').order_by(User_Group.user_group_name).each { |u|
+      User_Profile.all_with(User_Login_Data.deleted == 'f').order_by(User_Profile.surname).each { |u|
         if !(['0','5'].include?(u.user_group_id.to_s)) then
-          options << u.user_group_name
+          options << u.label
           user_group_ids << u.user_group_id
         end
       }

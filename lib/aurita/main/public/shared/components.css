@@ -2042,3 +2042,7 @@ a.add_file_button {
 .article_view .context_menu_element .article_text.context_hover { 
   border-left: 1px solid #dadada; 
 }
+
+.media_asset_table .context_menu_button { 
+  margin-top: 12px; 
+}

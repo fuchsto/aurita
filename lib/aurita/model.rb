@@ -115,6 +115,10 @@ module Aurita
       self.class.log(message)
     end
 
+    def dom_id
+      "#{model_name.gsub('::','__').downcase}_#{key.values.join('_')}"
+    end
+
   end # class
   
 end # module

@@ -183,7 +183,7 @@ module Main
                      " #{role.role_name}"
                   } 
                 }
-        list << HTML.li { Context_Menu_Element.new(entry, role) }
+        list << HTML.li { Context_Menu_Element.new(entry, :entity => role) }
       }
       body << list
       HTML.div { body }

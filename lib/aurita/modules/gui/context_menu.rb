@@ -50,10 +50,10 @@ module GUI
       elsif args.at(0).is_a? GUI::Element then
         element = args.at(0)
         params  = args.at(1)
-        entity  = params[:entity]
+        entity  = params[:entity] if params
       elsif args.at(0).is_a? Hash then
         params  = args.at(0)
-        entity  = params[:entity]
+        entity  = params[:entity] if params
         element = yield 
       end
 

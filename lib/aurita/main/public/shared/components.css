@@ -2044,5 +2044,6 @@ a.add_file_button {
 }
 
 .media_asset_table .context_menu_button { 
-  margin-top: 12px; 
+  margin-top: 1px; 
+  margin-left: 3px; 
 }

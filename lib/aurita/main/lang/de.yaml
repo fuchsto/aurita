@@ -52,8 +52,8 @@ category_name_already_used : Eine Kategorie mit diesem Namen existiert bereits
 in_category : in Kategorie
 in_categories : in Kategorien
 
-read_access : Schreibberechtigung f&uuml;r
-write_access : Leseberechtigung f&uuml;r
+read_access : Leseberechtigung f&uuml;r
+write_access : Schreibberechtigung f&uuml;r
 everyone : jeden
 registered_users : registrierte Benutzer
 members_of_category : Mitglieder der Kategorie

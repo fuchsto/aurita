@@ -32,7 +32,7 @@ module Main
           HTML.div.category_thumb { 
             link_to(c, :controller => 'Category') { c.category_name }
           }
-        }
+        } 
       }
     end
 

@@ -195,7 +195,7 @@ module Main
 
       # Map categories to Hash, so we can iterate over positions
       categories = {}
-      Aurita.user.categories.each { |c|
+      Aurita.user.readable_categories.each { |c|
         categories[c.category_id] = c
       }
       # If there aren't any user defined positions, default them to 

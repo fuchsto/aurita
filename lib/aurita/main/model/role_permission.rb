@@ -107,23 +107,14 @@ module Main
     #
     def may_view_content?(content)
     # {{{
-      if !content.kind_of? Content then
+      if !content.is_a? Content then
         content = Content.load(:content_id => content)
+        raise ::Exception.new("Could not resolve content for #{content.inspect}") unless content
       end
-
       return false unless content
 
-      return true if is_admin? or content.user_group_id == user_group_id
-      return false unless content.category
-      return true if content.category.is_public 
-
-      categories = User_Category.select { |uc| 
-        uc.join(Content_Category).on(User_Category.category_id == Content_Category.category_id) { |cc|
-          uc.where((Content_Category.content_id == content.content_id) & 
-                   (User_Category.user_group_id == user_group_id))
-        }
-      }.first
-      return true if (!categories.nil?)
+      return true if is_admin? or (content.user_group_id == user_group_id)
+      return true if (Aurita.user.readable_category_ids & (content.category_ids))
 
       permissions = Content_Permissions.all_with(Content_Permissions.content_id == content.content_id).entities
       permissions.each { |p|
@@ -149,24 +140,21 @@ module Main
     #
     def may_edit_content?(content)
     # {{{
-      if !content.kind_of? Content then
+      if !content.is_a? Content then
         content = Content.load(:content_id => content)
+        raise ::Exception.new("Could not resolve content for #{content.inspect}") unless content
       end
-      return true if is_admin? or (may_view_content?(content) && content.user_group_id == user_group_id)
+      return false unless content
+
+      return true if is_admin? or (content.user_group_id == user_group_id)
       return false if content.locked 
+      return true if (Aurita.user.writeable_category_ids & (content.category_ids))
+
       permissions = Content_Permissions.all_with(Content_Permissions.content_id == content.content_id).entities
       permissions.each { |p|
         return true if p.user_group_id == Aurita.user.user_group_id and !p.readonly
       }
       return false if permissions.length > 0
-      categories = User_Category.select { |uc| 
-        uc.join(Content_Category).on(User_Category.category_id == Content_Category.category_id) { |cc|
-          uc.where((Content_Category.content_id == content.content_id) & 
-                   (User_Category.user_group_id == user_group_id) & 
-                   (User_Category.readonly == false))
-        }
-      }.first
-      (!categories.nil?)
     end # }}}
 
   end

@@ -49,6 +49,9 @@ module Aurita
           cid.where(@category_map.__send__(@category_map_cat_id_attrib).in(user_cat_ids) )
         }
       ))
+      if respond_to?(:deleted) then
+        permission_constraints = (:deleted.is('f') & permission_constraints)
+      end
       return permission_constraints
     end
     alias is_accessible accessible

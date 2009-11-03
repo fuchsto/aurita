@@ -42,11 +42,12 @@ module Main
       entry(:add_hierarchy, 'Hierarchy/add/category=EXPERT', {:app_left_column => 'App_Main/left/'})
     end
 
-    def tag()
-      header('Tag options')
-      tag = param(:tag)
-      entry("find articles with tag '#{tag}'", 'Wiki::Article/find_by_tag/tag='+tag)
+    def user_profile()
+      header(tl(:user_profile))
+      uid = param(:user_group_id)
+      load_entry(:edit_user_profile, 'app_main_content' => 'User_Profile/update/user_group_id='+uid)
     end
+    alias user_group user_profile
 
     def hierarchy()
       

@@ -205,7 +205,8 @@ module Main
     def show(user=nil)
       return unless Aurita.user.is_registered? 
       
-      if !user && !param(:user_group_id) then
+      user ||= load_instance
+      if !user then
         return show_own
       end
 

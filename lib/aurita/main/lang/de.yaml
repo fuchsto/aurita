@@ -12,6 +12,9 @@ role_permissions : Berechtigungen
 role_preferences : Einstellungen
 manage_users : Benutzerverwaltung
 
+user_profile : Benutzerprofil
+edit_user_profile : Profil bearbeiten
+
 readonly_permission : Nur Lesen
 read_permission : Lesen
 write_permission : Schreiben

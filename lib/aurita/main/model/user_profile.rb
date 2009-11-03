@@ -21,6 +21,10 @@ module Main
     expects :surname
     expects :tags
 
+    def forename
+      attribute_value[:forename] || ''
+    end
+
     def self.bootstrap
       create(:user_group_id => 1, 
              :user_group_name => 'admin', 

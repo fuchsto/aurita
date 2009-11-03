@@ -1,5 +1,8 @@
 
-<div style="background-color: #efefef; ">
+<div style="background-color: #efefef; "
+  <%= gui.context_menu(:entity => user_profile, 
+                       :id     => "user_profile_#{user_profile.user_group_id}") %>
+>
   <div style="width: 320px; text-align: center; ">
 	   <%= gui.media_asset_thumb(:id => user_profile.picture_asset_id, :size => :medium ) %>
 	</div>

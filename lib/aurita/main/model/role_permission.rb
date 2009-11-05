@@ -72,6 +72,7 @@ module Main
         perms = Role_Permission.select { |rp| 
           rp.join(User_Role).on(Role_Permission.role_id == User_Role.role_id) { |urp|
             urp.where((User_Role.user_group_id == user_group_id) &
+                      (urp.value == 'true') & 
                       (urp.name == perm.to_s))
           }
         }.first
@@ -86,6 +87,7 @@ module Main
     end # }}}
     alias has_permission? has_permission
     alias may has_permission
+    alias may? has_permission
     alias permission has_permission
 
     # Wheter this user is a super admin. Short for #has_permission(:is_super_admin)

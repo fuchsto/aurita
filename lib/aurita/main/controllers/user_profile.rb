@@ -117,11 +117,12 @@ module Main
         raise ::Exception.new('could not create user') unless instance
 
         # Create user's own content category: 
-        user_cat = Category.create(:category_name => instance.user_group_name, :is_private => 't')
+        user_cat = Category.create(:category_name => instance.user_group_name, :is_private => true)
         # Assign user to its content category: 
-        User_Category.create(:user_group_id => instance.user_group_id, 
-                             :readonly      => 'f', 
-                             :category_id   => user_cat.category_id)
+        User_Category.create(:user_group_id    => instance.user_group_id, 
+                             :read_permission  => true, 
+                             :write_permission => true, 
+                             :category_id      => user_cat.category_id)
 
         # Assign user to role "registered": 
         User_Role.create(:user_group_id => instance.user_group_id, 
@@ -149,7 +150,7 @@ module Main
     end
 
     def admin_box_body
-      body = Array.new
+      body  = Array.new
       guest = Context_Menu_Element.new(HTML.a.entry(:onclick => link_to(:controller => 'User_Login_Data', 
                                                                         :action     => :update, 
                                                                         :user_group_id => 0) ) { tl(:unregistered_user) }, 

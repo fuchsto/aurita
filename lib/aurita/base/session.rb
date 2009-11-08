@@ -36,7 +36,7 @@ module Aurita
 
     @@logger     = Aurita::Log::Class_Logger.new('Aurita::Session')
     begin
-      @@guest_user = Aurita::Main::User_Login_Data.load({ :user_group_id => 0 }) 
+      @@guest_user = Aurita::Main::User_Group.load({ :user_group_id => 0 }) 
     rescue ::Exception => ignore
     end
 
@@ -111,7 +111,7 @@ module Aurita
     
     # Returns active interface language for this session
     def language
-      param('lang') || :de
+      param('lang') || (user && user.language)? user.language : 'de'
     end
     alias lang language
 

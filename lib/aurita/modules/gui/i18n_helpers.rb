@@ -30,7 +30,7 @@ module GUI
       begin 
         Lang.get(plugin, language_symbol.to_s)
       rescue ::Exception => e
-        raise ::Exception.new("Failed to resolve language pack for #{plugin}.#{language_symbol} in #{self.class.to_s}: #{e.message}")
+        raise ::Exception.new("Failed to resolve language pack for #{plugin}.#{language_symbol} in #{self.class.to_s}: #{e.message} #{e.backtrace.join(' ')}")
       end
     end
 

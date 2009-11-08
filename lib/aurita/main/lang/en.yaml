@@ -1,6 +1,31 @@
+main_role_fieldset : Allgemein
+plugin_name : Plattform
+
 
 ok : ok
 cancel : cancel
+
+register : Registrieren
+logon : Anmelden
+
+role_permissions : Berechtigungen 
+role_preferences : Einstellungen
+manage_users : Benutzerverwaltung
+
+user_profile : Benutzerprofil
+edit_user_profile : Profil bearbeiten
+
+readonly_permission : Nur Lesen
+read_permission : Lesen
+write_permission : Schreiben
+
+role : Rolle
+internal.role.role_name : Name
+is_admin : Administrator
+is_super_admin : Super-Administrator
+
+'yes' : ja
+'no' : nein
 
 public--content--user_group_id : User
 public--content--tags : Tags
@@ -11,14 +36,53 @@ public--hierarchy_entry--label : Title
 public--hierarchy_entry--interface : Module
 public--hierarchy_entry--type : Type
 internal--user_group--user_group_name : Login
+internal--user_group--division : Department / Company
 internal--user_login_data--login : Login
 internal--user_login_data--pass : Password
 public--category--category_name : Category name
 public--category--is_private : 
- - Private category
- - 
+ Private category :
    t: yes
    f: no
+
+category_name : Name of category
+users_in_category : Users in this category
+delete_category : Delete category
+delete_category_and_move_contents_to : Delete and move contents to
+your_private_category : Your private category
+your_categories : Your categories
+category_name_already_used : A category with this name already exists
+in_category : in category
+in_categories : in categories
+
+read_access : Read access for
+write_access : Write access for
+everyone : everyone
+registered_users : registered users
+members_of_category : category members
+
+division : Department / Company
+forename : Forename
+surname : Surname
+
+upload_image : Upload
+
+delete_hierarchies : Delete navigations
+view_recent_comments : View recent changes
+
+allow_access_to_users : Allow access to following users
+
+article_entry : Article
+filter_entry : Search
+blank_node_entry : Blind node
+
+show_all : Show all
+fulltext_search : Full text search
+all_search_results : All search results
+no_results : No matches have been found
+fulltext_search_results : Search results
+
+
 public--content--category_id : Category
 internal--user_profile--picture_asset_id : Picture
 internal--user_profile--forename : Forename
@@ -34,6 +98,8 @@ home : Home
 date_format : "%m/%d/%Y"
 time_format : "%H:%M:%S"
 datetime_format : "%m/%d/%Y - %H:%M:%S"
+
+timespan_to : bis
 
 error__invalid_value : Invalid value for {1}
 
@@ -53,14 +119,22 @@ delete_custom_entry : Delete entry
 edit_custom_entry : Edit entry
 
 add_user : New user
+edit_user : Edit user
+delete_user : Delete user
 add_user_group : New user group
 add_role : New role
+edit_role : Edit role
+delete_role : Delete role
 
 user_index : All users
+users_online : Users online
+
+favorites : Favorites
+recent_changes : Recent changes
 
 
-t : Yes
-f : No
+t : 'Yes'
+f : 'No'
 
 male_title : Mr. 
 female_title : Mrs.
@@ -84,8 +158,15 @@ categories : Categories
 roles : Roles
 all_categories : All categories
 user_categories : My categories
+add_category : Neue Kategorie
+edit_category : Kategorie bearbeiten
+delete_category : Kategorie l&ouml;schen
 users : Users
+locked_users : Gesperrte Benutzer
 show_category : Show category contents
+lock_user_hints : Gesperrte Benutzer k&ouml;nnen sich nicht mehr an der Plattform anmelden, und jederzeit wieder entsperrt werden. 
+unlock_user_hints : Dieser Benutzer ist gesperrt und kann sich nicht an der Plattform anmelden. 
+delete_user_hints : Gel&ouml;schte Benutzer k&ouml;nnen nicht mehr reaktiviert werden. Die von ihnen erfassten Inhalte und Daten bleiben aber erhalten. 
 
 user : Benutzer
 login_already_used : User name already taken
@@ -98,7 +179,8 @@ name : Name
 
 unregistered_user : Unregistered users
 add_content_category : Add category
-category : Category
+active_user_categories : Zugeordnete Kategorien
+active_user_roles : Zugeordnete Rollen
 
 no_matching_content_found : No matching content found
 error__specify_value : Please provide a value for {1}
@@ -109,8 +191,20 @@ administrator : Administrator
 administration : Administration
 admin_tools : Admin tools
 new_asset_comments : New comments
+user_comment_to : zu
+recent_comments : Neue Kommentare
 add_comment: Add comment
 last_changed_at : Last change
+confirm_delete_comment : Kommentar entfernen?
+comments : Kommentare
+comment : Kommentar
+last_changed_at : Letzte &Auml;nderung
+recommend_to_users : Folgenden Benutzern empfehlen
+article_recommendation_subject : Artikelempfehlung - {1}
+article_recommendation_message : Artikelempfehlung von {1}<br /><br /> <a href="#{3}">{2}</a>
+
+asset_recommendation_subject : Dateiweiterleitung - {1}
+asset_recommendation_message : Dateiweiterleitung von {1}<br /><br /> <a href="#{3}">{2}</a>
 
 submit : send
 cancel: cancel
@@ -120,8 +214,31 @@ user_group_index : All roles
 account : Account
 
 tags : Tags
+synonym : Synonym
+synonyms : Synonyme
+edit_synonyms : Synonyme bearbeiten
+add_synonym : Synonym hinzuf&uuml;gen
+add_synonyms : Synonyme hinzuf&uuml;gen
+select_synonym_tag : Begriff eingeben
+list_all_synonyms : Alle Synonyme 
+select_additional_category : \-\- Kategorie hinzuf&uuml;gen \-\-
+
+tag_relevance : Relevanz
 edit_tags : Edit tags
 frequent_tags : Frequent tags
+
+tag : Begriff
+ignored_tags : Ignorierte Begriffe
+new_tag_blacklist_entry : Begriff hinzuf&uuml;gen
+
+activate_user : Benutzer aktivieren
+deactivate_user : Benutzer sperren
+login_name : Kennung
+login : Anmelden
+new_pass_optional: Neues Passwort (optional)
+new_pass_optional_confirm: Neues Passwort wiederholen
+
+choose_date : w&auml;hlen
 
 january : January
 february : February
@@ -146,24 +263,13 @@ context_entry_type : Type
 
 change_password : New password
 confirm_password : Repeat new password
+password : Passwort
 file : File
 
 select_image : Choose image
 clear_image : No image
 
 internal--role--role_name : Name
-
-public--role_permissions--is_super_admin : 
- - Super admin: 
- -
-   t: yes
-   f: no
-
-public--role_permissions--is_admin : 
- - Admin: 
- -
-   t: yes
-   f: no
 
 access_private : For me only
 access_public : For everyone

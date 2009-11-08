@@ -193,12 +193,11 @@ admin_tools : Admin-Werkzeuge
 new_asset_comments : Neue Kommentare
 user_comment_to : zu
 recent_comments : Neue Kommentare
-recent_changes : Letzte &Auml;nderungen
 add_comment: Neuer Kommentar
 confirm_delete_comment : Kommentar entfernen?
 comments : Kommentare
-last_changed_at : Letzte &Auml;nderung
 comment : Kommentar
+last_changed_at : Letzte &Auml;nderung
 recommend_to_users : Folgenden Benutzern empfehlen
 article_recommendation_subject : Artikelempfehlung - {1}
 article_recommendation_message : Artikelempfehlung von {1}<br /><br /> <a href="#{3}">{2}</a>
@@ -208,6 +207,7 @@ asset_recommendation_message : Dateiweiterleitung von {1}<br /><br /> <a href="#
 
 
 submit : senden
+cancel: abbrechen
 
 system_links : Werkzeuge
 user_group_index : Alle Rollen
@@ -270,16 +270,6 @@ select_image : Bild w&auml;hlen
 clear_image : Kein Bild
 
 internal--role--role_name : Name
-
-public--role_permissions--is_super_admin : 
-  Superadmin:
-   t: yes
-   f: no
-
-public--role_permissions--is_admin : 
-  Admin:
-   t: yes
-   f: no
 
 access_private : F&uuml;r mich
 access_public : F&uuml;r alle

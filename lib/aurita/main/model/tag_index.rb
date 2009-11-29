@@ -27,7 +27,7 @@ module Main
         ti.where(Tag_Index.content_id == content.content_id)
       }.to_a.map { |t| t.tag }
       
-      new_tags = content.tags.gsub('{','').gsub('}','').gsub(',',' ').split(' ')
+      new_tags = content.tags.to_s.gsub('{','').gsub('}','').gsub(',',' ').split(' ')
       new_tags.each { |tag|
         begin
           if !old_tags.include?(tag) then

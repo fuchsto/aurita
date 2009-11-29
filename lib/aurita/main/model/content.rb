@@ -167,14 +167,13 @@ module Main
     def add_tags(*tags_string_or_list)
       new_tags = tags.split(' ')
       if tags_string_or_list.length == 1 then
-        tags_string_or_list = tags_string_or_list.to_s.split(' ')
+        tags_string_or_list = tags_string_or_list.first.to_s.split(' ')
       end
       new_tags += tags_string_or_list
       new_tags.map! { |t| t.to_s.downcase.to_sym }
       new_tags.uniq!
-      attr[:tags] = new_tags.join(' ')
 
-     # Tag_Index.update_tag_index_for(self)
+      set_attribute_value(:tags => new_tags.join(' '))
     end
     alias add_tag add_tags
 
@@ -184,6 +183,7 @@ module Main
       add_tags(tags_string_or_array)
       commit
     end
+    alias add_tag! add_tags!
     
     # Mark changes on this instance. 
     # Content.touch is to be called whenever non-meta attributes
@@ -203,10 +203,10 @@ module Main
         c.set(:changed => now) 
         c.where(Content.content_id == content_id)
       } 
-      Content_History.create(:time => now, 
+      Content_History.create(:time          => now, 
                              :user_group_id => Aurita.user.user_group_id, 
-                             :content_id => content_id, 
-                             :type => action)
+                             :content_id    => content_id, 
+                             :type          => action)
       Aurita.log { "Touching categories of content #{content_id}..." }
       Content_Category.all_with(:content_id.is(content_id)).each { |cat|
         Aurita.log { "Touching category #{cat.category_id} ..." }
@@ -215,8 +215,8 @@ module Main
     end
 
     # See Content.touch
-    def touch
-      Content.touch(content_id)
+    def commit()
+      super() && Content.touch(content_id)
     end
     
     # Returns number of comments on this Content instance as Integer. 
@@ -234,7 +234,7 @@ module Main
           c.where(c.content_id == content_id) 
         } 
       }.to_a
-      @categories = [ Category.load(:category_id => '1') ] unless @categories
+      @categories = [ Category.load(:category_id => 1) ] unless @categories
       @categories
     end
 
@@ -247,7 +247,7 @@ module Main
           c.limit(1)
         } 
       }.first
-      @category ||= Category.load(:category_id => '1') unless @category
+      @category ||= Category.load(:category_id => 1) unless @category
       return @category
     end
 
@@ -259,14 +259,14 @@ module Main
       @category_ids = Content_Category.select_values(:category_id) { |cc| 
         cc.where(cc.content_id == content_id) 
       }
-      @category_ids = ['1'] unless @category_ids
+      @category_ids = [1] unless @category_ids
       @category_ids
     end
 
     # Returns first category id mapped to this Content instance. 
     def category_id
       return category.category_id if category
-      '1'
+      1
     end
     
   end # class

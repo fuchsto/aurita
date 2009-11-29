@@ -52,9 +52,13 @@ module GUI
       end
     end
 
+    # /aurita/images/themes/custom/icons/
+
     def icon_tag(icon_name, css_class=nil)
+      return HTML.img(:src => "/aurita/images/icons/#{icon_name}.gif", :class => css_class).string 
+
       theme   = Aurita.user.profile.theme
-      theme ||= 'default'
+      theme   = 'default'
       return HTML.img(:src => "/aurita/images/icons/#{icon_name}.gif", :class => css_class).string if theme == 'default'
       return HTML.img(:src => "/aurita/images/themes/#{theme}/icons/#{icon_name}.gif", :class => css_class).string 
     end

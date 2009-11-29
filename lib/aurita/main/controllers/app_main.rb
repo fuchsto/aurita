@@ -195,18 +195,19 @@ module Main
       Aurita.user.readable_categories.each { |c|
         categories[c.category_id] = c
       }
+      positions ||= categories.keys
       # If there aren't any user defined positions, default them to 
       # their natural order: 
       if positions.length == 0 then
         positions = categories.keys
-      elsif positions.length < categories.length then
+      elsif positions.length < categories.keys.length then
         # Add category ids not mapped to a position
-        positions += positions - categories.keys
+        positions += categories.keys - positions
       end
       
       positions.each { |cat_id|
-        cat = categories[cat_id]
         cat_result = ''
+        cat = categories[cat_id]
         components = plugin_get(Hook.main.workspace.recent_changes_in_category, :category_id => cat_id)
         components.each { |component|
           cat_result << HTML.span(:id => 'component_' << count.to_s) { component.string }.string

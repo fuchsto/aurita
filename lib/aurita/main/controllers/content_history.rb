@@ -38,14 +38,17 @@ module Main
               "#{link_to(cat) { cat.category_name } }"
             }.join(', ')
           end
-          HTML.div(:class => [:index_entry]) { 
-            HTML.div(:class => [ :user_icon, :tiny ], :style => 'margin-right: 10px;') {
-              HTML.img(:src => "/aurita/assets/tiny/asset_#{user.picture_asset_id}.jpg") 
-            } +
-            HTML.b { link_to(c) { c.title } } + 
-            HTML.div { "#{link_to(user) { user.user_group_name }} #{in_cats}" } +
-            HTML.div { datetime(c.changed) }
-          }
+
+          if user then
+            HTML.div(:class => [:index_entry]) { 
+              HTML.div(:class => [ :user_icon, :tiny ], :style => 'margin-right: 10px;') {
+                HTML.img(:src => "/aurita/assets/tiny/asset_#{user.picture_asset_id}.jpg") 
+              } +
+              HTML.b { link_to(c) { c.title } } + 
+              HTML.div { "#{link_to(user) { user.user_group_name }} #{in_cats}" } +
+              HTML.div { datetime(c.changed) }
+            }
+          end
         }
       }
     end

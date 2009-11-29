@@ -28,6 +28,13 @@ class String
   def param_encode
     CGI.escape(self).gsub('%2F','/').gsub('%3D','=')
   end
+
+  def to_named_html_entities
+    HTMLEntities.new.encode(self, :named)
+  end
+  def to_named_html_entities!
+    replace(HTMLEntities.new.encode(self, :named))
+  end
     
   def camelize
     return self.capitalize unless (self.include?(' ') || self.include?('_'))

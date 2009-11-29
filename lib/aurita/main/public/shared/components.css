@@ -611,6 +611,11 @@ img.icon {
   margin-top: 4px; 
 }
 
+.context_menu_element { 
+  padding-left: 15px; 
+  margin-left: -15px; 
+}
+
 #context_menu, #message_box { 
   float: left; 
   position: absolute; 
@@ -1455,7 +1460,8 @@ div.calculation_totals .totals {
   width: 257px; 
   background-color: white; 
   height: 212px; 
-  margin-left: 4px; 
+  margin: 0px; 
+  margin-right: 4px; 
   margin-bottom: 3px; 
 }
 .media_asset_thumbnail.medium .image { 

@@ -1,4 +1,6 @@
 
+require('htmlentities')
+
 module Aurita
 
   def self.entities( str )
@@ -14,5 +16,6 @@ module Aurita
     str = entities(str)
     str.gsub(/&\#[^;]+;/,'')
   end
+
 
 end

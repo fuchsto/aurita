@@ -133,9 +133,6 @@ module Main
     end
 
     def start
-    # set_http_header('Cache-Control' => 'no-cache, must-revalidate');
-    # set_http_header('Pragma' => 'no-cache');
-    # @request.out('Cache-Control' => 'no-store, no-cache, must-revalidate, post-check=0,pre-check=0')
       
       set_http_header('expires' => (Time.now-24*60*60).to_s)
       
@@ -202,6 +199,9 @@ module Main
       # their natural order: 
       if positions.length == 0 then
         positions = categories.keys
+      elsif positions.length < categories.length then
+        # Add category ids not mapped to a position
+        positions += positions - categories.keys
       end
       
       positions.each { |cat_id|

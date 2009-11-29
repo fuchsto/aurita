@@ -33,13 +33,22 @@ module Aurita
     #  use_category_map(Custom_Map, :foo_id => :cat_id)
     #
     def use_category_map(klass, mapping)
-      @category_map = klass
+      @category_map               = klass
       @category_map_key_attrib    = mapping.keys.first.to_sym
       @category_map_cat_id_attrib = mapping.values.first.to_sym
     end
 
+    def category_mapping
+      { 
+        :map           => @category_map, 
+        :key_attrib    => __send__(@category_map_key_attrib), 
+        :cat_id_attrib => __send__(@category_map_cat_id_attrib)
+      }
+    end
+
     def accessible
-#     return Lore::Clause.new(true) if Aurita.user.is_super_admin?
+    # return Lore::Clause.new(true) if Aurita.user.is_super_admin?
+
       @category_map               ||= Content_Category
       @category_map_key_attrib    ||= :content_id
       @category_map_cat_id_attrib ||= :category_id
@@ -65,6 +74,23 @@ module Aurita
         cid.where(@category_map.__send__(@category_map_cat_id_attrib) == cat_id)
       })
     end
+  end
+
+  module Categorized_Instance_Behaviour
+
+    def accessible
+      mapping      = self.class.category_mapping()
+      map          = mapping[:map]
+      cat_id       = mapping[:cat_id_attrib]
+      key          = mapping[:key_attrib]
+      user_cat_ids = Aurita.user.readable_category_ids 
+
+      map.find(1).with(cat_id.in(user_cat_ids)).entity != false
+    end
+    alias accessible? accessible
+    alias is_accessible accessible
+    alias is_accessible? accessible
+
   end
 
 end

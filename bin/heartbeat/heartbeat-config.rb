@@ -1,28 +1,27 @@
-# Konfiguration heartbeat.rb
 
-# Was wird in Mails angegeben als Servername?
 MY_NAME = "intra.wortundform.de"
 
-# Wohin werden Mails verschickt?
-# E-Mail-Adresse oder Array von mehreren
-MAILTO_ADDRESS = [
-	'diehr@wortundform.de',
-	'gnaier@wortundform.de',
-	'fuchs@wortundform.de'
-]
+# MAILTO_ADDRESS = [
+#   'diehr@wortundform.de',
+#   'gnaier@wortundform.de',
+#   'fuchs@wortundform.de'
+# ]
 
 MAX_INVOCATIONS_PER_DAY = 50
+SMTP_SERVER = 'smtp.servername.com'
+SMTP_USER   = 'user'
+SMTP_PASS   = 'pass'
 
 THROTTLE_FILE = File.dirname(__FILE__) + "/throttle.yaml"
 LOG_FILE      = File.dirname(__FILE__) + "/heartbeat.log"
 
 # Shellcode zum Restarten des Servers
 RESTART_CODE = <<END
-/usr/share/svnwc/aurita/bin/flush
+/usr/share/gitwc/aurita_projects/cfmaier/bin/flush_production
 END
 
 # Welche URL soll abgerufen werden?
-CHECK_URL = 'http://intra.wortundform.de/aurita/App_Main/ping/'
+CHECK_URL = 'http://127.0.0.1/aurita/App_Main/ping/'
 
 # Welche Strings muessen in der Ausgabe auftauchen?
 CHECK_STRINGS = [

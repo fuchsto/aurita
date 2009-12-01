@@ -35,13 +35,15 @@ class Heartbeat
   end
 
   def send_error_mail subject, message
-    from_name   = "Serverueberwachung"
+    return unless MAILTO_ADDRESS
+
+    from_name   = "Aurita"
     from_email  = "system@wortundform.de"
     to          = MAILTO_ADDRESS
     helo_domain = 'wortundform.com'
-    smtp_server = 'smtp.1und1.de'
-    user        = 'm35038722-14'
-    password    = 'eskimo06'
+    smtp_server = SMTP_SERVER
+    user        = SMTP_USER
+    password    = SMTP_PASS
 
     mail = ''
     mail << 'From: ' << "#{from_name} <#{from_email}>" << "\r\n"

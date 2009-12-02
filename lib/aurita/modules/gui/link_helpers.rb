@@ -45,6 +45,7 @@ module GUI
         get_params.delete(:action)
         get_params.delete(:controller)
         get_params.delete(:entity)
+        get_params.delete(:target)
         url << get_params.to_get_params if get_params.size > 0
       when Aurita::Model
         entity         = args.at(0)
@@ -62,6 +63,7 @@ module GUI
         get_params.delete(:action)
         get_params.delete(:controller)
         get_params.delete(:entity)
+        get_params.delete(:target)
         url << '&' << get_params.to_get_params if get_params.size > 0
       else
         entity         = args.at(0)
@@ -73,6 +75,7 @@ module GUI
         url << "/#{action}/" if action
         get_params = options.dup
         get_params.delete(:action)
+        get_params.delete(:target)
         url << get_params.to_get_params if get_params.size > 0
       end
       url
@@ -282,6 +285,12 @@ module GUI
     # Without a label, rendering Javascript code for Ajax call: 
     # 
     #   link_to(:action => :update) 
+    #
+    # When providing a target ('_self', '_blank' ...) always returns a plain old link: 
+    #
+    #   link_to(:controller => 'Invoice', :action => :print, :target => '_blank') { 'Print' }
+    #   -->
+    #   <a href="Invoice/print" target="_blank">Print</a>
     # 
     # Link to a specific entity. If no :action is set, it will be defaulted to :show: 
     # 
@@ -321,11 +330,14 @@ module GUI
       params.delete(:element)
       params.delete(:label)
 
-      unless html_options[:onclick] then
+      unless params[:target] || html_options[:onclick] then
         target_part = ", element: '#{target}' " if target
         html_options[:onclick]  = "Aurita.load({ action: '#{resource_url_for(params)}' #{target_part}}); return false; "
       end
-      html_options[:href] = "/aurita/#{resource_url_for(params)}" unless target
+      if !target then
+        html_options[:href] = "/aurita/#{resource_url_for(params)}" 
+        html_options[:target] = params[:target]
+      end
       HTML.a(html_options) { label }.string
     end
 

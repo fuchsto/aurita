@@ -76,6 +76,20 @@ end
 
 logfile = "/var/log/aurita/aurita_#{project_name}_#{port}_#{mode}.log"
 
+if killold then
+  # TODO: This is really quick'n'dirty
+  command = "ps aux | grep 'thin_daemon' | grep '#{port}' | grep -v #{$$} | grep -v 'grep' | awk '{print $2}' | xargs sudo kill -9 2>/dev/null" 
+  system(command)
+end
+
+if verbosive then
+  STDERR.puts "bootstrapping aurita ..."
+end
+
+Aurita.load_project project_name
+Aurita.runmode = mode
+Aurita.bootstrap
+
 if verbosive then
   Lore.enable_logging
   Lore.enable_query_log
@@ -94,20 +108,6 @@ else
   Aurita::Configuration.sys_log_path = false
   Aurita::Configuration.run_log_path = false
 end
-
-if killold then
-  # TODO: This is really quick'n'dirty
-  command = "ps aux | grep 'thin_daemon' | grep '#{port}' | grep -v #{$$} | grep -v 'grep' | awk '{print $2}' | xargs sudo kill -9 2>/dev/null" 
-  system(command)
-end
-
-if verbosive then
-  STDERR.puts "bootstrapping aurita ..."
-end
-
-Aurita.load_project project_name
-Aurita.runmode = mode
-Aurita.bootstrap
 
 if verbosive then
   STDERR.puts "Running thin daemon for project #{project_name} on port #{port} in mode #{mode}"

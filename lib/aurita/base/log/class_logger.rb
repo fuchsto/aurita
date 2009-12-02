@@ -4,6 +4,11 @@ require('logger')
 module Aurita
 module Log
 
+  class Null_Logger
+    def method_missing(*args)
+    end
+  end
+
   class Class_Logger 
     
     @name = self.to_s
@@ -72,6 +77,7 @@ module Log
         @logger.level = ::Logger::DEBUG
         @disabled = false
       else
+        @logger = Null_Logger.new
         @disabled = true
       end
     end

@@ -5,3 +5,5 @@
 /lib/aurita/doc
 /lib/aurita/main/public/shared/script/jscalendar
 /lib/aurita/main/public/shared/script/tinymce
+/bin/heartbeat/heartbeat.log
+/bin/heartbeat/throttle.yaml

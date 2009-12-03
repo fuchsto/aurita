@@ -71,10 +71,10 @@ module GUI
 
           if File.exists?(Aurita.project_path + "views/#{@plugin_name}/#{template_filename}") then
             template_path = Aurita.project_path + "views/#{@plugin_name}/#{template_filename}"
-          elsif File.exists?(Aurita::Configuration.plugins_path + "#{@plugin_name}/views/#{template_filename}") then
-            template_path = Aurita::Configuration.plugins_path + "#{@plugin_name}/views/#{template_filename}"
-          elsif File.exists?(Aurita::Configuration.plugins_path + "#{@plugin_name}/lib/views/#{template_filename}") then
-            template_path = Aurita::Configuration.plugins_path + "#{@plugin_name}/lib/views/#{template_filename}"
+          elsif File.exists?(Aurita::App_Configuration.plugins_path + "#{@plugin_name}/views/#{template_filename}") then
+            template_path = Aurita::App_Configuration.plugins_path + "#{@plugin_name}/views/#{template_filename}"
+          elsif File.exists?(Aurita::App_Configuration.plugins_path + "#{@plugin_name}/lib/views/#{template_filename}") then
+            template_path = Aurita::App_Configuration.plugins_path + "#{@plugin_name}/lib/views/#{template_filename}"
           end
         end
 

@@ -34,7 +34,7 @@ module Aurita
   #
   class Session
 
-    @@logger     = Aurita::Log::Class_Logger.new('Aurita::Session')
+    @@logger = Aurita::Log::Class_Logger.new('Aurita::Session')
     begin
       @@guest_user = Aurita::Main::User_Group.load({ :user_group_id => 0 }) 
     rescue ::Exception => ignore

@@ -88,11 +88,6 @@ module Aurita
     Aurita.session.user
   end
 
-  # Return array of admin email adresses. 
-  def self.admin_emails
-    Aurita::Configuration.admin_emails
-  end
-
   # Base path of active project. 
   def self.project_path(*folders)
     @@project.base_path + folders.join('/')
@@ -105,17 +100,17 @@ module Aurita
     @@project.base_path.split('/').at(-1).camelcase
   end
 
-  @@base_path = Aurita::Configuration.base_path
+  @@base_path = Aurita::App_Configuration.base_path
   # Return base path
-  # (set as Aurita::Configuration.base_path in 
+  # (set as Aurita::App_Configuration.base_path in 
   # aurita/config.rb)
   def self.base_path 
     @@base_path
   end
 
-  @@app_base_path = Aurita::Configuration.app_base_path
+  @@app_base_path = Aurita::App_Configuration.app_base_path
   # Return application base path
-  # (set as Aurita::Configuration.app_base_path in 
+  # (set as Aurita::App_Configuration.app_base_path in 
   # aurita/config.rb)
   def self.app_base_path
     @@app_base_path
@@ -125,11 +120,16 @@ module Aurita
   # establishing a DB connection. 
   # Project can later be retreived via Aurita.project. 
   def self.load_project(project_name, runmode=:development)
-    require("#{Aurita::Configuration.projects_base_path}#{project_name.to_s}/config.rb")
-    Lore::Context.enter Aurita::Project_Configuration.context
+    
+    require("#{Aurita::App_Configuration.projects_base_path}#{project_name.to_s}/config.rb")
+
     @@project = Aurita::Project_Configuration
-    @@runmode = runmode.to_sym
+    
+    Lore.add_login_data @@project.databases[runmode] 
+    Lore::Context.enter @@project.databases[runmode].keys.first
     Aurita.import('base/session')
+
+    @@runmode = runmode.to_sym
   end
 
   # Return active project. 
@@ -163,10 +163,10 @@ module Aurita
         require("aurita-#{plugin_name}-plugin")
         require("aurita-#{plugin_name}-plugin/plugin.rb")
       rescue ::Exception => no_gem_found
-        Aurita.log { "Trying to load #{plugin_name} from #{Aurita::Configuration.plugins_path} ..." } 
-        # No gem found, so try to load from Aurita::Configuration.plugins_path.
+        Aurita.log { "Trying to load #{plugin_name} from #{Aurita::App_Configuration.plugins_path} ..." } 
+        # No gem found, so try to load from Aurita::App_Configuration.plugins_path.
       
-        if(File.exists?("#{Aurita::Configuration.plugins_path}#{plugin_name.to_s}/lib")) then
+        if(File.exists?("#{Aurita::App_Configuration.plugins_path}#{plugin_name.to_s}/lib")) then
           plugin_path = "#{plugin_name}/lib"
         else 
           plugin_path = plugin_name.to_s.dup
@@ -176,12 +176,12 @@ module Aurita
           Lang.add_project_language_pack(plugin_name)
         end
         Aurita.log { "Importing plugin #{plugin_name}" }
-        Aurita.import_folder "#{Aurita::Configuration.plugins_path}#{plugin_path}/lang/"
-        Aurita.import_folder "#{Aurita::Configuration.plugins_path}#{plugin_path}/modules/"
-        Aurita.import_folder "#{Aurita::Configuration.plugins_path}#{plugin_path}/model/"
-        Aurita.import_folder "#{Aurita::Configuration.plugins_path}#{plugin_path}/controllers/"
+        Aurita.import_folder "#{Aurita::App_Configuration.plugins_path}#{plugin_path}/lang/"
+        Aurita.import_folder "#{Aurita::App_Configuration.plugins_path}#{plugin_path}/modules/"
+        Aurita.import_folder "#{Aurita::App_Configuration.plugins_path}#{plugin_path}/model/"
+        Aurita.import_folder "#{Aurita::App_Configuration.plugins_path}#{plugin_path}/controllers/"
 
-        perms_file = "#{Aurita::Configuration.plugins_path}#{plugin_path}/permissions.rb"
+        perms_file = "#{Aurita::App_Configuration.plugins_path}#{plugin_path}/permissions.rb"
         if File.exists?(perms_file) then
           require perms_file
         end
@@ -203,10 +203,10 @@ module Aurita
   def self.import_plugin_model(plugin, model)
     r = false
     begin
-      r = require("#{Aurita::Configuration.plugins_path}#{plugin}/model/#{model}")
+      r = require("#{Aurita::App_Configuration.plugins_path}#{plugin}/model/#{model}")
     rescue LoadError => e
       plugin = "#{plugin}/lib"
-      r = require("#{Aurita::Configuration.plugins_path}#{plugin}/model/#{model}")
+      r = require("#{Aurita::App_Configuration.plugins_path}#{plugin}/model/#{model}")
     end
     Aurita.log "imported model #{plugin}/#{model}" if r
     r
@@ -219,10 +219,10 @@ module Aurita
   def self.import_plugin_controller(plugin, controller)
     r = false
     begin
-      r = require("#{Aurita::Configuration.plugins_path}#{plugin}/controllers/#{controller}")
+      r = require("#{Aurita::App_Configuration.plugins_path}#{plugin}/controllers/#{controller}")
     rescue LoadError => e
       plugin = "#{plugin}/lib"
-      r = require("#{Aurita::Configuration.plugins_path}#{plugin}/controllers/#{controller}")
+      r = require("#{Aurita::App_Configuration.plugins_path}#{plugin}/controllers/#{controller}")
     end
     Aurita.log "imported controller #{plugin}/#{controller}" if r
     r
@@ -235,10 +235,10 @@ module Aurita
   def self.import_plugin_module(plugin, module_name)
     r = false
     begin
-      r = require("#{Aurita::Configuration.plugins_path}#{plugin}/modules/#{module_name}")
+      r = require("#{Aurita::App_Configuration.plugins_path}#{plugin}/modules/#{module_name}")
     rescue LoadError => e
       plugin = "#{plugin}/lib"
-      r = require("#{Aurita::Configuration.plugins_path}#{plugin}/modules/#{module_name}")
+      r = require("#{Aurita::App_Configuration.plugins_path}#{plugin}/modules/#{module_name}")
     end
     Aurita.log "imported module #{plugin}/#{module_name}" if r
     r
@@ -262,7 +262,7 @@ module Aurita
     Dir.glob("#{Aurita::Application.base_path}main/controllers/*.rb").each { |controller| 
       Aurita::Main.import_controller(controller.split('/').last) unless controller.include?('custom_')
     }
-    Dir.glob("#{Aurita::Configuration.plugins_path}/*").each { |plugin_folder| 
+    Dir.glob("#{Aurita::App_Configuration.plugins_path}/*").each { |plugin_folder| 
       Aurita.import_plugin(plugin_folder.split('/').last) 
     }
     Dir.glob("#{Aurita.project.base_path}model/*.rb").each { |model| 
@@ -288,8 +288,8 @@ module Aurita
         puts e.message
       end
     }
-    Dir.glob("#{Aurita::Configuration.plugins_path}/*").each { |plugin_folder| 
-      Dir.glob("#{Aurita::Configuration.plugins_path}/#{plugin_folder.split('/').last.gsub('.rb','')}/model/*").each { |model| 
+    Dir.glob("#{Aurita::App_Configuration.plugins_path}/*").each { |plugin_folder| 
+      Dir.glob("#{Aurita::App_Configuration.plugins_path}/#{plugin_folder.split('/').last.gsub('.rb','')}/model/*").each { |model| 
         begin
           plugin = plugin_folder.split('/').last
           model_klass = model.split('/').last.gsub('.rb','')

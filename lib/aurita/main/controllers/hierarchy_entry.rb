@@ -34,22 +34,27 @@ module Main
       
       options = { 'FILTER'     => tl(:filter_entry), 
                   'BLANK_NODE' => tl(:blank_node_entry) }
+
+      type_elements = { 'FILTER' => Input_Field.new(:type => :text, :label => tl(:tags), :name => Content.tags, :required => true) }
       
-      plugin_options = plugin_get(Hook.main.hierarchy_entry.entry_types)
-      plugin_options.each { |p|
-        options.update(p)
+      plugin_get(Hook.main.hierarchy_entry.entry_types).each { |p|
+        options[p[:name]]       = p[:label]
+        type_elements[p[:name]] = p[:element]
       }
       
-      type_select = Select_Field.new(:name    => Hierarchy_Entry.entry_type, 
-                                     :label   => tl(:context_entry_type), 
-                                     :options => options, 
-                                     :value   => 'ARTICLE')
+      type_select = Select_Field.new(:name     => Hierarchy_Entry.entry_type, 
+                                     :id       => :hierarchy_entry_type_selector, 
+                                     :label    => tl(:context_entry_type), 
+                                     :onchange => "alert($('hierarchy_entry_type_selector').value);", 
+                                     :options  => options)
       form.add(type_select)
       
-      tags = Input_Field.new(:type => :text, :label => tl(:tags), :name => Content.tags, :required => true)
-      form.add(tags)
+      hidden_type_elements = HTML.div(:style => 'display: none; ') 
+      type_elements.each_pair { |name, element|
+        hidden_type_elements << HTML.div(:id => "type_element_#{name}") { element }
+      }
       
-      return decorate_form(form)
+      return decorate_form(form) 
     end
 
     def update

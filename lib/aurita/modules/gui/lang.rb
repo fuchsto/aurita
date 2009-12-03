@@ -27,9 +27,9 @@ class Lang
   }
 
   def self.add_plugin_language_pack(plugin_name)
-    yaml_path = Aurita::Configuration.plugins_path + plugin_name + '/lang/'
+    yaml_path = Aurita::App_Configuration.plugins_path + plugin_name + '/lang/'
     if !File.exists?(yaml_path) then
-      yaml_path = Aurita::Configuration.plugins_path + plugin_name + '/lib/lang/'
+      yaml_path = Aurita::App_Configuration.plugins_path + plugin_name + '/lib/lang/'
     end
     plugin_name = plugin_name.downcase.to_sym
     @@language_packs[plugin_name] = {}
@@ -60,7 +60,7 @@ class Lang
     plugin = plugin.to_sym
     symbol = symbol.to_s
     lang = Aurita.session.language.to_sym
-    if !@@language_packs[plugin][lang] then
+    if !@@language_packs[plugin] || !@@language_packs[plugin][lang] then
       error  = 'Missing language pack: Plugin ' << plugin.inspect + ', language ' << lang.inspect + "\n"
       raise ::Exception.new(error) 
     end

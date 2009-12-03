@@ -7,7 +7,7 @@ module Aurita
 
   class Application < Aurita::Base_Application
 
-    @app_base_path = Aurita::Configuration.base_path 
+    @app_base_path = Aurita::App_Configuration.base_path 
 
     @app_base_url  = '/aurita/'
     @app_namespace = Aurita
@@ -97,7 +97,7 @@ module Aurita
     # Returns result of require call. 
     #
     def self.import(path)
-      path = Aurita::Configuration.projects_base_path + Aurita.project.project_name.downcase + '/' << path.to_s
+      path = "#{Aurita::App_Configuration.projects_base_path}#{Aurita.project.project_name.to_s.downcase}/#{path}"
       r = require(path)
       Aurita.log('imported ' << path.to_s) if r
       r
@@ -215,7 +215,7 @@ module Aurita
         if name_parts.length > 1 then 
           # Plugin model
           namespace = name_parts[0]
-          if File.exists?("#{Aurita::Configuration.plugins_path}#{namespace.downcase}/model/#{model_name.downcase}.rb") then
+          if File.exists?("#{Aurita::App_Configuration.plugins_path}#{namespace.downcase}/model/#{model_name.downcase}.rb") then
             Aurita.import_plugin_model(namespace.downcase, model_name.downcase)
             namespace = Aurita::Plugins.const_get(name_parts[0])
             model = namespace.const_get(model_name)
@@ -264,11 +264,11 @@ module Aurita
         # Plugin controller
         if name_parts.length > 1 then 
           namespace = name_parts[0]
-          if File.exists?("#{Aurita::Configuration.plugins_path}#{namespace.downcase}/controllers/#{controller_name.downcase}.rb") then
+          if File.exists?("#{Aurita::App_Configuration.plugins_path}#{namespace.downcase}/controllers/#{controller_name.downcase}.rb") then
             namespace = Aurita::Plugins.const_get(name_parts[0])
             controller_name << '_Controller'
             controller = namespace.const_get(controller_name)
-          elsif File.exists?("#{Aurita::Configuration.plugins_path}#{namespace.downcase}/lib/controllers/#{controller_name.downcase}.rb") then
+          elsif File.exists?("#{Aurita::App_Configuration.plugins_path}#{namespace.downcase}/lib/controllers/#{controller_name.downcase}.rb") then
             namespace = Aurita::Plugins.const_get(name_parts[0])
             controller_name << '_Controller'
             controller = namespace.const_get(controller_name)

@@ -1,35 +1,21 @@
 
-# This is an example configuration for Aurita in development or testing mode. 
+require('aurita/base/configuration')
+
 
 module Aurita
 
-  class Configuration
+  class App_Configuration < Simple_Configuration
 
-    $KCODE = 'UTF-8'
-    @@app_base_path      = '/usr/share/gitwc/'
-    @@admin_emails       = [ 'root@localhost' ]
-    @@base_path          = @@app_base_path + 'aurita/lib/aurita/'
-    @@projects_base_path = @@app_base_path + 'aurita_projects/'
-    @@plugins_path       = @@app_base_path + 'aurita-plugins/'
+    admin_emails [ 'root@localhost' ]
 
-    @@sys_log_path = '/var/log/aurita/sys.log'
-    @@run_log_path = '/var/log/aurita/sys.log'
+    app_base_path '/usr/share/gitwc/'
+    base_path '/usr/share/gitwc/aurita/lib/aurita/'
+    projects_base_path '/usr/share/gitwc/aurita_projects/'
+    plugins_path  '/usr/share/gitwc/aurita-plugins/'
 
-    def self.base_path
-      @@base_path
-    end
-    def self.app_base_path
-      @@app_base_path
-    end
-    def self.admin_emails
-      @@admin_emails
-    end
-    def self.projects_base_path
-      @@projects_base_path
-    end
-    def self.plugins_path
-      @@plugins_path
-    end
+    sys_log_path '/var/log/aurita/sys.log'
+    run_log_path '/var/log/aurita/sys.log'
+
   end
 
 end

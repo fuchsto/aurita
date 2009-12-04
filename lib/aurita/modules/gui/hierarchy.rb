@@ -123,7 +123,12 @@ module GUI
         label_style << 'color: black; '
         entry   = e.label
       else
-        onclick = "Aurita.load({ action: '#{CGI.escape(e.interface).gsub('%2F','/').gsub('%3D','=')}' }); "
+        if e.content_id then
+          onclick = link_to(Content.get(e.content_id).concrete_instance) 
+        else
+          interface = e.interface
+          onclick = "Aurita.load({ action: '#{CGI.escape(interface).gsub('%2F','/').gsub('%3D','=')}' }); "
+        end
         entry   = HTML.a(:onclick => onclick) { e.label } 
       end
 

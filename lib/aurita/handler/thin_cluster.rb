@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 
 require 'rubygems'
 require 'aurita'
@@ -6,9 +5,7 @@ require 'aurita'
 require 'yaml'
 require 'zlib'
 
-require 'mongrel'
-
-Aurita.import :handler, :aurita_application
+Aurita.import :handler, :thin_daemon
 
 module Aurita
 
@@ -29,14 +26,27 @@ module Aurita
   # a project to test your changes in development 
   # without restarting any real webserver. 
   #
-  class Thin_Daemon 
+  class Thin_Cluster
     include Aurita::Handler
 
-    attr_accessor :logger
+    attr_accessor :threads, :logger
 
+    # Usage: 
+    #
+    #   c = Thin_Cluster.new(:project    => :my_project, 
+    #                        :ports      => [ 3000, 3001 ], 
+    #                        :ip         => 0.0.0.0, 
+    #                        :logger     => Logger.new(STDERR, 
+    #                        :no_session => false, 
+    #                        :chunked    => true)
+    #                        
+    #
+    #
     def initialize(options)
-      @options = options
-      @logger  = options[:logger]
+      @options      = options
+      @threads      = []
+      @logger       = ::Logger.new(STDERR)
+      @http_servers = []
     end
 
     private 
@@ -56,7 +66,13 @@ module Aurita
                              '/aurita/assets'         => Aurita_File_Application.new(root+'/assets'), 
                              '/aurita/images'         => Aurita_File_Application.new(root+'/images'))
 
-      @http_server = Thin::Server.new(@options[:ip], @options[:port], app) 
+      ports = @options[:ports]
+      @options.delete(:ports)
+      @options[:logger] = @logger
+      ports.each { |port|
+        STDERR.puts "Added daemon for port #{port}"
+        @http_servers << Thin::Server.new(@options[:ip], port, app) 
+      }
 
     end
 
@@ -64,17 +80,13 @@ module Aurita
     
     def run
       setup()
-
-      @logger.info { "Thin_Daemon: run entered" }
-      begin
-        @logger.info("Thin_Daemon: http_server.run")
-        @http_server.start
-      rescue StandardError, ::Exception => err
-        STDERR.puts err.inspect
-        @logger.error { "Thin_Daemon: #{err}" }
-        @logger.error { err.backtrace.join("\n") }
-      end
-      @logger.info { "Thin_Daemon: run left" }
+      @http_servers.each { |server|
+        @threads << Thread.new(server) { 
+          STDERR.puts "Starting daemon"
+          server.start
+        }
+      }
+      @threads.each { |thread| thread.join }
     end
     
   end # class

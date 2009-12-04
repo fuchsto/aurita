@@ -1,4 +1,5 @@
 
+require('aurita-gui/widget')
 require('aurita/modules/gui/i18n_helpers')
 
 module Aurita

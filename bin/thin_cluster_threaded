@@ -1,0 +1,152 @@
+#!/usr/bin/env ruby
+
+require 'getoptlong'
+require 'rubygems'
+require 'logger'
+require 'aurita'
+
+require 'thin'
+require 'yaml'
+require 'zlib'
+
+begin
+
+opts = GetoptLong.new(
+         [ '--gatling',   '-g', GetoptLong::OPTIONAL_ARGUMENT ],
+         [ '--short',     '-s', GetoptLong::OPTIONAL_ARGUMENT ],
+         [ '--killold',   '-k', GetoptLong::OPTIONAL_ARGUMENT ], 
+         [ '--verbosive', '-v', GetoptLong::OPTIONAL_ARGUMENT ], 
+         [ '--mode', GetoptLong::OPTIONAL_ARGUMENT ]
+       )
+
+project_name = ARGV.shift
+mode      = :production
+gatling   = false
+short     = false
+killold   = false
+verbosive = false
+deflate   = true
+
+opts.each { |opt, arg| 
+  case opt
+  when '--gatling' then
+    gatling   = true
+  when '--short' then
+    short     = true
+  when '--killold' then
+    killold   = true
+  when '--verbosive' then
+    verbosive = true
+  when '--port' then
+    port      = arg.to_i
+  when '--mode' then
+    mode = arg.to_sym
+    mode = :production if mode == :p
+    mode = :development if mode == :d
+    mode = :test if mode == :t
+    if ![:production,:test,:development].include?(mode) then
+      puts "Mode has to be 'production' (or 'p'), 'test' (or 't') or 'development' (or 'd')"
+      exit
+    end
+  end
+}
+
+if !project_name then
+  puts "Usage: "
+  puts ""
+  puts "  daemon project_name [OPTIONS] "
+  puts ""
+  puts "Following options are supported: "
+  puts ""
+  puts "  --gatling, -g : Optimize for short requests, without session handling"
+  puts "  --short, -s   : Optimize for short requests with session handling"
+  puts "  --killold     : Kill existing thin_daemon running on same port"
+  puts "  --mode, -m    : In which mode to run application. "
+  puts "                  Modes are production (or p), test (or t) and "
+  puts "                  developlent (or d)"
+  puts "Example: "
+  puts ""
+  puts "   thin_daemon --port=3001 --mode=test my_project"
+  puts ""
+  exit
+end
+
+logfile = "/var/log/aurita/aurita_#{project_name}_cluster_#{mode}.log"
+
+if killold then
+  # TODO: This is really quick'n'dirty
+  command = "ps aux | grep 'thin_daemon' | grep '#{port}' | grep -v #{$$} | grep -v 'grep' | awk '{print $2}' | xargs sudo kill -9 2>/dev/null" 
+  system(command)
+end
+
+if verbosive then
+  STDERR.puts "bootstrapping aurita ..."
+end
+
+Aurita.load_project project_name
+Aurita.runmode = mode
+Aurita.bootstrap
+
+if verbosive then
+  Lore.enable_logging
+  Lore.enable_query_log
+  Lore.logfile                       = logfile
+  Lore.query_logfile                 = logfile
+  Lore.logger.level                  = Logger::DEBUG
+  Lore.query_logger.level            = Logger::DEBUG
+  Aurita::Configuration.sys_log_path = logfile
+  Aurita::Configuration.run_log_path = logfile
+else
+  Lore.disable_logging
+  Lore.disable_query_log
+  Lore.logger.level                  = Logger::ERROR
+  Lore.logfile                       = logfile
+  Lore.query_logger.level            = Logger::ERROR
+  Aurita::Configuration.sys_log_path = false
+  Aurita::Configuration.run_log_path = false
+end
+
+Aurita.import :handler, :thin_cluster
+
+OPTIONS = {
+  :ports           => Aurita.project.cluster_ports[Aurita.runmode], 
+  :ip              => "0.0.0.0",
+  :server_root     => Aurita.project.base_path + '/public/', 
+  :compress        => deflate, 
+  :mode            => mode, 
+  :chunked         => true
+}
+# Gatling mode is as fast as can be, but without 
+# sessions, e.g. only public services are available. 
+if gatling then
+  OPTIONS[:compress]    = false
+  OPTIONS[:chunked]     = false
+  OPTIONS[:no_sessions] = true
+# Short mode is for requests that need session 
+# handling ( => user identification) but will 
+# return short responses. 
+elsif short then
+  OPTIONS[:compress]    = false
+  OPTIONS[:chunked]     = false
+  OPTIONS[:no_sessions] = false
+end
+
+if verbosive then
+  STDERR.puts "Running thin cluster for project #{project_name} in mode #{mode}"
+  STDERR.puts "Server log is #{logfile}\n"
+end
+
+STDERR.puts OPTIONS.inspect
+
+web_server             = Aurita::Thin_Cluster.new(OPTIONS)
+daemon_logger          = ::Logger.new(logfile)
+web_server.logger      = daemon_logger
+web_server.run
+
+rescue ::Exception => e
+  STDERR.puts e.message
+  e.backtrace.each { |l|
+    STDERR.puts l
+  }
+end
+

@@ -110,8 +110,9 @@ module Main
     def may_view_content?(content)
     # {{{
       if !content.is_a? Content then
-        content = Content.load(:content_id => content)
-        raise ::Exception.new("Could not resolve content for #{content.inspect}") unless content
+        entity = Content.load(:content_id => content)
+        raise ::Exception.new("Could not resolve content for #{content.inspect}") unless entity
+        content = entity
       end
       return false unless content
 

@@ -20,11 +20,12 @@ module Main
     def add
       form = model_form(:model => Hierarchy_Entry, :action => :perform_add)
       form.fields = [
-         Hierarchy_Entry.entry_type, 
          Hierarchy_Entry.label, 
+         Hierarchy_Entry.entry_type, 
          Content.tags, 
          Hierarchy_Entry.hierarchy_id, 
-         Hierarchy_Entry.hierarchy_entry_id_parent 
+         Hierarchy_Entry.hierarchy_entry_id_parent, 
+         :active_type_element
       ]
       form.add(Hidden_Field.new(:name  => Hierarchy_Entry.hierarchy_id, 
                                 :value => param(:hierarchy_id)))
@@ -35,24 +36,20 @@ module Main
       options = { 'FILTER'     => tl(:filter_entry), 
                   'BLANK_NODE' => tl(:blank_node_entry) }
 
-      type_elements = { 'FILTER' => Input_Field.new(:type => :text, :label => tl(:tags), :name => Content.tags, :required => true) }
-      
       plugin_get(Hook.main.hierarchy_entry.entry_types).each { |p|
-        options[p[:name]]       = p[:label]
-        type_elements[p[:name]] = p[:element]
+        options[p[:request]] = p[:label]
       }
       
       type_select = Select_Field.new(:name     => Hierarchy_Entry.entry_type, 
                                      :id       => :hierarchy_entry_type_selector, 
                                      :label    => tl(:context_entry_type), 
-                                     :onchange => "alert($('hierarchy_entry_type_selector').value);", 
+                                     :onchange => "Aurita.load_widget($('hierarchy_entry_type_selector').value, { }, 
+                                                     Aurita.load_widget_to('active_type_element'));", 
+                                     :value    => 'FILTER', 
                                      :options  => options)
       form.add(type_select)
-      
-      hidden_type_elements = HTML.div(:style => 'display: none; ') 
-      type_elements.each_pair { |name, element|
-        hidden_type_elements << HTML.div(:id => "type_element_#{name}") { element }
-      }
+
+      form.add(GUI::Form_Field.new(:name => :active_type_element) { HTML.div(:id => :active_type_element) {  } } )
       
       return decorate_form(form) 
     end
@@ -86,6 +83,7 @@ module Main
     end
 
     def perform_add
+
       hierarchy = Hierarchy.load(:hierarchy_id => param(:hierarchy_id))
       if(param(:entry_type) == 'FILTER') then
         param[:interface] = ('App_Main/find/key=' << param(:tags).to_s) 
@@ -95,6 +93,7 @@ module Main
         # Delegate to entry type handling to plugin
         plugin_call(Hook.main.hierarchy_entry.add_entry, @params)
       end
+      param[:entry_type] = ''
       hid = param(:hierarchy_id)
       param[:hierarchy_entry_id_parent] = 0 unless param(:hierarchy_entry_id_parent)
       

@@ -57,6 +57,9 @@ module Main
         }
         return
       end
+
+      exec_js(instance.js_initialize.gsub(/\s+/,' ')) if instance.respond_to?(:js_initialize)
+
       puts instance.to_s
     end
     

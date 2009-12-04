@@ -330,9 +330,10 @@ module GUI
       params.delete(:element)
       params.delete(:label)
 
-      unless params[:target] || html_options[:onclick] then
+      unless params[:target] then
         target_part = ", element: '#{target}' " if target
-        html_options[:onclick]  = "Aurita.load({ action: '#{resource_url_for(params)}' #{target_part}}); return false; "
+        html_options[:onclick] = '' unless html_options[:onclick]
+        html_options[:onclick] << "Aurita.load({ action: '#{resource_url_for(params)}' #{target_part}}); return false; "
       end
       if !target then
         html_options[:href] = "/aurita/#{resource_url_for(params)}" 

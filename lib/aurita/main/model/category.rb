@@ -60,7 +60,8 @@ module Main
     # Mark this category as touched (e.g. for cache invalidation). 
     # Categories are touched whenever Content instances are added to or 
     # removed from them. 
-    def touch
+    def touch(attrib=nil)
+      super(attrib) if attrib
       Category.touch(category_id)
     end
 

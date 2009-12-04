@@ -1,0 +1,4 @@
+#!/bin/bash
+
+/usr/bin/ruby -r /usr/share/gitwc/aurita/lib/aurita/console/irb/console.rb -r $1
+

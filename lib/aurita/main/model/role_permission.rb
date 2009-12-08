@@ -143,7 +143,7 @@ module Main
     #
     def may_edit_content?(content)
     # {{{
-      if !content.is_a? Content then
+      if !content.kind_of? Content then
         content = Content.load(:content_id => content)
         raise ::Exception.new("Could not resolve content for #{content.inspect}") unless content
       end
@@ -151,7 +151,7 @@ module Main
 
       return true if is_admin? or (content.user_group_id == user_group_id)
       return false if content.locked 
-      return true if (Aurita.user.writeable_category_ids & (content.category_ids))
+      return true if (Aurita.user.writeable_category_ids & (content.category_ids)).length > 0
 
       permissions = Content_Permissions.all_with(Content_Permissions.content_id == content.content_id).entities
       permissions.each { |p|

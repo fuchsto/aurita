@@ -72,6 +72,11 @@ module Handler
       response[1]['Cache-Control']  = 'private'
       response[1]['Expires']        = '-1'       # For aggressive caching in IE8
       response[1]['pragma']         = 'no-cache' # For aggressive caching in IE8
+      sendfile = response[1]['X-Aurita-Sendfile']
+      if sendfile then
+        response[1]['X-Accel-Redirect'] = sendfile # nginx sendfile
+        response[1]['Content-Length']   = response[1]['X-Aurita-Filesize']
+      end
 #     response[1]['Cache-Control']  = 'no-cache' # Does not seem to be necessary for IE8
       return response
     end

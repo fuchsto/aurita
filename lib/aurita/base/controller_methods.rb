@@ -468,24 +468,25 @@ module Aurita
       end
     end # }}} 
 
-    def send_file(file, params={})
+    def send_file(filepath, params={})
     # {{{
       filename   = params[:filename]
-      filename ||= file.split('/').last
+      filename ||= filepath.split('/').last
       filesize = 0
-      case file
+      case filepath
       when String then
-         filesize   = File.size(file)
-         filename ||= File.basename(file)
+         fs_path    = Aurita.project.base_path + '/public/' + filepath
+         filesize   = File.size(fs_path)
+         filename ||= File.basename(fs_path)
       when File then
          filesize   = file.size
          filename ||= file.basename
       end
       set_http_header('Content-Type'        => "application/force-download", 
                       'Content-Disposition' => "attachment; filename=\"#{filename}\"", 
-                      'Content-Length'      => filesize, 
-                      "X-Aurita-Sendfile"   => filename, 
-                      "X-Aurita-Filesize"   => filesize)
+                      'Content-Length'      => "#{filesize}", 
+                      "X-Aurita-Sendfile"   => filepath, 
+                      "X-Aurita-Filesize"   => "#{filesize}")
     end # }}} 
 
     private

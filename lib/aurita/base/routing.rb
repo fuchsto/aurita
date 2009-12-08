@@ -13,7 +13,8 @@ module Aurita
 
     def route(env)
     # {{{
-      uri = env['REQUEST_URI']
+      uri   = env['REQUEST_URI']
+      uri ||= env['PATH_INFO']
       # Poor man's routing: 
       routed = false
       uri_p  = uri.split('/')

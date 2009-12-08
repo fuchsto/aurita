@@ -15,7 +15,8 @@ module Aurita
     #
     HTTP_STATUS_CODES = { 302 => 'REDIRECT', 
                           200 => 'FOUND', 
-                          400 => 'NOT_FOUND' }
+                          400 => 'NOT_FOUND', 
+                          401 => 'FORBIDDEN' }
 
     @@form_generator = Aurita::GUI::Form_Generator
     
@@ -467,9 +468,10 @@ module Aurita
       end
     end # }}} 
 
-    def send_file(file, as_filename=nil)
+    def send_file(file, params={})
     # {{{
-      filename = as_filename
+      filename   = params[:filename]
+      filename ||= file.split('/').last
       filesize = 0
       case file
       when String then

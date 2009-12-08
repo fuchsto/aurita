@@ -1,6 +1,8 @@
 
 require('aurita')
 
+Aurita.import 'handler/aurita_application'
+
 module Aurita
 module Console
 
@@ -26,34 +28,18 @@ module Console
       # Fake a request
       
       params = {}
-      params['mode']       = 'default'
-      params['controller'] = 'App_Main'
-      params['action']     = 'start'
-      params['controller'] = argv[0].to_s if argv[0]
-      params['action']     = argv[1].to_s if argv[1]
+      params[:mode]       = 'default'
+      params[:controller] = 'App_Main'
+      params[:action]     = 'start'
+      params[:controller] = argv[0].to_s if argv[0]
+      params[:action]     = argv[1].to_s if argv[1]
+      params[:args]       = argv[2] if argv[2]
 
-      Aurita.import('handler/dispatcher')
-
-      arg_c = 0
-      while argv[2+arg_c] do 
-        param = argv[2+arg_c].split('=')
-        value = nil
-        if param[1] then
-          param[1].strip!
-          param[0].strip!
-          value = [ param[1] ]
-          if /\[([^\]])+?\]/.match(param[1]) then
-            value = param[1].sub('[','').sub(']','')
-            value = value.squeeze(' ').split(',')
-          end
-        end
-        params[param[0]] = value
-        arg_c += 1
-      end
+      @params     = params
 
       puts '============================================================='
       puts 'Dispatching with request parameters: '
-      pp params
+      pp @params
       puts '============================================================='
 
       user_group_id   = params['user_group_id'].first if params['user_group_id']
@@ -61,12 +47,28 @@ module Console
       @old_session_user   = Aurita.session.user
       Aurita.session.user = User_Profile.load(:user_group_id => user_group_id) if user_group_id
 
-      @dispatcher = Aurita::Dispatcher.new()
     end
 
     def run
-      @dispatcher.dispatch(request)
+      app = Aurita::Handler::Aurita_Dispatch_Application.new
+      controller = @params[:controller]
+      action     = @params[:action]
+
+      args = []
+      @params[:args].each_pair { |k,v|
+        args << "#{k}=#{v}"
+      }
+      uri = "/aurita/#{controller}/#{action}/#{args.join('&')}"
+      env = Rack::MockRequest.env_for(uri)
+
+      puts "Request: #{uri}"
+      puts "Mock ENV: "
+      pp env
+
+      response = app.call(env)
       Aurita.session.user = @old_session_user
+
+      return response
     end
 
     def usage

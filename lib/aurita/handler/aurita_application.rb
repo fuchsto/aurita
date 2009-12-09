@@ -77,7 +77,6 @@ module Handler
         response[1]['X-Accel-Redirect'] = sendfile # nginx sendfile
         response[1]['Content-Length']   = response[1]['X-Aurita-Filesize']
       end
-#     response[1]['Cache-Control']  = 'no-cache' # Does not seem to be necessary for IE8
       return response
     end
 

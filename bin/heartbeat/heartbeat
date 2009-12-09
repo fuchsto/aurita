@@ -35,7 +35,7 @@ class Heartbeat
   end
 
   def send_error_mail subject, message
-    return unless MAILTO_ADDRESS
+    return unless MAILTO_ADDRESS && MAILTO_ADDRESS.length > 0
 
     from_name   = "Aurita"
     from_email  = "system@wortundform.de"

@@ -92,7 +92,8 @@ module Main
         param[:interface] = '' 
       else
         # Delegate entry type handling to plugin
-        plugin_call(Hook.main.hierarchy_entry.add_entry, @params)
+        content = plugin_get(Hook.main.hierarchy_entry.add_entry, @params).first[:content]
+        param[:content_id] ||= content.content_id if content
       end
       param[:entry_type] = ''
       hid = param(:hierarchy_id)

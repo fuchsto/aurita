@@ -29,9 +29,11 @@ module GUI
       if @sortable then
         @tools << HTML.img(:src => '/aurita/images/icons/move.gif', :class => [ :moveable, :box_sort_handle ])
       end
-      tools = @tools.map { |t| HTML.div.section_header_right { t } } 
-      head  = HTML.div.section_header_left { HTML.h1 { @header } } 
-      head  = tools + head if tools && tools.length > 0
+      tools  = @tools.map { |t| HTML.div.section_header_right { t } } 
+      head   = HTML.div.section_header_left { HTML.h1 { @header } } if @header
+      head   = tools + head if tools && tools.length > 0
+      head ||= []
+
       HTML.div.section_header(:id => @params[:id]) { 
         head + 
         HTML.div(:style => 'clear: both;') +

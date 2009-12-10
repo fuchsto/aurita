@@ -365,6 +365,7 @@ div.article_view div.article_info {
   padding: 1px; 
   margin: 0px; 
   font-size: 10px; 
+  border: 0 none; 
 }
 
 .user_index_entry { 

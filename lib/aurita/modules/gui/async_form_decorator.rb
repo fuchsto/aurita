@@ -38,6 +38,7 @@ module GUI
       @form.onsubmit = 'Aurita.submit_form(this); return false;' unless form.onsubmit
       super()
     end
+
     def element
       form_box = HTML.div.form_box { 
         HTML.div.form_content { @form } + 
@@ -58,6 +59,11 @@ module GUI
         form_box
       end
     end
+
+    def script
+      @form.script
+    end
+
   end
 
 end

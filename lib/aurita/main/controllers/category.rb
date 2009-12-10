@@ -171,8 +171,11 @@ module Main
     end
 
     def show
-      cat = load_instance()
+
+      cat    = load_instance()
       cat_id = cat.category_id
+
+      return unless Aurita.user.readable_category_ids.include?(cat_id)
 
       users = cat.users
       elements = []

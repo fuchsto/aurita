@@ -3,9 +3,9 @@ module Aurita
 		
 	class User_Runtime_Error < ::Exception
     def self.initialize(tag)
-      begin
-        @message = Lang[tag]
-      rescue
+      if tag.is_a? Symbol then
+        @message = Lang[tag] 
+      else
         @message = tag.to_s
       end
     end

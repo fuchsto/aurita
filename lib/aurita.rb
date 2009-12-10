@@ -19,6 +19,8 @@ require('aurita/base/bits/time_ago')
 require('aurita/base/bits/file')
 require('aurita/base/bits/nil')
 
+require('aurita/modules/file_helpers')
+
 if not defined? RUBY_PATCHLEVEL or (RUBY_VERSION <= '1.8.5' and RUBY_PATCHLEVEL < 2)
   raise SecurityError, 'Please use Ruby 1.8.5-p2 or later!'
 end
@@ -43,6 +45,7 @@ Aurita.import_module :gui, :lang
 #   Aurita.session.user = User_Group.load(:user_group_id => 123)
 #
 module Aurita
+  extend Aurita::File_Helpers
 
   def self.runmode(mode=nil)
     if mode then
@@ -232,15 +235,16 @@ module Aurita
   #
   #   Aurita.import_plugin_module :wiki, :article_hierarchy_default_decorator
   #
-  def self.import_plugin_module(plugin, module_name)
+  def self.import_plugin_module(plugin, *path)
+    path = fs_path(*path)
     r = false
     begin
-      r = require("#{Aurita::App_Configuration.plugins_path}#{plugin}/modules/#{module_name}")
+      r = require("#{Aurita::App_Configuration.plugins_path}#{plugin}/modules/#{path}")
     rescue LoadError => e
       plugin = "#{plugin}/lib"
-      r = require("#{Aurita::App_Configuration.plugins_path}#{plugin}/modules/#{module_name}")
+      r = require("#{Aurita::App_Configuration.plugins_path}#{plugin}/modules/#{path}")
     end
-    Aurita.log "imported module #{plugin}/#{module_name}" if r
+    Aurita.log "imported module #{plugin}/#{path}" if r
     r
   end
 
@@ -271,6 +275,7 @@ module Aurita
     if File.exists?("#{project_path()}plugins/main.rb") then
       require("#{project_path()}plugins/main.rb")
     end
+
     if File.exists?("#{project_path()}/setup.rb") then
       require("#{project_path()}setup.rb")
     end

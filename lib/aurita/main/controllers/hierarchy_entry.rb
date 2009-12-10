@@ -37,7 +37,8 @@ module Main
                   'BLANK_NODE' => tl(:blank_node_entry) }
 
       plugin_get(Hook.main.hierarchy_entry.entry_types).each { |p|
-        options[p[:request]] = p[:label]
+        options[p[:name].to_s]    = p[:label] if p[:name]
+        options[p[:request].to_s] = p[:label] if p[:request]
       }
       
       type_select = Select_Field.new(:name     => Hierarchy_Entry.entry_type, 
@@ -83,14 +84,14 @@ module Main
     end
 
     def perform_add
-
       hierarchy = Hierarchy.load(:hierarchy_id => param(:hierarchy_id))
+      
       if(param(:entry_type) == 'FILTER') then
         param[:interface] = ('App_Main/find/key=' << param(:tags).to_s) 
       elsif param(:entry_type) == 'BLANK_NODE' then
         param[:interface] = '' 
       else
-        # Delegate to entry type handling to plugin
+        # Delegate entry type handling to plugin
         plugin_call(Hook.main.hierarchy_entry.add_entry, @params)
       end
       param[:entry_type] = ''
@@ -99,6 +100,8 @@ module Main
       
       instance = super()
       exec_js("Aurita.load({ element: 'hierarchy_#{hid}_body', action: 'Hierarchy/body/hierarchy_id=#{hid}' });")
+
+      return instance
     end
 
     def perform_update

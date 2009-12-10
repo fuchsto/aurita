@@ -8,7 +8,7 @@ module GUI
   class Page < Widget
   include I18N_Helpers
 
-    attr_accessor :header, :tools, :content, :sortable
+    attr_accessor :header, :tools, :content, :sortable, :script
 
     def initialize(params={}, &block)
       @header   = params[:header]
@@ -16,6 +16,7 @@ module GUI
       @tools    = [ @tools ] if @tools && !@tools.is_a?(Array)
       params.delete(:header)
       @content  = yield
+      @script   = @content.script if @content.respond_to?(:script)
       @params   = params
       @sortable = params[:sortable]
       @sortable = false unless Aurita.user.is_registered?
@@ -37,6 +38,7 @@ module GUI
         HTML.div.section_content(:id => "#{@params[:id]}_content") { @content } 
       }
     end
+
   end
 
 end

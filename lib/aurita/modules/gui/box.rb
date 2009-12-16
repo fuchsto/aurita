@@ -26,7 +26,7 @@ module GUI
     end
 
     def string()
-      @body = @body.join(' ') if @body.instance_of? Array
+#     @body = @body.join(' ') if @body.instance_of? Array
 
       toggle = "Aurita.GUI.toggle_box('#{attrib[:id]}');"
       if @collapsed then
@@ -69,7 +69,7 @@ module GUI
       body_args[:id]      = dom_id().to_s + '_body'
       body = Element.new(body_args) 
 
-      set_content(HTML.div { header.string + body.string }) 
+      set_content(HTML.div { header + body }) 
       super()
     end # def
 

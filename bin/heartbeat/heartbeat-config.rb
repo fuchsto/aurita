@@ -1,11 +1,9 @@
 
 MY_NAME = "intra.wortundform.de"
 
-# MAILTO_ADDRESS = [
-#   'diehr@wortundform.de',
-#   'gnaier@wortundform.de',
-#   'fuchs@wortundform.de'
-# ]
+MAILTO_ADDRESS = [
+#   'mail@domain.com',
+]
 
 MAX_INVOCATIONS_PER_DAY = 50
 SMTP_SERVER = 'smtp.servername.com'
@@ -17,7 +15,9 @@ LOG_FILE      = File.dirname(__FILE__) + "/heartbeat.log"
 
 # Shellcode zum Restarten des Servers
 RESTART_CODE = <<END
-/usr/share/gitwc/aurita_projects/cfmaier/bin/flush_production
+/usr/share/gitwc/aurita_projects/cfmaier/bin/stop_production; 
+/etc/init.d/postgresql-8.4 restart; 
+/usr/share/gitwc/aurita_projects/cfmaier/bin/flush_production; 
 END
 
 # Welche URL soll abgerufen werden?

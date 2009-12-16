@@ -110,7 +110,8 @@ module Main
       end
 
       if @mode == :async then
-        response[:html].pack! if response[:html]
+        response[:html].pack!   if response[:html]
+        response[:script].pack! if response[:script]
         @content  = "{ html: \"#{response[:html]}\", script: \"#{response[:script]}\""
         @content << ", debug: \"#{response[:debug]}\" " if response[:debug]
         @content << ", error: \"#{response[:error]}\" " if response[:error]

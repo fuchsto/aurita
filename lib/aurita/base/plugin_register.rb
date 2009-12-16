@@ -57,7 +57,7 @@ module Aurita
     # 
     # 
     def self.get(hook, *args)
-      Aurita.log {  'PLUGIN REGISTER GET: ' << hook.inspect }
+      Aurita.log { 'PLUGIN REGISTER GET: ' << hook.inspect }
 
       components         = []
       params             = {}

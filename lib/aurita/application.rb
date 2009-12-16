@@ -185,8 +185,8 @@ module Aurita
       #
       # Imports <aurita base dir>/main/model/user_login_data.rb
       #   
-      def self.import_controller(namespace, interface=nil)
-        Aurita::Main.import_controller(namespace, interface)
+      def self.import_controller(namespace, controller=nil)
+        Aurita::Main.import_controller(namespace, controller)
       end
 
       # Returns a model klass by given name. 
@@ -259,12 +259,17 @@ module Aurita
       # it just has to be compatible to Aurita's own user controller. 
       #
       def self.get_controller_klass(model_klassname)
-        name_parts = model_klassname.split('::')
+        name_parts      = model_klassname.split('::')
         controller_name = name_parts.last
         # Plugin controller
         if name_parts.length > 1 then 
           namespace = name_parts[0]
-          if File.exists?("#{Aurita::App_Configuration.plugins_path}#{namespace.downcase}/controllers/#{controller_name.downcase}.rb") then
+          # Search in project first: 
+          if File.exists?("#{Aurita.project_path}controllers/#{namespace.downcase}/#{controller_name.downcase}.rb") then
+            Aurita::Project.import_controller(namespace.downcase, controller_name.downcase)
+            controller_name << '_Controller'
+            controller = Aurita.const_get(Aurita.project_namespace).const_get(namespace).const_get(controller_name)
+          elsif File.exists?("#{Aurita::App_Configuration.plugins_path}#{namespace.downcase}/controllers/#{controller_name.downcase}.rb") then
             namespace = Aurita::Plugins.const_get(name_parts[0])
             controller_name << '_Controller'
             controller = namespace.const_get(controller_name)

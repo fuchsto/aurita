@@ -202,7 +202,7 @@ module Main
                                    (User_Category.write_permission == 't'))
                       })
                     ))
-          }.to_a
+          }.to_a.flatten.map { |cid| cid.to_i }
         else
           @readable_category_ids = Category.select_values(Category.category_id) { |c| 
             c.where((Category.public_readable == 't') |
@@ -211,7 +211,7 @@ module Main
                                    (User_Category.write_permission == 't'))
                       })
                     ))
-          }.to_a
+          }.to_a.flatten.map { |cid| cid.to_i }
         end
       end
       @readable_category_ids

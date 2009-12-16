@@ -27,7 +27,8 @@ module Console
 
         destfile = Aurita.project_path + "public/assets/<variants>/asset_#{asset_id}.jpg"
         if media_asset && media_asset.has_preview? then
-          puts "Importing #{media_asset.pkey}"
+          puts "Importing #{media_asset.pkey}, variant #{@variant}"
+
           begin
             Wiki::Image_Manipulation.new(media_asset).create_image_variants(variant)
           rescue ::Exception => e

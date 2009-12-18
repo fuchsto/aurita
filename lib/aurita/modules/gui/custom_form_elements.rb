@@ -80,7 +80,7 @@ JS
       params[:name]  = :tags unless params[:name]
       params[:class] = 'lore inline' unless params[:class]
       @onselect      = params[:onselect]
-      @onselect    ||= "alert('Username_Autocomplete_Field.onselect('+li.id+'));"
+      @onselect    ||= ''
       super(params, &block)
       @data_type = false
     end

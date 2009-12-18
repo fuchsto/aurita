@@ -98,7 +98,7 @@ module Main
       return result
     end
 
-    def header_buttons()
+    def header_buttons
       
       buttons  = Array.new
       buttons << Context_Menu_Element.new(HTML.div(:class => :header_button_active, 
@@ -208,21 +208,23 @@ module Main
       positions.each { |cat_id|
         cat_result = ''
         cat = categories[cat_id]
-        components = plugin_get(Hook.main.workspace.recent_changes_in_category, :category_id => cat_id)
-        components.each { |component|
-          cat_result << HTML.span(:id => 'component_' << count.to_s) { component.string }.string
-          count += 1
-        }
-        if components.length > 0 then
-          box = Box.new(:type     => :category, 
-                        :class    => :topic_inline, 
-                        :sortable => true, 
-                        :id       => "category_#{cat_id}", 
-                        :params   => { :category_id => cat_id } )
-          box.header = tl(:category) + ' ' << cat.category_name 
-          box.body = cat_result
-          result << HTML.li(:id => "component_category_box_#{cat_id}") { box.string }.string
-          count += 1
+        if cat then
+          components = plugin_get(Hook.main.workspace.recent_changes_in_category, :category_id => cat_id)
+          components.each { |component|
+            cat_result << HTML.span(:id => 'component_' << count.to_s) { component.string }.string
+            count += 1
+          }
+          if components.length > 0 then
+            box = Box.new(:type     => :category, 
+                          :class    => :topic_inline, 
+                          :sortable => true, 
+                          :id       => "category_#{cat_id}", 
+                          :params   => { :category_id => cat_id } )
+            box.header = tl(:category) + ' ' << cat.category_name 
+            box.body = cat_result
+            result << HTML.li(:id => "component_category_box_#{cat_id}") { box.string }.string
+            count += 1
+          end
         end
       }
       return unless count > 0

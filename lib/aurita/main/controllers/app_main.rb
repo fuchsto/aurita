@@ -229,7 +229,7 @@ module Main
       }
       return unless count > 0
       viewmode_icon = link_to(:controller => 'Content_History', 
-                              :action     => :list, 
+                              :action     => :list_body, 
                               :element    => 'recent_changes_page_content') { 
                         HTML.img(:src => '/aurita/images/icons/clock.png') 
                       } 
@@ -239,7 +239,7 @@ module Main
 
     def recent_changes
       viewmode_icon = link_to(:controller => 'Content_History', 
-                              :action     => :list, 
+                              :action     => :list_body, 
                               :element    => 'recent_changes_page_content') { 
                         HTML.img(:src => '/aurita/images/icons/clock.png') 
                       } 

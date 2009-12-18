@@ -1009,12 +1009,12 @@ td.profile_right_column {
 }
 
 .user_icon.tiny { 
-  background-color: #dedede; 
+/*  background-color: #dedede; */
   margin: 1px; 
   padding: 1px;
 /*  width: auto !important; */
-  width: 70px; 
-  height: 70px; 
+  width: 75px; 
+  height: 75px; 
   text-align: center; 
   clear: both; 
 }
@@ -1214,6 +1214,32 @@ li.autocomplete_first_entry {
 }
 */
 /* -------------------------------------------- */
+
+table.listing { 
+  border-right: 1px solid #c8c8c8; 
+  border-bottom: 1px solid #c8c8c8; 
+  border-left: 1px solid white;
+  border-top: 1px solid white; 
+  width: 100%; 
+}
+table.listing th { 
+  color: black; 
+  padding: 2px; 
+  padding-left: 10px; 
+  border-bottom: 1px solid #343434; 
+  border-left: 1px solid #898989; 
+/*  background: transparent url(/aurita/images/button_bg.gif) repeat scroll 0 0; */
+  background: transparent url(/aurita/images/icons/box_header_bg.png) repeat scroll 0 0; 
+  cursor: default; 
+}
+table.listing tr { 
+  background: transparent url(/aurita/images/icons/tall_row_brighter_bg.png) repeat-x scroll 0 0
+}
+table.listing td { 
+  padding: 7px; 
+  vertical-align: top; 
+  border-left: 1px solid #dfdfdf; 
+}
 
 table.media_asset_table { 
   border-right: 1px solid #c8c8c8; 
@@ -1603,6 +1629,18 @@ div.wide_column, div.column {
 }
 div.near_column { 
   float: left; 
+}
+div.column10 {
+  float: left; 
+  width: 9%
+}
+div.column25 {
+  float: left; 
+  width: 24%
+}
+div.column50 {
+  float: left; 
+  width: 49%
 }
 
 .comment_list_entry { 
@@ -2087,3 +2125,13 @@ table.listing_2_columns {
   background-color: transparent; 
   width: 100%; 
 }
+
+.recent_changes .index_entry { 
+  height: 55px; 
+  padding: 1px 1px 2px 5px; 
+}
+.recent_changes .index_entry .column { 
+  padding-left: 3px; 
+  padding-right: 3px; 
+}
+

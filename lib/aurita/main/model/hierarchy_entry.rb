@@ -17,7 +17,7 @@ module Main
     
     use_label :label
 
-    validates :label, :maxlength => 40
+    validates :label, :maxlength => 100
     expects :label
 
     explicit :content_id

@@ -310,3 +310,7 @@ enable_category_versions : aktivieren
 disable_category_versions : deaktivieren
 
 confirm_empty_trash : Papierkorb leeren? 
+
+structure : Struktur
+content : Inhalte
+link : URL in Popup

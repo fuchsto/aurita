@@ -64,23 +64,22 @@ module Main
     
     # CMS Worldwide Hype, Ajax => {cms,worldwide,hype,ajax}
     add_input_filter(:tags) { |tags| 
-      if tags.is_a?(Array) then
-        tags.map! { |t| t.to_s.downcase!; t }
-        tags.uniq!
-        tags = tags.join(',')
-      else
+      if !tags.is_a?(Array) then
         tags = tags.to_s
-        tags.gsub!("'","\'")
-        tags.gsub!('{','')
-        tags.gsub!('}','')
-        tags.gsub!(',',' ')
         tags = tags.squeeze(' ')
         tags.strip!
         tags = tags.split(' ')
-        tags.map! { |t| t.downcase!; t }
-        tags.uniq!
-        tags = tags.join(',')
       end
+      tags.map! { |t| 
+        t = t.to_s.downcase
+        t.gsub!("'","\'")
+        t.gsub!('{','')
+        t.gsub!('}','')
+        t.gsub(',','') 
+      }
+      tags = tags.reject { |t| t.to_s.length < 3 }
+      tags.uniq!
+      tags = tags.join(',')
       tags = '{' << tags + '}'
       tags
     }

@@ -8,8 +8,12 @@ require 'rack/content_length'
 require 'rack/chunked'
 require 'rack/deflater'
 require 'rack/static'
-require 'rack/session/memcache'
 require 'rack/contrib'
+
+require 'memcache'
+require 'rack/session/memcache'
+
+
 Aurita.import 'handler/dispatcher'
 
 module Aurita
@@ -108,6 +112,8 @@ module Handler
         begin
           @app = Rack::Session::Memcache.new(@app)
         rescue ::Exception => no_memcache
+          raise ::Exception.new("Memcache (gem: memcached) appears to be missing. ")
+
           @logger.info { "#{self.class.to_s}: Falling back to Session::Pool" }
           @app = Rack::Session::Pool.new(@app)
         end
@@ -141,6 +147,8 @@ module Handler
         begin
           @app = Rack::Session::Memcache.new(@app)
         rescue ::Exception => no_memcache
+          raise ::Exception.new("Memcache (gem: memcached) appears to be missing. ")
+
           @logger.info { "#{self.class.to_s}: Falling back to Session::Pool" }
           @app = Rack::Session::Pool.new(@app)
         end

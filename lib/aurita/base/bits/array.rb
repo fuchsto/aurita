@@ -7,6 +7,12 @@ class Array
     arr.collect { arr.slice!(rand(arr.length)) }
   end
 
+  def sum
+    s = 0
+    self.each { |x| s += x }
+    s
+  end
+
   def randomize!
    arr=self.dup
    result = []

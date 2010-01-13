@@ -24,7 +24,7 @@ module Main
           pu.where((Content_Comment.content_id == content_id))
           pu.order_by(:time, :asc)
         }
-      }
+      }.to_a
 
       view_string(:content_comment_list, 
                   :entries => entries, 
@@ -34,8 +34,9 @@ module Main
     def box
       box = Box.new(:id => :content_comment_box, :class => :topic_inline)
 
-      box.header = tl(:comments)
-      box.body = list_string(param(:content_id))
+      box.header    = tl(:comments)
+      box.body      = list_string(param(:content_id))
+      box.collapsed = true
 
       box
     end

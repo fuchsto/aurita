@@ -3,6 +3,13 @@ Aurita.import('base/bits/entities')
 
 class String
 
+  def first
+    '' << self[0]
+  end
+  def last
+    '' << self[-1]
+  end
+
   def to_utf8_s
     self.to_s.split(//u).join('')
   end

@@ -31,11 +31,15 @@ module GUI
 
     def initialize(form, params={})
       @form   = form
-      @params = {}
+      @params = params
       @params[:header] = @params[:title] unless @params[:header]
       @form.enctype  = 'multipart/form-data'
       @form.method   = 'POST'
       @form.onsubmit = 'Aurita.submit_form(this); return false;' unless form.onsubmit
+      @onclick_ok   = params[:onclick_ok] 
+      @onclick_ok ||= Javascript.Aurita.submit_form(@form.dom_id.to_s) 
+      @onclick_cancel   = params[:onclick_cancel] 
+      @onclick_cancel ||= Javascript.Aurita.cancel_form(@form.dom_id.to_s) 
       super()
     end
 
@@ -44,11 +48,11 @@ module GUI
         HTML.div.form_content { @form } + 
         HTML.div.form_button_bar(:id => "#{@form.dom_id}_buttons")  {
           Text_Button.new(:class   => :submit, 
-                          :onclick => Javascript.Aurita.submit_form(@form.dom_id.to_s), 
+                          :onclick => @onclick_ok, 
                           :icon    => 'button_ok.gif', 
                           :label   => tl(:ok)).string +
           Text_Button.new(:class   => :cancel, 
-                          :onclick => Javascript.Aurita.cancel_form(@form.dom_id.to_s), 
+                          :onclick => @onclick_cancel, 
                           :icon    => 'button_cancel.gif', 
                           :label   => tl(:cancel)).string
         }

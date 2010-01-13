@@ -114,7 +114,7 @@ module Main
       if !@category_ids then
         @category_ids = User_Category.select_values(User_Category.category_id) { |cid|
           cid.where(User_Category.user_group_id == (user_group_id))
-        }
+        }.to_a.flatten.map { |c| c.to_i }
       end
       return @category_ids
     end # }}}
@@ -226,7 +226,7 @@ module Main
           @writeable_category_ids = Category.select_values(Category.category_id) { |cid|
             cid.sort_by(:is_private)
             cid.sort_by(:category_name, :asc)
-          }.to_a
+          }.to_a.flatten.map { |c| c.to_i }
         else
           if is_registered? then
             @writeable_category_ids = Category.select { |c| 
@@ -237,7 +237,7 @@ module Main
                                      (User_Category.write_permission == 't'))
                         })
                       ))
-            }.to_a
+            }.to_a.flatten.map { |c| c.category_id }
           else
             @writeable_category_ids = Category.select { |c| 
               c.where((Category.public_writeable == 't') |
@@ -246,7 +246,7 @@ module Main
                                      (User_Category.write_permission == 't'))
                         })
                       ))
-            }.to_a
+            }.to_a.flatten.map { |c| c.category_id }
           end
         end
       end

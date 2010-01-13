@@ -117,11 +117,11 @@ module Main
       return false unless content
 
       return true if is_admin? or (content.user_group_id == user_group_id)
-      return true if (Aurita.user.readable_category_ids & (content.category_ids))
+      return true if (readable_category_ids() & (content.category_ids))
 
       permissions = Content_Permissions.all_with(Content_Permissions.content_id == content.content_id).entities
       permissions.each { |p|
-        return true if p.user_group_id == Aurita.user.user_group_id
+        return true if p.user_group_id == user_group_id
       }
       return false 
     end # }}}
@@ -149,13 +149,16 @@ module Main
       end
       return false unless content
 
-      return true if is_admin? or (content.user_group_id == user_group_id)
+      return true if (is_admin? || (content.user_group_id == user_group_id))
       return false if content.locked 
-      return true if (Aurita.user.writeable_category_ids & (content.category_ids)).length > 0
+#     puts "TEST: #{(writeable_category_ids() & (content.category_ids)).inspect}"
+#     puts "TEST: #{writeable_category_ids().inspect}"
+#     puts "TEST: #{content.category_ids.inspect}"
+      return true if ((writeable_category_ids() & (content.category_ids)).length > 0)
 
       permissions = Content_Permissions.all_with(Content_Permissions.content_id == content.content_id).entities
       permissions.each { |p|
-        return true if p.user_group_id == Aurita.user.user_group_id and !p.readonly
+        return true if p.user_group_id == user_group_id and !p.readonly
       }
       return false if permissions.length > 0
     end # }}}

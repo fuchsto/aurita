@@ -258,7 +258,7 @@ module Main
 
       @category_ids = Content_Category.select_values(:category_id) { |cc| 
         cc.where(cc.content_id == content_id) 
-      }
+      }.to_a.flatten.map { |cid| cid.to_i }
       @category_ids = [1] unless @category_ids
       @category_ids
     end

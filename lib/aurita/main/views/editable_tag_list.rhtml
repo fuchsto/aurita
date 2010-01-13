@@ -1,7 +1,10 @@
-<% cid = content.content_id %>
+<% 
+  cid = 0
+  cid = content.content_id if content 
+%>
 
   <span id="editable_tag_list_<%= cid %>" class="tag_list">
-    <%= content.tags %> 
+    <%= content.tags if content %> 
     <nobr>
       <span class="link" onclick="Element.show('tag_input_<%= cid %>');">+</span>
       <span id="tag_input_<%= cid %>" style="display: none; ">

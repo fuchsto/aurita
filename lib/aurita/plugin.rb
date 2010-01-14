@@ -71,11 +71,11 @@ class Manifest
 
   def self.method_missing(*args)
     meth = args.first
+    @plugin_config ||= {}
     if args.length == 2 then
-      @plugin_config ||= {}
       @plugin_config[args.first] = args[1]
     elsif args.length == 1 then
-      @plugin_config[args.first]
+      @plugin_config[args.first] 
     else 
       raise ::Exception.new("Invalid number of arguments for setting or getting a plugin manifest config entry. ")
     end

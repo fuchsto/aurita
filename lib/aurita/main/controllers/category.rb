@@ -178,14 +178,29 @@ module Main
       return unless Aurita.user.readable_category_ids.include?(cat_id)
 
       users = cat.users
+      implicit_users = false
+      if cat.registered_readable then
+        implicit_users = User_Profile.all_with((User_Profile.user_group_id > 100) & 
+                                               (User_Profile.locked == 'f')).sort_by(:surname, :asc).entities 
+      end
       elements = []
       if Aurita.user.is_registered? then
-        users_box = Box.new(:type => :none, 
+        users_box = Box.new(:type  => :none, 
                             :class => :topic_inline)
-        users_box.body = view_string(:user_list, :users => users)
-        users_box.header = tl(:users)
+        users_box.body   = view_string(:user_list, :users => users)
+        users_box.header = tl(:category_members)
 
         elements << users_box.string
+
+        if implicit_users then
+          impl_users_box = Box.new(:type      => :none, 
+                                   :class     => :topic_inline)
+          impl_users_box.collapsed = true
+          impl_users_box.body   = view_string(:user_compact_list, 
+                                              :users  => implicit_users)
+          impl_users_box.header = tl(:users_with_read_access)
+          elements << impl_users_box.string
+        end
       end
       components = plugin_get(Hook.main.category.list, :category_id => cat_id).collect { |c| c.string }
       elements += components

@@ -6,6 +6,9 @@ module Aurita
 module GUI
 
   class Text_Button < Element
+
+    attr_accessor :icon, :label
+
     def initialize(params={}, &block)
       params[:tag] = :a
       @icon  = params[:icon]
@@ -17,6 +20,10 @@ module GUI
       params[:class] << :button
       params[:class] << :icon_button if @icon
       super(params)
+      icon  = HTML.img(:src => "/aurita/images/icons/#{@icon}").string if @icon
+      label = HTML.span.button_label { @label }.string if @label
+      
+      set_content("#{icon}#{label}")
     end
 
     def string()

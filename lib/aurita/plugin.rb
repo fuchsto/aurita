@@ -69,6 +69,23 @@ class Manifest
     Plugin_Register.add_permission(self, permission)
   end
 
+  def self.method_missing(*args)
+    meth = args.first
+    if args.length == 2 then
+      @plugin_config ||= {}
+      @plugin_config[args.first] = args[1]
+    elsif args.length == 1 then
+      @plugin_config[args.first]
+    else 
+      raise ::Exception.new("Invalid number of arguments for setting or getting a plugin manifest config entry. ")
+    end
+  end
+
+  def self.config
+    @plugin_config ||= {}
+    @plugin_config
+  end
+
 end
 
 end

@@ -686,7 +686,7 @@ img.icon {
 }
 
 #message_box { 
-  position: fixed; 
+/*  position: fixed; */
 }
 
 .clear_spacer { 
@@ -701,6 +701,10 @@ img.icon {
   overflow-y: auto; 
   background-color: #dfdfdf; 
 }
+.form_fields .media_asset_list { 
+  width: 338px; 
+}
+
 .media_asset_folders { 
 /*  position: absolute; */
   position: relative; 
@@ -1265,7 +1269,7 @@ table.media_asset_table th.hovered {
   background: transparent url(/aurita/images/button_hover_bg.gif) repeat scroll 0 0; 
 }
 table.media_asset_table tr { 
-  background: transparent url(/aurita/images/icons/tall_row_brighter_bg.png) repeat-x scroll 0 0
+  background: #f3f3f3 url(/aurita/images/icons/tall_row_brighter_bg.png) repeat-x scroll 0 0
 }
 table.media_asset_table td { 
   padding: 7px; 

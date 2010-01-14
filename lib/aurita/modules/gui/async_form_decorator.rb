@@ -24,37 +24,67 @@ module GUI
   # Note that there are helper methods defined for this 
   # decorator in Controller_Methods. 
   #
+  # Form buttons can be defined manually by passing a Proc object rendering them. 
+  # The form decorator will pass a parameter hash into this Proc, like: 
+  #
+  #   { 
+  #     :onclick_ok     => "alert('clicked ok');", 
+  #     :onclick_cancel => "alert('clicked cancel');", 
+  #     :label_ok       => "ok", 
+  #     :label_cancel   => "cancel" 
+  #   }
+  #
+  # So, custom form buttons are set like this (in a controller): 
+  #
+  #   decorate_form(my_form, 
+  #                 :buttons => Proc.new { |params|
+  #                   Text_Button.new(:onclick => "alert('clicked my button');", 
+  #                                   :label   => "click me") + 
+  #                   Text_Button.new(:onclick => "alert('clicked my other button');", 
+  #                                   :label   => "click me too") + 
+  #                 })
+  #
   class Async_Form_Decorator < Widget
   include Aurita::GUI::I18N_Helpers
 
     attr_accessor :form
 
     def initialize(form, params={})
-      @form   = form
-      @params = params
+      @form            = form
+      @params          = params
       @params[:header] = @params[:title] unless @params[:header]
-      @form.enctype  = 'multipart/form-data'
-      @form.method   = 'POST'
-      @form.onsubmit = 'Aurita.submit_form(this); return false;' unless form.onsubmit
-      @onclick_ok   = params[:onclick_ok] 
-      @onclick_ok ||= Javascript.Aurita.submit_form(@form.dom_id.to_s) 
+      @form.enctype    = 'multipart/form-data'
+      @form.method     = 'POST'
+      @form.onsubmit   = 'Aurita.submit_form(this); return false;' unless form.onsubmit
+      @onclick_ok       = params[:onclick_ok] 
+      @onclick_ok     ||= Javascript.Aurita.submit_form(@form.dom_id.to_s) 
       @onclick_cancel   = params[:onclick_cancel] 
       @onclick_cancel ||= Javascript.Aurita.cancel_form(@form.dom_id.to_s) 
+      @label_ok         = tl(:ok)
+      @label_cancel     = tl(:cancel)
+      @buttons          = params[:buttons]
+      @buttons        ||= Proc.new { |btn_params|
+        Text_Button.new(:class   => :submit, 
+                        :onclick => btn_params[:onclick_ok].to_s, 
+                        :icon    => 'button_ok.gif', 
+                        :label   => btn_params[:label_ok].to_s).string + 
+        Text_Button.new(:class   => :cancel, 
+                        :onclick => btn_params[:onclick_cancel].to_s, 
+                        :icon    => 'button_cancel.gif', 
+                        :label   => btn_params[:label_cancel].to_s).string
+      }
       super()
     end
 
     def element
+      buttons = @buttons.call(:onclick_ok     => @onclick_ok, 
+                              :onclick_cancel => @onclick_cancel, 
+                              :label_ok       => @label_ok, 
+                              :label_cancel   => @label_cancel) 
       form_box = HTML.div.form_box { 
         HTML.div.form_content { @form } + 
-        HTML.div.form_button_bar(:id => "#{@form.dom_id}_buttons")  {
-          Text_Button.new(:class   => :submit, 
-                          :onclick => @onclick_ok, 
-                          :icon    => 'button_ok.gif', 
-                          :label   => tl(:ok)).string +
-          Text_Button.new(:class   => :cancel, 
-                          :onclick => @onclick_cancel, 
-                          :icon    => 'button_cancel.gif', 
-                          :label   => tl(:cancel)).string
+        HTML.div.form_button_bar(:id => "#{@form.dom_id}_buttons") {
+          buttons
         }
       }
       if @params[:header] then

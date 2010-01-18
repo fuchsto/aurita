@@ -925,7 +925,6 @@ public
         load_args   = @params 
         load_args ||= id_hash()
         @instance = klass.load(load_args) 
-        raise ::Exception.new("No instance for #{@klass.inspect} with: #{load_args.inspect}") unless @instance
       end
     end
     if !@instance then

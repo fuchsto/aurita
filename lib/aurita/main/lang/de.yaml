@@ -46,6 +46,7 @@ public--category--is_private:
     f: nein
 
 category_name : Name der Kategorie
+category_members : Mitglieder der Kategorie
 users_in_category : Benutzer in dieser Kategorie
 delete_category : Kategorie l&ouml;schen
 delete_category_and_move_contents_to : L&ouml;schen und Inhalte verschieben nach
@@ -314,3 +315,5 @@ confirm_empty_trash : Papierkorb leeren?
 structure : Struktur
 content : Inhalte
 link : URL in Popup
+
+users_with_read_access : Benutzer mit Leseberechtigung

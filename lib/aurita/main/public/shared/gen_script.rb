@@ -17,12 +17,14 @@ $scripts = [
   :editor, 
   :login, 
   :main, 
+
 # Plugins
 
   :wiki, 
   :poll, 
   :messaging, 
   :bookmark, 
+  :publish, 
 
 # Finally
   :onload

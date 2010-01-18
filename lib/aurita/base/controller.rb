@@ -552,6 +552,12 @@ class Aurita::Base_Controller
     return result
   end
 
+  # Explicitly set Aurita::Model class this controller is 
+  # using. 
+  def self.use_model(model_klass)
+    @klass = model_klass
+  end
+
   # Guess model klass for this controller by conroller name, 
   # set this controllers @klass variable and return model 
   # klass if successful. 
@@ -587,6 +593,7 @@ class Aurita::Base_Controller
   # 
   def self.model
   # {{{
+    return @klass if @klass
     model_klass_name = self.to_s.gsub('_Controller','')
     begin
       model_klass = eval(model_klass_name)
@@ -918,6 +925,7 @@ public
         load_args   = @params 
         load_args ||= id_hash()
         @instance = klass.load(load_args) 
+        raise ::Exception.new("No instance for #{@klass.inspect} with: #{load_args.inspect}") unless @instance
       end
     end
     if !@instance then

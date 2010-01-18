@@ -5,14 +5,16 @@ require('aurita/model')
 module Aurita
 module GUI
 
-  class Context_Menu_Button < DelegateClass(Element)
+  class Context_Menu_Button_Bar < DelegateClass(Element)
 
     def initialize(highlight_element_id)
-      element = HTML.div(:class   => :context_menu_button, 
-                         :style   => 'display: none;', 
-                         :onclick => "Aurita.open_context_menu(); ", 
-                         :id      => "#{highlight_element_id}_wrap") { 
-        HTML.img(:src => '/aurita/images/icons/edit_button.gif') 
+      element = HTML.div(:id    => "#{highlight_element_id}_wrap", 
+                         :class => :context_menu_button_bar, 
+                         :style => 'display: none;') { 
+        HTML.div(:class   => :context_menu_button, 
+                 :onclick => "Aurita.open_context_menu(); ") { 
+          HTML.img(:src => '/aurita/images/icons/edit_button.gif') 
+        }
       }
       super(element)
     end
@@ -83,7 +85,11 @@ module GUI
       
       element.id = "#{params[:id]}" unless element.dom_id()
 
-      context_button = Context_Menu_Button.new(highlight_element_id)
+      context_button = Context_Menu_Button_Bar.new(highlight_element_id)
+
+      if params[:add_context_buttons] then 
+        context_button << params[:add_context_buttons]
+      end
       
       if params[:show_button] == true then
         element = HTML.div(:class => [ type, :context_menu_element ] ) { 

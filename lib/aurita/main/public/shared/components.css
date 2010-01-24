@@ -2039,20 +2039,20 @@ a.add_file_button {
 }
 
 
-.context_menu_button { 
+.context_menu_button_bar { 
   position: absolute; 
-  background: #efefef; 
-  border: 1px outset white; 
-  padding: 2px; 
   margin-left: -21px; 
   margin-top: 0px; 
 }
 .article_view .context_menu_button { 
+  padding: 2px; 
+  margin-bottom: 2px; 
+} 
+.article_view .context_menu_button_bar { 
   margin-top: 0px; 
   margin-left: -21px; 
-} 
-
-.highlighted .context_menu_button { 
+}
+.highlighted .context_menu_button_bar { 
   display: none; 
 }
 

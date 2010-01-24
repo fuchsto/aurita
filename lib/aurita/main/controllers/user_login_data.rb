@@ -98,10 +98,13 @@ module Main
     end
     
     def perform_delete
-      instance = load_instance
+      instance         = load_instance
       instance.locked  = true; 
       instance.deleted = true; 
       instance.hidden  = true; 
+      instance.user_group_name = "#{instance.user_group_name} (X) #{instance.user_group_id}"
+      instance.login   = "deleted #{instance.user_group_id}"
+      instance.pass    = "deleted #{instance.user_group_id}"
       instance.commit
       redirect_to(:controller => 'App_Main', :action => :blank)
       redirect(:target => :admin_users_box_body, :controller => 'User_Profile', :action => :admin_box_body)

@@ -104,14 +104,14 @@ module Main
       buttons << Context_Menu_Element.new(HTML.div(:class => :header_button_active, 
                                                    :id => :button_App_General, 
                                                    :onclick => Javascript.Aurita.GUI.switch_layout('App_General')) { tl(:general) }, 
-                                          :type => :site_general,
+                                          :type   => :app_section,
                                           :params => { :category => 'GENERAL' } )
 
       if Aurita.user.is_registered? then
         buttons << Context_Menu_Element.new(HTML.div(:class => :header_button, 
                                                      :id => :button_App_My_Place, 
                                                      :onclick => Javascript.Aurita.GUI.switch_layout('App_My_Place')) { tl(:my_place) }, 
-                                            :type => :site_my_place, 
+                                            :type   => :app_section, 
                                             :params => { :category => 'MY_PLACE' } )
 
       end
@@ -122,7 +122,7 @@ module Main
         buttons << Context_Menu_Element.new(HTML.div(:class => :header_button, 
                                                      :id => :button_App_Admin, 
                                                      :onclick => Javascript.Aurita.GUI.switch_layout('App_Admin')) { tl(:admin) }, 
-                                            :type => :site_app_admin, 
+                                            :type   => :app_section, 
                                             :params => { :category => 'ADMIN' } )
       end
       

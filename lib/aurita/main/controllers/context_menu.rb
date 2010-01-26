@@ -14,32 +14,9 @@ module Main
     def site_start
     end
     
-    def site_my_base
-      header('My Base')
-      entry(:add_hierarchy, 'Hierarchy/add/category=MY_BASE', {:app_left_column => 'App_Main/left/'})
-    end
-
-    def site_my_place
-      header('My Place')
-      entry(:add_hierarchy, 'Hierarchy/add/category=MY_PLACE', {:app_left_column => 'App_Main/left/'})
-    end
-
-    def site_general
-      header('Allgemeines')
-      entry(:add_hierarchy, 'Hierarchy/add/category=GENERAL', {:app_left_column => 'App_Main/left/'})
-    end
-
-    def site_news
-      header('Aktuelles')
-      entry(:add_hierarchy, 'Hierarchy/add/category=NEWS', {:app_left_column => 'App_Main/left/'})
-    end
-
-    def site_media
-    end
-
-    def site_expert
-      header('Expert')
-      entry(:add_hierarchy, 'Hierarchy/add/category=EXPERT', {:app_left_column => 'App_Main/left/'})
+    def app_section
+      header('Section')
+      entry(:add_hierarchy, 'Hierarchy/add/category='+param(:category), {:app_left_column => 'App_Main/left/'})
     end
 
     def user_profile()

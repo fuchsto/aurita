@@ -2050,7 +2050,7 @@ a.add_file_button {
 } 
 .article_view .context_menu_button_bar { 
   margin-top: 0px; 
-  margin-left: -21px; 
+  margin-left: -23px; 
 }
 .highlighted .context_menu_button_bar { 
   display: none; 
@@ -2068,7 +2068,13 @@ a.add_file_button {
   border: 1px solid #999999; 
   -moz-border-radius: 3px; 
 }
-
+.edit_button.highlighted, .context_menu_button.highlighted { 
+  background: url('/aurita/images/icons/box_header_highlighted_bg.png');
+  margin: 0px; 
+  margin-bottom: 2px; 
+  padding: 2px; 
+  border-color: black; 
+}
 .article_view .context_menu_element .article_text { 
   border-left: 1px solid transparent; 
 }

@@ -199,7 +199,7 @@ module Main
                     (Category.registered_readable == 't') |
                     (Category.category_id.in(User_Category.select(User_Category.category_id) { |ucid|
                         ucid.where((User_Category.user_group_id == user_group_id) &
-                                   (User_Category.write_permission == 't'))
+                                   (User_Category.read_permission == 't'))
                       })
                     ))
           }.to_a.flatten.map { |cid| cid.to_i }
@@ -208,7 +208,7 @@ module Main
             c.where((Category.public_readable == 't') |
                     (Category.category_id.in(User_Category.select(User_Category.category_id) { |ucid|
                         ucid.where((User_Category.user_group_id == user_group_id) &
-                                   (User_Category.write_permission == 't'))
+                                   (User_Category.read_permission == 't'))
                       })
                     ))
           }.to_a.flatten.map { |cid| cid.to_i }
@@ -223,9 +223,9 @@ module Main
     # {{{
       if !@writeable_category_ids then
         if is_admin? then
-          @writeable_category_ids = Category.select_values(Category.category_id) { |cid|
-            cid.sort_by(:is_private)
-            cid.sort_by(:category_name, :asc)
+          @writeable_category_ids = Category.select_values(:category_id) { |cat_id|
+            cat_id.order_by(:is_private, :desc)
+            cat_id.order_by(:category_name, :asc)
           }.to_a.flatten.map { |c| c.to_i }
         else
           if is_registered? then

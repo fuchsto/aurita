@@ -114,10 +114,10 @@ module Main
         raise ::Exception.new("Could not resolve content for #{content.inspect}") unless entity
         content = entity
       end
-      return false unless content
+      raise ::Exception.new("Could not resolve content for #{content.inspect}") unless content
 
       return true if is_admin? or (content.user_group_id == user_group_id)
-      return true if (readable_category_ids() & (content.category_ids))
+      return true if (readable_category_ids() & (content.category_ids)).length > 0
 
       permissions = Content_Permissions.all_with(Content_Permissions.content_id == content.content_id).entities
       permissions.each { |p|

@@ -12,6 +12,18 @@ module Aurita
       icon
     end
 
+    def link_entry(label, url)
+      entry_id = 'context_menu_entry_' + rand(1000).to_s; 
+      icon = icon_for(label)
+
+      result = '<div id="' << entry_id + '" class="context_menu_entry" onMouseOut="unhover_element(\'' << entry_id + '\');" onMouseOver="hover_element(\'' << entry_id + '\'); " '
+     
+      result << 'class="context_menu"><nobr>&nbsp; '
+      result << '<img src="' << icon + '" alt="" /> '
+      result << '<a class="context_menu_entry_label" href="'+url+'">' + tl(label) << '&nbsp;</a></nobr></div>'
+      puts result
+    end
+
     def entry(label, interface, targets={})
       onload = ''
       onload = ', onload: ' << targets[:onload] if targets[:onload]

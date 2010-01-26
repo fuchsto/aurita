@@ -30,10 +30,12 @@ module Main
           end
 
           if user then
-            HTML.div(:class => [:index_entry, :listing ]) { 
-              HTML.div { link_to(c) { HTML.b { c.title } } } + 
-              HTML.div { datetime(c.changed) } +
-              HTML.div { "#{link_to(user) { user.user_group_name }} #{in_cats}" } 
+            Context_Menu_Element.new(:entity => c) { 
+              HTML.div(:class => [:index_entry, :listing ]) { 
+                HTML.div { link_to(c) { HTML.b { c.title } } } + 
+                HTML.div { datetime(c.changed) } +
+                HTML.div { "#{link_to(user) { user.user_group_name }} #{in_cats}" } 
+              }
             }
           end
         }
@@ -43,8 +45,8 @@ module Main
                               :action     => 'recent_changes_in_categories', 
                               :element    => 'recent_changes_page_content') { 
         HTML.img(:src => '/aurita/images/icons/category_view.png')
-      }
-      exec_js("$('recent_changes_viewmode_icon').innerHTML = #{viewmode_icon}")
+      }.gsub('"','\"')
+      exec_js("$('recent_changes_viewmode_icon').innerHTML = \"#{viewmode_icon}\"")
 
       return changes
     end
@@ -58,9 +60,9 @@ module Main
       }
       return Page.new(:header   => tl(:recent_changes), 
                       :sortable => true, 
-                      :tools    => HTML.span(:id => :recent_changes_viewmode_icon) { 
-                                     viewmode_icon
-                                   }, 
+                   #  :tools    => HTML.span(:id => :recent_changes_viewmode_icon) { 
+                   #                 viewmode_icon
+                   #               }, 
                       :id       => :recent_changes_page) { list_body } 
 
     end

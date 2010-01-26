@@ -136,7 +136,7 @@ module Main
       
       set_http_header('expires' => (Time.now-24*60*60).to_s)
       
-      positions  = Component_Position.select_values(:component_dom_id) { |i|
+      positions = Component_Position.select_values(:component_dom_id) { |i|
         i.where((Component_Position.user_group_id == Aurita.user.user_group_id) &
                 (Component_Position.gui_context == 'workspace_components'))
         i.order_by(:position, :asc)
@@ -232,8 +232,8 @@ module Main
                               :action     => :list_body, 
                               :element    => 'recent_changes_page_content') { 
                         HTML.img(:src => '/aurita/images/icons/clock.png') 
-                      } 
-      exec_js("$('recent_changes_viewmode_icon').innerHTML = #{viewmode_icon}")
+                      }.gsub('"','\"')
+      exec_js("$('recent_changes_viewmode_icon').innerHTML = \"#{viewmode_icon}\"")
       return result
     end
 
@@ -242,7 +242,7 @@ module Main
                               :action     => :list_body, 
                               :element    => 'recent_changes_page_content') { 
                         HTML.img(:src => '/aurita/images/icons/clock.png') 
-                      } 
+                      }
       return Page.new(:header   => tl(:recent_changes), 
                       :sortable => true, 
                       :tools    => HTML.span(:id => :recent_changes_viewmode_icon) { 

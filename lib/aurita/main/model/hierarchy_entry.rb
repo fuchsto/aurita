@@ -29,6 +29,10 @@ module Main
     def parent_id
       hierarchy_entry_id_parent
     end
+    
+    def has_children?
+      Hierarchy_Entry.find(1).with(Hierarchy_Entry.hierarchy_entry_id_parent == hierarchy_entry_id).entity
+    end
 
     def allow_access?(user)
       return true if entry_type == 'FILTER'

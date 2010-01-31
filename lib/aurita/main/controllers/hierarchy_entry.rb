@@ -33,9 +33,9 @@ module Main
                                 :value => param(:hierarchy_entry_id_parent)))
       form[Hierarchy_Entry.hierarchy_entry_id_parent].hide! 
       
-      options = { 'Tag_Autocomplete_Field' => tl(:filter_entry), 
-                  'Text_Field'             => tl(:link), 
-                  'BLANK_NODE'             => tl(:blank_node_entry) }
+      options = { 'Tag_Autocomplete_Field'       => tl(:filter_entry), 
+                  "Text_Field({ name: 'link' })" => tl(:link), 
+                  'BLANK_NODE'                   => tl(:blank_node_entry) }
 
       plugin_get(Hook.main.hierarchy_entry.entry_types).each { |p|
         if p[:request] then
@@ -48,7 +48,8 @@ module Main
       type_select = Select_Field.new(:name     => Hierarchy_Entry.entry_type, 
                                      :id       => :hierarchy_entry_type_selector, 
                                      :label    => tl(:context_entry_type), 
-                                     :onchange => "Aurita.load_widget($('hierarchy_entry_type_selector').value, { }, 
+                                     :onchange => "$('active_type_element').innerHTML = ''; 
+                                                  Aurita.load_widget($('hierarchy_entry_type_selector').value, { }, 
                                                      Aurita.load_widget_to('active_type_element'));", 
                                      :value    => 'BLANK_NODE', 
                                      :options  => options)
@@ -94,6 +95,10 @@ module Main
         param[:interface] = ('App_Main/find/key=' << param(:tags).to_s) 
       elsif param(:entry_type) == 'BLANK_NODE' then
         param[:interface] = '' 
+      elsif param(:link) then
+        link = param(:link)
+        link = "http://#{link}" unless link.include?(':')
+        param[:interface] = link
       else
         # Delegate entry type handling to plugin
         content = plugin_get(Hook.main.hierarchy_entry.add_entry, @params).first[:content]

@@ -662,6 +662,7 @@ class Aurita::Base_Controller
     @application = params[:_application]
     @params      = params
     @params.delete('controller')
+    @params.delete(:_application)
     @action      = @params['action']
     @params.delete('action')
     @response = {}

@@ -28,10 +28,16 @@ module Main
 
     def hierarchy()
       
+
       hierarchy_id = param(:hierarchy_id)
       hid = hierarchy_id
       targets = { "hierarchy_#{hid}_body" => "Hierarchy/body/hierarchy_id=#{hid}" }
       hierarchy = Hierarchy.load(:hierarchy_id => hierarchy_id)
+
+      if hierarchy.locked then
+        puts tl(:hierarchy_may_not_be_edited)
+        return
+      end
       
       header(tl(:hierarchy) + ': ' << hierarchy.header)
       entry(:add_entry, 'Hierarchy_Entry/add/hierarchy_id='+hierarchy_id, targets)
@@ -61,7 +67,9 @@ module Main
 
       entry(:edit_entry, "Hierarchy_Entry/update/hierarchy_entry_id=#{entry.hierarchy_entry_id}", targets)
       entry(:add_sub_entry, "Hierarchy_Entry/add/hierarchy_entry_id_parent=#{entry.hierarchy_entry_id}&hierarchy_id=#{param(:hierarchy_id)}", targets)
-      entry(:delete_entry, "Hierarchy_Entry/delete/hierarchy_entry_id=#{entry.hierarchy_entry_id}", targets)
+      if entry.locked === false then
+        entry(:delete_entry, "Hierarchy_Entry/delete/hierarchy_entry_id=#{entry.hierarchy_entry_id}", targets)
+      end
 
       load_entry(:sort_hierarchy, { "hierarchy_#{hid}_body" => "Hierarchy/sort/hierarchy_id=#{hid}" })
     end

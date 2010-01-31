@@ -47,12 +47,15 @@ class Lang
       yaml_path = Aurita.project.base_path + 'plugins/' << plugin_name + '/lib/lang/'
     end
     plugin_name = plugin_name.downcase.to_sym
-    @@language_packs[plugin_name] = {}
+    @@language_packs[plugin_name] = {} unless @@language_packs[plugin_name]
     Dir.glob(yaml_path + '*.yaml').each { |f|
       lang = f.split('/').at(-1).gsub('.yaml','').to_sym
       pack = (YAML::load(File::open(f)))
-      @@language_packs[plugin_name][lang] = pack unless @@language_packs[plugin_name][lang]
-      @@language_packs[plugin_name][lang].update(pack) if @@language_packs[plugin_name][lang]
+      if @@language_packs[plugin_name][lang]
+        @@language_packs[plugin_name][lang].update(pack) 
+      else
+        @@language_packs[plugin_name][lang] = pack 
+      end
     }
   end
 

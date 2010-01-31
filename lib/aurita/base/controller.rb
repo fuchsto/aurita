@@ -571,6 +571,19 @@ class Aurita::Base_Controller
     self.class.resolve_model_klass
   end
 
+  # Example: 
+  #
+  #   resolve_conroller_klass('Wiki::Article') 
+  #   --> Aurita::Plugins::Wiki::Article_Controller
+  #
+  def resolve_controller_klass(controller_name)
+    begin
+      @application.get_controller_klass(controller_name) 
+    rescue ::Exception => e
+      raise ::Exception.new("Could not resolve controller class for #{controller_name}. #{@params[:_application].inspect}")
+    end
+  end
+
   # Return plain name of this controller, like 'Article' for 
   # Article_Controller. 
   #
@@ -643,12 +656,13 @@ class Aurita::Base_Controller
   #
   def initialize(params={}, model_klass=false)
   # {{{
-    params   = Hash.new if params.nil?
-    @request = params[:_request]
-    @session = params[:_session]
-    @params  = params
+    params       = Hash.new if params.nil?
+    @request     = params[:_request]
+    @session     = params[:_session]
+    @application = params[:_application]
+    @params      = params
     @params.delete('controller')
-    @action  = @params['action']
+    @action      = @params['action']
     @params.delete('action')
     @response = {}
     @response[:decorator]    = nil # Set in Decorator itself
@@ -674,13 +688,24 @@ class Aurita::Base_Controller
   #   
   #   render_controller(Some_Foreign_Controller, :list, :user_id => 123)
   #
-  def render_controller(controller, action, params={})
+  def render_controller(controller, action=:show, params={})
   # {{{
-    @params ||= {}
-    params   = @params.dup.update(params)
-    delegate = controller.new(params)
-    result   = delegate.__send__(action)
-    response = delegate.response
+    if controller.is_a?(String) then
+      iface      = controller.split('/')
+      controller = resolve_controller_klass(iface[0])
+      action     = iface[1].to_sym
+      cparams    = iface[2].split('&')
+      cparams.each { |kv|
+        kv = kv.split('=')
+        params[kv[0].to_sym] = kv[1].to_s
+      }
+    end
+    @params  ||= {}
+    params     = @params.dup.update(params)
+    params[:_application] = @application
+    delegate   = controller.new(params)
+    result     = delegate.__send__(action)
+    response   = delegate.response
     response ||= {}
     @response[:html]   << response[:html]
     @response[:script] << response[:script]

@@ -276,6 +276,8 @@ module Aurita
       require("#{project_path()}plugins/main.rb")
     end
 
+    Lang.add_project_language_pack 'main'
+
     if File.exists?("#{project_path()}/setup.rb") then
       require("#{project_path()}setup.rb")
     end

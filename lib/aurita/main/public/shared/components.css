@@ -613,6 +613,8 @@ img.icon {
 }
 
 .context_menu_element { 
+  padding-top: 6px; 
+  padding-bottom: 6px; 
   padding-left: 15px; 
   margin-left: -15px; 
 }

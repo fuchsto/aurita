@@ -46,19 +46,20 @@ class Aurita::Dispatcher
   # {{{
     benchmark_start_time = Time.now unless @poller
 
-    params            = Aurita::Attributes.new(request)
-    params[:_request] = request
-    params[:_session] = Aurita::Session.new(request)
-    status            = 200
-    response_body     = ''
-    response_header   = {}
+    params                = Aurita::Attributes.new(request)
+    params[:_request]     = request
+    params[:_session]     = Aurita::Session.new(request)
+    params[:_application] = @application
+    status                = 200
+    response_body         = ''
+    response_header       = {}
 
-    controller        = params[:controller]
-    action            = params[:action]
-    mode              = params[:mode]
-    controller      ||= 'App_Main'
-    action          ||= 'start'
-    mode            ||= 'default'
+    controller            = params[:controller]
+    action                = params[:action]
+    mode                  = params[:mode]
+    controller          ||= 'App_Main'
+    action              ||= 'start'
+    mode                ||= 'default'
 
     Thread.current['request'] = params
 

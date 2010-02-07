@@ -35,9 +35,8 @@ module Main
     end
 
     def allow_access?(user)
-      return true if entry_type == 'FILTER'
-      return true if entry_type == 'BLANK_NODE'
       return Aurita.user.may_view_content?(content_id) if content_id
+      return true
     end
     
   end 

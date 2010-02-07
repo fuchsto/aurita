@@ -695,7 +695,8 @@ class Aurita::Base_Controller
       iface      = controller.split('/')
       controller = resolve_controller_klass(iface[0])
       action     = iface[1].to_sym
-      cparams    = iface[2].split('&')
+      cparams    = iface[2].split('&') if iface[2]
+      cparams  ||= []
       cparams.each { |kv|
         kv = kv.split('=')
         params[kv[0].to_sym] = kv[1].to_s

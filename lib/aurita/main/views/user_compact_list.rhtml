@@ -1,0 +1,12 @@
+
+<div style="height: 200px; overflow-y: auto; padding: 7px; ">
+  <% users.each do |user| %>
+    <div style="float: left; width: 200px; height: 37px;">
+      <%= gui.link_to(user) { 
+        user.label
+      }
+    %>
+    </div>
+  <% end %>
+  <div style="clear: both; "></div>
+</div>

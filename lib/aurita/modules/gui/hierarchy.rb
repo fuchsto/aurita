@@ -125,11 +125,11 @@ module GUI
       else
         if e.content_id then
           onclick = link_to(Content.get(e.content_id).concrete_instance) 
+          entry   = HTML.a(:onclick => onclick) { e.label } 
         else
-          interface = e.interface
-          onclick = "Aurita.load({ action: '#{CGI.escape(interface).gsub('%2F','/').gsub('%3D','=')}' }); "
+#         onclick = "xAurita.load({ action: '#{CGI.escape(interface).gsub('%2F','/').gsub('%3D','=')}' }); "
+          entry   = HTML.a(:href => e.interface) { e.label }
         end
-        entry   = HTML.a(:onclick => onclick) { e.label } 
       end
 
       params = { :hierarchy_entry_id => e.hierarchy_entry_id, 

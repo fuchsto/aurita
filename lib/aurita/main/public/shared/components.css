@@ -98,10 +98,10 @@ p {
 }
 
 .article_view .highlighted { 
-  margin-left: -4px; 
-  padding-left: 4px; 
-  margin-right: -4px; 
-  padding-right: 4px; 
+  margin-left: -2px; 
+  padding-left: 2px; 
+  margin-right: -2px; 
+  padding-right: 2px; 
 }
 .article_view .context_hover { 
   margin-left: -4px; 
@@ -442,6 +442,8 @@ div.article_view div.article_info {
 
 .article_container, .article_partial { 
   padding: 4px; 
+}
+.media_container_partial { 
 }
 
 .article_container_files { 
@@ -1470,7 +1472,7 @@ div.calculation_totals .totals {
   float: left; 
   width: 200px; 
   background-color: white; 
-  height: 200px; 
+/*  height: 200px; */
   margin-left: 2px; 
   margin-top: 3px; 
 }
@@ -1494,7 +1496,8 @@ div.calculation_totals .totals {
   background-color: white; 
   height: 212px; 
   margin: 0px; 
-  margin-right: 4px; 
+  margin-right: 3px; 
+  margin-top: 3px; 
   margin-bottom: 3px; 
 }
 .media_asset_thumbnail.medium .image { 
@@ -1515,7 +1518,7 @@ div.calculation_totals .totals {
   width: 145px; 
   background-color: white; 
   height: 123px; 
-  margin-left: 4px; 
+  margin-right: 4px; 
   margin-bottom: 3px; 
 }
 .media_asset_selection .media_asset_thumbnail.tiny { 
@@ -1545,11 +1548,12 @@ div.calculation_totals .totals {
 .media_asset_thumbnail .info { 
   padding: 3px;
   padding-left: 7px;
-  height: 70px; 
+/*  height: 70px; */
   overflow: hidden; 
 }
 .media_asset_thumbnail.tiny .info { 
   padding: 1px;
+  padding-left: 5px; 
   height: 40px; 
   overflow: hidden; 
 }

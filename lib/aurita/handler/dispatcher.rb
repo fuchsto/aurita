@@ -127,7 +127,7 @@ class Aurita::Dispatcher
     rescue Exception => excep
       @logger.log(excep.message)
       @logger.log(excep.backtrace.join("\n"))
-      response_body = { :error => GUI::Error_Page.new(excep).string }
+      response_body = GUI::Error_Page.new(excep).string
     end
 
     # Try to avoid this. Response headers are mostly huge. 

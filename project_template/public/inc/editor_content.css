@@ -1,0 +1,39 @@
+
+body { 
+  padding: 3px; 
+  color: #000000; 
+  overflow: auto; 
+  overflow-y: auto; 
+  overflow-x: auto; 
+  font-size: 13.34px; 
+}
+.mceContentBody { 
+  overflow: auto; 
+  overflow-y: auto; 
+  overflow-x: auto; 
+}
+
+.header1 { 
+  font-weight: bold; 
+  font-size: 16px; 
+}
+.header2 { 
+  font-weight: bold; 
+  font-size: 14px; 
+}
+.header3 { 
+  font-weight: bold; 
+}
+
+pre, .code { 
+  font-family: Monospace; 
+  background-color: #000000; 
+  color: #afafaf; 
+}
+
+p.message_quote { 
+  background-color: #e0e0e0; 
+  padding: 7px; 
+  margin: -3px; 
+  margin-top: 7px; 
+}

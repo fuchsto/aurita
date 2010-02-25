@@ -2089,13 +2089,15 @@ a.add_file_button {
 }
 
 .media_asset_table .context_menu_button { 
-  margin-top: 1px; 
-  margin-left: 3px; 
+  margin-top: 4px; 
+  margin-left: 25px; 
+  padding: 2px; 
 }
 
 .media_asset_grid .context_menu_button, .media_asset_folder_grid .context_menu_button { 
-  margin-top: 3px; 
-  margin-left: 3px; 
+  margin-top: 0px; 
+  margin-left: 25px; 
+  padding: 20px; 
 }
 
 .data_table { 

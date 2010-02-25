@@ -1,0 +1,383 @@
+
+a, .link, a:hover, a:active, a:visited {
+  color: #e40000; 
+}
+
+img { 
+  margin: 0px; 
+}
+
+body { 
+  overflow-x: hidden; 
+}
+
+.site_body, .site_body_App_News, .site_body_App_General, .site_body_App_My_Place, .site_body_App_My_Base, .site_body_App_Expert { 
+  padding: 0px; 
+  margin: 0px; 
+  padding: 0px;
+  background: url('/aurita/images/bg.gif') repeat-x; 
+  background-color: #000000; 
+  overflow-x: hidden; 
+  margin-left: 80px; 
+  margin-right: 80px; 
+  font-family: Verdana,Arial,Helvetica,sans-serif;
+}
+.head_content { 
+  position: absolute; 
+  right: 35px; 
+  top: 30px; 
+  z-index: 89; 
+}
+
+#site_main {
+/*  background: url('/aurita/images/pane_bg.gif') repeat-x; */
+/*  background-color: #121212; */
+  min-width: 900px; 
+  padding: 14px; 
+  display: block; 
+  padding-top: 65px; 
+}
+
+#site_head {
+  margin-right: 20px; 
+  min-width: 900px; 
+  height: 90px; 
+  margin-top: 0px; 
+  border-top: 1px solid transparent;
+}
+
+.header_button_background { 
+  position: absolute; 
+  top: 124px; 
+  left: 251px; 
+  width: 100%; 
+  height: 19px; 
+}
+
+.head_content { 
+  position: absolute; 
+  right: 35px; 
+  top: 30px; 
+  z-index: 89; 
+}
+
+.logo {  
+  position: absolute; 
+  right: 15px; 
+  top: 58px; 
+ 
+  z-index: 90; 
+}
+
+.logo_box {
+ 
+  position: absolute; 
+  right: 19px; 
+  top: 40px; 
+  width: 324px; 
+  height: 112px; 
+ 
+  z-index: 80; 
+ 
+  background-color: #000000; 
+  opacity:.20; 
+  filter: alpha(opacity=20); 
+  -moz-opacity: 0.2; 
+  -khtml-opacity:0.2; 
+  color:rgba(255, 255, 255, 0.2);
+}
+.left_column {
+  vertical-align: top; 
+  padding: 0px; 
+  width: 277px;
+  border-right: 1px solid #5a5a5a;
+}
+.main_content {
+  vertical-align: top; 
+  padding: 0px; 
+  min-height: 700px;
+  z-index: 11;  
+}
+
+.content_pane { 
+  background: url('/aurita/images/pane_inner_bg.gif') repeat-x;
+  background-color: #8e8e8e; 
+}
+
+.right_column { 
+/*
+  position: absolute; 
+  right: 24px; 
+  top: 161px; 
+  clear: both; 
+  z-index: 11;
+*/
+  padding: 5px; 
+  vertical-align: top; 
+  width: 226px;
+}
+
+#app_right_column { 
+  position: absolute; 
+  right: 30px; 
+  top: 148px; 
+  z-index: 11;
+  padding: 0px; 
+  vertical-align: top; 
+  width: 215px;
+}
+
+.topic { 
+  margin: 0px !important; 
+  margin-bottom: 1px !important; 
+}
+.topic, .topic_inline { 
+  background-color: transparent !important; 
+  border-color: transparent !important; 
+  border-width: 0px !important;
+}
+
+.topic_inline { 
+  background-color: #b6b6b6 !important; 
+  margin-left: -1px; 
+}
+
+.topic .box_body { 
+  background-color: #b6b6b6 !important; 
+  margin-left: 10px; 
+  padding: 0px; 
+}
+.topic .box_header { 
+  background-color: #b6b6b6 !important; 
+  padding: 10px !important; 
+  height: 14px !important; 
+}
+.topic_inline .box_body { 
+  background-color: #cfcfcf !important; 
+  border: 1px solid #000000; 
+}
+.topic_inline .box_header { 
+  background: url('/aurita/images/button_bg.gif');
+  color: white; 
+  font-size: 11px; 
+/*  padding-left: 7px; */
+  margin: 0px; 
+  height: 17px; 
+}
+
+.box_body a.icon { 
+  float: left; 
+  margin-right: 0px; 
+  margin-left: 3px; 
+  padding: 3px; 
+}
+.box_body a.icon:hover { 
+  background-color: #c4c4c4 !important; 
+}
+.box_body a.icon img { 
+  margin: 0px !important; 
+}
+
+.darker_bg { 
+  background-color: #a4a4a4; 
+}
+
+.todo_entry_table .darker_bg { 
+  background-color: #cfcfcf; 
+}
+
+.form_box { 
+  background-color: #b6b6b6;
+}
+.section_content .form_box { 
+  background-color: #c4c4c4;
+}
+
+.media_asset_folder_tree_box { 
+  height: auto !important; 
+  overflow: hidden; 
+}
+
+#media_folder_box_body { 
+  padding-bottom: 0px; 
+}
+
+
+.section_header_left, .section_content, .section_header_right { 
+  background-color: #b6b6b6 !important; 
+}
+
+button, button:hover, button:active { 
+  color: white; 
+  padding: 4px !important; 
+  font-size: 11px; 
+  background-color: #000000;
+  outline: none; 
+  border: 0px solid transparent; 
+}
+button { 
+  background: url('/aurita/images/button_bg.gif') !important; 
+  margin-right: 2px; 
+}
+button:hover { 
+  background: url('/aurita/images/button_hover_bg.gif') !important; 
+}
+
+table.media_asset_table th { 
+  background: url('/aurita/images/button_bg.gif') !important;
+  border: 0px solid transparent !important; 
+  color: white; 
+}
+table.media_asset_table th.hovered { 
+  background: url('/aurita/images/button_hover_bg.gif') !important;
+  border: 0px solid transparent !important; 
+  color: white; 
+}
+
+.main_autocomplete_box { 
+  position: absolute; 
+  right: 94px; 
+  top: 105px; 
+  padding: 12px; 
+  padding-bottom: 12px; 
+  padding-top: 13px; 
+  background-color: #a8a8a8; 
+}
+.main_account_box { 
+  position: absolute; 
+  right: 374px; 
+  top: 105px; 
+  padding: 12px; 
+  padding-bottom: 12px; 
+  padding-top: 13px; 
+  background-color: #a8a8a8; 
+  height: 27px; 
+  line-height: 27px; 
+}
+.main_account_box .icon { 
+  float: left; 
+  margin-right: 4px; 
+}
+.main_account_box .user_label { 
+  float: right; 
+}
+#indicator_ { 
+  position: relative !important; 
+  margin: 0px !important; 
+  float: left; 
+  right: 0px; 
+}
+#indicator { 
+  left: 5px !important; 
+  top: 8px !important; 
+}
+
+input.autocomplete, input.autocomplete:focus { 
+  margin: 0px !important; 
+  padding: 6px !important; 
+  float: left; 
+  height: 12px; 
+  border: 1px solid #000000; 
+}
+#autocomplete_choices { 
+  left: -174px !important;
+  top: 38px !important; 
+  border: 1px solid #000000; 
+}
+#autocomplete_media { 
+  border: 1px solid black; 
+  height: 14px; 
+}
+#context_menu .form_box { 
+  background-color: #f8f8f8;
+}
+.box_hierarchy_entry { 
+  border-color: #cfcfcf; 
+}
+.box_hierarchy_entry_level_0 { 
+  background: url('/aurita/images/button_bg.gif'); 
+  color: white; 
+}
+.box_hierarchy_entry_level_1 { 
+  background-color: #b6b6b6; 
+}
+.box_hierarchy_entry_level_2 { 
+  background-color: #a9a9a9; 
+}
+.box_hierarchy_entry_level_3 { 
+  background-color: #a0a0a0; 
+}
+
+
+button.icon { 
+  height: 20px; 
+  line-height: 15px; 
+  padding: 0px; 
+  margin: 0px; 
+  width: 100%; 
+  font-size: 10px; 
+}
+button.icon img { 
+  padding: 0px;
+  margin-right: 4px; 
+  margin-top: -5px; 
+  display: inline; 
+}
+
+ul.single_line_list { 
+  margin: 0px; 
+  padding: 0px; 
+  border-top: 1px solid #a0a0a0; 
+}
+ul.single_line_list li { 
+  border-bottom: 1px solid #a0a0a0; 
+}
+
+li a.entry { 
+  padding-left: 5px; 
+  display: block; 
+}
+li a.entry:hover { 
+  background-color: #c4c4c4;
+}
+
+.highlighted, li.focussed {
+  background-color: #8697b9 !important;
+  border-color: #7182a4 !important;
+}
+.context_menu_entry.hovered { 
+  background-color: #afc0e2;
+}
+
+li.focussed label { 
+  background-color: #99aacc !important;
+  color: white !important; 
+}
+
+li.form_field.required label { 
+  color: red; 
+}
+tr.highlighted td { 
+  border-color: #7182a4 !important;
+}
+
+table.media_asset_table td.icon { 
+  background-color: transparent; 
+}
+
+.article_view { 
+  padding: 12px; 
+  width: auto !important; 
+}
+
+a.tag_link, a.tag_link:hover, a.tag_link:visited, .highlighted a.tag_link { color: #233479; background-color: transparent; } 
+
+table.todo_entry_table { 
+  border: 0px solid transparent; 
+}
+table.todo_entry_table th { 
+  color: white; 
+  border: 0px solid transparent; 
+}
+
+

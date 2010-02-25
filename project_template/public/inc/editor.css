@@ -1,0 +1,11 @@
+
+.mceEditor { 
+  border: 1px solid #cccccc; 
+}
+img { 
+  border-width: 0px; 
+}
+
+p.message_quote {
+  background-color: #e0e0e0; 
+}

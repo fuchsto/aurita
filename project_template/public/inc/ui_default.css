@@ -1,0 +1,177 @@
+table.rd_admin__box { 
+	background-color: #9c9c9c; 
+}
+div.rd_admin__box { 
+	background-color: #9c9c9c; 
+}
+div.rd_admin__box_fullwidth { 
+	background-color: #9c9c9c; 
+}
+table.rd_admin__alert_box { 
+	border:1px solid #FF0000; 
+	background-image: url(/aurelia.admin/inc/resources/bg_alert.gif); 
+}
+
+div.rd_admin__alert_box {
+	border:1px solid #FF0000;
+	background-image: url(/aurelia.admin/inc/resources/bg_alert.gif); 
+}
+div.rd_admin__tool_box {
+	background-color: #9c9c9c; 
+}
+div.rd_admin__alert_popbox {
+	border:1px solid #FF0000;
+	background-image: url(/aurelia.admin/inc/resources/bg_alert.gif);
+}
+
+hr {
+  height: 1px; 
+  border: 0; 
+  color: #343434; 
+  background-color: #343434; 
+}
+
+div.rd_admin__page {
+<!-- 
+  background-color: #000000; 
+  opacity:.90; 
+  filter: alpha(opacity=90); 
+  -moz-opacity: 0.9; 
+  color:rgba(255, 255, 255, 0.9); 
+  -khtml-opacity:0.9; 
+  height: 400px; 
+-->
+}
+
+.flow {
+	color: #000000; 
+}
+
+th {
+	color: #000000; 
+}
+td {
+	color: #000000; 
+}
+
+.rd_admin__alert_header {
+	color:#aa0000;
+}
+.rd_admin__alert_message {
+	color: #990000; 
+}
+.rd_admin__logbuffer {
+	color: #332277; 
+}
+
+body.rd_admin__ui, body.rd_admin__ui__left
+{
+	background-color: #aeaeae; 
+}
+body.rd_admin__ui__stage
+{
+  padding: 0px; 
+  margin: 0px; 
+  height: 100%; 
+  background-color: #ffffff;
+}
+body.rd_admin__ui__buffer
+{
+	background-color: #9c9c9c; 
+}
+body.rd_admin__ui__log
+{
+	background-color: #aeaeae; 
+	color: #990000; 
+}
+
+.message
+{
+}
+.header
+{
+	background-color: #9c9c9c; 
+}
+.header_alert
+{
+	background-color:#ef0000;
+}
+.header_collapse
+{
+	background-color: #9c9c9c; 
+}
+.header_collapse:hover
+{
+	background-color:#aeaeae;
+}
+.tool_header
+{
+	background-color: #9c9c9c; 
+}
+.tool_header:hover
+{
+	background-color: #aeaeae; 
+}
+.tool_header_varheight
+{
+	background-color: #9c9c9c; 
+}
+.tool_header_varheight:hover
+{
+	background-color: #aeaeae; 
+}
+.tool_content
+{
+}
+
+a {
+	color: #ffffff;
+}
+
+a.button {
+	border: 1px solid #333333;
+	background-color:#CCCCCC; 
+	color: #000033;
+}
+a.button:hover {
+	border: 1px solid #666666;
+	background-color:#eeeeee; 
+	color: #000033;
+}
+a.button_recommended {
+	border: 1px solid #117711;
+	background-color:#CCeeCC; 
+	color: #117711;
+}
+a.button_recommended:hover {
+	border: 1px solid #44bb33;
+	background-color:#eeffee; 
+	color: #117711;
+}
+a.button_critical {
+	border: 1px solid #993333;
+	background-color:#eeCCCC; 
+	color: #990033;
+}
+a.button_critical:hover {
+	border: 1px solid #ff6666;
+	background-color:#ffeeee; 
+	color: #990033;
+}
+a.button_collapse {
+	border: 1px solid #787878;
+	background-color:#cccccc; 
+	color: #333333;
+}
+a.button_collapse:hover {
+	border: 1px solid #787878;
+	background-color:#dddddd; 
+	color: #333333;
+}
+
+
+.rd_admin__ui__form { 
+	border-right:1px solid #787878; 
+ 	border-bottom:1px solid #787878; 
+	background-color: #aeaeae; 
+}

@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require('aurita')
-Aurita.load_project :default
+Aurita.load_project :test
 Aurita.bootstrap
 
 def import_from_model_folder(folder_path, dump_path, plugin_name=false)

@@ -38,8 +38,8 @@ module Main
     # Ensures that every new permission to a Category is readonly 
     # at first. 
     def self.before_create(args)
-      args[:write_permission] = true
-      args[:read_permission]  = true
+      args[:write_permission] = true if args[:write_permission].nil?
+      args[:read_permission]  = true if args[:read_permission].nil?
     end
 
     def self.members_of(cat)
@@ -105,6 +105,13 @@ module Main
     # Returns id private Category of this user. Uses User_Group#category(). 
     def category_id
       if category then category.category_id end
+    end
+
+    def member_of_category?(cat)
+      if cat.is_a?(Category) then
+        cat = cat.category_id
+      end
+      category_ids.include?(cat)
     end
 
     # Returns ids of Category instances this user is mapped to, as unordered 
@@ -262,14 +269,27 @@ module Main
       end
       return true if cat.public_readable
       return true if (cat.registered_readable && is_registered?)
-      return User_Category.find(1).with((User_Category.category_id == cat.category_id) & 
-                                        (User_Category.user_group_id == user_group_id) & 
-                                        (User_Category.read_permission == 't')).entity 
+      return !User_Category.find(1).with((User_Category.category_id == cat.category_id) & 
+                                         (User_Category.user_group_id == user_group_id) & 
+                                         (User_Category.read_permission == 't')).entity.nil?
     end
     alias may_view_category may_view_category?
-    alias is_in_category may_view_category?
-    alias is_in_category? may_view_category?
+    alias may_read_from_category may_view_category?
 
+    def may_write_to_category?(cat_or_cat_id)
+      cat = false
+      if cat_or_cat_id.is_a?(Aurita::Model) then
+        cat = cat_or_cat_id
+      else
+        cat = Category.get(cat_or_cat_id)
+      end
+      return true if cat.public_writeable
+      return true if (cat.registered_writeable && is_registered?)
+      return !User_Category.find(1).with((User_Category.category_id == cat.category_id) & 
+                                         (User_Category.user_group_id == user_group_id) & 
+                                         (User_Category.write_permission == 't')).entity.nil?
+    end
+    alias may_write_to_category may_write_to_category?
   end
 
 end 

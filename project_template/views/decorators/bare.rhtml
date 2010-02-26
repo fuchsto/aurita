@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!-- Running on Aurita (c) Copyright 2006-2010 Tobias Fuchs and wortundform office for enterprise publishing  -->
+<!-- Based on Lore DB Abstraction, both (c) Copyright 2005-2008 Tobias Fuchs published under GNU GPL -->
+
+  <head>
+    <title><%= Aurita.project.project_title %></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=8;FF=3;OtherUA=4" />
+
+    <link rel="stylesheet" href="/aurita/inc/ui.css" type="text/css" />
+
+    <script language="javascript" src="/aurita/shared/scriptaculous/lib/prototype.js" type="text/javascript"> </script>
+    <script language="javascript" src="/aurita/shared/scriptaculous/src/scriptaculous.js?load=effects,dragdrop,builder,controls" type="text/javascript"> </script>
+
+<!-- Special IE includes -->
+<!--[if IE 6]> 
+    <link rel="stylesheet" href="/aurita/inc/ui_ie.css" type="text/css" />
+<![endif]--> 
+<!--[if IE 7]> 
+    <link rel="stylesheet" href="/aurita/inc/ui_ie.css" type="text/css" />
+<![endif]--> 
+<!-- End special IE includes --> 
+
+  </head>
+
+  <body id="app_body" class="site_body" >
+
+    <div id="dispatcher" style="display:none; "></div>
+
+  <!-- begin main app -->
+
+    <div id="app_main_content" class="main_content">
+      <%= content %>
+    </div>
+
+    <div style="clear: both"></div>
+
+  <!-- end main app -->
+
+  <script language="javascript" src="/aurita/shared/script/<%= Aurita.runmode %>/aurita_bundle_public.js" type="text/javascript"> </script>
+<!--[if lt IE8 ]> 
+  <iframe name="ie_fix_history_frame" 
+          id="ie_fix_history_frame" 
+          style="display: none;" 
+          border="0" frameborder="0" 
+          src="/aurita/App_Main/blank/mode=none&code=no_code"></iframe>
+<![endif]--> 
+</body>
+
+<script language="javascript" type="text/javascript">
+
+  Aurita.init_page = function() { 
+    <%= init_script %>
+  } 
+
+</script>
+
+</html>

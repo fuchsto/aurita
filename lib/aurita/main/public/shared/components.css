@@ -1548,7 +1548,7 @@ div.calculation_totals .totals {
 .media_asset_thumbnail .info { 
   padding: 3px;
   padding-left: 7px;
-/*  height: 70px; */
+  height: 70px; 
   overflow: hidden; 
 }
 .media_asset_thumbnail.tiny .info { 
@@ -2097,7 +2097,7 @@ a.add_file_button {
 .media_asset_grid .context_menu_button, .media_asset_folder_grid .context_menu_button { 
   margin-top: 0px; 
   margin-left: 25px; 
-  padding: 20px; 
+  padding: 3px; 
 }
 
 .data_table { 

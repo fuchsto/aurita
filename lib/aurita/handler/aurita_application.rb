@@ -51,7 +51,7 @@ module Handler
       @logger       ||= ::Logger.new(STDERR) 
       @dispatcher     = Aurita::Dispatcher.new()
       @calls          = 0
-      @gc_after_calls = 60
+      @gc_after_calls = 200
     end
 
     public

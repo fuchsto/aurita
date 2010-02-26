@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env ruby1.8
 
 require 'getoptlong'
 require 'rubygems'
@@ -27,7 +27,7 @@ gatling   = false
 short     = false
 killold   = false
 verbosive = false
-deflate   = true
+deflate   = false # usually the master webserver, like nginx, is already applying gzip or deflate
 
 opts.each { |opt, arg| 
   case opt

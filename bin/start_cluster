@@ -42,7 +42,7 @@ echo -e "Starting cluster for $PROJECT ... "
 
 for port in `seq $PORT_START $PORT_END`
 do
-$CMDPREF /usr/bin/env ruby $AURITA_BIN_PATH/thin_daemon $PROJECT --port=$port --mode production --killold 2>/var/log/aurita/thin_error.log & 
+$CMDPREF /usr/bin/env ruby1.8 $AURITA_BIN_PATH/thin_daemon $PROJECT --port=$port --mode production --killold 2>/var/log/aurita/thin_error.log & 
 echo -ne "port $port " 
 test_success
 done

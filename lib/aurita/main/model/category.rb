@@ -35,6 +35,8 @@ module Main
 
     explicit :is_private
 
+    translate_field :category_name
+
     # Create category with id '1' ("no category") when creating a new 
     # project. 
     def bootstrap

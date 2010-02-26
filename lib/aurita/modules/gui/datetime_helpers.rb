@@ -11,12 +11,13 @@ module GUI
     # Render the given date/time/datetime string or object in format 
     # configured in language pack (:date_format, :time_format, 
     # :datetime_format)
-    def datetime_string(datetime_string, format) 
-      return '' unless datetime_string
-      if datetime_string.is_a?(Date) || datetime_string.is_a?(Datetime) then
-        datetime_string.strftime(tl(format))
-      elsif datetime_string.kind_of?(String) then
-        Aurita::Datetime.new(datetime_string).string(tl(format))
+    def datetime_string(dt, format) 
+      format = tl(format) if format.is_a?(Symbol)
+      return '' unless dt
+      if dt.is_a?(Date) || dt.is_a?(Datetime) then
+        dt.strftime()
+      elsif dt.kind_of?(String) then
+        Aurita::Datetime.new(dt).string(format)
       end
     end
 

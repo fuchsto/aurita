@@ -1,0 +1,51 @@
+
+/* ui_ie.css */
+
+.header_button_background { 
+  top: 124px; 
+} 
+li { 
+  line-height: inherit; 
+}
+.main_content { 
+  padding-right: 0px; 
+}
+
+/* Disables cleartype in IE */
+body { 
+  filter: none; 
+}
+
+/* layout_ie.css */
+
+#app_right_column { 
+  right: 27px; 
+}
+
+#site_main { 
+  margin-left: 20px; 
+  margin-right: 20px;
+}
+
+.site_body, .site_body_App_News, .site_body_App_General, .site_body_App_My_Place, .site_body_App_My_Base, .site_body_App_Expert { 
+  padding-left: 0px; 
+  margin-left: 0px; 
+}
+#site_head {
+  margin-right: 20px;
+  padding-top: 0px;
+  padding-bottom: 0px; 
+  min-width: 900px; 
+  display: block; 
+  margin-left: 20px; 
+}
+.main_content {
+  vertical-align: top; 
+  margin-bottom: 0px; .  margin-top: 14px; 
+  margin-right: 0px; 
+  padding: 5px; 
+  padding-right: 7px; 
+  padding-top: 8px; 
+  min-height: 700px;
+  z-index: 11;  
+}

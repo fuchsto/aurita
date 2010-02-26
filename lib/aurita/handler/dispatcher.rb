@@ -85,7 +85,16 @@ class Aurita::Dispatcher
           element = controller_instance.call_guarded(action)
         end
         response          = controller_instance.response
-        response[:html]   = element.string if (element.respond_to?(:string) && response[:html] == '')
+        if response[:html] == '' then
+          if element.respond_to?(:string) then
+            response[:html] = element.string 
+          elsif element.is_a?(Array) then
+            element.each { |e|
+              response[:html] << e.to_s
+            }
+          end
+        end
+
         response_header.update(response[:http_header]) if response[:http_header]
       rescue ::Exception => excep
         @logger.log { "Error in Dispatcher: #{excep.message}" }
@@ -118,7 +127,7 @@ class Aurita::Dispatcher
     rescue Exception => excep
       @logger.log(excep.message)
       @logger.log(excep.backtrace.join("\n"))
-      response_body = { :error => GUI::Error_Page.new(excep).string }
+      response_body = GUI::Error_Page.new(excep).string
     end
 
     # Try to avoid this. Response headers are mostly huge. 

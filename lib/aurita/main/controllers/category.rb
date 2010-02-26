@@ -152,7 +152,8 @@ module Main
         icon_tag(:categories) + tl(:add_content_category) 
       } 
       list = HTML.ul.no_bullets { } 
-      Category.all_with((Category.is_private == 'f') & (Category.category_id >= '100')).sort_by(:category_name, :asc).each { |cat|
+      Category.all_with((Category.is_private == 'f') & 
+                        (Category.category_id >= '100')).sort_by(:category_name, :asc).each { |cat|
         cat = Context_Menu_Element.new(HTML.a.entry(:onclick => link_to(cat, :action => :update)) {
                                           cat.category_name
                                        }, 
@@ -164,14 +165,15 @@ module Main
     end
 
     def admin_box
-      box = Box.new(:type => :category_index, :class => :topic, :id => :admin_categories_box)
-      box.header = tl(:categories)
+      box        = Box.new(:type  => :category_index, 
+                           :class => :topic, 
+                           :id    => :admin_categories_box)
+      box.header = tl(:categories_box_header)
       box.body   = admin_box_body()
       box
     end
 
     def show
-
       cat    = load_instance()
       cat_id = cat.category_id
 
@@ -185,12 +187,14 @@ module Main
       end
       elements = []
       if Aurita.user.is_registered? then
-        users_box = Box.new(:type  => :none, 
-                            :class => :topic_inline)
-        users_box.body   = view_string(:user_list, :users => users)
-        users_box.header = tl(:category_members)
-
-        elements << users_box.string
+        if users && users.length > 0 then
+          users_box = Box.new(:type  => :none, 
+                              :class => :topic_inline)
+          users_box.body   = view_string(:user_list, :users => users)
+          users_box.header = tl(:category_members)
+          
+          elements << users_box.string
+        end
 
         if implicit_users then
           impl_users_box = Box.new(:type      => :none, 

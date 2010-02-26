@@ -98,10 +98,10 @@ p {
 }
 
 .article_view .highlighted { 
-  margin-left: -4px; 
-  padding-left: 4px; 
-  margin-right: -4px; 
-  padding-right: 4px; 
+  margin-left: -2px; 
+  padding-left: 2px; 
+  margin-right: -2px; 
+  padding-right: 2px; 
 }
 .article_view .context_hover { 
   margin-left: -4px; 
@@ -442,6 +442,8 @@ div.article_view div.article_info {
 
 .article_container, .article_partial { 
   padding: 4px; 
+}
+.media_container_partial { 
 }
 
 .article_container_files { 
@@ -1470,7 +1472,7 @@ div.calculation_totals .totals {
   float: left; 
   width: 200px; 
   background-color: white; 
-  height: 200px; 
+/*  height: 200px; */
   margin-left: 2px; 
   margin-top: 3px; 
 }
@@ -1494,7 +1496,8 @@ div.calculation_totals .totals {
   background-color: white; 
   height: 212px; 
   margin: 0px; 
-  margin-right: 4px; 
+  margin-right: 3px; 
+  margin-top: 3px; 
   margin-bottom: 3px; 
 }
 .media_asset_thumbnail.medium .image { 
@@ -1515,7 +1518,7 @@ div.calculation_totals .totals {
   width: 145px; 
   background-color: white; 
   height: 123px; 
-  margin-left: 4px; 
+  margin-right: 4px; 
   margin-bottom: 3px; 
 }
 .media_asset_selection .media_asset_thumbnail.tiny { 
@@ -1550,6 +1553,7 @@ div.calculation_totals .totals {
 }
 .media_asset_thumbnail.tiny .info { 
   padding: 1px;
+  padding-left: 5px; 
   height: 40px; 
   overflow: hidden; 
 }
@@ -2085,13 +2089,15 @@ a.add_file_button {
 }
 
 .media_asset_table .context_menu_button { 
-  margin-top: 1px; 
-  margin-left: 3px; 
+  margin-top: 4px; 
+  margin-left: 25px; 
+  padding: 2px; 
 }
 
 .media_asset_grid .context_menu_button, .media_asset_folder_grid .context_menu_button { 
-  margin-top: 3px; 
-  margin-left: 3px; 
+  margin-top: 0px; 
+  margin-left: 25px; 
+  padding: 3px; 
 }
 
 .data_table { 
@@ -2146,4 +2152,63 @@ table.listing_2_columns {
   padding-left: 3px; 
   padding-right: 3px; 
 }
+
+.marginal_placement_editor { 
+  width: 100%; 
+}
+
+#place_marginal_selection_list { 
+  width: 448px; 
+  border: 1px dashed #ffffff;
+  padding: 5px; 
+  margin-bottom: 15px; 
+  margin-left: 0px; 
+  float: left; 
+}
+#place_marginal_selection_list .marginal_image { 
+  display: none; 
+}
+#place_marginal_selection_list li .header { 
+  cursor: s-resize; 
+}
+#place_marginal_selection_list li { 
+  float: left; 
+  width: 138px; 
+  border: 1px outset white; 
+  background: #dedede; 
+  height: 35px; 
+  margin-right: 2px; 
+  margin-top: 2px; 
+  padding: 2px; 
+  overflow: hidden; 
+}
+.marginal_placement_editor .marginal_image { 
+  text-align: center; 
+  margin-top: 8px; 
+}
+.marginal_placement_editor li .header { 
+  cursor: move; 
+}
+.marginal_placement_editor ul { 
+  float: left; 
+  width: 210px; 
+  border: 1px dashed #ffffff;
+  padding: 5px; 
+  margin-left: 0px; 
+  margin-right: 16px; 
+}
+.marginal_placement_editor li { 
+  float: left; 
+  width: 200px; 
+  border: 1px outset white; 
+  background: #dedede; 
+  height: 180px; 
+  margin-right: 2px; 
+  margin-top: 2px; 
+  padding: 4px; 
+}
+
+
+
+
 

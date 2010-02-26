@@ -156,6 +156,7 @@ on_date : am
 category : Kategorie
 choose_user_category : Kategorie
 categories : Kategorien
+categories_box_header : Kategorien
 roles : Rollen
 all_categories : Alle Kategorien
 user_categories : Meine Kategorien

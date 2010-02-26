@@ -115,8 +115,67 @@ module Aurita
       self.class.log(message)
     end
 
+    # Returns a string useable as unique dom id 
+    # for this entity instance. 
     def dom_id
       "#{model_name.gsub('::','__').downcase}_#{key.values.join('_')}"
+    end
+
+    # Treat values of a field as language keys so 
+    # they are translated on the fly. 
+    # Values prefixed with 'tl:' will be translated 
+    # using tl(value_without_prefix). 
+    #
+    # Example: 
+    #
+    #   value in database: 
+    #     category_name: 'tl:private_category'
+    #
+    #   entry in language pack: 
+    #     category: Your private category
+    #  
+    #   cat.category_name 
+    #   -> 'tl:private_category'
+    #   -> tl(:private_category) 
+    #   -> 'Your private category'
+    #
+    # Values with no prefix will be returned unchanged: 
+    #
+    #   cat.category_name 
+    #   -> 'Movies'
+    
+    def self.translate_field(attrib)
+      @translated_fields ||= []
+      attrib_sym = attrib.to_sym
+      @translated_fields << attrib_sym
+      send :define_method, attrib_sym do
+        value = attr[attrib_sym]
+        if value.to_s[0..2] == 'tl:' then
+          return tl(value.to_s[3..-1].to_sym) 
+        else
+          return value
+        end
+      end
+    end
+
+    # Returns true if given field's values are to 
+    # be translated. See Aurita::Model.translate_field. 
+    def self.has_translated_field?(attrib)
+      @translated_fields ||= []
+      return @translated_fields.include?(attrib.to_sym)
+    end
+
+    # Returns true if value of given attribute has 
+    # been translated automatically. 
+    #
+    # Used e.g. in form generators, as auto-translated 
+    # field values must not be changed manually 
+    # (auto-translated field values are typically used for 
+    # system-defined values)
+    #
+    def is_translated?(attrib)
+      attrib_sym = attrib.to_sym
+      return (self.class.has_translated_field?(attrib_sym)) && (attr[attrib_sym].to_s[0..2] == 'tl:')
     end
 
   end # class

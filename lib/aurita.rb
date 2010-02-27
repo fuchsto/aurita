@@ -100,7 +100,7 @@ module Aurita
   # Project namespace is the camelcased project 
   # name, so :the_project --> The_Project. 
   def self.project_namespace
-    @@project.base_path.split('/').at(-1).camelcase
+    @@project.namespace || @@project.base_path.split('/').at(-1).camelcase
   end
 
   @@base_path = Aurita::App_Configuration.base_path

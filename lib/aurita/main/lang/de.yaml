@@ -23,6 +23,7 @@ role : Rolle
 internal.role.role_name : Name
 is_admin : Administrator
 is_super_admin : Super-Administrator
+super_admin : Super-Administrator
 
 'yes' : ja
 'no' : nein
@@ -45,6 +46,7 @@ public--category--is_private:
     t: ja
     f: nein
 
+no_category : Keine Kategorie
 category_name : Name der Kategorie
 category_members : Mitglieder der Kategorie
 users_in_category : Benutzer in dieser Kategorie

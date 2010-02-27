@@ -18,6 +18,8 @@ module Main
     
     use_label :role_name
     expects :role_name
+
+    translate_field :role_name
     
   end # class
 

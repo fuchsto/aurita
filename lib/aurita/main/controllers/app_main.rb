@@ -89,10 +89,12 @@ module Main
 
       if Aurita.user.is_admin? then
         admin_components = plugin_get(Hook.main.admin_toolbar)
-        admin_tool_box = Box.new(:class => :topic, :id => 'admin_toolbox')
-        admin_tool_box.header = tl(:admin_tools)
-        admin_tool_box.body = admin_components
-        result << admin_tool_box
+        if admin_components.length > 0 then
+          admin_tool_box = Box.new(:class => :topic, :id => 'admin_toolbox')
+          admin_tool_box.header = tl(:admin_tools)
+          admin_tool_box.body = admin_components
+          result << admin_tool_box 
+        end
       end
       
       return result

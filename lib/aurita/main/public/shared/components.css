@@ -1730,6 +1730,11 @@ div.column50 {
 .box_hierarchy_entry_level_4 { 
   background-color: #a0a0a0; 
 }
+
+.topic li a { 
+  display: block; 
+}
+
 .media_asset_folder_tree_box { 
   border-top: 1px solid #cfcfcf; 
   margin-top: 0px; 

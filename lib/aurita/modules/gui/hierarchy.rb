@@ -156,7 +156,7 @@ module GUI
           entry   = HTML.a(:onclick => onclick) { e.label } 
         else
           if e.interface then
-            if e.interface.include('://') then
+            if e.interface.include?('://') then
               entry  = HTML.a(:href => e.interface, :target => '_blank') { e.label }
             else 
               action = CGI.escape(interface).gsub('%2F','/').gsub('%3D','=')

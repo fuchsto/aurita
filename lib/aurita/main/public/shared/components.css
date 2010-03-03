@@ -545,6 +545,7 @@ tr.highlighted td {
   line-height: 17px; 
   background-color: #dedede; 
   background: url('/aurita/images/icons/box_header_bright_bg.png'); 
+  display: block; 
 }
 
 .section_content .box_header { 

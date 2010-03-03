@@ -2215,6 +2215,19 @@ table.listing_2_columns {
 }
 
 
+#page_tools { 
+  display: none; 
+}
+.App_Structure #page_tools { 
+  display: block; 
+}
 
+#background_selection_box .highlighted img { 
+  opacity:.30; 
+  filter: alpha(opacity=30); 
+  -moz-opacity: 0.3; 
+  -khtml-opacity:0.3; 
+  color:rgba(255, 255, 255, 0.3);
+}
 
 

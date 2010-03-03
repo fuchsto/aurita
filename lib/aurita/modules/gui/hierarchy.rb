@@ -7,24 +7,35 @@ Aurita.import_module :gui, :box
 module Aurita
 module GUI
 
+  # Default decorator for a single Hierarchy_Entry element. 
+  #
+  # Usage: 
+  #
+  #   entry   = Hierarchy_Entry.get(123)
+  #   element = Hierarchy_Element.new(entry)
+  #   element.id      = 'my_element'
+  #   element.onclick = "alert('Clicked my element');"
+  #   puts element.string
+  #
+  # Model instance 'entry' has to include behaviour "Aurita::GUI::Hierarchy_Element_Behaviour"
+  #
   class Hierarchy_Element < Element
-    attr_accessor :model_instance, :label, :onclick, :class
-    # Model instance has to include behaviour "Aurita::GUI::Hierarchy_Element_Behaviour"
-    def initialize(model_instance)
+    attr_accessor :entity, :label, :onclick, :class
+
+    def initialize(entity)
       @tag     = :li
-      @model_instance = model_instance
+      @entity  = entity
       @class   = 'hierarchy_entry'
-      @label   = model_instance.entry_label.to_s
-      @id      = model_instance.entry_key.to_s
+      @label   = entity.entry_label.to_s
+      @id      = entity.entry_key.to_s
       @onclick = nil
       @icon    = false
       @string  = false
     end
     def string
-    # return @string if @string
-      entry_params = { :class => @class, :onclick => @onclick } 
-      @icon ||= :blank
-      @string = HTML.li(entry_params) { "<img src=\"/aurita/images/icons/#{@icon}.gif\" /> #{@label}" }
+      params    = { :class => @class, :onclick => @onclick } 
+      @icon   ||= :blank
+      @string   = HTML.li(entry_params) { "<img src=\"/aurita/images/icons/#{@icon}.gif\" /> #{@label}" }
       return @string
     end
 
@@ -33,121 +44,146 @@ module GUI
     end
   end
 
+  # Distributes flat list of hierarchy entries to a Hash so
+  # they are mapped to their parent entry id. 
+  #
   # Usage: 
   #
-  #  h = Hierarchy_Map.new(Some_Hierarchy_Model.all_with(foo == 3).entities, 
-  #                        :id => 'some_hierarchy')
-  #  
-  #  d = Hierarchy_Default_Decorator.new(h)
-  #  d.entry_decorator = Some_Specific_Entry_Decorator
-  #  d.build()
+  #   entries = Hierarchy.get(123).entries 
+  #
+  # Hierarchy#entries returns Hierarchy_Entry instances ordered 
+  # by position, but not mapped to parents. 
+  #
+  #   map     = Hierarchy_Map.new(entries)
+  #
+  # Using Hierarchy_Map, they can now be accessed by their parent id: 
+  #
+  #   map[0]  # All entries with parent_id = 0
+  #   --> [ Hierarchy_Entry(1), Hierarchy_Entry(2) ]
+  #
+  #   map[1]  # All entries with parent_id = 1
+  #   --> [ Hierarchy_Entry(10), Hierarchy_Entry(20) ]
+  #
+  #   map[2]  # All entries with parent_id = 2
+  #   --> []
   # 
   class Hierarchy_Map
+  # {{{
 
-    attr_reader :entry_map, :entry_model
+    attr_reader :entry_map, :entry_model, :hierarchy
     
-    def initialize(entries, dom_id='hierarchy_map')
-      @entry_map = Hash.new
-      @dom_id = dom_id
-      for entry in entries do 
-        pid = entry.parent_id # Has to be provided by model instance
-        @entry_map[pid] = Array.new unless @entry_map[pid]
-        map_element = Hierarchy_Element.new(entry)
-        @entry_map[pid] << map_element
+    def initialize(entities)
+      @entities    = entities
+      @entries     = false
+      @hierarchy   = @entities.first.hierarchy if @entities.first
+      @entry_model = @entities.first.class if @entities.first
+    end
+
+    def entries
+      if !@entries then
+        @entries = {}
+        @entities.each { |entry|
+          pid = entry.parent_id # Has to be provided by model instance
+          @entries[pid]  = Array.new unless @entries[pid]
+          @entries[pid] << entry
+        }
       end
-      model_inst = @entry_map.values.first.first.model_instance if @entry_map.values.first
-      @entry_model = model_inst.class if model_inst
+      return @entries
     end
 
     def [](key)
-      @entry_map[key]
+      entries[key] || []
     end
-  end
+    
+  end # }}}
 
-  class Hierarchy_Entries_Default_Decorator
+  class Hierarchy_Entries_Default_Decorator < Widget
   # {{{
   extend Aurita::GUI::Helpers
   include Aurita::GUI::Helpers
   include Aurita::GUI
-
-  private
-
-    @string
 
   public
   
     attr_accessor :dom_id
   
     def initialize(hierarchy_map)
-      @entry_map = hierarchy_map
-      @string = recurse(0)
-      @dom_id = 'sortable_hierarchy'
+      @entry_map       ||= hierarchy_map
+      @dom_id          ||= 'hierarchy_entries'
+      @entry_decorator ||= Hierarchy_Element
+      @elements          = false
+      super()
     end
 
     def recurse(parent_id, indent=1)
-      return '' unless @entry_map[parent_id] 
-      string = ''
+      return [] unless @entry_map[parent_id] 
+      elements = []
       for e in @entry_map[parent_id] do
 
-#       entry = plugin_get(Hook.main.hierarchy.entry_decorator, :entry => e)
-        entry_id = e.model_instance.pkey_value
-
-        label_string = decorate_entry(e)
-        
-        if @entry_map[entry_id] then
-          next_level = HTML.ul(:class => 'no_bullets indent-' << indent.to_s) { recurse(entry_id, indent+1) }.string
-        else
-          next_level = ''
+#       entry      = plugin_get(Hook.main.hierarchy.entry_decorator, :entry => e)
+        entry_id   = e.pkey
+        next_level = []
+        if @entry_map[entry_id].length > 0 then
+          next_level = decorate_level(e, recurse(entry_id, indent+1))
+          next_level.add_css_class("indent-#{indent}")
         end
-        if label_string then
-          string << HTML.li { label_string + next_level }.string
-        end
+        entry = decorate_entry(e, next_level)
+        elements << entry if entry 
       end
-      return string
+      return elements
+    end
+
+    def decorate_level(parent, child_elements)
+      HTML.ul(:class => "no_bullets") { child_elements }
     end
 
     # Overload method decorate_entry to support other 
     # model instances for hierarchies
-    def decorate_entry(e)
-      e = e.model_instance
-  
-      if !e.allow_access?(Aurita.user) then
-        return HTML.span.not_accessible { e.label } if Aurita.user.is_registered? 
-        return ''
-      end
+    def decorate_entry(e, next_level)
+      entry = e.label
 
-      label_style = 'padding: 2px; margin: -2px; '
-      onclick     = ''
-      entry       = ''
-      if e.attr[:entry_type] == 'BLANK_NODE' then
-        label_style << 'color: black; '
-        entry   = e.label
-      else
+#     if !e.allow_access?(Aurita.user) then
+#       if Aurita.user.is_registered? then
+#         return HTML.span.not_accessible { entry } 
+#       else
+#         return nil
+#       end
+#     end
+
+      if e.attr[:entry_type] != 'BLANK_NODE' then
         if e.content_id then
           onclick = link_to(Content.get(e.content_id).concrete_instance) 
           entry   = HTML.a(:onclick => onclick) { e.label } 
         else
-#         onclick = "xAurita.load({ action: '#{CGI.escape(interface).gsub('%2F','/').gsub('%3D','=')}' }); "
-          entry   = HTML.a(:href => e.interface) { e.label }
+          if e.interface then
+            if e.interface.include('://') then
+              entry  = HTML.a(:href => e.interface, :target => '_blank') { e.label }
+            else 
+              action = CGI.escape(interface).gsub('%2F','/').gsub('%3D','=')
+              entry  = link_to(:action => action) { e.label }
+            end
+          end
         end
       end
 
       params = { :hierarchy_entry_id => e.hierarchy_entry_id, 
                  :hierarchy_id       => e.hierarchy_id }
-      return Context_Menu_Element.new(HTML.div.link(:style => label_style) { 
-                                        entry
-                                      }, 
-                                      :entity => e, 
-                                      :params => params)
+    # entry  = Context_Menu_Element.new(:entity => e, 
+    #                                   :params => params) { 
+    #   HTML.div.link { entry.string }
+    # }
+
+      return HTML.li { entry + next_level }
     end
 
-    def string
-      if @string.length > 0 then
-        return HTML.ul(:class => :no_bullets, :id => @dom_id.to_s ) { @string }.string
-      else 
-        return nil
-      end
+    def element
+      @elements ||= recurse(0)
+      return HTML.ul(:class => :no_bullets, 
+                     :id    => @dom_id.to_s ) { 
+        @elements
+      }
     end
+
   end # }}}
 
   class Hierarchy_Entries_Accordion_Decorator < Hierarchy_Entries_Default_Decorator
@@ -155,34 +191,30 @@ module GUI
   extend Aurita::GUI::Helpers
   include Aurita::GUI::Helpers
   include Aurita::GUI
-
-  public
   
     attr_accessor :dom_id
   
     def initialize(hierarchy_map)
       @entry_map = hierarchy_map
-      @string    = recurse('0')
       @dom_id    = 'accordion_hierarchy'
+      super(hierarchy_map)
     end
 
-    def recurse(parent_id, indent=1)
-      return '' unless @entry_map[parent_id] 
-      string = ''
-      for e in @entry_map[parent_id] do
-        entry_id = e.model_instance.pkey_value
-
-        if @entry_map[entry_id] then
-          entry   = e.model_instance
-          onclick = "Aurita.load({ action: '#{CGI.escape(entry.interface).gsub('%2F','/').gsub('%3D','=')}' }); "
-          next_level = Accordion_Box.new(:header => HTML.a(:onclick => onclick) { e.model_instance.label }, :class => "accordion_level_#{indent}") { recurse(entry_id, indent+1) }.string
-          string << next_level.string
-        else
-          label_string = decorate_entry(e)
-          string << HTML.div { label_string }.string if label_string
-        end
+    def decorate_entry(entry, child_elements)
+      if child_elements.length > 0 then
+        box = Accordion_Box.new(:entity => entry, 
+                                :id     => "hierarchy_#{entry.hierarchy_id}_#{entry.pkey}")
+        box.header = entry.label
+        box.body   = child_elements
+#       box.rebuild
+        box
+      else
+        super(entry, child_elements)
       end
-      return string
+    end
+
+    def element
+      recurse(0)
     end
 
   end # }}}
@@ -192,12 +224,13 @@ module GUI
     def initialize(hierarchy_map)
       super(hierarchy_map) 
     end
+
     def recurse(parent_id, indent=1)
       return '' unless @entry_map[parent_id] 
       string = ''
       for e in @entry_map[parent_id] do
       # entry = plugin_get(Hook.main.hierarchy.sortable_entry_decorator, :entry => e)
-        entry_id = e.model_instance.pkey_value
+        entry_id = e.pkey_value
         
         label_string = decorate_entry(e)
 
@@ -215,58 +248,39 @@ module GUI
       return string
     end
 
-    def decorate_entry(e)
-      e.model_instance.label
+    def decorate_entry(e, next_level)
+      e.label
     end
 
   end # }}}
  
-  class Hierarchy_Default_Decorator
+  class Hierarchy_Default_Decorator < Widget
   # {{{
   extend Aurita::GUI
   include Aurita::GUI
 
-    attr_reader :string, :entries_string
-    attr_accessor :entry_decorator, :dom_id, :context_menu_params, :header, :context_menu_model
-    
-    @entries_string
-
-  protected
-    @string
-    @hierarchy
-    @entry_model
-
-  public
+    attr_accessor :entry_decorator, :dom_id, :header
 
     def initialize(hierarchy_map)
-      @context_menu_model = ''
-      @hierarchy          = hierarchy_map
-      @string             = ''
-      @entry_model        = @hierarchy.entry_model
-      @entry_decorator    = Hierarchy_Entries_Default_Decorator
-      @entries_string     = ''
+      @hierarchy_map    ||= hierarchy_map
+      @hierarchy        ||= hierarchy_map.hierarchy
+      @entry_model      ||= @hierarchy.entry_model
+      @entry_decorator  ||= Hierarchy_Entries_Default_Decorator
+      @dom_id           ||= "hierarchy_#{@hierarchy.pkey}"
+      @header           ||= @hierarchy.header
+      @entries          ||= false
+      super()
     end
 
-    def string
-      @string || build()
-    end
-
-    def rebuild
-      @string = false
-    end
-
-    def build()
-      @entries_string = @entry_decorator.new(@hierarchy).string
+    def element
+      @entries ||= @entry_decorator.new(@hierarchy_map)
       box = Box.new(:entity => @hierarchy, 
                     :class  => :topic, 
-                    :id     => @dom_id.to_s)
+                    :id     => dom_id().to_s)
       box.header = @header.to_s
-      begin
-        box.body = @entries_string
-        @string = box.string
-        return @string
-      rescue ::Exception => e
-      end
+      box.body   = @entries
+      box.rebuild
+      return box
     end
 
   end # }}}
@@ -275,26 +289,29 @@ module GUI
   # {{{
 
     attr_reader :string, :entries_string
-
-    @entries_string = ''
     
     def initialize(hierarchy, model)
-      @hierarchy = hierarchy
-      @string = ''
       @entry_model = model
-      @entries_string = Hierarchy_Entries_Sortable_Decorator.new(model).string
-      build()
+      @entries     = Hierarchy_Entries_Sortable_Decorator.new(model)
+      super(hierarchy)
     end
-    def render
-      js = "reorder_hierarchy_id=#{@hierarchy.hierarchy_id}; 
-            Sortable.create('hierarchy_sortable_list_#{@hierarchy.hierarchy_id}', 
-                            { onUpdate: on_hierarchy_entry_reorder, tree: true });"
-      hid = @hierarchy.hierarchy_id
-      icon = HTML.img(:src => '/aurita/images/icons/save.gif', 
-                      :style => 'margin-bottom: 4px;', 
-                      :onclick => "Aurita.load({ element: 'hierarchy_#{hid}_body', action: 'Hierarchy/body/hierarchy_id=#{hid}' }); " )
-      App_Controller.render_string(:html => icon + @entries_string, 
-                                   :script => js)
+    
+    def js_initialize
+      "reorder_hierarchy_id=#{@hierarchy.hierarchy_id}; 
+       Sortable.create('hierarchy_sortable_list_#{@hierarchy.hierarchy_id}', 
+                       { onUpdate: on_hierarchy_entry_reorder, tree: true });"
+    end
+
+    def element
+      hid  = @hierarchy.hierarchy_id
+      icon = HTML.img(:src     => '/aurita/images/icons/save.gif', 
+                      :style   => 'margin-bottom: 4px;', 
+                      :onclick => "Aurita.load({ element: 'hierarchy_#{hid}_body', 
+                                                 action: 'Hierarchy/body/hierarchy_id=#{hid}' 
+                                               });")
+      HTML.div { 
+        icon + @entries
+      }
     end
   end # }}}
 
@@ -304,8 +321,19 @@ module GUI
   include Aurita::GUI
 
     def initialize(hierarchy_map)
-      super()
       @entry_decorator = Hierarchy_Entries_Accordion_Decorator
+      super(hierarchy_map)
+    end
+
+    def element
+      @entries ||= @entry_decorator.new(@hierarchy_map)
+      box = Accordion_Box.new(:entity => @hierarchy, 
+                              :class  => :topic, 
+                              :id     => dom_id().to_s)
+      box.header = @header.to_s
+      box.body   = @entries
+      box.rebuild
+      return box
     end
 
   end # }}} 

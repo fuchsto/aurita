@@ -38,6 +38,10 @@ module Main
       return Aurita.user.may_view_content?(content_id) if content_id
       return true
     end
+
+    def hierarchy
+      Hierarchy.get(hierarchy_id)
+    end
     
   end 
 

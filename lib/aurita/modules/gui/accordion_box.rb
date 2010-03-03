@@ -16,43 +16,28 @@ module GUI
   #    'Body here' 
   #  }
   #
-  class Accordion_Box < Element
-    
-    attr_accessor :header, :body, :collapsed, :type
+  class Accordion_Box < Box
+
+    @@accordion_box_count = 0
 
     def initialize(params={}, &block)
-      @body        = params[:body]
-      @body        = yield() if block_given?
-      @body      ||= ''
-      @header      = params[:header]
-      @header    ||= ''
-      @collaped    = params[:collapsed]
-      @collapsed ||= false
-      @type        = params[:type]
-      @type      ||= false
-      @type        = false if @type == :none
-      @attrib      = params
-      @context_menu_params   = params[:params]
-      @context_menu_params ||= {}
-      params[:tag] = :div
-      params.delete(:type)
-      params.delete(:header)
-      params.delete(:body)
-      add_css_classes(:accordion_box, :topic)
-      super(params)
+      @params      = params
+      @params[:id] = "accordion_box_#{@@accordion_box_count}" unless @params[:id]
+
+      super(params, &block)
+      add_css_classes(:accordion_box, :topic, dom_id)
+
+      @@accordion_box_count += 1
     end
 
-    def type=(type)
-      @type = type 
-      @type = false if @type == :none
-    end
+    def element
+      accordion_box = HTML.div(@params) { }
 
-    def string
-      accordion_box = HTML.div(@attrib) { }
-
-      classes = css_classes.map { |c| "#{c}_header" }
-      header = HTML.div(:class => classes + [ :box_header, :accordion_box_header ]) { @header.to_s } 
-      header.id = accordion_box.dom_id().to_s+'_header' if accordion_box.dom_id
+      header = HTML.div(:class => [ :box_header, 
+                                    :accordion_box_header , 
+                                    "#{dom_id}_header"
+                                  ]) { @header.to_s } 
+      header.id = "#{accordion_box.dom_id()}_header" if accordion_box.dom_id
       header.add_css_class("#{@type}_header") if @type
 
       header = Context_Menu_Element.new(header, 
@@ -60,8 +45,10 @@ module GUI
                                         :highlight_id => accordion_box.dom_id, 
                                         :params => @context_menu_params) if @type
 
-      classes = css_classes.map { |c| "#{c}_body" }
-      body    = HTML.div(:class => classes + [:accordion_box_body, :box_body], 
+      body    = HTML.div(:class => [ :box_body, 
+                                     :accordion_box_body, 
+                                     "#{dom_id}_body" 
+                                   ], 
                          :style => 'overflow: hidden; display: none; ') { @body }
       body.id = accordion_box.dom_id.to_s + '_body' if accordion_box.dom_id
 
@@ -69,6 +56,16 @@ module GUI
       accordion_box << body
 
       return accordion_box
+    end
+
+    def js_initialize
+      "new accordion('#{dom_id}', { 
+        classNames: { 
+          content: '#{dom_id}_body', 
+          toggle: '#{dom_id}_header', 
+          toggleActive: '#{dom_id}_header_active'
+        }
+      });" 
     end
 
   end

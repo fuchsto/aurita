@@ -22,21 +22,28 @@ module GUI
 
     def initialize(params={}, &block)
       @params      = params
+      @level       = params[:level]
+      @level     ||= 0
+      @onclick     = @params[:onclick]
+      @params.delete(:level)
+      @params.delete(:onclick)
       @params[:id] = "accordion_box_#{@@accordion_box_count}" unless @params[:id]
 
-      super(params, &block)
-      add_css_classes(:accordion_box, :topic, dom_id)
+      super(@params, &block)
+      add_css_classes(:accordion_box, :topic, "accordion_box_#{@level}")
 
       @@accordion_box_count += 1
     end
 
     def element
       accordion_box = HTML.div(@params) { }
+      group  = "accordion_box_#{@level}"
 
-      header = HTML.div(:class => [ :box_header, 
-                                    :accordion_box_header , 
-                                    "#{dom_id}_header"
-                                  ]) { @header.to_s } 
+      header = HTML.a(:class => [ :box_header, 
+                                  :accordion_box_header , 
+                                  "#{group}_header"
+                                ], 
+                      :onclick => @onclick) { @header.to_s } 
       header.id = "#{accordion_box.dom_id()}_header" if accordion_box.dom_id
       header.add_css_class("#{@type}_header") if @type
 
@@ -45,11 +52,11 @@ module GUI
                                         :highlight_id => accordion_box.dom_id, 
                                         :params => @context_menu_params) if @type
 
-      body    = HTML.div(:class => [ :box_body, 
-                                     :accordion_box_body, 
-                                     "#{dom_id}_body" 
-                                   ], 
-                         :style => 'overflow: hidden; display: none; ') { @body }
+      body   = HTML.div(:class => [ :box_body, 
+                                    :accordion_box_body, 
+                                    "#{group}_body" 
+                                  ], 
+                        :style => 'overflow: hidden; display: none; ') { @body }
       body.id = accordion_box.dom_id.to_s + '_body' if accordion_box.dom_id
 
       accordion_box << header
@@ -59,11 +66,13 @@ module GUI
     end
 
     def js_initialize
-      "new accordion('#{dom_id}', { 
+      group  = "accordion_box_#{@level+1}"
+      
+      "new accordion('#{dom_id}_body', { 
         classNames: { 
-          content: '#{dom_id}_body', 
-          toggle: '#{dom_id}_header', 
-          toggleActive: '#{dom_id}_header_active'
+          content: '#{group}_body', 
+          toggle: '#{group}_header', 
+          toggleActive: '#{group}_header_active'
         }
       });" 
     end

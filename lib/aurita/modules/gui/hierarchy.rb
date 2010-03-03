@@ -105,7 +105,7 @@ module GUI
 
   public
   
-    attr_accessor :dom_id
+    element_properties :dom_id
   
     def initialize(hierarchy_map)
       @entry_map       ||= hierarchy_map
@@ -120,14 +120,13 @@ module GUI
       elements = []
       for e in @entry_map[parent_id] do
 
-#       entry      = plugin_get(Hook.main.hierarchy.entry_decorator, :entry => e)
         entry_id   = e.pkey
         next_level = []
         if @entry_map[entry_id].length > 0 then
           next_level = decorate_level(e, recurse(entry_id, indent+1))
           next_level.add_css_class("indent-#{indent}")
         end
-        entry = decorate_entry(e, next_level)
+        entry = decorate_entry(e, next_level, indent)
         elements << entry if entry 
       end
       return elements
@@ -137,19 +136,8 @@ module GUI
       HTML.ul(:class => "no_bullets") { child_elements }
     end
 
-    # Overload method decorate_entry to support other 
-    # model instances for hierarchies
-    def decorate_entry(e, next_level)
+    def decorate_item(e, indent)
       entry = e.label
-
-#     if !e.allow_access?(Aurita.user) then
-#       if Aurita.user.is_registered? then
-#         return HTML.span.not_accessible { entry } 
-#       else
-#         return nil
-#       end
-#     end
-
       if e.attr[:entry_type] != 'BLANK_NODE' then
         if e.content_id then
           onclick = link_to(Content.get(e.content_id).concrete_instance) 
@@ -165,6 +153,21 @@ module GUI
           end
         end
       end
+      entry
+    end
+
+    # Overload method decorate_entry to support other 
+    # model instances for hierarchies
+    def decorate_entry(e, next_level, indent)
+      entry = decorate_item(e, indent)
+
+#     if !e.allow_access?(Aurita.user) then
+#       if Aurita.user.is_registered? then
+#         return HTML.span.not_accessible { entry } 
+#       else
+#         return nil
+#       end
+#     end
 
       params = { :hierarchy_entry_id => e.hierarchy_entry_id, 
                  :hierarchy_id       => e.hierarchy_id }
@@ -192,24 +195,26 @@ module GUI
   include Aurita::GUI::Helpers
   include Aurita::GUI
   
-    attr_accessor :dom_id
-  
-    def initialize(hierarchy_map)
-      @entry_map = hierarchy_map
-      @dom_id    = 'accordion_hierarchy'
+    def initialize(hierarchy_map, params={})
+      @entry_map   = hierarchy_map
+      @group_class = params[:group_class]
+      @dom_id      = 'accordion_hierarchy'
       super(hierarchy_map)
     end
 
-    def decorate_entry(entry, child_elements)
+    def decorate_entry(entry, child_elements, indent)
       if child_elements.length > 0 then
-        box = Accordion_Box.new(:entity => entry, 
-                                :id     => "hierarchy_#{entry.hierarchy_id}_#{entry.pkey}")
-        box.header = entry.label
+        onclick = link_to(Content.get(entry.content_id).concrete_instance) if entry.content_id
+        dom_id  = "hierarchy_#{entry.hierarchy_id}_#{entry.pkey}"
+        box     = Accordion_Box.new(:entity  => entry, 
+                                    :level   => indent, 
+                                    :onclick => onclick, 
+                                    :id      => dom_id)
+        box.header = entry.label 
         box.body   = child_elements
-#       box.rebuild
         box
       else
-        super(entry, child_elements)
+        HTML.div.accordion_item { decorate_item(entry, indent) }
       end
     end
 
@@ -248,7 +253,7 @@ module GUI
       return string
     end
 
-    def decorate_entry(e, next_level)
+    def decorate_entry(e, next_level, indent)
       e.label
     end
 
@@ -332,7 +337,6 @@ module GUI
                               :id     => dom_id().to_s)
       box.header = @header.to_s
       box.body   = @entries
-      box.rebuild
       return box
     end
 

@@ -17,7 +17,8 @@ module GUI
     def initialize(hierarchy, params={}, &block)
       @params      = params
       @hierarchy   = hierarchy
-      @params[:id] = 'accordion_manu' unless @params[:id]
+      @group_class = 'accordion_menu'
+      @params[:id] = 'accordion_menu' unless @params[:id]
       super()
     end
 
@@ -29,11 +30,12 @@ module GUI
     end
 
     def js_initialize
+      group  = "accordion_box"
       "new accordion('#{dom_id}', { 
         classNames: { 
-          content: '#{dom_id}_body', 
-          toggle: '#{dom_id}_header', 
-          toggleActive: '#{dom_id}_header_active'
+          content: '#{group}_1_body', 
+          toggle: '#{group}_1_header', 
+          toggleActive: '#{group}_1_header_active'
         }
       });" 
     end

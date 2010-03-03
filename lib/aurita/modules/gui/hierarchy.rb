@@ -171,10 +171,10 @@ module GUI
 
       params = { :hierarchy_entry_id => e.hierarchy_entry_id, 
                  :hierarchy_id       => e.hierarchy_id }
-    # entry  = Context_Menu_Element.new(:entity => e, 
-    #                                   :params => params) { 
-    #   HTML.div.link { entry.string }
-    # }
+      entry  = Context_Menu_Element.new(:entity => e, 
+                                        :params => params) { 
+        entry
+      }
 
       return HTML.li { entry + next_level }
     end
@@ -196,9 +196,10 @@ module GUI
   include Aurita::GUI
   
     def initialize(hierarchy_map, params={})
-      @entry_map   = hierarchy_map
-      @group_class = params[:group_class]
-      @dom_id      = 'accordion_hierarchy'
+      @entry_map    = hierarchy_map
+      @group_class  = params[:group_class]
+      @dom_id       = 'accordion_hierarchy'
+      @context_menu = params[:context_menu] != false
       super(hierarchy_map)
     end
 
@@ -214,7 +215,16 @@ module GUI
         box.body   = child_elements
         box
       else
-        HTML.div.accordion_item { decorate_item(entry, indent) }
+        item = decorate_item(entry, indent)
+        if @context_menu then
+          params = { :hierarchy_entry_id => entry.hierarchy_entry_id, 
+                     :hierarchy_id       => entry.hierarchy_id }
+          item  = Context_Menu_Element.new(:entity => entry, 
+                                           :params => params) { 
+            item
+          }
+        end
+        HTML.div.accordion_item { item }
       end
     end
 
@@ -227,30 +237,41 @@ module GUI
   class Hierarchy_Entries_Sortable_Decorator < Hierarchy_Entries_Default_Decorator
   # {{{
     def initialize(hierarchy_map)
+      @sortable_dom_id = "hierarchy_sortable_list_#{hierarchy_map.hierarchy.hierarchy_id}"
       super(hierarchy_map) 
     end
 
     def recurse(parent_id, indent=1)
       return '' unless @entry_map[parent_id] 
-      string = ''
+      elements = []
       for e in @entry_map[parent_id] do
-      # entry = plugin_get(Hook.main.hierarchy.sortable_entry_decorator, :entry => e)
         entry_id = e.pkey_value
         
-        label_string = decorate_entry(e)
-
         if @entry_map[entry_id] then
           next_level = recurse(entry_id, indent+1) 
         else
           next_level = ''
         end
-        string << HTML.li(:id => "entry_#{entry_id}") { HTML.font(:style => 'cursor: ns-resize; ') { label_string } +
-                   HTML.ul(:id => "entry_placeholder_#{entry_id}", :class => 'no_bullets drop-placeholder') { 
-                     '&nbsp;' + next_level 
-                   }
-                  }.string
+
+        entry = decorate_entry(e, next_level, indent)
+
+        elements << HTML.li(:id => "entry_#{entry_id}") { 
+          HTML.font(:style => 'cursor: ns-resize; ') { entry } +
+          HTML.ul(:id    => "entry_placeholder_#{entry_id}", 
+                  :class => 'no_bullets drop-placeholder') { 
+            '&nbsp;' + next_level 
+          }
+        }
       end
-      return string
+      return elements
+    end
+
+    def element
+      @elements ||= recurse(0)
+      return HTML.ul(:class => [ :outer, :no_bullets ], 
+                     :id    => @sortable_dom_id ) { 
+        @elements
+      }
     end
 
     def decorate_entry(e, next_level, indent)
@@ -278,12 +299,11 @@ module GUI
     end
 
     def element
-      @entries ||= @entry_decorator.new(@hierarchy_map)
-      box = Box.new(:entity => @hierarchy, 
-                    :class  => :topic, 
-                    :id     => dom_id().to_s)
+      box        = Box.new(:entity => @hierarchy, 
+                           :class  => :topic, 
+                           :id     => dom_id().to_s)
       box.header = @header.to_s
-      box.body   = @entries
+      box.body   = @entry_decorator.new(@hierarchy_map)
       box.rebuild
       return box
     end
@@ -292,30 +312,28 @@ module GUI
 
   class Hierarchy_Sortable_Decorator < Hierarchy_Default_Decorator
   # {{{
-
-    attr_reader :string, :entries_string
     
-    def initialize(hierarchy, model)
-      @entry_model = model
-      @entries     = Hierarchy_Entries_Sortable_Decorator.new(model)
-      super(hierarchy)
+    def initialize(hierarchy_map)
+      @entry_decorator = Hierarchy_Entries_Sortable_Decorator
+      super(hierarchy_map)
+      @dom_id = "hierarchy_sortable_list_#{@hierarchy.hierarchy_id}"
     end
     
     def js_initialize
       "reorder_hierarchy_id=#{@hierarchy.hierarchy_id}; 
-       Sortable.create('hierarchy_sortable_list_#{@hierarchy.hierarchy_id}', 
-                       { onUpdate: on_hierarchy_entry_reorder, tree: true });"
+       Sortable.create('#{@dom_id}', 
+                       { onUpdate: Aurita.GUI.on_hierarchy_entry_reorder, tree: true });"
     end
 
     def element
       hid  = @hierarchy.hierarchy_id
       icon = HTML.img(:src     => '/aurita/images/icons/save.gif', 
                       :style   => 'margin-bottom: 4px;', 
-                      :onclick => "Aurita.load({ element: 'hierarchy_#{hid}_body', 
+                      :onclick => "Aurita.load({ element: '#{@dom_id}_body', 
                                                  action: 'Hierarchy/body/hierarchy_id=#{hid}' 
-                                               });")
+                                              });")
       HTML.div { 
-        icon + @entries
+        icon + @entry_decorator.new(@hierarchy_map)
       }
     end
   end # }}}

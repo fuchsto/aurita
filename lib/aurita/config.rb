@@ -1,7 +1,6 @@
 
 require('aurita/base/configuration')
 
-
 module Aurita
 
   class App_Configuration < Simple_Configuration

@@ -21,13 +21,14 @@ module GUI
     @@accordion_box_count = 0
 
     def initialize(params={}, &block)
-      @params      = params
-      @level       = params[:level]
-      @level     ||= 0
-      @onclick     = @params[:onclick]
+      @params       = params
+      @level        = params[:level]
+      @level      ||= 0
+      @onclick      = @params[:onclick]
       @params.delete(:level)
       @params.delete(:onclick)
-      @params[:id] = "accordion_box_#{@@accordion_box_count}" unless @params[:id]
+      @context_menu = params[:context_menu] != false
+      @params[:id]  = "accordion_box_#{@@accordion_box_count}" unless @params[:id]
 
       super(@params, &block)
       add_css_classes(:accordion_box, :topic, "accordion_box_#{@level}")
@@ -47,10 +48,12 @@ module GUI
       header.id = "#{accordion_box.dom_id()}_header" if accordion_box.dom_id
       header.add_css_class("#{@type}_header") if @type
 
-      header = Context_Menu_Element.new(header, 
-                                        :type => @type, 
-                                        :highlight_id => accordion_box.dom_id, 
-                                        :params => @context_menu_params) if @type
+      if @type && @with_context_menu then
+        header = Context_Menu_Element.new(header, 
+                                          :type => @type, 
+                                          :highlight_id => accordion_box.dom_id, 
+                                          :params => @context_menu_params) 
+      end
 
       body   = HTML.div(:class => [ :box_body, 
                                     :accordion_box_body, 

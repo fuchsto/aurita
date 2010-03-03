@@ -157,19 +157,12 @@ module Main
     def sort
       h = Hierarchy.load(:hierarchy_id => param(:hierarchy_id))
       return unless h
+      
       h_id = h.hierarchy_id
       map = Hierarchy_Map.new(Hierarchy_Entry.all_with(Hierarchy_Entry.hierarchy_id == h.hierarchy_id).entities)
-      dec = Hierarchy_Entries_Sortable_Decorator.new(map)
+      dec = Hierarchy_Sortable_Decorator.new(map)
       dec.dom_id = "hierarchy_sortable_list_#{h_id}"
-      js_init = "reorder_hierarchy_id=#{h_id}; 
-                 Sortable.create('hierarchy_sortable_list_#{h_id}', 
-                                 { onUpdate: Aurita.GUI.on_hierarchy_entry_reorder, tree: true });"
-      icon = HTML.img(:src => '/aurita/images/icons/save.gif', 
-                      :style => 'margin-bottom: 4px;', 
-                      :onclick => "Aurita.load({ element: 'hierarchy_#{h_id}_body', action: 'Hierarchy/body/hierarchy_id=#{h_id}' }); " )
-
-      exec_js(js_init)
-      puts icon + dec.string
+      dec
     end
 
     def body

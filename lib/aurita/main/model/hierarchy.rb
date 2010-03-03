@@ -16,7 +16,7 @@ module Main
     validates :header, :maxlength => 23, :mandatory => true
 
     def entries
-      Hierarchy_Entry.all_with(:hierarchy_id => hierarchy_id).sort_by(:sortpos, :desc).to_a
+      Hierarchy_Entry.all_with(:hierarchy_id => hierarchy_id).sort_by(:sortpos, :asc).to_a
     end
 
   end 

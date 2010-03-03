@@ -15,17 +15,20 @@ module GUI
   class Accordion_Menu < Widget
 
     def initialize(hierarchy, params={}, &block)
-      @params      = params
-      @hierarchy   = hierarchy
-      @group_class = 'accordion_menu'
-      @params[:id] = 'accordion_menu' unless @params[:id]
+      @params       = params
+      @hierarchy    = hierarchy
+      @group_class  = 'accordion_menu'
+      @params[:id]  = 'accordion_menu' unless @params[:id]
+      @context_menu = params[:context_menu] != false
+      @params.delete(:context_menu)
       super()
     end
 
     def element
       map = Hierarchy_Map.new(@hierarchy.entries)
       HTML.div.accordion_menu(@params) { 
-        Hierarchy_Entries_Accordion_Decorator.new(map)
+        Hierarchy_Entries_Accordion_Decorator.new(map, 
+                                                  :context_menu => @context_menu)
       }
     end
 

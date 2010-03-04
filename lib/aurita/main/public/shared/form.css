@@ -11,6 +11,11 @@ ul.form_fields {
   padding: 0px; 
   width: 340px; 
 }
+.wide ul.form_fields {
+  margin: 0px; 
+  padding: 0px; 
+  width: 540px; 
+}
 
 ul.form_fields input, ul.form_fields textarea, ul.form_fields select {
   border: 0px solid transparent; 
@@ -163,6 +168,13 @@ input.inline, textarea.inline {
   width: 340px; 
   background-color: #f4f4f4; 
 }
+.form_box.wide { 
+  padding: 10px; 
+/*  width: 472px; */
+  width: 540px; 
+  background-color: #f4f4f4; 
+}
+
 .section_content .form_box { 
   padding: 10px; 
   margin: -10px; 

@@ -709,6 +709,9 @@ img.icon {
 .form_fields .media_asset_list { 
   width: 338px; 
 }
+.wide .form_fields .media_asset_list { 
+  width: 538px; 
+}
 
 .media_asset_folders { 
 /*  position: absolute; */

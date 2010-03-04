@@ -261,6 +261,7 @@ module Main
     end # }}}
 
     def may_view_category?(cat_or_cat_id)
+    # {{{
       cat = false
       if cat_or_cat_id.is_a?(Aurita::Model) then
         cat = cat_or_cat_id
@@ -272,11 +273,13 @@ module Main
       return !User_Category.find(1).with((User_Category.category_id == cat.category_id) & 
                                          (User_Category.user_group_id == user_group_id) & 
                                          (User_Category.read_permission == 't')).entity.nil?
-    end
+    end # }}}
     alias may_view_category may_view_category?
     alias may_read_from_category may_view_category?
+    alias may_read_from_category? may_view_category?
 
     def may_write_to_category?(cat_or_cat_id)
+    # {{{
       cat = false
       if cat_or_cat_id.is_a?(Aurita::Model) then
         cat = cat_or_cat_id
@@ -288,7 +291,7 @@ module Main
       return !User_Category.find(1).with((User_Category.category_id == cat.category_id) & 
                                          (User_Category.user_group_id == user_group_id) & 
                                          (User_Category.write_permission == 't')).entity.nil?
-    end
+    end # }}}
     alias may_write_to_category may_write_to_category?
   end
 

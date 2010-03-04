@@ -111,7 +111,6 @@ module Main
     # {{{
       if !content.is_a? Content then
         entity = Content.load(:content_id => content)
-        raise ::Exception.new("Could not resolve content for #{content.inspect}") unless entity
         content = entity
       end
       raise ::Exception.new("Could not resolve content for #{content.inspect}") unless content
@@ -157,7 +156,7 @@ module Main
       permissions.each { |p|
         return true if p.user_group_id == user_group_id and !p.readonly
       }
-      return false if permissions.length > 0
+      return false 
     end # }}}
 
   end

@@ -1,5 +1,16 @@
+#!/usr/bin/env ruby1.8
 
-$scripts = [ 
+require('aurita')
+
+if ARGV.length != 1 then
+  STDERR.puts "No project name given"
+  STDERR.puts "Usage: gen_script.rb <project_name>"
+  exit(1)
+end
+
+Aurita.load_project ARGV[0].to_sym
+
+$core_scripts = [ 
   'jscalendar/calendar', 
   'jscalendar/lang/calendar-de', 
   'jscalendar/calendar-setup', 
@@ -16,31 +27,67 @@ $scripts = [
   :aurita_gui, 
   :editor, 
   :login, 
-  :main, 
+  :main
+]
 
-# Plugins
-
-  :wiki, 
-  :poll, 
-  :messaging, 
-  :bookmark, 
-  :publish, 
-
-# Finally
+$core_scripts_after = [
   :onload
 ]
 
-File.open("./aurita_bundle.js", "w") { |out|
-  $scripts.each do |script_filename|
-  File.open("./script/#{script_filename}.js", "r") { |f|
-    out.write("\n///////////////////////////////////////////////////////")
-    out.write("\n// BEGIN #{script_filename}")
-    out.write("\n///////////////////////////////////////////////////////\n")
-    out.write(f.read)
-    out.write("\n///////////////////////////////////////////////////////")
-    out.write("\n// END #{script_filename}")
-    out.write("\n///////////////////////////////////////////////////////\n")
+$plugin_scripts = Dir.glob("#{Aurita.project.base_path}plugins/*.rb").map { |path|
+  path.split('/')[-1].gsub('.rb','').to_sym
+}
+
+project_script_base = "#{Aurita.project.base_path}public/inc/"
+$project_scripts = Dir.glob("#{project_script_base}*.js").map { |path|
+  path = path.split('/')[-1].gsub('.js','').to_sym 
+}
+$project_scripts -= [ :dump ]
+
+def append_script(file_to, path_from)
+  File.open(path_from, "r") { |f|
+    file_to.write("\n///////////////////////////////////////////////////////")
+    file_to.write("\n// BEGIN #{path_from}")
+    file_to.write("\n///////////////////////////////////////////////////////\n")
+    file_to.write(f.read)
+    file_to.write("\n///////////////////////////////////////////////////////")
+    file_to.write("\n// END #{path_from}")
+    file_to.write("\n///////////////////////////////////////////////////////\n")
   }
+end
+
+File.open("#{Aurita.project.base_path}public/inc/dump.js", "w") { |out|
+  $core_scripts.each do |script_filename|
+    core_script    = "#{Aurita::App_Configuration.base_path}main/public/shared/script/#{script_filename}.js"
+    project_script = "#{project_script_base}main/#{script_filename}.js"
+    if File.exists?(project_script) then
+      core_script = project_script
+    end
+    append_script(out, core_script)
+  end
+  $plugin_scripts.each do |plugin_name|
+    plugin_script_base = "#{Aurita::App_Configuration.plugins_path}#{plugin_name}/public/script/"
+    Dir.glob("#{plugin_script_base}*.js") { |script_filename|
+      project_script = "#{project_script_base}#{plugin_name}/#{script_filename}"
+      plugin_script  = "#{plugin_script_base}#{script_filename}"
+      if File.exists?(project_script) then
+        plugin_script = project_script
+      end
+      puts plugin_script
+      append_script(out, plugin_script)
+    }
+  end
+  $project_scripts.each do |script_filename|
+    project_script = "#{project_script_base}#{script_filename}.js"
+    append_script(out, project_script)
+  end
+  $core_scripts_after.each do |script_filename|
+    core_script    = "#{Aurita::App_Configuration.base_path}main/public/shared/script/#{script_filename}.js"
+    project_script = "#{project_script_base}main/#{script_filename}.js"
+    if File.exists?(project_script) then
+      core_script = project_script
+    end
+    append_script(out, core_script)
   end
 }
 

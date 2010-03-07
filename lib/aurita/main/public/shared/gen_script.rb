@@ -34,8 +34,12 @@ $core_scripts_after = [
   :onload
 ]
 
-$plugin_scripts = Dir.glob("#{Aurita.project.base_path}plugins/*.rb").map { |path|
+def path_to_token(path)
   path.split('/')[-1].gsub('.rb','').to_sym
+end
+
+$plugin_scripts = Dir.glob("#{Aurita.project.base_path}plugins/*.rb").map { |path|
+  path_to_token(path)
 }
 
 project_script_base = "#{Aurita.project.base_path}public/inc/"
@@ -66,14 +70,14 @@ File.open("#{Aurita.project.base_path}public/inc/dump.js", "w") { |out|
     append_script(out, core_script)
   end
   $plugin_scripts.each do |plugin_name|
-    plugin_script_base = "#{Aurita::App_Configuration.plugins_path}#{plugin_name}/public/script/"
+    plugin_script_base = "#{Aurita::App_Configuration.plugins_path}#{plugin_name}/lib/public/script/"
     Dir.glob("#{plugin_script_base}*.js") { |script_filename|
+      script_filename = path_to_token(script_filename)
       project_script = "#{project_script_base}#{plugin_name}/#{script_filename}"
       plugin_script  = "#{plugin_script_base}#{script_filename}"
       if File.exists?(project_script) then
         plugin_script = project_script
       end
-      puts plugin_script
       append_script(out, plugin_script)
     }
   end

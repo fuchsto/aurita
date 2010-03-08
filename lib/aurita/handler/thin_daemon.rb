@@ -51,10 +51,10 @@ module Aurita
                              '/aurita'                => @aurita_std, 
                              '/aurita'                => @aurita_std, 
                              '/aurita/poll'           => @aurita_poll, 
-                             '/aurita/inc'            => Aurita_File_Application.new(root+'/inc'), 
+                             '/aurita/inc'            => Aurita_Theme_File_Application.new(root+'/inc'), 
                              '/aurita/shared'         => Aurita_File_Application.new(root+'/shared'), 
                              '/aurita/assets'         => Aurita_File_Application.new(root+'/assets'), 
-                             '/aurita/images'         => Aurita_File_Application.new(root+'/images'))
+                             '/aurita/images'         => Aurita_Theme_File_Application.new(root+'/images'))
 
       @http_server = Thin::Server.new(@options[:ip], @options[:port], app) 
 

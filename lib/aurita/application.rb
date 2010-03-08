@@ -2,6 +2,7 @@
 require('aurita/config')
 require('aurita/base/application')
 require('aurita/base/log/system_logger')
+require('aurita/modules/file_helpers')
 
 module Aurita
 
@@ -121,10 +122,11 @@ module Aurita
     # Project specific models are useful when overloading / 
     # redefining existing models just in one project. 
     #
-    def self.import_model(namespace, model=nil)
-      if model.nil? then
+    def self.import_model(namespace, *model)
+      if model.length == 0 then
         Aurita::Project.import('model/' << namespace.to_s) 
       else
+        model = fs_path(model)
         Aurita::Project.import('model/' << namespace.to_s << '/' << model.to_s)
       end
     end
@@ -158,6 +160,7 @@ module Aurita
   # plugin hooks just like controller methods in plugins. 
   #
   module Main
+  extend Aurita::File_Helpers
 
     class Application < Aurita::Base_Application
 
@@ -318,7 +321,8 @@ module Aurita
     #
     # Imports <aurita base dir>/main/model/user_login_data.rb
     #   
-    def self.import_model(model)
+    def self.import_model(*model)
+      model = fs_path(model)
       Aurita::Main.import('model/' << model.to_s)
     end
 

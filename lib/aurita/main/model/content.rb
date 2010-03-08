@@ -2,10 +2,12 @@
 require('aurita/model')
 Aurita.import_module :tagging
 Aurita.import_module :categorized
+Aurita.import_module :access_strategy
 Aurita::Main.import_model :user_group
 Aurita::Main.import_model :tag_index
 Aurita::Main.import_model :category
 Aurita::Main.import_model :tag_relevance
+Aurita::Main.import_model :strategies, :category_based_content_access
 
 module Aurita
 module Main
@@ -33,8 +35,10 @@ module Main
   # possessor of this instance) and timestamps 'created' and 'changed'. 
   #
   class Content < Aurita::Model
+  # {{{
     extend Aurita::Taggable_Behaviour
     extend Aurita::Categorized_Behaviour
+    include Aurita::Access_Strategy
 
     @@logger = Aurita::Log::Class_Logger.new(self.to_s)
 
@@ -52,6 +56,7 @@ module Main
     hide_attribute :user_group_id
 
     use_category_map(Content_Category, :content_id => :category_id)
+    use_access_strategy(Category_Based_Content_Access)
 
     def user_group
       u =   User_Group.load(:user_group_id => user_group_id)
@@ -268,7 +273,23 @@ module Main
       1
     end
     
-  end # class
+  end # class }}}
+
+  class User_Group < Aurita::Model
+
+    # Whether user has read permissions on given Content instance. 
+    # Behaviour depends on the content's access strategy. 
+    def may_view_content?(content)
+      content.access_strategy.permits_read_access_for(self)
+    end 
+    
+    # Whether user has permissions to perform changes on given Content instance. 
+    # Behaviour depends on the content's access strategy. 
+    def may_edit_content?(content)
+      content.access_strategy.permits_write_access_for(self)
+    end 
+
+  end
 
 end # module
 end # module

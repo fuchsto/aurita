@@ -203,8 +203,9 @@ module Aurita
   #
   #   Aurita.import_plugin_model :wiki, :article
   #
-  def self.import_plugin_model(plugin, model)
+  def self.import_plugin_model(plugin, *model)
     r = false
+    model = fs_path(model)
     begin
       r = require("#{Aurita::App_Configuration.plugins_path}#{plugin}/model/#{model}")
     rescue LoadError => e
@@ -308,6 +309,10 @@ module Aurita
       }
     }
     return @models
+  end
+
+  def self.memory_usage
+    `ps -o rss= -p #{Process.pid}`.to_i 
   end
 
   module Plugins

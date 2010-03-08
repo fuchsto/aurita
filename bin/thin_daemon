@@ -17,7 +17,8 @@ opts = GetoptLong.new(
          [ '--killold',   '-k', GetoptLong::OPTIONAL_ARGUMENT ], 
          [ '--port',      '-p', GetoptLong::OPTIONAL_ARGUMENT ], 
          [ '--verbosive', '-v', GetoptLong::OPTIONAL_ARGUMENT ], 
-         [ '--mode', GetoptLong::OPTIONAL_ARGUMENT ]
+         [ '--mode',      '-m', GetoptLong::OPTIONAL_ARGUMENT ], 
+         [ '--log',       '-l', GetoptLong::OPTIONAL_ARGUMENT ]
        )
 
 project_name = ARGV.shift
@@ -28,6 +29,7 @@ short     = false
 killold   = false
 verbosive = false
 deflate   = false # usually the master webserver, like nginx, is already applying gzip or deflate
+logfile   = ''
 
 opts.each { |opt, arg| 
   case opt
@@ -41,6 +43,11 @@ opts.each { |opt, arg|
     verbosive = true
   when '--port' then
     port      = arg.to_i
+  when '--log' then
+    logfile = arg
+    if arg == 'stderr' then
+      logfile = STDERR
+    end
   when '--mode' then
     mode = arg.to_sym
     mode = :production if mode == :p
@@ -74,7 +81,7 @@ if !project_name then
   exit
 end
 
-logfile = "/var/log/aurita/aurita_#{project_name}_#{port}_#{mode}.log"
+logfile ||= "/var/log/aurita/aurita_#{project_name}_#{port}_#{mode}.log"
 
 if killold then
   # TODO: This is really quick'n'dirty

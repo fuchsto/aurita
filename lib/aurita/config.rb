@@ -12,8 +12,8 @@ module Aurita
     projects_base_path '/usr/share/gitwc/aurita_projects/'
     plugins_path  '/usr/share/gitwc/aurita-plugins/'
 
-    sys_log_path '/var/log/aurita/sys.log'
-    run_log_path '/var/log/aurita/sys.log'
+    sys_log_path '/usr/share/gitwc/log/aurita/sys.log'
+    run_log_path '/usr/share/gitwc/log/aurita/sys.log'
 
   end
 

@@ -597,6 +597,7 @@ a.icon img, a.button img {
   margin: -2px 4px 0px 0px; 
   display: inline !important; 
   vertical-align: middle; 
+  padding-top: 2px; 
 }
 
 .toolbox_body a.icon:hover { 

@@ -51,7 +51,7 @@ module Aurita
       if block_given? then
         args = block
       end
-      return config.__send__(meth, *args) if block_given? || args.length == 0
+      return config.__send__(meth, *args) if !block_given? && args.length == 0
       return config.__send__("#{meth}=".to_sym, *args)
     end
 

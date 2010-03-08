@@ -2233,4 +2233,6 @@ table.listing_2_columns {
   color:rgba(255, 255, 255, 0.3);
 }
 
-
+.Wiki__Text_Asset { 
+  clear: both; 
+}

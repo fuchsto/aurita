@@ -46,7 +46,7 @@ project_script_base = "#{Aurita.project.base_path}public/inc/"
 $project_scripts = Dir.glob("#{project_script_base}*.js").map { |path|
   path = path.split('/')[-1].gsub('.js','').to_sym 
 }
-$project_scripts -= [ :dump ]
+$project_scripts -= [ :aurita_bundle ]
 
 def append_script(file_to, path_from)
   File.open(path_from, "r") { |f|
@@ -60,13 +60,14 @@ def append_script(file_to, path_from)
   }
 end
 
-File.open("#{Aurita.project.base_path}public/inc/dump.js", "w") { |out|
+File.open("#{project_script_base}/aurita_bundle.js", "w") { |out|
   $core_scripts.each do |script_filename|
     core_script    = "#{Aurita::App_Configuration.base_path}main/public/shared/script/#{script_filename}.js"
     project_script = "#{project_script_base}main/#{script_filename}.js"
     if File.exists?(project_script) then
       core_script = project_script
     end
+    puts "Using #{core_script}"
     append_script(out, core_script)
   end
   $plugin_scripts.each do |plugin_name|
@@ -78,11 +79,13 @@ File.open("#{Aurita.project.base_path}public/inc/dump.js", "w") { |out|
       if File.exists?(project_script) then
         plugin_script = project_script
       end
+      puts "Using #{plugin_script}"
       append_script(out, plugin_script)
     }
   end
   $project_scripts.each do |script_filename|
     project_script = "#{project_script_base}#{script_filename}.js"
+    puts "Using #{project_script}"
     append_script(out, project_script)
   end
   $core_scripts_after.each do |script_filename|
@@ -91,6 +94,7 @@ File.open("#{Aurita.project.base_path}public/inc/dump.js", "w") { |out|
     if File.exists?(project_script) then
       core_script = project_script
     end
+    puts "Using #{core_script}"
     append_script(out, core_script)
   end
 }

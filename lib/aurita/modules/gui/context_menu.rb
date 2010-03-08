@@ -91,16 +91,18 @@ module GUI
         context_button << params[:add_context_buttons]
       end
       
+      type_css_class = type.gsub('::','__')
+
       if params[:show_button] == true then
-        element = HTML.div(:class => [ type, :context_menu_element ] ) { 
+        element = HTML.div(:class => [ type_css_class, :context_menu_element ] ) { 
           context_button + element 
         } 
       elsif params[:show_button] == :append then
-        element << HTML.div(:class => [ type, :context_menu_element ] ) { 
+        element << HTML.div(:class => [ type_css_class, :context_menu_element ] ) { 
            context_button
         } 
       elsif params[:show_button] == :prepend then
-        element.prepend(HTML.div(:class => [ type, :context_menu_element ] ) { 
+        element.prepend(HTML.div(:class => [ type_css_class, :context_menu_element ] ) { 
           context_button  
         })
       end

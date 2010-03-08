@@ -39,6 +39,9 @@ img.mceItemAnchor {
 img {border:0;}
 table {cursor:default}
 table td, table th {cursor:text}
+table td { 
+  padding-right: 20px; 
+}
 ins {border-bottom:1px solid green; text-decoration: none; color:green}
 del {color:red; text-decoration:line-through}
 cite {border-bottom:1px dashed blue}
@@ -96,5 +99,19 @@ h5, h6 {
 
 h1, h2, h3, h4, h5, h6 { 
   color: #3287D7;
+}
+
+img.image_left { 
+  float: left; 
+  margin-right: 20px; 
+  margin-bottom: 10px; 
+}
+img.image_right { 
+  float: right; 
+  margin-left: 20px; 
+  margin-bottom: 10px; 
+}
+.no_float { 
+  clear: both; 
 }
 

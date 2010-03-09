@@ -78,6 +78,18 @@ module Main
 
   class User_Group < Aurita::Model
 
+    def add_category(category, params={})
+      cat_id = category
+      cat_id = category.category_id if category.is_a?(Aurita::Model) 
+      params.update(:user_group_id => user_group_id, 
+                    :category_id   => cat_id)
+      # Invalidate cache
+      @category_ids           = false
+      @readable_category_ids  = false
+      @writeable_category_ids = false
+      User_Category.create(params)
+    end
+
     # Returns private Category of this user. 
     def category
     # {{{

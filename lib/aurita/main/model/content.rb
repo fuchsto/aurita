@@ -228,50 +228,6 @@ module Main
       Content_Comment.value_of.count(:content_id).where(Content_Comment.content_id == content_id).to_i
     end
 
-    # Returns array of Category instances mapped to this content, or 
-    # category with id 1 (no category). 
-    def categories
-      return @categories if @categories
-
-      @categories = Category.select { |cc| 
-        cc.join(Content_Category).using(:category_id) { |c| 
-          c.where(c.content_id == content_id) 
-        } 
-      }.to_a
-      @categories = [ Category.load(:category_id => 1) ] unless @categories
-      @categories
-    end
-
-    # Returns first category of this Content instance, or 
-    # category with id 1 (no category). 
-    def category
-      @category ||= Category.select { |cc| 
-        cc.join(Content_Category).using(:category_id) { |c| 
-          c.where(c.content_id == content_id) 
-          c.limit(1)
-        } 
-      }.first
-      @category ||= Category.load(:category_id => 1) unless @category
-      return @category
-    end
-
-    # Returns category ids mapped to this Content instance via Content_Category 
-    # as Array. 
-    def category_ids
-      return @category_ids if @category_ids 
-
-      @category_ids = Content_Category.select_values(:category_id) { |cc| 
-        cc.where(cc.content_id == content_id) 
-      }.to_a.flatten.map { |cid| cid.to_i }
-      @category_ids = [1] unless @category_ids
-      @category_ids
-    end
-
-    # Returns first category id mapped to this Content instance. 
-    def category_id
-      return category.category_id if category
-      1
-    end
     
   end # class }}}
 

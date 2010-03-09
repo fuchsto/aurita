@@ -1,5 +1,6 @@
 
 require('aurita')
+Aurita::Main.import_model :content_permissions
 Aurita::Main.import_model :strategies, :abstract_content_access
 
 module Aurita
@@ -14,13 +15,13 @@ module Main
     # - Content instance and user are mapped to at least one common Category. 
     # - User has been granted exceptional read permissions via Content_Permission. 
     #
-    def permits_read_acccess_for(user)
-      return true if (user.is_admin? || (@content.user_group_id == user_group_id))
+    def permits_read_access_for(user)
+      return true if (user.is_admin? || (@content.user_group_id == user.user_group_id))
       return true if (user.readable_category_ids() & (@content.category_ids)).length > 0
 
       permissions = Content_Permissions.all_with(Content_Permissions.content_id == @content.content_id).entities
       permissions.each { |p|
-        return true if p.user_group_id == @user.user_group_id
+        return true if p.user_group_id == user.user_group_id
       }
       return false 
     end
@@ -41,8 +42,8 @@ module Main
     # - User has been granted exceptional write permissions via Content_Permission. 
     #
     def permits_write_access_for(user)
-      return true if (user.is_admin? || (@content.user_group_id == user_group_id))
-      return false if content.locked 
+      return true if (user.is_admin? || (@content.user_group_id == user.user_group_id))
+      return false if @content.locked 
       return true if ((user.writeable_category_ids() & (@content.category_ids)).length > 0)
 
       permissions = Content_Permissions.all_with(Content_Permissions.content_id == @content.content_id).entities

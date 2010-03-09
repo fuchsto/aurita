@@ -29,7 +29,7 @@ module Aurita
     end
 
     def access_strategy
-      @access_strategy ||= self.klass.access_strategy.new(self)
+      @access_strategy ||= self.class.access_strategy.new(self)
       @access_strategy
     end
   end

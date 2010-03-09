@@ -1,5 +1,6 @@
 *~
 *.swp
+*.swo
 /lib/aurita/tmp
 /doc
 /lib/aurita/doc

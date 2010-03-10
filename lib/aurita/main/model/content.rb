@@ -6,7 +6,7 @@ Aurita::Main.import_model :user_group
 Aurita::Main.import_model :tag_index
 Aurita::Main.import_model :category
 Aurita::Main.import_model :tag_relevance
-Aurita::Main.import_model :strategies, :category_based_content_access
+Aurita::Main.import_model :strategies, :category_based_access
 
 module Aurita
 module Main
@@ -36,7 +36,7 @@ module Main
   class Content < Aurita::Model
   # {{{
     extend Aurita::Taggable_Behaviour
-    extend Aurita::Access_Strategy
+    include Aurita::Access_Strategy
 
     @@logger = Aurita::Log::Class_Logger.new(self.to_s)
 
@@ -53,7 +53,7 @@ module Main
 
     hide_attribute :user_group_id
 
-    use_access_strategy(Category_Based_Content_Access, 
+    use_access_strategy(Category_Based_Access, 
                         :managed_by => Content_Category, 
                         :mapping    => { :content_id => :category_id } )
 

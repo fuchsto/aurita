@@ -20,7 +20,7 @@ module Aurita
   #
   #   end
   #
-  module Access_Strategy
+  module Access_Strategy_Class_Methods
     @access_strategy_klass = nil
     @access_strategy_params = nil
 
@@ -31,7 +31,7 @@ module Aurita
     def use_access_strategy(klass, params={})
       klass.on_use(self, params)
       @access_strategy_params = params
-      @access_strategy_klass = klass
+      @access_strategy_klass  = klass
     end
 
     # Returns currently used access strategy klass 
@@ -40,20 +40,20 @@ module Aurita
       @access_strategy_klass
     end
 
-    # Hook called when extending a klass with this 
-    # module. Automatically includes Access_Strategy_Instance_Methods 
-    # into the klass extended. 
-    #
-    def self.extended(extended_klass)
-      extended_klass.include(Access_Strategy_Instance_Methods)
-    end
-
   end
 
   # Instance methods for Access_Strategy module. 
   # Automatically included when extending a klass with 
   # Access_Strategy. 
-  module Access_Strategy_Instance_Methods
+  module Access_Strategy
+
+    # Hook called when extending a klass with this 
+    # module. Automatically includes Access_Strategy_Instance_Methods 
+    # into the klass extended. 
+    #
+    def self.included(extended_klass)
+      extended_klass.extend(Access_Strategy_Class_Methods)
+    end
 
     def access_strategy
       @access_strategy ||= self.class.access_strategy.new(self)

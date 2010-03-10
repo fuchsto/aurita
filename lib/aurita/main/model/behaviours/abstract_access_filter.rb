@@ -1,7 +1,7 @@
 
 module Aurita
 
-  module Abstract_Access_Filter_Instance_Behaviour
+  module Abstract_Access_Filter_Class_Behaviour
 
     def accessible
     end
@@ -18,10 +18,6 @@ module Aurita
     alias accessible? accessible
     alias is_accessible accessible
     alias is_accessible? accessible
-
-    def self.extended(extended_klass)
-      extended_klass.include(Abstract_Access_Filter_Instance_Behaviour)
-    end
 
   end
 

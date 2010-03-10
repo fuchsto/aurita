@@ -26,7 +26,7 @@ module Main
   end
 
   class Hierarchy
-  extend Aurita::Access_Strategy
+  include Aurita::Access_Strategy
 
     use_access_strategy(Category_Based_Content_Access, 
                         :managed_by => Hierarchy_Category, 

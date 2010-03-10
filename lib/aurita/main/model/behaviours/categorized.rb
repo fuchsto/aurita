@@ -1,6 +1,7 @@
 
 require('aurita')
-Aurita::Main.import_model :behaviour, :abstract_access_filter
+require('module-import')
+Aurita::Main.import_model :behaviours, :abstract_access_filter
 
 module Aurita
 
@@ -9,7 +10,8 @@ module Aurita
     end
   end
 
-  module Categorized_Instance_Behaviour < Abstract_Access_Filter_Instance_Behaviour
+  module Categorized_Behaviour 
+    extend Abstract_Access_Filter_Behaviour
 
     # Returns true if model instance is accessible for the 
     # given user, otherwise returns false. 
@@ -42,7 +44,7 @@ module Aurita
         key_field    = mapping[:key_attrib]
 
         @category_ids = map.select_values(cat_id_field) { |cat_ids| 
-          cat_ids.where(key_field == key_value))
+          cat_ids.where(key_field == key_value)
         }.to_a.flatten.map { |cat_id| cat_id.to_i }
       end
       @category_ids
@@ -56,7 +58,7 @@ module Aurita
         key_value    = __send__(key_field)
 
         @categories = map.select { |cat| 
-          cat.where(key_field == key_value))
+          cat.where(key_field == key_value)
         }.to_a
       end
       @categories
@@ -132,7 +134,9 @@ module Aurita
   # Matches user categories against content categories, filtering 
   # those accessible for this user (Aurita.user instance). 
   #
-  module Categorized_Behaviour < Abstract_Access_Filter_Behaviour
+  module Categorized_Class_Behaviour 
+    extend Abstract_Access_Filter_Class_Behaviour
+
     @category_map               = Content_Category
     @category_map_key_attrib    = :content_id
     @category_map_cat_id_attrib = :category_id
@@ -155,8 +159,8 @@ module Aurita
         :map                => @category_map, 
         :key_attrib_name    => @category_map_key_attrib, 
         :cat_id_attrib_name => @category_map_cat_id_attrib, 
-        :key_attrib         => __send__(@category_map_key_attrib), 
-        :cat_id_attrib      => __send__(@category_map_cat_id_attrib)
+        :key_attrib         => @category_map.__send__(@category_map_key_attrib), 
+        :cat_id_attrib      => @category_map.__send__(@category_map_cat_id_attrib)
       }
     end
 
@@ -186,9 +190,8 @@ module Aurita
     end
 
     def self.extended(extended_klass)
-      extended_klass.include(Categorized_Instance_Behaviour)
+      extended_klass.import(Categorized_Behaviour)
     end
-
   end
 
 end

@@ -18,7 +18,7 @@ module Main
     #
     def permits_read_access_for(user)
       return true if user.is_admin? 
-      return true if @instance.respond_to?(:user_group_id) && (@instance.user_group_id == user.user_group_id))
+      return true if @instance.respond_to?(:user_group_id) && (@instance.user_group_id == user.user_group_id)
       return false if @instance.respond_to?(:locked) && @instance.locked 
       return false if @instance.respond_to?(:deleted) && @instance.deleted
       return false 
@@ -41,7 +41,7 @@ module Main
     #
     def permits_write_access_for(user)
       return true if user.is_admin? 
-      return true if @instance.respond_to?(:user_group_id) && (@instance.user_group_id == user.user_group_id))
+      return true if @instance.respond_to?(:user_group_id) && (@instance.user_group_id == user.user_group_id)
       return false if @instance.respond_to?(:locked) && @instance.locked 
       return false if @instance.respond_to?(:deleted) && @instance.deleted
       return true if ((user.writeable_category_ids() & (@instance.category_ids)).length > 0)
@@ -58,7 +58,7 @@ module Main
     #
     # 
     def self.on_use(klass, params=false)
-      klass.extend(Categorized_Behaviour)
+      klass.extend(Categorized_Class_Behaviour)
       if params then
         klass.use_category_map(params[:managed_by], params[:mapping])
       end

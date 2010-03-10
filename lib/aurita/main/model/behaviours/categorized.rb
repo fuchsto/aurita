@@ -54,7 +54,7 @@ module Aurita
       end
 
       map.create({ cat_field => cat_id, 
-                   key_field    => key_value })
+                   key_field => key_value })
       
       if @category_ids then
         @category_ids << cat_id
@@ -155,7 +155,6 @@ module Aurita
     end
 
     def self.extended(extended_klass)
-      raise ::Exception.new("CCB EXTENDED #{extended_klass.inspect}") unless extended_klass.is_a?(Module)
       extended_klass.import(Categorized_Behaviour) unless extended_klass.is_a?(Module)
     end
   end # }}}
@@ -213,7 +212,7 @@ module Aurita
     end
 
     def self.extended(extended_klass)
-      extended_klass.import(Categorized_Access_Behaviour) unless extended_klass.is_a?(Module)
+      extended_klass.import(Categorized_Access_Behaviour) 
     end
 
   end # module Categorized_Access_Class_Behaviour }}}
@@ -459,7 +458,7 @@ module Aurita
     # {{{
 
     def self.extended(extended_klass)
-      extended_klass.import(Categorized_Accessor_Behaviour) unless extended_klass.is_a?(Module)
+      extended_klass.import(Categorized_Accessor_Behaviour) 
     end
   end # }}}
 

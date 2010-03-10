@@ -17,6 +17,7 @@ describe(Category) do
     c   = Content.create(:user_group_id => 1, 
                          :tags          => [ :spec, :test ])
     cat = Category.create(:category_name => 'Cat')
+    c.respond_to?(:add_category).should == true
     c.add_category(cat)
 
     c.category_ids.should_include(cat.category_id)

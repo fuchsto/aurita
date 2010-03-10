@@ -6,12 +6,12 @@ module Aurita
 module Main
 
   class Content_Comment < Aurita::Model
-    extend Aurita::Access_Strategy
+    include Aurita::Access_Strategy
 
     table :content_comment, :public
     primary_key :content_comment_id, :content_comment_id_seq
 
-    use_access_strategy(Category_Based_Content_Access, 
+    use_access_strategy(Category_Based_Access, 
                         :managed_by => Content_Category, 
                         :mapping    => { :content_id => :category_id } )
     

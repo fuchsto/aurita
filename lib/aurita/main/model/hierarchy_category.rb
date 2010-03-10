@@ -26,18 +26,11 @@ module Main
   end
 
   class Hierarchy
-  extend Aurita::Categorized_Behaviour
+  extend Aurita::Access_Strategy
 
-    def category_ids
-      if !@category_ids then
-        @category_ids = Hierarchy_Category.select_values(:category_id) { |cid|
-          cid.where(:hierarchy_id.eq(hierarchy_id))
-        }
-      end
-      return @category_ids
-    end
-
-    use_category_map(Hierarchy_Category, :hierarchy_id => :category_id)
+    use_access_strategy(Category_Based_Content_Access, 
+                        :managed_by => Hierarchy_Category, 
+                        :mapping    => { :hierarchy_id => :category_id } )
     
   end 
 

@@ -6,11 +6,15 @@ module Aurita
 module Main
 
   class Content_Comment < Aurita::Model
-  extend Aurita::Categorized_Behaviour
+    extend Aurita::Access_Strategy
 
     table :content_comment, :public
     primary_key :content_comment_id, :content_comment_id_seq
 
+    use_access_strategy(Category_Based_Content_Access, 
+                        :managed_by => Content_Category, 
+                        :mapping    => { :content_id => :category_id } )
+    
     add_input_filter(:message) { |m|
       m.gsub("'",'&apos;')
     }

@@ -24,8 +24,6 @@ describe Aurita::Main::DACL_Based_Content_Access do
       strategy.permits_write_access_for(user).should == false
 
       strategy.grant(:user       => user, 
-                     :content    => content, 
-                     :inherit    => false, 
                      :permission => [ :r, :w ])
 
       strategy.permits_read_access_for(user).should == :explicit
@@ -65,7 +63,6 @@ describe Aurita::Main::DACL_Based_Content_Access do
       strategy.permits_write_access_for(user).should == false
 
       p_strategy.grant(:user       => user, 
-                       :inherit    => false, 
                        :permission => [ :r, :w ])
 
       p_strategy.permits_read_access_for(user).should == :explicit

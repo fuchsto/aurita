@@ -1,5 +1,5 @@
 
-require('../spec_env')
+require('./spec_env')
 
 Aurita::Main.import_model :user_category
 Aurita::Main.import_model :user_group

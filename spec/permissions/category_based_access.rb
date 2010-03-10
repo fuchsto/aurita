@@ -1,5 +1,5 @@
 
-require('../spec_env')
+require('./spec_env')
 
 Aurita::Main.import_model :content
 Aurita::Main.import_model :content_category

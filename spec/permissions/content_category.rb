@@ -1,4 +1,5 @@
 
+require('./spec_env')
 
 describe(Content_Permission) do
 

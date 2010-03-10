@@ -5,8 +5,8 @@ module Main
   class Abstract_Access_Strategy
 
     # Expects model instance to manage access control for. 
-    def initialize(content)
-      @instance = content
+    def initialize(inst)
+      @instance = inst
     end
 
     # Wheter given user has read access on the model instance 

@@ -3,12 +3,12 @@ require('aurita')
 Aurita::Main.import_model :content_permissions
 Aurita::Main.import_model :content_hierarchy
 Aurita::Main.import_model :user_dacl
-Aurita::Main.import_model :strategies, :abstract_content_access
+Aurita::Main.import_model :strategies, :abstract_access_strategy
 
 module Aurita
 module Main
 
-  class DACL_Based_Content_Access < Abstract_Content_Access
+  class DACL_Based_Access < Abstract_Access_Strategy
 
     # Whether user has requested permission on given Content instance. 
     # Returns true in the following cases: 
@@ -44,16 +44,16 @@ module Main
     #
     def permits_access_for(user, permission)
       return :admin if (user.is_admin?)
-      return :owner if (@content.user_group_id == user.user_group_id)
+      return :owner if (@instance.user_group_id == user.user_group_id)
 
       return false if denies_access_for(user, permission)
 
       user_group_id_set = user.user_group_id_stack
-      return :explicit if User_DACL.find(1).with((User_DACL.content_id == @content.content_id) &
+      return :explicit if User_DACL.find(1).with((User_DACL.content_id == @instance.content_id) &
                                             (User_DACL.user_group_id.in(user_group_id_set)) & 
                                             (User_DACL.deny == false) & 
                                             (User_DACL.permissions.has_element(permission.to_s))).entity
-      content_id_stack  = @content.content_id_stack
+      content_id_stack  = @instance.content_id_stack
       return :inherit if User_DACL.find(1).with((User_DACL.inherit == true) &
                                             (User_DACL.content_id.in(content_id_stack)) &
                                             (User_DACL.user_group_id.in(user_group_id_set)) & 
@@ -66,11 +66,11 @@ module Main
 
     def denies_access_for(user, permission)
       user_group_id_set = user.user_group_id_stack
-      return :explicit if User_DACL.find(1).with((User_DACL.content_id == @content.content_id) &
+      return :explicit if User_DACL.find(1).with((User_DACL.content_id == @instance.content_id) &
                                             (User_DACL.user_group_id.in(user_group_id_set)) & 
                                             (User_DACL.deny == true) & 
                                             (User_DACL.permissions.has_element(permission.to_s))).entity
-      content_id_stack  = @content.content_id_stack
+      content_id_stack  = @instance.content_id_stack
       return :inherit if User_DACL.find(1).with((User_DACL.inherit == true) &
                                             (User_DACL.content_id.in(content_id_stack)) &
                                             (User_DACL.user_group_id.in(user_group_id_set)) & 
@@ -103,11 +103,11 @@ module Main
       perm ||= params[:permissions]
       User_DACL.delete { |ace|
         ace.where(:deny          => 't', 
-                  :content_id    => @content.content_id, 
+                  :content_id    => @instance.content_id, 
                   :user_group_id => obj.user_group_id)
       }
       User_DACL.create(:user_group_id => obj.user_group_id, 
-                       :content_id    => @content.content_id, 
+                       :content_id    => @instance.content_id, 
                        :permissions   => perm, 
                        :deny          => false,  
                        :inherit       => (params[:inherit] == true))
@@ -120,11 +120,11 @@ module Main
       perm ||= params[:permissions]
       User_DACL.delete { |ace|
         ace.where(:deny          => 'f', 
-                  :content_id    => @content.content_id, 
+                  :content_id    => @instance.content_id, 
                   :user_group_id => obj.user_group_id)
       }
       User_DACL.create(:user_group_id => obj.user_group_id, 
-                       :content_id    => @content.content_id, 
+                       :content_id    => @instance.content_id, 
                        :permissions   => perm, 
                        :deny          => true, 
                        :inherit       => (params[:inherit] == true))

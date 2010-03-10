@@ -3,9 +3,9 @@ require('./spec_env')
 
 Aurita::Main.import_model :content
 Aurita::Main.import_model :content_category
-Aurita::Main.import_model :strategies, :category_based_content_access
+Aurita::Main.import_model :strategies, :category_based_access
 
-describe Aurita::Main::Category_Based_Content_Access do
+describe Aurita::Main::Category_Based_Access do
 
   before do
     Category.delete_all
@@ -15,7 +15,7 @@ describe Aurita::Main::Category_Based_Content_Access do
   it "respects content in public categories" do
     Lore::Transaction.exec { 
       content    = Content.create(:user_group_id => 1, :tags => [ :foo, :bar ])
-      strategy   = Category_Based_Content_Access.new(content)
+      strategy   = Category_Based_Access.new(content)
       user       = User_Group.get(1001)
       public_cat = Category.create(:category_name    => 'Public', 
                                    :public_readable  => true, 
@@ -38,7 +38,7 @@ describe Aurita::Main::Category_Based_Content_Access do
   it "allows read access for category members with explicit read permissions in a content's category" do
     Lore::Transaction.exec { 
       content    = Content.create(:user_group_id => 1, :tags => [ :foo, :bar ])
-      strategy   = Category_Based_Content_Access.new(content)
+      strategy   = Category_Based_Access.new(content)
       user       = User_Group.get(1001)
       closed_cat = Category.create(:category_name        => 'Members only', 
                                    :registered_readable  => false, 
@@ -64,7 +64,7 @@ describe Aurita::Main::Category_Based_Content_Access do
     Lore::Transaction.exec { 
       content    = Content.create(:user_group_id => 1, 
                                   :tags          => [ :foo, :bar ])
-      strategy   = Category_Based_Content_Access.new(content)
+      strategy   = Category_Based_Access.new(content)
       user       = User_Group.get(1001)
       closed_cat = Category.create(:category_name        => 'Members only', 
                                    :registered_readable  => false, 

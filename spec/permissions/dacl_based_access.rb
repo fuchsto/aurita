@@ -3,9 +3,9 @@ require('./spec_env')
 
 Aurita::Main.import_model :content
 Aurita::Main.import_model :content_category
-Aurita::Main.import_model :strategies, :dacl_based_content_access
+Aurita::Main.import_model :strategies, :dacl_based_access
 
-describe Aurita::Main::DACL_Based_Content_Access do
+describe Aurita::Main::DACL_Based_Access do
 
 
   before do
@@ -17,7 +17,7 @@ describe Aurita::Main::DACL_Based_Content_Access do
   it "is a restrictive, discretionary access control based on mapping users to concrete permissions" do
     Lore::Transaction.exec { 
       content    = Content.create(:user_group_id => 1, :tags => [ :foo, :bar ])
-      strategy   = DACL_Based_Content_Access.new(content)
+      strategy   = DACL_Based_Access.new(content)
       user       = User_Group.get(1001)
 
       strategy.permits_read_access_for(user).should == false
@@ -37,8 +37,8 @@ describe Aurita::Main::DACL_Based_Content_Access do
       parent     = Content.create(:user_group_id => 1, :tags => [ :spec, :parent, :test ])
       parent.add_child(content)
 
-      strategy   = DACL_Based_Content_Access.new(content)
-      p_strategy = DACL_Based_Content_Access.new(parent)
+      strategy   = DACL_Based_Access.new(content)
+      p_strategy = DACL_Based_Access.new(parent)
       user       = User_Group.get(1001)
 
       strategy.permits_read_access_for(user).should == false
@@ -82,7 +82,7 @@ describe Aurita::Main::DACL_Based_Content_Access do
   it "allows permission sets for user groups" do
     Lore::Transaction.exec { 
       content    = Content.create(:user_group_id => 1, :tags => [ :spec, :test ])
-      strategy   = DACL_Based_Content_Access.new(content)
+      strategy   = DACL_Based_Access.new(content)
       group      = User_Group.create(:user_group_name => 'Authors', 
                                      :atomic          => false)
       user       = User_Group.get(1001)

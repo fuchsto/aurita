@@ -65,10 +65,8 @@ module Main
     #
     def has_permission(perm)
     # {{{
-      if perm == :is_super_admin then
-        # raise ::Exception.new('find me')
-      end
-      if @role_permissions.nil? || @role_permissions[perm.to_s].nil? then
+      perm = perm.to_sym
+      if @role_permissions.nil? || @role_permissions[perm].nil? then
         perms = Role_Permission.select { |rp| 
           rp.join(User_Role).on(Role_Permission.role_id == User_Role.role_id) { |urp|
             urp.where((User_Role.user_group_id == user_group_id) &
@@ -78,12 +76,12 @@ module Main
         }.first
         @role_permissions = Hash.new unless @role_permissions
         if perms.nil? then
-          @role_permissions[perm.to_s] = false
+          @role_permissions[perm] = false
         else
-          @role_permissions[perm.to_s] = true
+          @role_permissions[perm] = true
         end
       end
-      @role_permissions[perm.to_s] 
+      (@role_permissions[perm] == true)
     end # }}}
     alias has_permission? has_permission
     alias may has_permission

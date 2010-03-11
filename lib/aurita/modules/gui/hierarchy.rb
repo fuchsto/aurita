@@ -153,6 +153,7 @@ module GUI
           end
         end
       end
+      entry = HTML.div { entry } if entry.kind_of?(String)
       entry
     end
 

@@ -37,6 +37,9 @@ module Aurita
     # Returns currently used access strategy klass 
     # previously set using .use_access_strategy. 
     def access_strategy
+      if !@access_strategy_klass && superclass.respond_to?(:access_strategy)
+        @access_strategy_klass = superclass.access_strategy 
+      end
       @access_strategy_klass
     end
 
@@ -56,7 +59,11 @@ module Aurita
     end
 
     def access_strategy
-      @access_strategy ||= self.class.access_strategy.new(self)
+      begin
+        @access_strategy ||= self.class.access_strategy.new(self)
+      rescue ::Exception => e
+        raise ::Exception.new("Could not resolve access strategy klass for #{self.class.inspect}")
+      end
       @access_strategy
     end
   end

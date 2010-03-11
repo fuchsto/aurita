@@ -29,7 +29,7 @@ short     = false
 killold   = false
 verbosive = false
 deflate   = false # usually the master webserver, like nginx, is already applying gzip or deflate
-logfile   = ''
+logfile   = false
 
 opts.each { |opt, arg| 
   case opt

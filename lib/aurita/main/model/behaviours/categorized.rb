@@ -136,7 +136,10 @@ module Aurita
     end
 
     def category_mapping
-      { 
+      if !@category_map && superclass.respond_to?(:category_mapping) then
+        return superclass.category_mapping
+      end
+      @category_mapping ||= { 
         :map                => @category_map, 
         :key_attrib_name    => @category_map_key_attrib, 
         :cat_id_attrib_name => @category_map_cat_id_attrib, 

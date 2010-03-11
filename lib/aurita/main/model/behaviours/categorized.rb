@@ -34,9 +34,10 @@ module Aurita
         map          = mapping[:map]
         key_field    = mapping[:key_attrib_name]
         key_value    = __send__(key_field)
-
-        @categories = map.select { |cat| 
-          cat.where(key_field == key_value)
+        @categories = map.select { |cat_map| 
+          cat_map.join(Category).using(:category_id) { |cat|
+            cat.where(key_field => key_value)
+          }
         }.to_a
       end
       @categories
@@ -213,6 +214,9 @@ module Aurita
       end
       return permission_constraints
     end
+    alias accessible? accessible
+    alias is_accessible accessible
+    alias is_accessible? accessible
 
     def self.extended(extended_klass)
       extended_klass.import(Categorized_Access_Behaviour) 

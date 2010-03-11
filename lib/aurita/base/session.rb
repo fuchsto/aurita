@@ -46,6 +46,8 @@ module Aurita
     def initialize(rack_request)
       @user         = false
       @env          = rack_request.env
+      raise ::Exception.new("Cowardly refusing to open a session without a request environment") unless @env
+
       @session_opts = @env['rack.session.options']
       @session_id   = @session_opts[:id] if @session_opts
     end
@@ -55,9 +57,9 @@ module Aurita
     # credentials after logon. 
     # Returns session id created for this user. 
     def open(user)
-      @session ||= @env['rack.session']
+      @session                ||= @env['rack.session']
       @session['user_group_id'] = user.user_group_id
-      @session['user'] = Marshal.dump(user)
+      @session['user']          = Marshal.dump(user)
       @session_id
     end
 
@@ -68,7 +70,7 @@ module Aurita
     alias [] param
 
     def set_param(key, value)
-      @session ||= @env['rack.session']
+      @session         ||= @env['rack.session']
       @session[key.to_s] = value
     end
     alias []= set_param

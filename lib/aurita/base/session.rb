@@ -44,8 +44,8 @@ module Aurita
 
     # Constructor expects CGI object of current request. 
     def initialize(rack_request)
-      @user         = false
-      @env          = rack_request.env
+      @user          = false
+      @env           = rack_request.env
       raise ::Exception.new("Cowardly refusing to open a session without a request environment") unless @env
 
       @session_opts = @env['rack.session.options']
@@ -107,6 +107,8 @@ module Aurita
         @env['rack.session'][:drop]  = true
         @env['rack.session.options'][:close] = true
         @env['rack.session.options'][:drop]  = true
+        @session = false
+        @user    = false
       rescue ::Exception => excep
       end
     end # def }}}
@@ -154,7 +156,12 @@ module Aurita
       @user = user
     end
 
+    def open(user)
+      raise ::Exception.new("Cannot open a Mock_Session")
+    end
+
     def close()
+      raise ::Exception.new("Cannot open a Mock_Session")
     end
 
   end

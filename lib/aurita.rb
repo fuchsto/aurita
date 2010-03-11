@@ -63,8 +63,10 @@ module Aurita
   # of Aurita::Session. 
   # A session is always bound to Thread.current, So this is thread safe. 
   def self.session
-    return Thread.current['request'][:_session] if (Thread.current['request'] && !@session)
-    @session = Aurita::Mock_Session.new unless @session
+    if !@session || @session.is_a?(Aurita::Mock_Session) then
+      @session   = Thread.current['request'][:_session] if Thread.current['request'] 
+      @session ||= Aurita::Mock_Session.new 
+    end
     @session
   end
 

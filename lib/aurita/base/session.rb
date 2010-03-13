@@ -101,21 +101,22 @@ module Aurita
     # expiration time to a date in the past, then close this session. 
     def close() 
     # {{{
-      begin
-        @@logger.log("delete user login cookie")
+      @@logger.log("delete user login cookie")
+    #  @session = false
+    #  @user    = @@guest_user
+      if @env['rack.session'] then
         @env['rack.session'][:close] = true
         @env['rack.session'][:drop]  = true
+      end
+      if @env['rack.session.options'] then
         @env['rack.session.options'][:close] = true
         @env['rack.session.options'][:drop]  = true
-        @session = false
-        @user    = false
-      rescue ::Exception => excep
       end
     end # def }}}
     
     # Returns active interface language for this session
     def language
-      param('lang') || (user && user.language)? user.language : 'de'
+      param('lang') || (user && user.language)? user.language : Aurita.project.default_language
     end
     alias lang language
 
@@ -161,7 +162,7 @@ module Aurita
     end
 
     def close()
-      raise ::Exception.new("Cannot open a Mock_Session")
+      raise ::Exception.new("Cannot close a Mock_Session")
     end
 
   end

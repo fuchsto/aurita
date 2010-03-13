@@ -34,8 +34,8 @@ module Aurita
         map          = mapping[:map]
         key_field    = mapping[:key_attrib_name]
         key_value    = __send__(key_field)
-        @categories = map.select { |cat_map| 
-          cat_map.join(Category).using(:category_id) { |cat|
+        @categories  = Category.select { |cat_map| 
+          cat_map.join(map).using(:category_id) { |cat|
             cat.where(key_field => key_value)
           }
         }.to_a

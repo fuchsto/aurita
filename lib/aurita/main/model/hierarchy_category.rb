@@ -25,14 +25,5 @@ module Main
     end
   end
 
-  class Hierarchy
-  include Aurita::Access_Strategy
-
-    use_access_strategy(Category_Based_Access, 
-                        :managed_by => Hierarchy_Category, 
-                        :mapping    => { :hierarchy_id => :category_id } )
-    
-  end 
-
 end
 end

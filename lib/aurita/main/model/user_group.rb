@@ -1,5 +1,6 @@
 
 require('aurita/model')
+Aurita.import_module :accessor_strategy
 Aurita::Main.import_model :user_group_hierarchy
 Aurita::Main.import_model :user_role
 
@@ -36,6 +37,7 @@ module Main
   #   a user is online
   #
   class User_Group < Aurita::Model
+  include Accessor_Strategy 
     
     table :user_group, :internal
     primary_key :user_group_id, :user_group_id_seq

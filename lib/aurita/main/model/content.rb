@@ -36,6 +36,7 @@ module Main
   class Content < Aurita::Model
   # {{{
     extend Aurita::Taggable_Behaviour
+    extend Aurita::Categorized_Class_Behaviour
     include Aurita::Access_Strategy
 
     @@logger = Aurita::Log::Class_Logger.new(self.to_s)
@@ -52,10 +53,6 @@ module Main
     expects :tags
 
     hide_attribute :user_group_id
-
-    use_access_strategy(Category_Based_Access, 
-                        :managed_by => Content_Category, 
-                        :mapping    => { :content_id => :category_id } )
 
     def user_group
       u =   User_Group.load(:user_group_id => user_group_id)

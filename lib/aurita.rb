@@ -278,13 +278,16 @@ module Aurita
     Dir.glob("#{Aurita.project.base_path}model/*.rb").each { |model| 
       Aurita::Project.import_model(model.split('/').last) 
     }
+    if File.exists?("#{project_path()}policy.rb") then
+      require("#{project_path()}policy.rb")
+    end
     if File.exists?("#{project_path()}plugins/main.rb") then
       require("#{project_path()}plugins/main.rb")
     end
 
     Lang.add_project_language_pack 'main'
 
-    if File.exists?("#{project_path()}/setup.rb") then
+    if File.exists?("#{project_path()}setup.rb") then
       require("#{project_path()}setup.rb")
     end
   end

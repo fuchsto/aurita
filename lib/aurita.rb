@@ -267,10 +267,10 @@ module Aurita
     Aurita::Main.import :permissions
 
     Dir.glob("#{Aurita::Application.base_path}main/model/*.rb").each { |model| 
-      Aurita::Main.import_model(model.split('/').last) unless model.include?('custom_')
+      Aurita::Main.import_model(model.split('/').last) 
     }
     Dir.glob("#{Aurita::Application.base_path}main/controllers/*.rb").each { |controller| 
-      Aurita::Main.import_controller(controller.split('/').last) unless controller.include?('custom_')
+      Aurita::Main.import_controller(controller.split('/').last) 
     }
     Dir.glob("#{Aurita::App_Configuration.plugins_path}/*").each { |plugin_folder| 
       Aurita.import_plugin(plugin_folder.split('/').last) 
@@ -280,6 +280,8 @@ module Aurita
     }
     if File.exists?("#{project_path()}policy.rb") then
       require("#{project_path()}policy.rb")
+    else 
+      Aurita::Main.import :policy
     end
     if File.exists?("#{project_path()}plugins/main.rb") then
       require("#{project_path()}plugins/main.rb")
@@ -299,7 +301,7 @@ module Aurita
     @models = []
     Dir.glob("#{Aurita::Application.base_path}main/model/*.rb").each { |model| 
       begin
-        @models << Aurita::Main.const_get(model.split('/').last.gsub('.rb','').camelcase) unless model.include?('custom_')
+        @models << Aurita::Main.const_get(model.split('/').last.gsub('.rb','').camelcase) 
       rescue ::Exception => e
         puts e.message
       end

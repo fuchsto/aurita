@@ -1,6 +1,8 @@
 
 require('aurita/model')
 
+Aurita::Main.import_model :user_group
+
 module Aurita
 module Main
 

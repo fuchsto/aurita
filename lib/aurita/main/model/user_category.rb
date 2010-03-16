@@ -79,15 +79,6 @@ module Main
 
   end 
 
-  class User_Group < Aurita::Model
-    include Accessor_Strategy 
-
-    use_accessor_strategy(Category_Based_Accessor, 
-                          :managed_by => User_Category, 
-                          :mapping    => { :user_group_id => :category_id})
-
-  end
-
 end 
 end
 

@@ -227,7 +227,11 @@ module Aurita
           # App model
           if File.exists?(Aurita.project.base_path + "model/#{model_name.downcase}.rb") then
             Aurita::Project.import_model(model_name.downcase)
-            model = Aurita::Main.const_get(model_name)
+            begin
+              model = Aurita::Main.const_get(model_name)
+            rescue ::Exception => e
+            end
+            model ||= Aurita.const_get(Aurita.project.namespace).const_get(model_name)
           elsif File.exists?(Aurita::Main::Application.base_path + "model/#{model_name.downcase}.rb") then
             Aurita::Main.import_model(model_name.downcase)
             model = Aurita::Main.const_get(model_name)

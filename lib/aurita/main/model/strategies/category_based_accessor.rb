@@ -17,7 +17,7 @@ module Main
     #
     # 
     def self.on_use(klass, params=false)
-      klass.extend(Categorized_Accessor_Class_Behaviour)
+      klass.extend(Categorized_Accessor_Class_Behaviour) unless klass.kind_of?(Categorized_Accessor_Class_Behaviour)
       if params then
         klass.use_category_map(params[:managed_by], params[:mapping])
       end

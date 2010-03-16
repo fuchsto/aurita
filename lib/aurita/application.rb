@@ -122,13 +122,8 @@ module Aurita
     # Project specific models are useful when overloading / 
     # redefining existing models just in one project. 
     #
-    def self.import_model(namespace, *model)
-      if model.length == 0 then
-        Aurita::Project.import('model/' << namespace.to_s) 
-      else
-        model = fs_path(model)
-        Aurita::Project.import('model/' << namespace.to_s << '/' << model.to_s)
-      end
+    def self.import_model(*path)
+      Aurita::Project.import('model/' << path.join('/'))
     end
 
     # Import module from currently loaded project space. 

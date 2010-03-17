@@ -6,7 +6,7 @@ Aurita::Main.import_model :user_group
 Aurita::Main.import_model :tag_index
 Aurita::Main.import_model :category
 Aurita::Main.import_model :tag_relevance
-Aurita::Main.import_model :strategies, :category_based_access
+Aurita::Main.import_model :behaviours, :categorized
 
 module Aurita
 module Main
@@ -53,6 +53,8 @@ module Main
     expects :tags
 
     hide_attribute :user_group_id
+
+    use_category_map Content_Category, { :content_id => :category_id }
 
     def user_group
       u =   User_Group.load(:user_group_id => user_group_id)

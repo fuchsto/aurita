@@ -1,7 +1,7 @@
 
 require('aurita/model')
 
-Aurita::Main.import_model :user_category
+Aurita::Main.import_model :category
 
 module Aurita
 module Main

@@ -20,11 +20,13 @@ module GUI
       @type         = args[:type]
       @type       ||= @entity.model_name if @entity
       @type       ||= :none
+      @header       = args[:header]
       @context_menu_params   = args[:params]
       @context_menu_params ||= {}
       @params       = args
       @params.delete(:sortable)
       @params.delete(:entity)
+      @params.delete(:header)
 
       super()
     end

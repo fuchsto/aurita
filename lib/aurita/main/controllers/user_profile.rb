@@ -165,7 +165,7 @@ module Main
         user_entry = HTML.a.entry(:onclick => link_to(user, 
                                                       :controller => 'User_Login_Data', 
                                                       :action     => :update)) { user.label }
-        if ![0,5].include?(user.user_group_id) then
+        if !user.is_system_user? then
           user_entry = Context_Menu_Element.new(user_entry, :entity => user)
         end
         list << HTML.li { user_entry } 

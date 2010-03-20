@@ -61,9 +61,10 @@ module Main
     end
     alias label_string label
 
-    def is_system_user?
+    def is_system_user
       user_group_id < 100
     end
+    alias is_system_user? is_system_user
 
  private
     # Filter user group hierarchy using a visitor. 

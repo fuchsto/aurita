@@ -25,5 +25,14 @@ class Array
   def pick_random
     self[rand(self.length)]
   end
+  
+  def to_ids
+    flatten.map { |i| i.to_i }.uniq
+  end
+
+  def to_ids!
+    flatten! 
+    replace(map { |i| i.to_i }.uniq)
+  end
 
 end

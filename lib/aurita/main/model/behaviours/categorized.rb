@@ -71,15 +71,15 @@ module Aurita
       cat_field    = mapping[:cat_id_attrib_name]
       
       map.delete { |e|
-        e.where(key_field == key_value)
+        e.where(key_field.is(key_value))
       }
       category_ids ||= []
-      category_ids.flatten.each { |cat_id|
+      category_ids.to_ids.each { |cat_id|
         if cat_id.kind_of?(Aurita::Model) then
           cat_id = cat_id.__send__(cat_field)
         end
         map.create(cat_field => cat_id, 
-                   key_field    => key_value)
+                   key_field => key_value)
       }
       @category_ids = category_ids
     end

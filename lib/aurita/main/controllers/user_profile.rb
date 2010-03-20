@@ -151,31 +151,27 @@ module Main
 
     def admin_box_body
       body  = Array.new
-      guest = Context_Menu_Element.new(HTML.a.entry(:onclick => link_to(:controller => 'User_Login_Data', 
-                                                                        :action     => :update, 
-                                                                        :user_group_id => 0) ) { tl(:unregistered_user) }, 
-                                       :type => :system_link)
-      
+      guest = User_Login_Data.get(0)
+      list  = HTML.ul.no_bullets {  }
       body << HTML.a(:class   => :icon, 
                      :onclick => link_to(:admin_add)) { 
         icon_tag(:user) + tl(:add_user) 
       } 
       
-      list = HTML.ul.no_bullets { HTML.li { guest } }
-      User_Profile.all_with((User_Group.atomic == true) & (User_Login_Data.locked == 'f')).sort_by(:surname, :asc).each { |user|
+      user_profiles = [ guest ] + User_Profile.all_with((User_Group.atomic == true) & 
+                                                        (User_Login_Data.locked == 'f') & 
+                                                        (User_Group.user_group_id > 5)).sort_by(:surname, :asc).to_a
+      user_profiles.each { |user|
+        user_entry = HTML.a.entry(:onclick => link_to(user, 
+                                                      :controller => 'User_Login_Data', 
+                                                      :action     => :update)) { user.label }
         if ![0,5].include?(user.user_group_id) then
-          user_label = user.surname.capitalize + ' ' + user.forename.capitalize 
-          user_label << ' (' + user.division + ')' if user.division.to_s != ''
-          user = Context_Menu_Element.new(HTML.a.entry(:onclick => link_to(user, 
-                                                                           :controller => 'User_Login_Data', 
-                                                                           :action => :update)) { 
-                                            user_label 
-                                          }, :entity => user)
-          list << HTML.li { user } 
+          user_entry = Context_Menu_Element.new(user_entry, :entity => user)
         end
+        list << HTML.li { user_entry } 
       }
       body << list
-      HTML.div.admin_user_box_body { body } 
+      HTML.div.scrollbox { body } 
     end
     def admin_box
       box = Box.new(:type => :box, :class => :topic, :id => :admin_users_box)

@@ -92,24 +92,41 @@ module Main
     end 
 
     def perform_delete
-      new_cat_id = param(:new_category_id)
+      new_cat_id   = param(:new_category_id)
+      new_cat_id ||= 1
       # Reassign contents, but do not create duplicate assignments: 
-      Content_Category.update { |cc|
-        cc.set(:category_id => new_cat_id)
-        cc.where((Content_Category.category_id == param(:category_id)) & 
-                 (Content_Category.content_id.not_in( 
-                    Content_Category.select(:content_id) { |cid|
-                      cid.where(Content_Category.category_id == new_cat_id)
-                    })
-                 )
-                )
-      }
+      if new_cat_id != 1 then
+        Content_Category.update { |cc|
+          cc.set(:category_id => new_cat_id)
+          cc.where((Content_Category.category_id == param(:category_id)) & 
+                   (Content_Category.content_id.not_in( 
+                      Content_Category.select(:content_id) { |cid|
+                        cid.where(Content_Category.category_id == new_cat_id)
+                      })
+                   )
+                  )
+        }
+      else
+        Content_Category.update { |cc|
+          cc.set(:category_id => new_cat_id)
+          cc.where((Content_Category.category_id == param(:category_id)) & 
+                   (Content_Category.content_id.not_in( 
+                      Content_Category.select(:content_id) { |cid|
+                        cid.where(Content_Category.category_id != param(:category_id))
+                      })
+                   )
+                  )
+        }
+      end
 
       Content_Category.delete { |cc|
         cc.where(Content_Category.category_id == param(:category_id))
       }
       User_Category.delete { |cc|
         cc.where(User_Category.category_id == param(:category_id))
+      }
+      Hierarchy_Category.delete { |cc|
+        cc.where(Hierarchy_Category.category_id == param(:category_id))
       }
       super()
     end
@@ -125,7 +142,8 @@ module Main
       resolve_access()
       instance = super()
 
-      redirect_to(instance)
+      redirect(:element => :admin_categories_box_body, :to => :admin_box_body)
+      redirect_to(instance, :action => :update)
     end
 
     def perform_update
@@ -161,7 +179,7 @@ module Main
         list << HTML.li { cat }
       }
       body << list
-      HTML.div.admin_category_box_body { body }
+      HTML.div.scrollbox { body }
     end
 
     def admin_box

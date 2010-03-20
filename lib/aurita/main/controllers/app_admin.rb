@@ -38,7 +38,7 @@ module Main
     end
 
     def locked_users_box
-      box = Box.new(:type => :box, :class => :topic)
+      box = Box.new(:type => :box, :class => :topic, :id => :locked_users_box)
       box.header = tl(:locked_users)
       body = Array.new
       User_Profile.all_with((User_Group.atomic == 't') & 

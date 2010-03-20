@@ -889,10 +889,6 @@ input.login_button {
     background-color: #cecece;
 }
 
-div.scrollbox { 
-  overflow-y: auto; 
-  height: 300px; 
-}
 
 span.code { 
   font-family: Monospace; 
@@ -1911,12 +1907,7 @@ table.message_table {
   color: #565656; 
 }
 
-.admin_user_box_body { 
-  height: 230px; 
-  overflow-y: auto; 
-  overflow-x: hidden; 
-}
-.admin_category_box_body { 
+.scrollbox { 
   height: 230px; 
   overflow-y: auto; 
   overflow-x: hidden; 

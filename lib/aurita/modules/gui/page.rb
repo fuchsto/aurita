@@ -37,7 +37,7 @@ module GUI
       HTML.div.section_header(:id => @params[:id]) { 
         head + 
         HTML.div(:style => 'clear: both;') +
-        HTML.div.section_content(:id => "#{@params[:id]}_content") { @content + HTML.div(:style => 'clear: both;') } 
+        HTML.div.section_content(:id => "#{@params[:id]}_content") { @content + HTML.div(:style => 'clear: both;') if @content } 
       }
     end
 

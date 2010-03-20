@@ -49,10 +49,21 @@ module Main
 
     # Renders user name to string. 
     def label
-      return "#{user_group_name} (#{division})" if division && !division.empty? 
-      return user_group_name.to_s
+      if !@label then
+        @label   = tl(:unregistered_user) if user_group_id == 0
+        if !@label && (surname.nonempty? || forename.nonempty?) then
+          @label ||= surname.capitalize + ' ' + forename.capitalize 
+        end
+        @label ||= user_group_name.to_s
+        @label << ' (' + division + ')' if division.nonempty?
+      end
+      return @label
     end
     alias label_string label
+
+    def is_system_user?
+      user_group_id < 100
+    end
 
  private
     # Filter user group hierarchy using a visitor. 

@@ -73,11 +73,12 @@ module Aurita
       map.delete { |e|
         e.where(key_field == key_value)
       }
+      category_ids ||= []
       category_ids.flatten.each { |cat_id|
         if cat_id.kind_of?(Aurita::Model) then
           cat_id = cat_id.__send__(cat_field)
         end
-        map.create(cat_id_field => cat_id, 
+        map.create(cat_field => cat_id, 
                    key_field    => key_value)
       }
       @category_ids = category_ids

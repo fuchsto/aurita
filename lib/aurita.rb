@@ -64,8 +64,13 @@ module Aurita
   # of Aurita::Session. 
   # A session is always bound to Thread.current, So this is thread safe. 
   def self.session
-    return Thread.current['request'][:_session] if (Thread.current['request'] && !@session)
-    @session = Aurita::Mock_Session.new unless @session
+    return Thread.current['request'][:_session] if (Thread.current['request'] && Thread.current['request'][:_session])
+    return Aurita::Mock_Session.new
+
+    if !@session || @session.is_a?(Aurita::Mock_Session) then
+      @session   = Thread.current['request'][:_session] if Thread.current['request'] 
+      @session ||= Aurita::Mock_Session.new 
+    end
     @session
   end
 
@@ -204,8 +209,9 @@ module Aurita
   #
   #   Aurita.import_plugin_model :wiki, :article
   #
-  def self.import_plugin_model(plugin, model)
+  def self.import_plugin_model(plugin, *model)
     r = false
+    model = fs_path(model)
     begin
       r = require("#{Aurita::App_Configuration.plugins_path}#{plugin}/model/#{model}")
     rescue LoadError => e
@@ -262,10 +268,10 @@ module Aurita
     Aurita::Main.import :permissions
 
     Dir.glob("#{Aurita::Application.base_path}main/model/*.rb").each { |model| 
-      Aurita::Main.import_model(model.split('/').last) unless model.include?('custom_')
+      Aurita::Main.import_model(model.split('/').last) 
     }
     Dir.glob("#{Aurita::Application.base_path}main/controllers/*.rb").each { |controller| 
-      Aurita::Main.import_controller(controller.split('/').last) unless controller.include?('custom_')
+      Aurita::Main.import_controller(controller.split('/').last) 
     }
     Dir.glob("#{Aurita::App_Configuration.plugins_path}/*").each { |plugin_folder| 
       Aurita.import_plugin(plugin_folder.split('/').last) 
@@ -273,13 +279,18 @@ module Aurita
     Dir.glob("#{Aurita.project.base_path}model/*.rb").each { |model| 
       Aurita::Project.import_model(model.split('/').last) 
     }
+    if File.exists?("#{project_path()}policy.rb") then
+      require("#{project_path()}policy.rb")
+    else 
+      Aurita::Main.import :policy
+    end
     if File.exists?("#{project_path()}plugins/main.rb") then
       require("#{project_path()}plugins/main.rb")
     end
 
     Lang.add_project_language_pack 'main'
 
-    if File.exists?("#{project_path()}/setup.rb") then
+    if File.exists?("#{project_path()}setup.rb") then
       require("#{project_path()}setup.rb")
     end
   end
@@ -291,7 +302,7 @@ module Aurita
     @models = []
     Dir.glob("#{Aurita::Application.base_path}main/model/*.rb").each { |model| 
       begin
-        @models << Aurita::Main.const_get(model.split('/').last.gsub('.rb','').camelcase) unless model.include?('custom_')
+        @models << Aurita::Main.const_get(model.split('/').last.gsub('.rb','').camelcase) 
       rescue ::Exception => e
         puts e.message
       end
@@ -309,6 +320,10 @@ module Aurita
       }
     }
     return @models
+  end
+
+  def self.memory_usage
+    `ps -o rss= -p #{Process.pid}`.to_i 
   end
 
   module Plugins

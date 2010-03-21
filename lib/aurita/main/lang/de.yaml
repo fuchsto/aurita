@@ -23,6 +23,7 @@ role : Rolle
 internal.role.role_name : Name
 is_admin : Administrator
 is_super_admin : Super-Administrator
+superadmin : Super-Administrator
 super_admin : Super-Administrator
 
 'yes' : ja
@@ -322,3 +323,7 @@ link : URL in Popup
 users_with_read_access : Benutzer mit Leseberechtigung
 
 hierarchy_may_not_be_edited : Diese Liste kann nicht bearbeitet werden
+
+select_additional_language : Sprache hinzuf&uuml;gen
+languages : Sprachen
+public--product--product_name : Name

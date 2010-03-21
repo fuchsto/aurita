@@ -67,10 +67,6 @@ module Main
       tags
     }
 
-    def label
-      "#{forename} #{surname}"
-    end
-
   end
 
   class User_Group < Aurita::Model

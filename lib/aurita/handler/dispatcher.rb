@@ -84,7 +84,7 @@ class Aurita::Dispatcher
         else 
           element = controller_instance.call_guarded(action)
         end
-        response          = controller_instance.response
+        response = controller_instance.response
         if response[:html] == '' then
           if element.respond_to?(:string) then
             response[:html] = element.string 
@@ -130,8 +130,6 @@ class Aurita::Dispatcher
       response_body = GUI::Error_Page.new(excep).string
     end
 
-    # Try to avoid this. Response headers are mostly huge. 
- #  response_header.each_pair { |k,v| response_header[k] = v.to_s }
     return [ status, response_header, response_body ]
   end # def }}}
 

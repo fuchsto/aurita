@@ -65,10 +65,8 @@ module Main
     #
     def has_permission(perm)
     # {{{
-      if perm == :is_super_admin then
-        # raise ::Exception.new('find me')
-      end
-      if @role_permissions.nil? || @role_permissions[perm.to_s].nil? then
+      perm = perm.to_sym
+      if @role_permissions.nil? || @role_permissions[perm].nil? then
         perms = Role_Permission.select { |rp| 
           rp.join(User_Role).on(Role_Permission.role_id == User_Role.role_id) { |urp|
             urp.where((User_Role.user_group_id == user_group_id) &
@@ -78,12 +76,12 @@ module Main
         }.first
         @role_permissions = Hash.new unless @role_permissions
         if perms.nil? then
-          @role_permissions[perm.to_s] = false
+          @role_permissions[perm] = false
         else
-          @role_permissions[perm.to_s] = true
+          @role_permissions[perm] = true
         end
       end
-      @role_permissions[perm.to_s] 
+      (@role_permissions[perm] == true)
     end # }}}
     alias has_permission? has_permission
     alias may has_permission
@@ -100,68 +98,8 @@ module Main
       ((!user_group_id.nil?) && has_permission(:is_admin))
     end
 
-    # Whether user has read permissions on given Content instance. 
-    # Returns true in the following cases: 
-    # - User is admin. 
-    # - Content instance is mapped to a public category. 
-    # - Content instance and user are mapped to at least one common Category. 
-    # - User has been granted exceptional read permissions via Content_Permission. 
-    #
-    def may_view_content?(content)
-    # {{{
-      if !content.is_a? Content then
-        entity = Content.load(:content_id => content)
-        content = entity
-      end
-      raise ::Exception.new("Could not resolve content for #{content.inspect}") unless content
-
-      return true if is_admin? or (content.user_group_id == user_group_id)
-      return true if (readable_category_ids() & (content.category_ids)).length > 0
-
-      permissions = Content_Permissions.all_with(Content_Permissions.content_id == content.content_id).entities
-      permissions.each { |p|
-        return true if p.user_group_id == user_group_id
-      }
-      return false 
-    end # }}}
-    
-    # Whether user has permissions to perform changes on given Content instance. 
-    # Even if Content instance is locked, returns true in following cases: 
-    #
-    # - User is admin. 
-    # - User is author of Content instance and has read permissions on it. 
-    #   (Note that users might lose permissions on a Content they created themselves, 
-    #   so read permissions have to be validated in any case). 
-    #
-    # Otherwise, if Content instance is locked, always returns false. 
-    #
-    # Returns true if Content instance is not locked and: 
-    # - Content instance and user are mapped to at least one common Category the 
-    #   user has write permissions for. 
-    # - User has been granted exceptional write permissions via Content_Permission. 
-    #
-    def may_edit_content?(content)
-    # {{{
-      if !content.kind_of? Content then
-        content = Content.load(:content_id => content)
-        raise ::Exception.new("Could not resolve content for #{content.inspect}") unless content
-      end
-      return false unless content
-
-      return true if (is_admin? || (content.user_group_id == user_group_id))
-      return false if content.locked 
-      return true if ((writeable_category_ids() & (content.category_ids)).length > 0)
-
-      permissions = Content_Permissions.all_with(Content_Permissions.content_id == content.content_id).entities
-      permissions.each { |p|
-        return true if p.user_group_id == user_group_id and !p.readonly
-      }
-      return false 
-    end # }}}
-
   end
 
 end
-
 end
 

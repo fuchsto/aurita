@@ -5,6 +5,7 @@ module Aurita
 module Main
 
   class Hierarchy < Aurita::Model
+  include Aurita::Access_Strategy
 
     table :hierarchy, :public
     primary_key :hierarchy_id, :hierarchy_id_seq

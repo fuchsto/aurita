@@ -85,7 +85,7 @@ module Aurita
     #   Aurita::Main::Content.model_name           --> 'Content'
     #
     def self.model_name
-      self.to_s.gsub('Aurita::Main::','').gsub('Aurita::Plugins::','')
+      self.to_s.gsub('Aurita::Main::','').gsub('Aurita::Plugins::','').gsub("Aurita::#{Aurita.project.namespace}::",'')
     end
     # See Aurita::Model.model_name
     def model_name

@@ -290,6 +290,7 @@ module Main
       set_http_header('expires' => (Time.now-24*60*60).to_s)
 
       Aurita.session.close()
+      Aurita.session = false
 
       render_view(:after_logout)
     end

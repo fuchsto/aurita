@@ -119,7 +119,7 @@ module Main
       elsif @mode == :dispatch || @mode == :none then
         @content = response[:html]
       else
-        @mode   = Aurita.project.default_theme if @mode == :default
+        @mode   = Aurita::Project_Configuration.default_theme if @mode == :default
         @mode ||= :default
         project_template = "#{Aurita.project_path}views/decorators/#{@mode}.rhtml"
 

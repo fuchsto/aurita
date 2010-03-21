@@ -61,7 +61,8 @@ def append_script(file_to, path_from)
   }
 end
 
-File.open("#{project_script_base}/aurita_bundle.js", "w") { |out|
+target_file = "#{project_script_base}/aurita_bundle.js"
+File.open(target_file, "w") { |out|
   $core_scripts.each do |script_filename|
     core_script    = "#{Aurita::App_Configuration.base_path}main/public/shared/script/#{script_filename}.js"
     project_script = "#{project_script_base}main/#{script_filename}.js"
@@ -100,3 +101,4 @@ File.open("#{project_script_base}/aurita_bundle.js", "w") { |out|
   end
 }
 
+puts "Written to #{target_file}"

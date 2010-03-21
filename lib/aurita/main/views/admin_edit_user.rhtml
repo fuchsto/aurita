@@ -3,7 +3,7 @@
 
   <h2 style="margin: 0px; padding-top: 0px; padding-left: 1px; "><%= user.user_group_name %></h2> 
 
-<% if user.user_group_id.to_i > 10 then %>
+<% if !user.is_system_user? then %>
 
   <br />
 
@@ -39,8 +39,10 @@
 </div>
 <br />
 
+<% if !user.is_system_user? then %>
+
 <div class="form_box">
-  <div id="user_role_list">
+  <div id="lock_user_box">
     <% if user.locked then %>
       <h2><%= tl(:activate_user) %></h2>
       <br />
@@ -66,7 +68,7 @@
 </div>
 
 <div class="form_box">
-  <div id="user_role_list">
+  <div id="delete_user_box">
     <h2><%= tl(:delete_user) %></h2>
     <%= tl(:delete_user_hints) %>
     <br />
@@ -75,3 +77,4 @@
   </div>
 </div>
 
+<% end %>

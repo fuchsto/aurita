@@ -141,6 +141,69 @@ JS
 
   end # class Picture_Asset_Field
 
+  class Language_Select_Field < Aurita::GUI::Widget
+  include Aurita::GUI::I18N_Helpers
+    
+    def initialize(params={})
+      @parent = params[:parent]
+      @attrib = params
+      @attrib.delete(:parent)
+      if !@attrib[:value] then
+        @attrib[:option_values] = [ '' ]
+        @attrib[:option_labels] = [ tl(:select_additional_language) ]
+
+        @attrib[:option_values] = [ :de, :en, :fr ]
+        @attrib[:option_labels] = [ 'deutsch', 'englisch', 'franz&ouml;sisch' ]
+      end
+      @attrib[:onchange] = "Aurita.GUI.language_selection_add('#{@parent.dom_id}');" if @parent
+      super()
+    end
+
+    def element
+      Select_Field.new(@attrib)
+    end
+  end
+
+  class Language_Selection_List_Field < Selection_List_Field
+  include Aurita::GUI::I18N_Helpers
+
+    class Language_Selection_List_Option_Field < Selection_List_Option_Field
+      def initialize(params={})
+        super(params)
+      end
+      def element
+        HTML.div { 
+          Hidden_Field.new(:name => 'languages[]', :value => @value) + 
+          HTML.a(:onclick => "Element.remove('#{@parent.dom_id}');", :class => :icon) { 
+            HTML.img(:src => '/aurita/images/icons/delete_small.png') 
+          } + 
+          HTML.span { @label }
+        }
+      end
+    end
+    
+    def initialize(params={}, &block)
+      @option_field_decorator ||= Language_Selection_List_Option_Field
+      @select_field_class     ||= Language_Select_Field
+
+      selected_languages = params[:value] || []
+
+      params[:name]  = :languages if params[:name].to_s.empty?
+      params[:label] = tl(:languages) unless params[:label]
+
+      option_values = [ '', :de, :en, :fr ]
+      option_labels = [ tl(:select_additional_language), 'deutsch', 'englisch', 'franz&ouml;sisch' ]
+
+      options        = option_labels
+      options.fields = option_values
+      
+      super(params, &block)
+
+      set_options(options)
+      set_value(selected_languages)
+    end
+  end
+
   class Category_Select_Field < Aurita::GUI::Widget
   include Aurita::GUI::I18N_Helpers
     
@@ -174,6 +237,7 @@ JS
     end
   end
 
+
   class Category_Selection_List_Field < Selection_List_Field
   include Aurita::GUI::I18N_Helpers
 
@@ -184,7 +248,10 @@ JS
       def element
         HTML.div { 
           Hidden_Field.new(:name => 'category_ids[]', :value => @value) + 
-          HTML.a(:onclick => "Element.remove('#{@parent.dom_id}');", :class => :icon) { HTML.img(:src => '/aurita/images/icons/delete_small.png') } + HTML.span { @label }
+          HTML.a(:onclick => "Element.remove('#{@parent.dom_id}');", :class => :icon) { 
+            HTML.img(:src => '/aurita/images/icons/delete_small.png') 
+          } + 
+          HTML.span { @label }
         }
       end
     end

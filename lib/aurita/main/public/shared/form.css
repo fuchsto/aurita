@@ -631,6 +631,9 @@ fieldset legend {
 }
 */
 
+ul.form_fields .multi_file_field_wrap input { 
+  margin-left: 4px; 
+}
 ul.form_fields .multi_file_entry input { 
 /*  width: 312px; */
 }

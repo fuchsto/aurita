@@ -597,6 +597,7 @@ a.icon img, a.button img {
   margin: -2px 4px 0px 0px; 
   display: inline !important; 
   vertical-align: middle; 
+  padding-top: 2px; 
 }
 
 .toolbox_body a.icon:hover { 
@@ -661,12 +662,13 @@ img.icon {
 /*  border-color: #454545;  */
 }
 
-.context_menu_entry_label { 
+.context_menu_entry_label, a.context_menu_entry_label:hover { 
   font-family: inherit; 
   font-size: 11px; 
   position: relative; 
   top: -4px; 
   cursor: default; 
+  color: black; 
 }
 .context_menu_header {
   font-family: Verdana, Arial, Helvetica; 
@@ -887,10 +889,6 @@ input.login_button {
     background-color: #cecece;
 }
 
-div.scrollbox { 
-  overflow-y: auto; 
-  height: 300px; 
-}
 
 span.code { 
   font-family: Monospace; 
@@ -1264,6 +1262,7 @@ table.media_asset_table th {
   color: black; 
   padding: 2px; 
   padding-left: 10px; 
+  padding-right: 7px; 
   border-bottom: 1px solid #343434; 
   border-left: 1px solid #898989; 
 /*  background: transparent url(/aurita/images/button_bg.gif) repeat scroll 0 0; */
@@ -1739,7 +1738,7 @@ div.column50 {
 }
 
 .media_asset_folder_tree_box { 
-  border-top: 1px solid #cfcfcf; 
+/*  border-top: 1px solid #cfcfcf; */
   margin-top: 0px; 
   padding: 0px; 
   float: left; 
@@ -1908,12 +1907,7 @@ table.message_table {
   color: #565656; 
 }
 
-.admin_user_box_body { 
-  height: 230px; 
-  overflow-y: auto; 
-  overflow-x: hidden; 
-}
-.admin_category_box_body { 
+.scrollbox { 
   height: 230px; 
   overflow-y: auto; 
   overflow-x: hidden; 

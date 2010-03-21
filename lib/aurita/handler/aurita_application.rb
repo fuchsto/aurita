@@ -183,6 +183,22 @@ module Handler
     end
   end
 
+  # Rack application for serving aurita's static resources 
+  # (files, that is), like assets, css, javascript that depend 
+  # on the user's theme. 
+  class Aurita_Theme_File_Application < Aurita_File_Application
+    def initialize(root)
+      theme   = Aurita::Project_Configuration.default_theme
+      theme ||= :default
+      theme   = theme.to_sym
+      if theme != :default then
+        root = "#{root}/themes/#{theme}/"
+      end
+      super(root)
+    end
+
+  end
+
 end
 end
 

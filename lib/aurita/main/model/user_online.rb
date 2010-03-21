@@ -13,7 +13,7 @@ module Main
     
     # Return list of users currently online as unsorted Array. 
     def self.current_users
-      reg = {}
+      reg   = {}
       users = []
       User_Profile.select { |s|
         s.join(User_Action).using(:user_group_id) { |u| 

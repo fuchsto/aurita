@@ -1,11 +1,12 @@
 
 require('aurita/model')
 Aurita.import_module :tagging
-Aurita.import_module :categorized
+Aurita.import_module :access_strategy
 Aurita::Main.import_model :user_group
 Aurita::Main.import_model :tag_index
 Aurita::Main.import_model :category
 Aurita::Main.import_model :tag_relevance
+Aurita::Main.import_model :behaviours, :categorized
 
 module Aurita
 module Main
@@ -33,8 +34,10 @@ module Main
   # possessor of this instance) and timestamps 'created' and 'changed'. 
   #
   class Content < Aurita::Model
+  # {{{
     extend Aurita::Taggable_Behaviour
-    extend Aurita::Categorized_Behaviour
+    extend Aurita::Categorized_Class_Behaviour
+    include Aurita::Access_Strategy
 
     @@logger = Aurita::Log::Class_Logger.new(self.to_s)
 
@@ -51,7 +54,7 @@ module Main
 
     hide_attribute :user_group_id
 
-    use_category_map(Content_Category, :content_id => :category_id)
+    use_category_map Content_Category, { :content_id => :category_id }
 
     def user_group
       u =   User_Group.load(:user_group_id => user_group_id)
@@ -223,52 +226,24 @@ module Main
       Content_Comment.value_of.count(:content_id).where(Content_Comment.content_id == content_id).to_i
     end
 
-    # Returns array of Category instances mapped to this content, or 
-    # category with id 1 (no category). 
-    def categories
-      return @categories if @categories
-
-      @categories = Category.select { |cc| 
-        cc.join(Content_Category).using(:category_id) { |c| 
-          c.where(c.content_id == content_id) 
-        } 
-      }.to_a
-      @categories = [ Category.load(:category_id => 1) ] unless @categories
-      @categories
-    end
-
-    # Returns first category of this Content instance, or 
-    # category with id 1 (no category). 
-    def category
-      @category ||= Category.select { |cc| 
-        cc.join(Content_Category).using(:category_id) { |c| 
-          c.where(c.content_id == content_id) 
-          c.limit(1)
-        } 
-      }.first
-      @category ||= Category.load(:category_id => 1) unless @category
-      return @category
-    end
-
-    # Returns category ids mapped to this Content instance via Content_Category 
-    # as Array. 
-    def category_ids
-      return @category_ids if @category_ids 
-
-      @category_ids = Content_Category.select_values(:category_id) { |cc| 
-        cc.where(cc.content_id == content_id) 
-      }.to_a.flatten.map { |cid| cid.to_i }
-      @category_ids = [1] unless @category_ids
-      @category_ids
-    end
-
-    # Returns first category id mapped to this Content instance. 
-    def category_id
-      return category.category_id if category
-      1
-    end
     
-  end # class
+  end # class }}}
+
+  class User_Group < Aurita::Model
+
+    # Whether user has read permissions on given Content instance. 
+    # Behaviour depends on the content's access strategy. 
+    def may_view_content?(content)
+      content.access_strategy.permits_read_access_for(self)
+    end 
+    
+    # Whether user has permissions to perform changes on given Content instance. 
+    # Behaviour depends on the content's access strategy. 
+    def may_edit_content?(content)
+      content.access_strategy.permits_write_access_for(self)
+    end 
+
+  end
 
 end # module
 end # module

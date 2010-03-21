@@ -38,12 +38,16 @@ module Main
     end
 
     def locked_users_box
-      box = Box.new(:type => :box, :class => :topic)
+      box = Box.new(:type => :box, :class => :topic, :id => :locked_users_box)
       box.header = tl(:locked_users)
       body = Array.new
-      User_Profile.all_with((User_Group.atomic == 't') & 
+      locked_users = User_Profile.all_with((User_Group.atomic == 't') & 
                             (User_Login_Data.deleted == 'f') & 
-                            (User_Login_Data.locked == 't')).sort_by(:surname, :asc).each { |user|
+                            (User_Login_Data.locked == 't')).sort_by(:surname, :asc).to_a
+
+      return unless locked_users && locked_users.length > 0
+
+      locked_users.each { |user|
         if user.user_group_id != '0' then
           user = Context_Menu_Element.new(HTML.a.entry(:onclick => link_to(user, 
                                                                            :controller => 'User_Login_Data', 

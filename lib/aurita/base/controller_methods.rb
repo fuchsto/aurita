@@ -42,7 +42,7 @@ module Aurita
     def load(klass_name) # :nodoc:
     # {{{
       namespaces = klass_name.to_s.split('::')
-      @klass = Aurita.const_get(namespaces[0])
+      @klass     = Aurita.const_get(namespaces[0])
       namespaces[1..-1].each { |ns|
         @klass = @klass.const_get(ns)
       }

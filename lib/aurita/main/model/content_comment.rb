@@ -6,7 +6,7 @@ module Aurita
 module Main
 
   class Content_Comment < Aurita::Model
-  extend Aurita::Categorized_Behaviour
+    include Aurita::Access_Strategy
 
     table :content_comment, :public
     primary_key :content_comment_id, :content_comment_id_seq

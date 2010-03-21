@@ -1,5 +1,6 @@
 
 require('aurita/model')
+Aurita.import_module :accessor_strategy
 Aurita::Main.import_model :user_group_hierarchy
 Aurita::Main.import_model :user_role
 
@@ -36,6 +37,7 @@ module Main
   #   a user is online
   #
   class User_Group < Aurita::Model
+  include Accessor_Strategy 
     
     table :user_group, :internal
     primary_key :user_group_id, :user_group_id_seq
@@ -47,10 +49,22 @@ module Main
 
     # Renders user name to string. 
     def label
-      return "#{user_group_name} (#{division})" if division && !division.empty? 
-      return user_group_name.to_s
+      if !@label then
+        @label   = tl(:unregistered_user) if user_group_id == 0
+        if !@label && (surname.nonempty? || forename.nonempty?) then
+          @label ||= surname.capitalize + ' ' + forename.capitalize 
+        end
+        @label ||= user_group_name.to_s
+        @label << ' (' + division + ')' if division.nonempty?
+      end
+      return @label
     end
     alias label_string label
+
+    def is_system_user
+      user_group_id < 100
+    end
+    alias is_system_user? is_system_user
 
  private
     # Filter user group hierarchy using a visitor. 

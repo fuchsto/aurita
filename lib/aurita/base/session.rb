@@ -44,8 +44,10 @@ module Aurita
 
     # Constructor expects CGI object of current request. 
     def initialize(rack_request)
-      @user         = false
-      @env          = rack_request.env
+      @user          = false
+      @env           = rack_request.env
+      raise ::Exception.new("Cowardly refusing to open a session without a request environment") unless @env
+
       @session_opts = @env['rack.session.options']
       @session_id   = @session_opts[:id] if @session_opts
     end
@@ -55,9 +57,9 @@ module Aurita
     # credentials after logon. 
     # Returns session id created for this user. 
     def open(user)
-      @session ||= @env['rack.session']
+      @session                ||= @env['rack.session']
       @session['user_group_id'] = user.user_group_id
-      @session['user'] = Marshal.dump(user)
+      @session['user']          = Marshal.dump(user)
       @session_id
     end
 
@@ -68,7 +70,7 @@ module Aurita
     alias [] param
 
     def set_param(key, value)
-      @session ||= @env['rack.session']
+      @session         ||= @env['rack.session']
       @session[key.to_s] = value
     end
     alias []= set_param
@@ -99,19 +101,22 @@ module Aurita
     # expiration time to a date in the past, then close this session. 
     def close() 
     # {{{
-      begin
-        @@logger.log("delete user login cookie")
+      @@logger.log("delete user login cookie")
+    #  @session = false
+    #  @user    = @@guest_user
+      if @env['rack.session'] then
         @env['rack.session'][:close] = true
         @env['rack.session'][:drop]  = true
+      end
+      if @env['rack.session.options'] then
         @env['rack.session.options'][:close] = true
         @env['rack.session.options'][:drop]  = true
-      rescue ::Exception => excep
       end
     end # def }}}
     
     # Returns active interface language for this session
     def language
-      param('lang') || (user && user.language)? user.language : 'de'
+      param('lang') || (user && user.language)? user.language : Aurita.project.default_language
     end
     alias lang language
 
@@ -152,7 +157,12 @@ module Aurita
       @user = user
     end
 
+    def open(user)
+      raise ::Exception.new("Cannot open a Mock_Session")
+    end
+
     def close()
+      raise ::Exception.new("Cannot close a Mock_Session")
     end
 
   end

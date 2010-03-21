@@ -147,7 +147,7 @@ module GUI
             if e.interface.include?('://') then
               entry  = HTML.a(:href => e.interface, :target => '_blank') { e.label }
             else 
-              action = CGI.escape(interface).gsub('%2F','/').gsub('%3D','=')
+              action = CGI.escape(e.interface).gsub('%2F','/').gsub('%3D','=')
               entry  = link_to(:action => action) { e.label }
             end
           end
@@ -174,7 +174,7 @@ module GUI
                  :hierarchy_id       => e.hierarchy_id }
       entry  = Context_Menu_Element.new(:entity => e, 
                                         :params => params) { 
-        entry
+        HTML.div { entry }
       }
 
       return HTML.li { entry + next_level }

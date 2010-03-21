@@ -17,6 +17,7 @@ $core_scripts = [
   :log, 
   :helpers, 
   :cookie, 
+  :stats, 
   :xhconn, 
   :md5, 
   :aurita, 
@@ -27,7 +28,7 @@ $core_scripts = [
   :aurita_gui, 
   :editor, 
   :login, 
-  :main
+  :main, 
 ]
 
 $core_scripts_after = [

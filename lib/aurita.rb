@@ -18,6 +18,7 @@ require('aurita/base/bits/time')
 require('aurita/base/bits/time_ago')
 require('aurita/base/bits/file')
 require('aurita/base/bits/nil')
+require('aurita/base/bits/mock')
 
 require('aurita/modules/file_helpers')
 

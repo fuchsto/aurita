@@ -185,23 +185,42 @@ JS
     def initialize(params={}, &block)
       @option_field_decorator ||= Language_Selection_List_Option_Field
       @select_field_class     ||= Language_Select_Field
-
+      
       selected_languages = params[:value] || []
-
+      
       params[:name]  = :languages if params[:name].to_s.empty?
       params[:label] = tl(:languages) unless params[:label]
-
+      
       option_values = [ '', :de, :en, :fr ]
       option_labels = [ tl(:select_additional_language), 'deutsch', 'englisch', 'franz&ouml;sisch' ]
-
+      
       options        = option_labels
       options.fields = option_values
       
       super(params, &block)
-
+      
       set_options(options)
       set_value(selected_languages)
     end
+  end
+
+
+  class Single_Category_Select_Field < Select_Field
+  include Aurita::GUI::I18N_Helpers
+
+    def initialize(params={}, &block)
+      values = [ '' ]
+      labels = [ tl(:no_category) ]
+      Category.all_with(Category.is_private == 'f').sort_by(:category_name, :asc).each { |c|
+        values  << c.category_id
+        labels  << c.category_name 
+      }
+      params[:option_labels] = labels
+      params[:option_values] = values
+
+      super(params, &block)
+    end
+
   end
 
   class Category_Select_Field < Aurita::GUI::Widget
@@ -225,9 +244,10 @@ JS
 
     def element
       select_field = Select_Field.new(@attrib)
+
       if @parent then
-        button       = Text_Button.new(:class   => :add_category_button, 
-                                       :onclick => "Aurita.Main.category_selection_add('#{@parent.dom_id}');") { '+' }
+        button = Text_Button.new(:class   => :add_category_button, 
+                                 :onclick => "Aurita.Main.category_selection_add('#{@parent.dom_id}');") { '+' }
         return HTML.div.category_select_field { 
           select_field
         }
@@ -478,7 +498,6 @@ JS
       end
       def element
         element_id = @parent.name.to_s + '_' + @value if @parent
-        p element_id
         element_id = 'user_selection_option_' + @value if @parent
         HTML.div(:id => element_id) { 
           Hidden_Field.new(:name => 'user_group_ids[]', :value => @value) + 

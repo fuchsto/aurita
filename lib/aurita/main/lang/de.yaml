@@ -42,11 +42,13 @@ internal--user_group--division : Firma
 internal--user_login_data--login : Login
 internal--user_login_data--pass : Passwort
 public--category--category_name : Name der Kategorie
+public--category--category_id_parent : Als Unterkategorie von
 public--category--is_private: 
   Private Kategorie :
     t: ja
     f: nein
 
+parent_category : Unterkategorie von
 no_category : Keine Kategorie
 category_name : Name der Kategorie
 category_members : Mitglieder der Kategorie
@@ -125,7 +127,11 @@ edit_custom_entry : Eintrag bearbeiten
 add_user : Neuer Benutzer
 edit_user : Benutzer bearbeiten
 delete_user : Benutzer l&ouml;schen
-add_user_group : Neue Kategorie
+user_group_name : Name der Gruppe
+add_user_group : Neue Benutzergruppe
+edit_user_group : Benutzergruppe bearbeiten
+delete_user_group : Benutzergruppe l&ouml;schen
+user_groups : Benutzergruppen
 add_role : Neue Rolle
 edit_role : Rolle bearbeiten
 delete_role : Rolle l&ouml;schen

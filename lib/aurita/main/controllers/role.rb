@@ -189,12 +189,11 @@ module Main
       HTML.div { body }
     end
     def admin_box
-      box = Box.new(:type => :user_role_index, :class => :topic, :id => :admin_roles_box)
+      box = Box.new(:class => :topic, :id => :admin_roles_box)
       box.header = tl(:roles)
       box.body = admin_box_body
       box
     end
-
 
   end
 

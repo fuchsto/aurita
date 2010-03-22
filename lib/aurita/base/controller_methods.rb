@@ -661,7 +661,9 @@ module Aurita
     #
     def delete_form(klass=nil) 
     # {{{
-      form = model_form(:model => klass, :action => :perform_delete, :instance => load_instance(klass))
+      klass     = @klass if klass.nil?
+      instance  = load_instance(klass)
+      form = model_form(:model => klass, :action => :perform_delete, :instance => instance)
       form.readonly! 
       return form
     end # def }}}
@@ -705,11 +707,7 @@ module Aurita
     # Renders Aurita::GUI::Form instance returned by #delete_form(). 
     def delete(klass=nil) 
     # {{{
-      klass     = @klass if klass.nil?
-      instance  = load_instance(klass)
-      form      = model_form(:klass => @klass, :instance => instance, :action => :perform_delete)
-      form.readonly! 
-      render_form(form)
+      render_form(delete_form)
     end # def }}}
 
   end # class

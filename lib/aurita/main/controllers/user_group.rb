@@ -32,6 +32,16 @@ module Main
     end
 
     def update_group
+      group = User_Group.load(:user_group_id => param(:user_group_id))
+       
+      form = view_string(:admin_edit_user_group, 
+                         :user_categories => User_Category_Controller.category_list(group.user_group_id),
+                         :user_roles      => User_Role_Controller.list_string(group.user_group_id),
+                         :group           => group)
+      page = Page.new(:header => tl(:edit_user)) { form }
+      page.add_css_class(:form_section) 
+      return page
+
       form = update_form
       form.fields = [
          User_Group.user_group_name, 
@@ -98,6 +108,13 @@ module Main
 
     def show
       render_controller(User_Profile_Controller, :show, :user_group_id => id())
+    end
+
+    def group_list(user_group_id=nil)
+      user_group_id ||= param(:user_group_id)
+      user = User_Group.load(:user_group_id => user_group_id)
+      HTML.div { view_string(:admin_user_groups_list, 
+                             :user => user) }
     end
 
     def admin_box_body

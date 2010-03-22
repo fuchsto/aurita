@@ -1,0 +1,41 @@
+
+<div class="form_box">
+
+  <h2 style="margin: 0px; padding-top: 0px; padding-left: 1px; "><%= group.user_group_name %></h2> 
+
+  <br />
+
+  <% form_for(:model => User_Group, :instance => group, :action => :perform_update, :id => :user_group_form) do |f| %>
+    <%= f.text(:name => :user_group_name, :value => group.user_group_name, :label => tl(:user_group_name), :required => true) %>
+  <% end %>
+  <div class="form_button_bar">
+    <%= gui.button(:onclick => "Aurita.submit_form('user_group_form');") { tl(:ok) } %>
+  </div>
+
+</div>
+<br />
+
+<div class="form_box">
+  <div id="user_category_list">
+    <%= user_categories %>
+  </div>
+</div>
+<br />
+
+<div class="form_box">
+  <div id="user_role_list">
+    <%= user_roles %>
+  </div>
+</div>
+<br />
+
+<div class="form_box">
+  <div id="delete_group_box">
+    <h2><%= tl(:delete_user_group) %></h2>
+    <%= tl(:delete_user_group_hints) %>
+    <br />
+    <br />
+    <%= gui.button(:class => [ :red, :form ], :onclick => "Aurita.load({ action: 'User_Group/delete_group/user_group_id=#{group.user_group_id}' });") { tl(:delete_user_group) } %>
+  </div>
+</div>
+

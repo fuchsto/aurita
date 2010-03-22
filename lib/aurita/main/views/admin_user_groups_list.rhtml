@@ -1,0 +1,15 @@
+
+<h3><%= tl(:user_groups) %></h3>
+<% form_for(:model => User_Group_Hierarchy, :action => :perform_add, :instance => user, :id => :user_groups_form) do |f| %>
+  <%= f.custom(:element => User_Group_Selection_List_Field, 
+               :name    => :group_id, 
+               :user    => user) 
+  %>
+  <%= f.custom(:element => Text_Button, 
+               :onclick => "Aurita.submit_form('user_groups_form', { onload: function() { Aurita.load({ element: 'user_groups_list',  
+                                                                                                        action: 'User_Group/group_list/user_group_id=#{user.user_group_id}'}); 
+                                                                                          } 
+                           });") { '+' } 
+  %>
+<% end %>
+

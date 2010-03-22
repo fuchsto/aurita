@@ -191,35 +191,27 @@ module Main
 
     # Query all groups this group is part of, directly or via 
     # hierarchy. 
-    def get_groups(group_id=nil) 
+    def parent_groups(group_id=nil) 
     # {{{
-
-      groups  = Array.new
-      group ||= user_group_id
+      groups     = []
+      group_id ||= user_group_id
+      return groups unless group_id && group_id > 0
       
       parents = User_Group_Hierarchy.select { |e| 
         e.where(User_Group_Hierarchy.user_group_id__child == group_id)
         e.order_by(:user_group_name, :asc)
-      }
+      }.to_a
 
-      parents.each { |entry|
-        if entry.user_group_id__parent >= 300 then
-          group = User_Group.select { |ug|
-            ug.where(
-              ug.user_group_id == entry.user_group_id__parent
-            )
-            ug.order_by(:user_group_name, :asc)
-            ug.limit(1)
-          }.first
-          if !group.nil? && !group.is_atomic? then groups.push(group) end
-        else 
-          return []
+      parents.each { |group|
+        group = User_Group.get(group.user_group_id__parent)
+
+        if group && !group.atomic then 
+          groups.push(group) 
+          next_parents = group.parent_groups
+          groups += next_parents if next_parents
         end
-        child_groups = get_groups(entry.user_group_id__parent)
-        groups += child_groups unless child_groups.nil?
       }
       return groups
-      
     end # def }}}
     
   end # class 

@@ -127,6 +127,7 @@ edit_custom_entry : Eintrag bearbeiten
 add_user : Neuer Benutzer
 edit_user : Benutzer bearbeiten
 delete_user : Benutzer l&ouml;schen
+user_groups : Benutzergruppen
 user_group_name : Name der Gruppe
 add_user_group : Neue Benutzergruppe
 edit_user_group : Benutzergruppe bearbeiten
@@ -178,6 +179,7 @@ show_category : Inhalte anzeigen
 lock_user_hints : Gesperrte Benutzer k&ouml;nnen sich nicht mehr an der Plattform anmelden, und jederzeit wieder entsperrt werden. 
 unlock_user_hints : Dieser Benutzer ist gesperrt und kann sich nicht an der Plattform anmelden. 
 delete_user_hints : Gel&ouml;schte Benutzer k&ouml;nnen nicht mehr reaktiviert werden. Die von ihnen erfassten Inhalte und Daten bleiben aber erhalten. 
+delete_user_group_hints : Mitglieder dieser Gruppe verlieren alle Berechtigungen, die sie durch diese Gruppe erhalten haben. 
 
 user : Benutzer
 login_already_used : Der Benutzername ist bereits vergeben

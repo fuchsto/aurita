@@ -133,6 +133,10 @@ add_user_group : Neue Benutzergruppe
 edit_user_group : Benutzergruppe bearbeiten
 delete_user_group : Benutzergruppe l&ouml;schen
 user_groups : Benutzergruppen
+
+inherited_from_user_group : Vererbt aus Benutzergruppe
+immediate_cagegory_member_of : Direkte Mitgliedschaften
+
 add_role : Neue Rolle
 edit_role : Rolle bearbeiten
 delete_role : Rolle l&ouml;schen

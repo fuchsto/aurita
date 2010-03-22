@@ -211,7 +211,7 @@ module Main
           groups += next_parents if next_parents
         end
       }
-      return groups
+      return groups.flatten
     end # def }}}
     
   end # class 

@@ -301,42 +301,29 @@ module Aurita
     def readable_categories
     # {{{
       if !@readable_categories then
-        inherited_readable_cats    = []
-        inherited_readable_cat_ids = [0]
+        parent_group_ids = []
         if respond_to?(:parent_groups) then
-          parent_groups.map { |g| 
-            inherited_readable_cats += g.readable_categories 
-          }
-          inherited_readable_cats.each { |c| 
-            inherited_readable_cat_ids << c.category_id
-          }
-          inherited_readable_cat_ids.uniq!
+          parent_group_ids = parent_groups.map { |g| g.user_group_id }
         end
         if is_registered? then
-          @readable_categories = inherited_readable_cats + 
-            Category.select { |c| 
+          @readable_categories = Category.select { |c| 
               c.where((Category.public_readable == 't') | 
                       (Category.registered_readable == 't') | 
-                      ((Category.category_id.in(User_Category.select(User_Category.category_id) { |ucid|
-                          ucid.where((User_Category.user_group_id == user_group_id) &
-# TODO: Should be:
-#                         ucid.where((User_Category.user_group_id.in(parent_user_group_ids + user_group_id)) &
+                      (Category.category_id.in(User_Category.select(User_Category.category_id) { |ucid|
+                          ucid.where((User_Category.user_group_id.in(parent_group_ids + [ user_group_id ])) &
                                      (User_Category.read_permission == 't'))
-                        })
-                       ) & 
-                       (Category.category_id.not_in(inherited_readable_cat_ids))))
+                       })
+                      ))
               c.order_by(:category_name, :asc)
             }.to_a
         else
-          @readable_categories = inherited_readable_cats + 
-            Category.select { |c| 
+          @readable_categories = Category.select { |c| 
               c.where((Category.public_readable == 't') |
-                      ((Category.category_id.in(User_Category.select(User_Category.category_id) { |ucid|
-                          ucid.where((User_Category.user_group_id == user_group_id) &
+                      (Category.category_id.in(User_Category.select(User_Category.category_id) { |ucid|
+                          ucid.where((User_Category.user_group_id.in(parent_group_ids + [ user_group_id ])) &
                                      (User_Category.read_permission == 't'))
-                        })
-                       ) & 
-                       (Category.category_id.not_in(inherited_readable_cat_ids))))
+                       })
+                      ))
               c.order_by(:category_name, :asc)
             }.to_a
         end
@@ -355,40 +342,29 @@ module Aurita
             c.order_by(:category_name, :asc)
           }
         else
-          inherited_writeable_cats    = []
-          inherited_writeable_cat_ids = [0]
+          parent_group_ids = []
           if respond_to?(:parent_groups) then
-            parent_groups.map { |g| 
-              inherited_writeable_cats += g.writeable_categories 
-            }
-            inherited_writeable_cats.each { |c| 
-              inherited_writeable_cat_ids << c.category_id
-            }
-            inherited_writeable_cat_ids.uniq!
+            parent_group_ids = parent_groups.map { |g| g.user_group_id }
           end
           if is_registered? then
-            @writeable_categories = inherited_writeable_cats + 
-              Category.select { |c| 
+            @writeable_categories = Category.select { |c| 
               c.where((Category.public_writeable == 't') | 
                       (Category.registered_writeable == 't') | 
                       (Category.category_id.in(User_Category.select(User_Category.category_id) { |ucid|
-                          ucid.where((User_Category.user_group_id == user_group_id) &
+                          ucid.where((User_Category.user_group_id.in(parent_group_ids + [ user_group_id ])) &
                                      (User_Category.write_permission == 't'))
                         }) 
-                      ) & 
-                      (Category.category_id.not_in(inherited_writeable_cat_ids)))
+                      ))
               c.order_by(:category_name, :asc)
             }.to_a
           else
-            @writeable_categories = inherited_writeable_cats + 
-              Category.select { |c| 
+            @writeable_categories = Category.select { |c| 
               c.where((Category.public_writeable == 't') |
                       (Category.category_id.in(User_Category.select(User_Category.category_id) { |ucid|
-                          ucid.where((User_Category.user_group_id == user_group_id) &
+                          ucid.where((User_Category.user_group_id.in(parent_group_ids + [ user_group_id ])) &
                                      (User_Category.write_permission == 't'))
                         })
-                      ) & 
-                      (Category.category_id.not_in(inherited_writeable_cat_ids)))
+                      ))
               c.order_by(:category_name, :asc)
             }.to_a
           end
@@ -402,29 +378,25 @@ module Aurita
     def readable_category_ids
     # {{{
       if !@readable_category_ids then
-        inherited_readable_cat_ids  = []
+        parent_group_ids = []
         if respond_to?(:parent_groups) then
-          inherited_readable_cat_ids = parent_groups.map { |g|
-            g.readable_category_ids
-          }.flatten
+          parent_group_ids = parent_groups.map { |g| g.user_group_id }
         end
         if is_registered? then
-          @readable_category_ids = inherited_readable_cat_ids + 
-            Category.select_values(Category.category_id) { |c| 
+          @readable_category_ids = Category.select_values(Category.category_id) { |c| 
             c.where((Category.public_readable == 't') |
                     (Category.registered_readable == 't') |
                     (Category.category_id.in(User_Category.select(User_Category.category_id) { |ucid|
-                        ucid.where((User_Category.user_group_id == user_group_id) &
+                        ucid.where((User_Category.user_group_id.in(parent_group_ids + [ user_group_id ])) &
                                    (User_Category.read_permission == 't'))
                       })
                     ))
           }.to_a.flatten.map { |cid| cid.to_i }.uniq
         else
-          @readable_category_ids = inherited_readable_cat_ids + 
-            Category.select_values(Category.category_id) { |c| 
+          @readable_category_ids = Category.select_values(Category.category_id) { |c| 
             c.where((Category.public_readable == 't') |
                     (Category.category_id.in(User_Category.select(User_Category.category_id) { |ucid|
-                        ucid.where((User_Category.user_group_id == user_group_id) &
+                        ucid.where((User_Category.user_group_id.in(parent_group_ids + [ user_group_id ])) &
                                    (User_Category.read_permission == 't'))
                       })
                     ))
@@ -445,29 +417,25 @@ module Aurita
             cat_id.order_by(:category_name, :asc)
           }.to_a.flatten.map { |c| c.to_i }
         else
-          inherited_writeable_cat_ids = []
+          parent_group_ids = []
           if respond_to?(:parent_groups) then
-            inherited_writeable_cat_ids = parent_groups.map { |g|
-              g.writeable_category_ids
-            }.flatten
+            parent_group_ids = parent_groups.map { |g| g.user_group_id }
           end
           if is_registered? then
-            @writeable_category_ids = inherited_writeable_cat_ids + 
-              Category.select { |c| 
+            @writeable_category_ids = Category.select { |c| 
               c.where((Category.public_writeable == 't') | 
                       (Category.registered_writeable == 't') |
                       (Category.category_id.in(User_Category.select(User_Category.category_id) { |ucid|
-                          ucid.where((User_Category.user_group_id == user_group_id) &
+                          ucid.where((User_Category.user_group_id.in(parent_group_ids + [ user_group_id ])) &
                                      (User_Category.write_permission == 't'))
                         })
                       ))
             }.to_a.flatten.map { |c| c.category_id }.uniq
           else
-            @writeable_category_ids = inherited_writeable_cat_ids + 
-              Category.select { |c| 
+            @writeable_category_ids = Category.select { |c| 
               c.where((Category.public_writeable == 't') |
                       (Category.category_id.in(User_Category.select(User_Category.category_id) { |ucid|
-                          ucid.where((User_Category.user_group_id == user_group_id) &
+                          ucid.where((User_Category.user_group_id.in(parent_group_ids + [ user_group_id ])) &
                                      (User_Category.write_permission == 't'))
                         })
                       ))

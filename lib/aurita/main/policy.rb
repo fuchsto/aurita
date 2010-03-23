@@ -1,5 +1,10 @@
 
+require('aurita')
+Aurita::Main.import_model :strategies, :category_based_access
+Aurita::Main.import_model :strategies, :category_based_accessor
+
 module Aurita
+module Main
 
   User_Group.use_accessor_strategy(Category_Based_Accessor, 
                                    :managed_by => User_Category, 
@@ -15,5 +20,6 @@ module Aurita
                                       :managed_by => Content_Category, 
                                       :mapping    => { :content_id => :category_id } )
 
+end
 end
 

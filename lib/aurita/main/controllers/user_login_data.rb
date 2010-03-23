@@ -6,7 +6,7 @@ module Main
 
   class User_Login_Data_Controller < App_Controller
     
-    guard_interface(:perform_lock, :perform_unlock, :perform_delete, :perform_add) { 
+    guard_interface(:update, :perform_lock, :perform_unlock, :perform_delete, :perform_add) { 
       Aurita.user.is_admin?
     }
     
@@ -24,14 +24,13 @@ module Main
     end
     
     def update
-      return unless Aurita.user.is_admin? 
-
       user = User_Profile.load(:user_group_id => param(:user_group_id))
        
       form = view_string(:admin_edit_user, 
                          :user_categories => User_Category_Controller.category_list(user.user_group_id),
-                         :user_roles => User_Role_Controller.list_string(user.user_group_id),
-                         :user => user)
+                         :user_roles      => User_Role_Controller.list_string(user.user_group_id),
+                         :user_groups     => User_Group_Controller.group_list(user.user_group_id),
+                         :user            => user)
       page = Page.new(:header => tl(:edit_user)) { form }
       page.add_css_class(:form_section) 
       page

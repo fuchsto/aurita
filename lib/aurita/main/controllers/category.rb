@@ -14,6 +14,7 @@ module Main
     def form_groups
       [
        Category.category_name, 
+       :category_id_parent, 
        :read_access, 
        :write_access
       ]
@@ -55,7 +56,9 @@ module Main
     public
 
     def add
-      form = add_form
+      form       = add_form
+      form.add(GUI::Single_Category_Select_Field.new(:label => tl(:parent_category), 
+                                                     :name  => :category_id_parent))
       form.add(GUI::Category_Access_Options_Field.new(:label => tl(:read_access), 
                                                       :name  => :read_access))
       form.add(GUI::Category_Access_Options_Field.new(:label => tl(:write_access), 
@@ -75,6 +78,13 @@ module Main
       read_access  = :members
       read_access  = :public if category.public_readable
       read_access  = :registered if category.registered_readable
+
+      sub_cat_ids  = ([ category.category_id ] + category.child_category_ids())
+
+      update_form.add(GUI::Single_Category_Select_Field.new(:label   => tl(:parent_category), 
+                                                            :exclude => sub_cat_ids, 
+                                                            :value   => category.category_id_parent, 
+                                                            :name    => :category_id_parent))
       update_form.add(GUI::Category_Access_Options_Field.new(:label => tl(:read_access), 
                                                              :value => read_access, 
                                                              :name  => :read_access))

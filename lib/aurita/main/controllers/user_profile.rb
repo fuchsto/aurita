@@ -247,9 +247,6 @@ module Main
       show(user) if user
     end
 
-    def show_short
-    end
-
     def update
       instance     = User_Profile.load(:user_group_id => param(:user_group_id))
       form         = update_form(User_Profile) 

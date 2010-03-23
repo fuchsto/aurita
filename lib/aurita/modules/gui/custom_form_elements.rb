@@ -185,23 +185,42 @@ JS
     def initialize(params={}, &block)
       @option_field_decorator ||= Language_Selection_List_Option_Field
       @select_field_class     ||= Language_Select_Field
-
+      
       selected_languages = params[:value] || []
-
+      
       params[:name]  = :languages if params[:name].to_s.empty?
       params[:label] = tl(:languages) unless params[:label]
-
+      
       option_values = [ '', :de, :en, :fr ]
       option_labels = [ tl(:select_additional_language), 'deutsch', 'englisch', 'franz&ouml;sisch' ]
-
+      
       options        = option_labels
       options.fields = option_values
       
       super(params, &block)
-
+      
       set_options(options)
       set_value(selected_languages)
     end
+  end
+
+
+  class Single_Category_Select_Field < Select_Field
+  include Aurita::GUI::I18N_Helpers
+
+    def initialize(params={}, &block)
+      values = [ '' ]
+      labels = [ tl(:no_category) ]
+      Category.all_with(Category.is_private == 'f').sort_by(:category_name, :asc).each { |c|
+        values  << c.category_id
+        labels  << c.category_name 
+      }
+      params[:option_labels] = labels
+      params[:option_values] = values
+
+      super(params, &block)
+    end
+
   end
 
   class Category_Select_Field < Aurita::GUI::Widget
@@ -225,9 +244,10 @@ JS
 
     def element
       select_field = Select_Field.new(@attrib)
+
       if @parent then
-        button       = Text_Button.new(:class   => :add_category_button, 
-                                       :onclick => "Aurita.Main.category_selection_add('#{@parent.dom_id}');") { '+' }
+        button = Text_Button.new(:class   => :add_category_button, 
+                                 :onclick => "Aurita.Main.category_selection_add('#{@parent.dom_id}');") { '+' }
         return HTML.div.category_select_field { 
           select_field
         }
@@ -478,7 +498,6 @@ JS
       end
       def element
         element_id = @parent.name.to_s + '_' + @value if @parent
-        p element_id
         element_id = 'user_selection_option_' + @value if @parent
         HTML.div(:id => element_id) { 
           Hidden_Field.new(:name => 'user_group_ids[]', :value => @value) + 
@@ -641,6 +660,60 @@ JS
     end
   end
 
+  # Specialization of Aurita::GUI::Selection_List_Field:
+  # Sets
+  #   options: All available non-atomic user groups
+  #   value: Array of user group ids currently assigned to user
+  # Expects: 
+  #   user: Instance of user to create selection list for
+  #
+  class User_Group_Selection_List_Field < Selection_List_Field
+  include Aurita::GUI::I18N_Helpers
+
+    attr_accessor :user
+
+    class User_Group_Selection_List_Option_Field < Selection_List_Option_Field
+    include Aurita::GUI::I18N_Helpers
+
+      def initialize(params={})
+        super(params)
+        @user = @parent.user
+      end
+      def element
+        HTML.div { 
+          HTML.a(:class => :icon, 
+                 :onclick => "Aurita.call({ onload: function() { Aurita.load({ element: 'user_groups_list', 
+                                                                               action: 'User_Group/group_list/user_group_id=#{@user.user_group_id}' }); }, 
+                                            action: 'User_Group_Hierarchy/perform_delete/user_group_id=#{@user.user_group_id}&category_id=#{@value}' });") { 
+            HTML.img(:src => '/aurita/images/icons/delete_small.png') 
+          } + 
+          @label.to_s 
+        }
+      end
+    end
+
+    def initialize(params={})
+      @user         = params[:user]
+      active_groups = @user.parent_groups.map { |g| g.user_group_id }
+      options       = []
+      group_ids     = []
+      params.delete(:user)
+
+      User_Group.all_with(User_Group.atomic == false).sort_by(User_Group.user_group_name).each { |c|
+        STDERR.puts c.inspect
+        options << c.user_group_name
+        group_ids << c.user_group_id
+      }
+      options.fields = group_ids.map { |v| v.to_s }
+   
+      super(params)
+      set_options(options) 
+      set_value(active_groups)
+
+      @option_field_decorator = User_Group_Selection_List_Option_Field
+    end
+
+  end
 end
 end
 

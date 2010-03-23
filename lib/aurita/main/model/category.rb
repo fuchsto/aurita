@@ -75,6 +75,40 @@ module Main
       return @unassigned_category
     end
 
+    def parent_category
+      return false if category_id_parent == 0
+      return Category.find(1).with(Category.category_id == category_id_parent).entity
+    end
+    alias parent parent_category
+    def parent_categories
+      parents = [ ]
+      immediate_parent = parent_category()
+      if immediate_parent then
+        parents << immediate_parent
+        parents += parents.first.parent_categories
+      end
+      parents
+    end
+
+    def immediate_child_categories
+      Category.all_with(Category.category_id_parent == category_id).entities
+    end
+    def child_categories
+    end
+    alias categories child_categories
+
+    def child_category_ids(parent_category_id=false)
+      parent_category_id ||= category_id
+      cat_ids = Category.select_values(:category_id) { |cid| 
+        cid.where(Category.category_id_parent == parent_category_id)
+      }.to_a.flatten.map { |cid| cid.to_i }
+      sub_cat_ids = []
+      cat_ids.each { |cid|
+        sub_cat_ids += child_category_ids(cid)
+      }
+      cat_ids + sub_cat_ids
+    end
+
   end 
 
 end # module

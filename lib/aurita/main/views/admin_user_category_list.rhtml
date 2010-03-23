@@ -1,6 +1,25 @@
 
 <h3><%= tl(:categories) %></h3>
 <% form_for(:model => User_Category, :action => :perform_add, :instance => user, :id => :user_category_form) do |f| %>
+  <% user.parent_groups.each do |group| %>
+    <b class="label"><%= tl(:inherited_from_user_group) %> <%= link_to(group, :action => :update_group) { group.user_group_name } %></b>
+    <div class="selection_list_field">
+      <% group.categories.each do |c| %>
+        <ul class="no_bullet">
+          <li>
+          <%= c.category_name %><br />
+            <ul>
+              <li><label>
+                <% if c.read_permission %>Lesen <% end %>
+                <% if c.write_permission %> Schreiben <% end %>
+                </label></li>
+            </ul>
+          </li>
+        </ul>
+      <% end %>
+    </div>
+  <% end %>
+  <b class="label"><%= tl(:immediate_cagegory_member_of) %></b>
   <%= f.custom(:element => User_Category_Selection_List_Field, 
                :name    => :category_id, 
                :user    => user) 

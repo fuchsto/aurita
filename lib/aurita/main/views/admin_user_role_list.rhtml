@@ -1,6 +1,20 @@
 
+
 <h3><%= tl(:roles) %></h3>
 <% form_for(:model => User_Role, :action => :perform_add, :instance => user, :id => :user_role_form) do |f| %>
+  <% user.parent_groups.each do |group| %>
+    <b class="label"><%= tl(:inherited_from_user_group) %> <%= link_to(group, :action => :update_group) { group.user_group_name } %></b>
+    <div class="selection_list_field">
+      <% group.roles.each do |r| %>
+        <ul class="no_bullet">
+          <li>
+          <%= r.role_name %>
+          </li>
+        </ul>
+      <% end %>
+    </div>
+  <% end %>
+  <b class="label"><%= tl(:immediate_roles) %></b>
   <%= f.custom(:element => User_Role_Selection_List_Field, 
                :name    => :role_id, 
                :user    => user) 

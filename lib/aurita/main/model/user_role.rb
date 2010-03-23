@@ -19,11 +19,15 @@ module Main
     # Return roles this user is member of, as unsorted array. 
     def roles
       if !@roles then
-        @roles = User_Role.select { |r|
-          r.where(User_Role.user_group_id == user_group_id)
-        }
+        STDERR.puts '-- ROLES ---------------------------------------------------'
+        @roles = Role.select { |r|
+          r.join(User_Role).using(:role_id) { |ur|
+            ur.where(User_Role.user_group_id == user_group_id)
+          }
+        }.to_a
+        STDERR.puts '-- END ROLES ---------------------------------------------------'
       end
-      return @role_ids
+      return @roles
     end
     
     # Return ids of roles this user is member of, as unsorted array. 
@@ -31,7 +35,7 @@ module Main
       if !@role_ids then
         @role_ids = User_Role.select_values(User_Role.role_id) { |rid|
           rid.where(User_Role.user_group_id == user_group_id)
-        }
+        }.to_a.flatten.map { |i| i.to_i }
       end
       return @role_ids
     end

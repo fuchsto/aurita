@@ -67,9 +67,10 @@ module Main
     # {{{
       perm = perm.to_sym
       if @role_permissions.nil? || @role_permissions[perm].nil? then
+        parent_group_ids = parent_groups.map { |g| g.user_group_id }
         perms = Role_Permission.select { |rp| 
           rp.join(User_Role).on(Role_Permission.role_id == User_Role.role_id) { |urp|
-            urp.where((User_Role.user_group_id == user_group_id) &
+            urp.where((User_Role.user_group_id.in([user_group_id] + parent_group_ids)) &
                       ((urp.value == 'true') | (urp.value == 't')) & 
                       (urp.name == perm.to_s))
           }

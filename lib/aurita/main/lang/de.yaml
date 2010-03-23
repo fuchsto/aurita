@@ -134,8 +134,9 @@ edit_user_group : Benutzergruppe bearbeiten
 delete_user_group : Benutzergruppe l&ouml;schen
 user_groups : Benutzergruppen
 
-inherited_from_user_group : Vererbt aus Benutzergruppe
+inherited_from_user_group : Vererbt von Benutzergruppe
 immediate_cagegory_member_of : Direkte Mitgliedschaften
+immediate_roles : Zugewiesene Rollen
 
 add_role : Neue Rolle
 edit_role : Rolle bearbeiten

@@ -118,34 +118,10 @@ module Main
     # Whether group is atomic (i.e. an user) or not
     # @tested
     def is_atomic?
-      attr['atomic'] == 't'
+      atomic
     end
 
   public 
-
-    def immediate_roles()
-    # {{{
-        own_roles = User_Role.select { |r|
-          r.where(r[User_Role.user_group_id] == attr['user_group_id'])   
-        }
-    end # def }}}
-    
-    # Get roles of User_Group instance as array of 
-    # Table_Accessor instances of User_Role. 
-    def roles() 
-    # {{{
-        inherited_roles = Array.new
-        get_groups.each { |g|
-          inherited_roles += g.immediate_roles
-        } unless get_groups.nil?
-        own = own_roles()
-        if own then
-          return own + inherited_roles
-        else 
-          return inherited_roles
-        end
-        
-    end # def }}}
 
     def get_own_users(user_group_id=nil) 
     # {{{

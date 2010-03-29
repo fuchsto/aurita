@@ -23,8 +23,8 @@ module Main
     end
     def perform_delete
       User_Role.delete { |r|
-        r.where((r.user_group_id == param(:user_group_id)) & 
-                (r.role_id == param(:role_id)))
+        r.where((User_Role.user_group_id == param(:user_group_id)) & 
+                (User_Role.role_id == param(:role_id)))
       }
       redirect_to(:controller => 'User_Login_Data', :action => :update, :user_group_id => param(:user_group_id))
     end

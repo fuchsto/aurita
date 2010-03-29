@@ -16,29 +16,59 @@ module Main
 
   class User_Group < Aurita::Model
 
-    # Return roles this user is member of, as unsorted array. 
-    def roles
+    def immediate_roles()
+    # {{{
+      Role.select { |r|
+        r.join(User_Role).using(:role_id) { |ur|
+          ur.where(User_Role.user_group_id == user_group_id)   
+        }
+      }.to_a
+    end # def }}}
+    alias own_roles immediate_roles
+
+    # Get roles of User_Group instance as array of 
+    # Table_Accessor instances of User_Role. 
+    def roles() 
+    # {{{
       if !@roles then
-        STDERR.puts '-- ROLES ---------------------------------------------------'
-        @roles = Role.select { |r|
-          r.join(User_Role).using(:role_id) { |ur|
-            ur.where(User_Role.user_group_id == user_group_id)
-          }
-        }.to_a
-        STDERR.puts '-- END ROLES ---------------------------------------------------'
+        inherited_roles = Array.new
+        parent_groups.each { |g|
+          inherited_roles += g.immediate_roles
+        } 
+        own = immediate_roles()
+        if own then
+          @roles = own + inherited_roles
+        else 
+          @roles = inherited_roles
+        end
       end
-      return @roles
-    end
-    
-    # Return ids of roles this user is member of, as unsorted array. 
-    def role_ids
+      @roles
+    end # def }}}
+
+    def immediate_role_ids()
+    # {{{
+      User_Role.select_values(:role_id) { |r|
+        r.where(User_Role.user_group_id == user_group_id)   
+      }.to_a.flatten.map { |r| r.to_i }
+    end # def }}}
+    alias own_role_ids immediate_role_ids
+
+    def role_ids()
+    # {{{
       if !@role_ids then
-        @role_ids = User_Role.select_values(User_Role.role_id) { |rid|
-          rid.where(User_Role.user_group_id == user_group_id)
-        }.to_a.flatten.map { |i| i.to_i }
+        inherited_role_ids = Array.new
+        parent_groups.each { |g|
+          inherited_role_ids += g.immediate_role_ids
+        } 
+        own = immediate_role_ids()
+        if own then
+          @role_ids = own + inherited_role_ids
+        else 
+          @role_ids = inherited_role_ids
+        end
       end
-      return @role_ids
-    end
+      @role_ids
+    end # def }}}
   end
 
 end # module

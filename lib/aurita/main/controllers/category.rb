@@ -81,6 +81,9 @@ module Main
 
       sub_cat_ids  = ([ category.category_id ] + category.child_category_ids())
 
+      STDERR.puts "Excluding: #{sub_cat_ids.map { |c| Category.get(c).inspect }}"
+
+      
       update_form.add(GUI::Single_Category_Select_Field.new(:label   => tl(:parent_category), 
                                                             :exclude => sub_cat_ids, 
                                                             :value   => category.category_id_parent, 

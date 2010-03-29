@@ -546,7 +546,7 @@ JS
     def initialize(params={})
       @user = params[:user]
       params.delete(:user)
-      active_roles = user.role_ids
+      active_roles = user.immediate_role_ids
       options = {}
       Role.find(:all).sort_by(Role.role_name).each { |c|
         options[c.role_id] = c.role_name

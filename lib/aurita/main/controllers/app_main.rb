@@ -44,7 +44,9 @@ module Main
     end
 
     def login
-      exec_js("Effect.Appear('login_box', { afterFinish: function() { $('login').focus(); } }); ")
+#     exec_js("Effect.Appear('login_box', { afterFinish: function() { $('login').focus(); } }); ")
+#     exec_js("Effect.Appear('login_box');")
+      exec_js("$('login').focus(); "); 
       render_view(:login)
     end
 

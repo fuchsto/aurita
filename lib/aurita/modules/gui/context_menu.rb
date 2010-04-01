@@ -85,6 +85,10 @@ module GUI
       
       element.id = "#{params[:id]}" unless element.dom_id()
 
+      if params[:id] then
+        own_id = "context_#{params[:id]}"
+      end
+
       context_button = Context_Menu_Button_Bar.new(highlight_element_id)
 
       if params[:add_context_buttons] then 
@@ -106,6 +110,8 @@ module GUI
           context_button  
         })
       end
+
+      element.id = own_id if own_id
       
       element.onmouseout  = "Aurita.context_menu_out(this);"
       element.onmouseover = "Aurita.context_menu_over('#{type}', '#{menu_params}', '#{highlight_element_id}');"

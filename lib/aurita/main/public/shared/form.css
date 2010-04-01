@@ -164,13 +164,11 @@ input.inline, textarea.inline {
 
 .form_box { 
   padding: 10px; 
-/*  width: 472px; */
   width: 340px; 
   background-color: #f4f4f4; 
 }
 .form_box.wide { 
   padding: 10px; 
-/*  width: 472px; */
   width: 540px; 
   background-color: #f4f4f4; 
 }

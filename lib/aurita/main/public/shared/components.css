@@ -617,10 +617,9 @@ img.icon {
 }
 
 .context_menu_element { 
-  padding-top: 6px; 
-  padding-bottom: 6px; 
   padding-left: 15px; 
   margin-left: -15px; 
+
 }
 
 #context_menu, #message_box { 
@@ -2052,6 +2051,7 @@ a.add_file_button {
   position: absolute; 
   margin-left: -21px; 
   margin-top: 0px; 
+  padding-top: 4px; 
 }
 .article_view .context_menu_button { 
   padding: 2px; 

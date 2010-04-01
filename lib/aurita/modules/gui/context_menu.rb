@@ -86,7 +86,8 @@ module GUI
       element.id = "#{params[:id]}" unless element.dom_id()
 
       if params[:id] then
-        own_id = "context_#{params[:id]}"
+        own_id               = "context_#{params[:id]}"
+        highlight_element_id = own_id
       end
 
       context_button = Context_Menu_Button_Bar.new(highlight_element_id)

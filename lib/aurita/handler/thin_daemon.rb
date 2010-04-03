@@ -52,6 +52,7 @@ module Aurita
                              '/aurita'                => @aurita_std, 
                              '/aurita/poll'           => @aurita_poll, 
                              '/aurita/inc'            => Aurita_Theme_File_Application.new(root+'/inc'), 
+                             '/aurita/css'            => Aurita_Theme_File_Application.new(root+'/css'), 
                              '/aurita/shared'         => Aurita_File_Application.new(root+'/shared'), 
                              '/aurita/assets'         => Aurita_File_Application.new(root+'/assets'), 
                              '/aurita/images'         => Aurita_Theme_File_Application.new(root+'/images'))

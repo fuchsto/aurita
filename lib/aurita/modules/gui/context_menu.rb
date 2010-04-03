@@ -11,10 +11,6 @@ module GUI
       element = HTML.div(:id    => "#{highlight_element_id}_wrap", 
                          :class => :context_menu_button_bar, 
                          :style => 'display: none;') { 
-        HTML.div(:class   => :context_menu_button, 
-                 :onclick => "Aurita.open_context_menu(); ") { 
-          HTML.img(:src => '/aurita/images/icons/edit_button.gif') 
-        }
       }
       super(element)
     end
@@ -90,27 +86,38 @@ module GUI
         highlight_element_id = own_id
       end
 
-      context_button = Context_Menu_Button_Bar.new(highlight_element_id)
+      button_bar  = Context_Menu_Button_Bar.new(highlight_element_id)
+      edit_button = HTML.div(:class   => :context_menu_button, 
+                             :onclick => "Aurita.open_context_menu(); ") { 
+          HTML.img(:src => '/aurita/images/icons/edit_button.gif') 
+      }
 
       if params[:add_context_buttons] then 
-        context_button << params[:add_context_buttons]
+        button_bar << edit_button
+        button_bar << params[:add_context_buttons]
+      elsif params[:context_buttons] then
+        button_bar << params[:context_buttons]
+      else
+        button_bar << edit_button
       end
       
       type_css_class = type.gsub('::','__')
 
       if params[:show_button] == true then
         element = HTML.div(:class => [ type_css_class, :context_menu_element ] ) { 
-          context_button + element 
+          button_bar + element 
         } 
       elsif params[:show_button] == :append then
         element << HTML.div(:class => [ type_css_class, :context_menu_element ] ) { 
-           context_button
+           button_bar
         } 
       elsif params[:show_button] == :prepend then
         element.prepend(HTML.div(:class => [ type_css_class, :context_menu_element ] ) { 
-          context_button  
+          button_bar  
         })
       end
+
+      element.add_css_class(params[:class]) if params[:class]
 
       element.id = own_id if own_id
       

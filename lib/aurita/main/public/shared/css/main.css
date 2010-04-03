@@ -1,0 +1,282 @@
+
+.main_autocomplete_box { 
+  border-top: 1px solid white; 
+  border-left: 1px solid white; 
+  border-right: 1px solid #c8c8c8; 
+  border-bottom: 1px solid #c8c8c8; 
+  background-color: #f0f0f0;
+}
+
+.user_index_entry { 
+  display: block; 
+  min-width: 170px; 
+  width: 170px; 
+  height: 150px; 
+  float: left; 
+  padding: 5px; 
+  margin-left: 2px; 
+  margin-top: 2px; 
+  padding-left: 10px; 
+  border: 1px dotted #cccccc;
+  overflow: hidden; 
+}
+
+.video_index_entry { 
+  min-width: 300px; 
+  width: 30%; 
+  height: 200px; 
+  float: left; 
+  padding: 5px; 
+  margin-left: 2px; 
+  margin-top: 2px; 
+  padding-left: 10px; 
+  border: 1px dotted #cccccc;
+}
+
+.user_icon { 
+  background-color: #efefef; 
+  float: left; 
+  margin: 2px; 
+  padding: 2px;
+  width: 135px; 
+  text-align: center; 
+}
+.user_icon .image { 
+  height: 98px; 
+}
+
+.user_icon.tiny { 
+  margin: 1px; 
+  padding: 1px;
+  width: 75px; 
+  height: 75px; 
+  text-align: center; 
+  clear: both; 
+}
+.user_icon.tiny .image { 
+  width: 70px; 
+  height: auto !important; 
+  overflow: hidden; 
+  float: left; 
+  margin-right: 5px; 
+  text-align: center; 
+  background-color: #efefef; 
+}
+.user_icon.tiny .info { 
+  text-align: left; 
+  width: 128px; 
+  float: left; 
+}
+
+.user_icon.tiny.list { 
+  background-color: transparent; 
+  margin: 1px; 
+  padding: 1px;
+  text-align: center; 
+  clear: both; 
+  width: auto !important; 
+}
+.user_icon.tiny.list .info { 
+  text-align: left; 
+  width: auto !important; 
+}
+.user_icon.tiny.list .info { 
+  clear: both; 
+}
+
+input.autocomplete, input.autocomplete:focus {
+  width:180px;
+  background-color: white;
+  border:1px solid #cccccc;
+  margin:3px;
+  padding:3px;
+  margin-right: 0px;
+}
+div.autocomplete {
+  position:absolute;
+  padding: 2px; 
+  margin: 0px; 
+  border-top: 1px solid #cfcfcf; 
+  border-left: 1px solid #cfcfcf; 
+  border-right: 1px solid #afafaf; 
+  border-bottom: 1px solid #afafaf; 
+  background-color: white; 
+}
+span.informal {
+  color: #565656;
+  margin-left: 40px; 
+  padding-left: 5px; 
+}
+#indicator, #indicator_image { 
+  position: absolute; 
+  z-index: 2; 
+  margin-top: 5px; 
+  margin-left: 7px; 
+  right: 6px; 
+}
+#indicator_, #indicator_image_ {
+  position: absolute; 
+  margin-top: 5px; 
+  margin-left: 7px; 
+  z-index: 1; 
+  right: 6px; 
+}
+div.autocomplete ul {
+  list-style-type:none;
+  margin:0px;
+  padding:0px;
+}
+div.autocomplete ul.autocomplete li.autocomplete.selected { 
+  background-color: #f9dba8 !important; 
+}
+div.autocomplete ul.autocomplete li.autocomplete {
+  list-style-type:none;
+  display:block;
+  margin:0;
+  padding:2px;
+  cursor:pointer;
+  overflow: hidden; 
+  padding-left: 7px; 
+}
+#autocomplete_choices { 
+  width: 419px; 
+  top: 25px; 
+  left: -262px; 
+  background-color: #efefef;
+/*
+  opacity:.90; 
+  filter: alpha(opacity=90); 
+  -moz-opacity: 0.9; 
+  -khtml-opacity:0.9; 
+  color:rgba(0, 0, 0, 0.9);  
+*/
+}
+ul.autocomplete { 
+
+  width: 416px; 
+  clear: both; 
+  z-index: 100; 
+}
+
+div.autocomplete, ul.autocomplete, li.autocomplete, li.autocomplete_image, li.autocomplete_first_entry, li.autocomplete_last_entry {
+  list-style-type : none;
+  display: block;
+  margin: 0px;
+  padding: 0px;
+  cursor: pointer;
+  overflow: hidden; 
+}
+
+li.autocomplete_default { 
+  clear: both; 
+}
+
+li.autocomplete_image { 
+  clear: both;  
+}
+
+li.autocomplete { 
+  width: 416px; 
+  padding-top: 5px; 
+}
+li.autocomplete_last_entry { 
+  border-bottom: 1px solid #232323;
+  padding-top: 5px; 
+  padding-bottom: 10px; 
+}
+li.autocomplete_first_entry { 
+  padding-top: 5px; 
+}
+#global_search { 
+  position: absolute; 
+  top: 125px; 
+  left: 31px; 
+}
+
+.autocomplete_default { 
+  padding-left: 3px; 
+}
+
+.autocomplete .delimiter, .autocomplete .delimiter.selected { 
+  padding: 3px; 
+  background-color: #cccccc; 
+  cursor: default; 
+}
+
+.box_hierarchy_entry { 
+  height: 22px; 
+  font-size: inherit;
+  line-height: 21px;
+  cursor: pointer; 
+  background: transparent url(/aurita/images/icons/row_bg.png) repeat; 
+}
+.box_hierarchy_entry_level_1 .label { 
+  padding-left: 31px; 
+}
+.box_hierarchy_entry_level_2 .label { 
+  padding-left: 42px; 
+}
+.box_hierarchy_entry_level_3 .label { 
+  padding-left: 53px; 
+}
+
+.box_hierarchy_entry { 
+  border-color: #cfcfcf; 
+}
+.box_hierarchy_entry_level_1 { 
+  background-color: #e8e8e8; 
+}
+.box_hierarchy_entry_level_2 { 
+  background-color: #e0e0e0; 
+}
+.box_hierarchy_entry_level_3 { 
+  background-color: #a0a0a0; 
+}
+.box_hierarchy_entry_level_4 { 
+  background-color: #a0a0a0; 
+}
+
+.box_hierarchy_entry .label { 
+  overflow: hidden; 
+  height: 100%; 
+}
+.box_hierarchy_entry_level_1 .label { 
+  padding-left: 22px; 
+}
+.box_hierarchy_entry_level_2 .label { 
+  padding-left: 42px; 
+}
+.box_hierarchy_entry_level_3 .label { 
+  padding-left: 53px; 
+}
+.box_hierarchy_entry_level_4 .label { 
+  padding-left: 64px; 
+}
+.box_hierarchy_entry_level_5 .label { 
+  padding-left: 75px; 
+}
+.box_hierarchy_entry_level_6 .label { 
+  padding-left: 86px; 
+}
+.highlighted .label { 
+  background-color: transparent !important; 
+}
+
+.user_profile_box { 
+  width: 320px; 
+  float: left; 
+}
+.user_profile_box h2 { 
+  padding-left: 7px; 
+}
+
+.recent_changes .index_entry { 
+  height: 55px; 
+  padding: 1px 1px 2px 5px; 
+}
+.recent_changes .index_entry .column { 
+  padding-left: 3px; 
+  padding-right: 3px; 
+}
+
+

@@ -1,0 +1,1151 @@
+
+html{color:#000;}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0;}
+table{border-collapse:separate;border-spacing:0;}
+fieldset,img{border:0;}
+address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}
+li{list-style:none;}
+caption,th{text-align:left;}
+h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}
+q:before,q:after{content:'';}
+abbr,acronym {border:0;font-variant:normal;}
+sup {vertical-align:text-top;}
+sub {vertical-align:text-bottom;}
+input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;}
+legend{color:#000;}
+body {font:13px/1.231 verdana,arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}
+table {font-size:inherit;font:100%;}
+pre,code,kbd,samp,tt{font-family:monospace;*font-size:108%;line-height:100%;}
+
+h1 { margin-top: 10px; font-weight: bold; margin-bottom: 8px; padding-top: 4px; }
+h2 { margin-top: 10px; font-weight: bold; margin-bottom: 8px; } 
+h3 { margin-top: 7px;  font-weight: bold; margin-bottom: 5px; } 
+
+ol.no_bullets li { list-style-type: none; }
+ul.no_bullets li { list-style-type: none; }
+
+ol li { list-style-type: decimal; }
+
+a { 
+  outline: none; 
+  font-weight: inherit; 
+}
+
+pre {
+     white-space: pre-wrap;       /* css-3 */
+     white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+     white-space: -pre-wrap;      /* Opera 4-6 */
+     white-space: -o-pre-wrap;    /* Opera 7 */
+     word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+body { 
+  font-size: 12px; 
+  font-family: verdana,helvetica,arial,freesans,clean,sans-serif;
+  line-height: 18px !important; 
+}
+
+h1,h2,h3,h4,h5,h6 { 
+  font-family: Verdana, sans-serif; 
+}
+
+h1 { 
+  font-size: 25px;
+  margin-bottom: 0px; 
+  font-weight: lighter; 
+  line-height: 30px; 
+}
+
+h2 { 
+  font-size: 20px;
+  line-height: 20px; 
+  padding-top: 10px; 
+  padding-bottom: 10px; 
+  font-weight: lighter; 
+}
+h3, h4 { 
+  font-weight: bold; 
+  line-height: 17px; 
+  padding-top: 10px; 
+  padding-bottom: 10px; 
+}
+h3 { font-size: 16px; padding: 0px; }
+h4 { font-size: 14px; padding: 0px; }
+
+h5, h6 { 
+  font-size: 13px;
+  line-height: 18px; 
+  font-weight: bold; 
+  text-transform: uppercase; 
+  padding-top: 10px; 
+  padding-bottom: 10px; 
+}
+
+h1, h2, h3, h4, h5, h6 { 
+  color: #3287D7;
+}
+
+p { 
+  padding-top: 4px; 
+  padding-bottom: 4px; 
+  line-height: inherit; 
+}
+
+.highlighted { 
+  border-color: #e3bb88; 
+  background: #f9cf88 url(/aurita/images/icons/tall_row_highlighted_bg.png) repeat-x scroll 0 0px !important; 
+}
+
+.informal, .informal a { 
+  color: #787878; 
+  font-size: 10px; 
+}
+
+.highlighted .body .sub { 
+  background-color: #e3bb88; 
+}
+
+.highlighted .box_header { 
+  background: #f9cf88 url('/aurita/images/icons/box_header_highlighted_bg.png') repeat-x; 
+}
+.highlighted .box_body { 
+  background-color: transparent;
+}
+.highlighted img { 
+  opacity:.60; 
+  filter: alpha(opacity=60); 
+  -moz-opacity: 0.6; 
+  -khtml-opacity:0.6; 
+  color:rgba(255, 255, 255, 0.6);
+}
+
+div.warning_box, div.message_box.confirmation { 
+  background-color: #FB7070; 
+  border-color: #D43C3C; 
+  color: #FFFFFF; 
+}
+div.hint_box { 
+  background-color: #FFFFCC; 
+  border-color: #DDDB54; 
+  color: #000000; 
+}
+div.message_box { 
+  background-color: #9BCF7B; 
+  border-color: #669933; 
+  color: #000000; 
+}
+
+div.warning_box, div.hint_box, div.message_box { 
+  padding: 7px; 
+  text-align: center; 
+  margin-bottom: 4px; 
+  border-width: 1px; 
+  border-style: solid; 
+}
+
+/* Hides from IE-mac \*/
+* html .clearfix {height: 1%;}
+/* End hide from IE-mac */
+
+#cover { 
+  z-index: 301; 
+  background-color: #ffffff; 
+  position: fixed; 
+  left: 0; 
+  top: 0; 
+  width: 100%; 
+  height: 100%; 
+  padding-bottom: 10px; 
+  text-align: center; 
+  padding-top: 300px; 
+}
+
+table.sortable th { 
+  cursor: pointer; 
+  overflow: hidden; 
+  padding-left: 10px; 
+}
+
+table.list { 
+  border-width: 1px; 
+  border-style: solid; 
+  border-color: white #C8C8C8 #C8C8C8 white
+} 
+table.list td { 
+  padding: 6px; 
+}
+table.list tr.even { 
+/*  background-color: #efefef; */
+}
+table.list tr.odd { 
+/*  background-color: #dfdfdf; */
+}
+table.list tr.deact { 
+  color: #454545; 
+  background-color: #e0e0e0; 
+}
+table.list td {
+  border-top: 1px solid #cecece; 
+  background: #f3f3f3 url('/aurita/images/icons/tall_row_brighter_bg.png') repeat-x; 
+}
+table.list tr.highlighted td { 
+  background: #f9cf88 url(/aurita/images/icons/tall_row_highlighted_bg.png) repeat-x scroll 0 0px; 
+}
+table.list th, table.list th.first { 
+  background: transparent url('/aurita/images/icons/box_header_bg.png') repeat-x scroll 0 0;
+  color: #000000; 
+  padding: 3px 5px; 
+  font-size: 12px; 
+  line-height: 16px; 
+  height: 16px; 
+  border-left: 1px solid #cccccc; 
+}
+table.list th img { 
+  display: inline !important; 
+  margin: 0px 0px -3px 0px; 
+}
+
+table.list th.first { 
+  /* border-left: 1px solid #cccccc; */
+}
+table.list td.tab_left { 
+  text-align: right; 
+}
+.index_entry { 
+  display: block; 
+  padding: 3px; 
+  margin-left: 0px; 
+  margin-top: 2px; 
+  padding-left: 10px; 
+  line-height: 19px; 
+  clear: both; 
+  background: #f3f3f3 url('/aurita/images/icons/tall_row_brighter_bg.png') repeat-x; 
+}
+
+.bookmark_index_entry { 
+  display: block; 
+  padding: 3px; 
+  margin-left: 2px; 
+  margin-top: 2px; 
+  padding-left: 10px; 
+  background-color: #efefef;
+}
+.flag_button, .flag_button_active { 
+  cursor: pointer; 
+  width: 100px; 
+  height: 15px; 
+  float: left; 
+  font-size: 12px; 
+  border-left: 1px solid #cccccc; 
+  border-right: 1px solid #cccccc; 
+  border-top: 1px solid #cccccc; 
+  border-bottom-width: 0px; 
+  padding: 7px; 
+  margin-top: 3px; 
+  margin-right: 3px; 
+  margin-bottom: -1px; 
+  background: #c3c3c3 url('/aurita/images/icons/box_header_bg.png') repeat-x; 
+  -moz-border-radius-topleft: 3px; 
+  -moz-border-radius-topright: 3px; 
+}
+.flag_button { 
+  color: #232323; 
+}
+.flag_button:hover { 
+  color: #565656; 
+  border-left: 1px solid #565656; 
+  border-right: 1px solid #565656; 
+  border-top: 1px solid #565656; 
+}
+.flag_button_active { 
+  margin-bottom: -1px; 
+  border-bottom: 0px; 
+  background: #f9cf88 url('/aurita/images/icons/box_header_highlighted_bg.png') repeat-x 
+}
+
+.folder_tab_list_entry { 
+  border-bottom: 1px solid #dddddd; 
+}
+
+.index_entry { 
+  margin: 2px; 
+  padding: 5px 5px 5px 10px; 
+}
+.index_entry .header { 
+  font-weight: bold; 
+  margin: -5px -5px 0px -10px; 
+  padding: 5px 5px 5px 10px; 
+}
+.index_entry .info { 
+}
+
+.dark_bg { 
+  background-color: #c7c7c7; 
+}
+.highlighted .dark_bg, .highlighted.dark_bg { 
+  background-color: #e3bb88 !important; 
+}
+.darker_bg { 
+  background-color: #eaeaea; 
+}
+.highlighted .darker_bg, .highlighted.darker_bg { 
+  background-color: #f7cf9b !important; 
+  border-color: #e3bb88 !important; 
+}
+.default_bg { 
+  background-color: #f9f9f9; 
+}
+.highlighted .default_bg, .highlighted.default_bg { 
+  background-color: #f9dba8 !important; 
+  border-color: #e3bb88 !important; 
+}
+.brighter_bg { 
+  background-color: #f6f6f6; 
+}
+.highlighted .brighter_bg, .highlighted.brighter_bg { 
+  background-color: #f9dba8 !important; 
+  border-color: #e3bb88 !important; 
+}
+.bright_bg { 
+  background-color: #ffffff; 
+}
+.highlighted .bright_bg, .highlighted.bright_bg { 
+  border-color: #e3bb88 !important; 
+}
+
+tr.highlighted td { 
+  border-color: #e3bb88 !important;
+}
+
+.topic {
+  background-color: #dedede; 
+  color: #000000;
+  padding: 0px; 
+}
+.topic, .topic_inline { 
+  background-color: #f0f0f0; 
+/*  border: 1px solid #cccccc; */
+  border-right: 1px solid #c8c8c8; 
+  border-bottom: 1px solid #c8c8c8; 
+  border-left: 1px solid white;
+  border-top: 1px solid white; 
+  color: #000000;
+}
+.highlighted.topic, .highlighted.topic_inline { 
+  border-left: 1px solid #ffffff; 
+  border-top: 1px solid #ffffff; 
+}
+.topic_inline { 
+  padding: 0px; 
+  margin-bottom: 4px; 
+}
+
+.box_header {
+  padding: 3px;      
+  font-size: 13px; 
+  color: #000000;
+  height: 16px; 
+  font-family: inherit; 
+  line-height: 17px; 
+  background-color: #dedede; 
+  background: url('/aurita/images/icons/box_header_bright_bg.png'); 
+  display: block; 
+}
+
+.section_content .box_header { 
+  background: transparent url('/aurita/images/icons/box_header_bright_bg.png') repeat-x scroll 0 0;
+}
+
+.box_header .header {
+  font-family: Verdana, sans-serif; 
+}
+
+.box_body { 
+  background: #F3F3F3 url(/aurita/images/icons/tall_row_brighter_bg.png) repeat-x scroll 0 0; 
+}
+.main_content .box_body { 
+  background: transparent; 
+  padding: 2px; 
+}
+
+.topic_content, .box_body { 
+  padding: 3px; 
+  font-size: inherit; 
+  font-family: inherit; 
+  overflow: hidden;  
+}
+.topic_content ul, .box_body ul {
+  padding: 5px;  
+}
+
+a.icon { 
+  padding: 2px; 
+  margin-left: -2px; 
+  margin-right: -2px; 
+  margin-bottom: 4px; 
+}
+.box_body a.icon { 
+  display: block; 
+}
+a.icon img, a.button img { 
+  margin: -2px 4px 0px 0px; 
+  display: inline !important; 
+  vertical-align: middle; 
+  padding-top: 2px; 
+}
+
+.toolbox_body a.icon:hover { 
+  background-color: #f8f8f8; 
+}
+
+.small_topic .box_header { 
+  font-size: 10px; 
+  background-color: #d7d7d7; 
+}
+
+img.icon { 
+  padding-right: 2px; 
+  margin-right: 2px; 
+  margin-bottom: -2px; 
+  margin-top: 4px; 
+}
+
+/*
+.context_menu_element { 
+  padding-left: 15px; 
+  margin-left: -15px; 
+}
+*/
+
+#context_menu, #message_box { 
+  float: left; 
+  position: absolute; 
+  left: 0; 
+  top: 0; 
+  padding: 1px; 
+  z-index: 700; 
+  background-color: #f0f0f0; 
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-bottom: 1px solid #989898;
+  border-right: 1px solid #989898;
+}
+.context_menu_entry img {
+  padding: 4px;
+  margin: 1px 0px -3px -6px; 
+  display: inline; 
+}
+
+.context_menu_entry.hovered { 
+  background-color: #f9dba8;
+}
+
+.context_menu_entry_label, a.context_menu_entry_label:hover { 
+  font-family: inherit; 
+  font-size: 11px; 
+  position: relative; 
+  top: -4px; 
+  cursor: default; 
+  color: black; 
+}
+.context_menu_header {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-right: 0px; 
+  padding-left: 0px; 
+  margin: -1px; 
+  color: #000000;
+  background-color: #cccccc; 
+  background: transparent url('/aurita/images/icons/box_header_bg.png') repeat scroll 0 0;
+  font-size: 10px;
+  cursor: move; 
+}
+.context_menu_entry { 
+  padding-right: 0px; 
+  border: 1px solid transparent; 
+  border-bottom: 1px solid #dfdfdf; 
+  height: 26px; 
+  cursor: default; 
+}
+
+.clear_spacer { 
+  clear: both; 
+}
+
+.moveable { 
+  cursor: move; 
+}
+
+.loading { 
+  cursor: wait; 
+}
+
+ul.comment_list { 
+  list-style-type: none; 
+  margin: 0px; 
+  padding: 0px; 
+  margin-top: 7px; 
+  margin-left: 0px; 
+}
+ul.comment_list li { 
+  background-color: #f5f5f5; 
+  padding: 7px; 
+}
+ul.comment_list li.odd { 
+  background-color: #cfcfcf; 
+  padding: 7px; 
+}
+
+li.article, li.link, li.feed { 
+  margin-left: 25px; 
+  padding-left: 5px; 
+  margin-bottom: 4px; 
+  padding-bottom: -3px; 
+}
+
+li.article { 
+  list-style-image: url('/aurita/images/icons/article.gif'); 
+}
+li.link { 
+  list-style-image: url('/aurita/images/icons/link.gif'); 
+}
+li.feed { 
+  list-style-image: url('/aurita/images/icons/feed.gif'); 
+}
+
+.moveable { 
+  cursor: move; 
+}
+
+#crop_line_top {
+	top: -405px;
+}
+
+#crop_line_left {
+	left: -305px;
+}
+
+#crop_line_right {
+	left: 299px;
+}
+
+input.login, input.login_button {
+  font-size: 13px; 
+  border: 1px solid #cfcfcf; 
+  color: #3f697f; 
+  margin-bottom: 6px; 
+  background-color: #dfdfdf;
+  padding: 3px; 
+}
+/*
+input.form_builder_entry { 
+  border-width: 0px; 
+  color: #000000;
+  font-family: inherit; 
+  font-size: 10px; 
+  font-weight: normal;
+  background-color: #cccccc;
+  padding: 3px;
+  padding-left: 0px; 
+  width: 140px; 
+  text-align: right; 
+}
+*/
+input.login { 
+  width: 110px; 
+  float: right; 
+}
+
+input.login_button {
+  color: #ffffff;
+  height: 24px; 
+  font-size: 13px; 
+  background-color: #000000;
+  border-color: #000000; 
+  float: right; 
+}
+
+.centered { 
+  width: 100%;
+  text-align: center; 
+}
+
+.login_box {
+  padding: 20px; 
+  padding-right: 29px; 
+  font-size: 15px; 
+  width: 200px; 
+  text-align: left;
+  left: -100px; 
+  position: relative;  
+  top: 100px; 
+  right: 0;  
+  margin: 0 auto; 
+  background-color: #ffffff; 
+}
+.label_big {
+  color: #000000;
+  font-size: 12px; 
+  float: left; 
+  margin: 5px; 
+}
+.align_right {
+  text-align: right;
+}
+
+.mini_button {
+    cursor: pointer; 
+    background-color: #efefef; 
+    color: #000000; 
+    height: 15px; 
+    width: 40px; 
+    padding: 1px;
+    margin-right: 1px; 
+    text-align: center; 
+    float: left; 
+}
+.mini_button:hover { 
+    background-color: #cecece;
+}
+
+span.code { 
+  font-family: Monospace; 
+  adding: 1px; 
+  margin: -1px; 
+}
+
+p.code, pre { 
+  padding: 5px; 
+  margin: -5px; 
+  margin-top: 0px; 
+  margin-bottom: 0px; 
+  background-color: #f0f0f0; 
+  color: #232323; 
+  font-family: 'Lucida Console', Monospace; 
+  overflow: auto;
+}
+.code, pre { 
+  line-height: 1.3; 
+}
+
+pre a.tag_link, pre a.tag_link:visited, pre a.tag_link:hover { 
+  color: inherit; 
+  font-family: inherit; 
+  font-size: inherit; 
+  border-bottom: 1px dotted orange; 
+  background-color: transparent; 
+}
+a.tag_link { 
+  color: inherit; 
+  font-family: inherit; 
+  font-size: inherit; 
+}
+
+.highlighted a.tag_link { 
+  background-color: #e3bb88; 
+}
+
+pre span { 
+  font-family: inherit; 
+  font-size: inherit; 
+}
+
+.Type { 
+  color: #efac34; 
+}
+.Constant { 
+/*  color: #56afff; */
+  color: 679967; 
+}
+.Statement { 
+/*  color: #dcd62b; */
+  color: #992300;
+}
+.Identifier { 
+  color: #9aff12; 
+}
+.Comment { 
+  width: 100%; 
+  color: #757575; 
+  line-height: 10px; 
+  padding: 1px; 
+} 
+.String, .Special { 
+/*  color: #56afff; */
+  color: #676799; 
+}
+.PreProc { 
+  color: #ffaf34; 
+}
+.lnr { 
+  color: #676767; 
+  line-height: 11px; 
+  margin-right: 4px; 
+}
+
+.bookmark_folder_box { 
+  border: 1px solid #d7d7d7; 
+}
+.bookmark_folder_box .list_header { 
+  padding: 4px; 
+  background-color: #d7d7d7; 
+  margin: -4px; 
+  margin: -4px -4px 4px -6px; 
+  padding: 2px 1px 3px 4px; 
+}
+
+td.profile_left_column { 
+  width: 120px; 
+  border-top: 1px dotted #cecece; 
+}
+
+td.profile_right_column { 
+  border-top: 1px dotted #cecece; 
+  width: 200px; 
+}
+
+.picture_asset_element_preview { 
+  padding: 0px; 
+  text-align: center; 
+  width: 100%; 
+  margin-bottom: 3px; 
+} 
+
+input.polling_option { 
+  width: 265px !important; 
+  margin-right: 2px !important; 
+  margin-bottom: 2px; 
+}
+button.polling_option_button { 
+  width: 30px; 
+}
+
+ol#poll_options { 
+  margin-left: 21px !important;
+}
+ol#poll_options li { 
+  padding: 2px !important; 
+}
+
+.comment_box { 
+  padding-left: 3px; 
+  padding-bottom: 3px; 
+  background-color: #dedede; 
+  margin-left: -3px; 
+}
+
+table.listing { 
+  border-right: 1px solid #c8c8c8; 
+  border-bottom: 1px solid #c8c8c8; 
+  border-left: 1px solid white;
+  border-top: 1px solid white; 
+  width: 100%; 
+}
+table.listing th { 
+  color: black; 
+  padding: 2px; 
+  padding-left: 10px; 
+  border-bottom: 1px solid #343434; 
+  border-left: 1px solid #898989; 
+  background: transparent url(/aurita/images/icons/box_header_bg.png) repeat scroll 0 0; 
+  cursor: default; 
+}
+table.listing tr { 
+  background: transparent url(/aurita/images/icons/tall_row_brighter_bg.png) repeat-x scroll 0 0
+}
+table.listing td { 
+  padding: 7px; 
+  vertical-align: top; 
+  border-left: 1px solid #dfdfdf; 
+}
+
+div.forum_topic_list table.forum_topic_info { 
+  width: 500px; 
+}
+div.forum_topic_list table.forum_topic_info th { 
+  border-bottom: 1px solid #cfcfcf; 
+  padding: 3px; 
+}
+div.forum_topic { 
+  border: 1px solid #cfcfcf; 
+}
+div.forum_topic div.topic_title { 
+  font-weight: bold; 
+  padding: 3px; 
+}
+div.forum_topic td.info { 
+  padding-right: 10px; 
+  padding-left: 3px; 
+  border-right: 1px solid #cfcfcf; 
+}
+div.forum_topic td.num_posts { 
+  padding-right: 10px; 
+  width: 30px; 
+  text-align: right; 
+  border-right: 1px solid #cfcfcf; 
+}
+div.forum_topic td.num_hits { 
+  padding-right: 10px; 
+  width: 30px; 
+  text-align: right; 
+}
+
+.duration_days select, .duration_hours select { 
+  width: auto !important;
+  margin-right: 9px !important; 
+}
+
+div.duration_days, div.duration_hours { 
+  float: left; 
+  margin-right: 12px; 
+}
+
+div.form_builder_editor input.attribute_default, div.form_builder_editor select.attribute_default { 
+  width: 100px; 
+}
+div.form_builder_editor input.attribute_name { 
+  width: 120px; 
+}
+div.form_builder_editor select.attribute_type { 
+  width: 80px; 
+}
+
+.custom_form_table { 
+  clear: both; 
+}
+.custom_form_table label { 
+  float: left; 
+  width: 240px; 
+}
+.custom_form_table li.form_field .readonly { 
+  float: left; 
+}
+
+div.wide_column, div.column {
+  float: left; 
+  width: 49%; 
+}
+div.near_column { 
+  float: left; 
+}
+div.column10 {
+  float: left; 
+  width: 9%
+}
+div.column25 {
+  float: left; 
+  width: 24%
+}
+div.column50 {
+  float: left; 
+  width: 49%
+}
+
+.comment_list_entry { 
+}
+
+.topic_inline.feed .index_entry img { 
+  float: left; 
+  margin-right: 10px; 
+  margin-bottom: 10px; 
+  clear: both; 
+}
+
+.section_header { 
+  width: 100%; 
+}
+.section_header_left { 
+  display: inline; 
+  padding: 18px; 
+  padding-left: 10px; 
+  padding-right: 10px; 
+  float: left; 
+  margin-right: 4px; 
+  background-color: #f5f5f5; 
+  height: 20px; 
+  overflow-y: hidden; 
+}
+.section_header_left h1, .section_header_left h2 { 
+  padding: 0px; 
+  margin: 0px; 
+  width: 81%; 
+  display: inline !important; 
+}
+.section_header_right { 
+  float: right; 
+  display: inline; 
+  padding: 18px; 
+  margin-top: 1px; 
+  margin-bottom: -2px; 
+  background-color: #f5f5f5; 
+  height: 20px; 
+  overflow-y: hidden; 
+}
+.section_content { 
+  background-color: #f5f5f5; 
+  padding: 10px; 
+}
+
+.topic li a { 
+  display: block; 
+}
+
+table.calendar_mini_month { 
+  width: 100%; 
+  margin-top: 10px; 
+}
+
+table.profile_user_data td { 
+  padding: 5px; 
+}
+
+.picture_asset_field button { 
+  width: 110px; 
+}
+
+#info_badge, #info_badge a { 
+  color: white; 
+}
+#info_badge .close_button { 
+  padding: 11px; 
+  padding-top: 14px; 
+  font-size: 12px; 
+  color: white; 
+  width: 30px; 
+  position: relative; 
+  top: -30px; 
+  left: 97%;  
+}
+
+.accordion_box_header { 
+  cursor: pointer; 
+}
+
+#messaging_content { 
+  background-color: #eaeaea; 
+}
+#messaging_content .form_box {
+  margin: 0px; 
+}
+
+table.message_table { 
+  width: 100%; 
+}
+
+.message_table td { 
+  padding-left: 2px;
+  padding-right: 2px; 
+  padding-bottom: 2px; 
+  padding-top: 2px; 
+  vertical-align: top; 
+}
+
+.message_table td.to_trash, .message_table td.delete, .message_table td.restore { 
+  width: 20px; 
+  text-align: center; 
+  padding-top: 6px; 
+}
+.message_table td.date { 
+  width: 150px; 
+}
+.message_table td.to, .message_table td.from { 
+  padding-left: 4px; 
+  padding-right: 4px; 
+  width: 120px; 
+}
+.message_table td.read { 
+  text-align: center; 
+  width: 50px; 
+}
+.message_table td.subject { 
+  white-space: none; 
+  overflow-x: hidden; 
+}
+
+.message_table .mail_view {
+  margin-left: 33px; 
+  background-color: white; 
+}
+
+.message_table .mail_view .mail_toolbar { 
+  padding: 7px; 
+  padding-left: 3px; 
+  border-left: 1px solid #afafaf; 
+  border-right: 1px solid #afafaf; 
+  margin: -0px -1px 0px 0px; 
+  background: #d2d2d2 url(/aurita/images/icons/box_header_bright_bg.png) repeat-x scroll 0 0; 
+}
+.message_table .mail_view .mail_body { 
+  height: 90px; 
+  overflow-x: hidden; 
+  overflow-y: auto; 
+  border: 1px solid #afafaf; 
+  margin: -1px -1px -1px 0px; 
+  border-top: 0px solid transparent; 
+  padding: 7px; 
+}
+
+.message_table td.message_body { 
+  padding: 0px; 
+  margin: 0px
+}
+
+.server_error { 
+  background-color: #efefef; 
+  border: 1px solid red; 
+  padding: 10px; 
+}
+.server_error h1.error { 
+  margin-top: 0px; 
+  margin-bottom: 10px; 
+}
+.server_error .error_backtrace { 
+  color: #565656; 
+}
+
+.scrollbox { 
+  height: 230px; 
+  overflow-y: auto; 
+  overflow-x: hidden; 
+}
+
+#debug_box { 
+  background: #f0f0f0; 
+  border: 1px outset white; 
+  width: 500px; 
+}
+#debug_toolbar { 
+  width: 100%; 
+  background: url('/aurita/images/icons/box_header_bg.png') repeat-x;
+  background-color: #c0c0c0; 
+}
+#developer_console { 
+  height: 300px; 
+  overflow: auto; 
+  padding: 5px; 
+  font-family: "Lucida Console",monospace; 
+  font-size: 10px; 
+}
+#developer_console hr { 
+  margin: 1px; 
+  margin-left: -3px;
+  margin-right: -3px;
+} 
+
+span.inline_button, div.inline_button { 
+  cursor: pointer; 
+  background: url('/aurita/images/icons/button_normal.gif') repeat-x;
+  background-color: #c0c0c0; 
+  padding: 1px; 
+  padding-left: 3px; 
+  padding-right: 3px; 
+  border: 1px outset white; 
+  margin-left: 5px; 
+  font-size: 10px; 
+  position: relative; 
+  z-index: 450; 
+  text-align: center; 
+}
+
+.form_content .defaultSkin table.mceLayout { 
+  border-style: none !important; 
+}
+.defaultSkin table.mceLayout tr.mceFirst td { 
+  border: 0px !important; 
+}
+.defaultSkin table.mceLayout tr.mceLast td { 
+  border-bottom-width: 0px; 
+  border: 0px !important; 
+  border-style: none; 
+}
+.defaultSkin .mceIframeContainer { 
+  border-top-width: 0px; 
+  border-bottom-width: 0px; 
+  border: 0px !important; 
+  border-style: none; 
+}
+
+.defaultSkin a.mceButtonActive, .defaultSkin a.mceButtonSelected { 
+  background: #f9cf88 url('/aurita/images/icons/box_header_highlighted_bg.png') repeat-x !important; 
+}
+
+.context_menu_button_bar { 
+  position: absolute; 
+  margin-left: -21px; 
+  margin-top: 0px; 
+  padding-top: 4px; 
+}
+.highlighted .context_menu_button_bar { 
+  display: none; 
+}
+
+.edit_button_right { 
+  float: right; 
+  padding: 2px; 
+  margin-top: -33px; 
+}
+
+.context_menu_button { 
+  cursor: pointer; 
+}
+
+.context_menu_button .label { 
+  display: block; 
+  float: right; 
+  padding-left: 4px; 
+  font-size: 10px;
+}
+
+.edit_button, .context_menu_button { 
+  background-color: #efefef; 
+  background: url('/aurita/images/icons/box_header_bright_bg.png');
+  border: 1px solid #999999; 
+  -moz-border-radius: 3px; 
+}
+.edit_button.highlighted, .context_menu_button.highlighted { 
+  background: url('/aurita/images/icons/box_header_highlighted_bg.png');
+  margin: 0px; 
+  margin-bottom: 2px; 
+  padding: 2px; 
+  border-color: black; 
+}
+
+.data_table { 
+  font-size: 10px; 
+  border: 1px outset white; 
+  background-color: #dedede; 
+}
+.data_table td { 
+  padding: 2px; 
+}
+
+table.listing_2_columns th { 
+  background: url('/aurita/images/icons/box_header_bright_bg.png');
+  background-color: #cfcfcf; 
+  font-weight: bold; 
+  padding: 4px; 
+}
+table.listing_2_columns td {
+  padding: 1px; 
+  padding-left: 4px; 
+  padding-right: 4px; 
+  height: 20px; 
+  vertical-align: top; 
+}
+table.listing_2_columns td input {
+  padding: 2px; 
+  margin-top: 4px; 
+  margin-bottom: 4px; 
+}
+table.listing_2_columns td b {
+  color: #676767; 
+  font-weight: normal; 
+}
+table.listing_2_columns { 
+  font-size: 10px; 
+  background-color: #dfdfdf; 
+  width: 450px; 
+  width: 450px; 
+}
+

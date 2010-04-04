@@ -537,6 +537,13 @@ li ul.checkbox_options label {
   color: #898989; 
 }
 
+.listbox .item .checkbox { 
+  display: inline; 
+  margin-top: 4px; 
+  float: left; 
+  margin-right: 10px; 
+}
+
 fieldset { 
   border: 1px solid #cccccc;
   margin-top: 12px; 

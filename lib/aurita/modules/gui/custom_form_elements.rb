@@ -417,14 +417,22 @@ JS
       }
       options = []
       cat_ids = []
-      Category.all_with((Category.is_private == 'f') & (Category.category_id >= 100)).sort_by(Category.category_name).each { |c|
-        if c.is_private == 't'
-          options << (tl(:user) + ': ' + c.category_name) 
+
+      cats = Category.all_with((Category.is_private == 'f') & (Category.category_id >= 100)).sort_by(Category.category_name).to_a
+      dec  = Hierarchy_Map_Iterator.new(cats)
+      dec.each_with_level { |cat, level|
+        cat_label = ''
+        level.times { cat_label << '|&nbsp;&nbsp;' }
+        cat_label << cat.category_name
+
+        if cat.is_private == 't'
+          options << (tl(:user) + ': ' + cat.category_name) 
         else
-          options << c.category_name
+          options << cat_label
         end
-        cat_ids << c.category_id
-      }
+        cat_ids << cat.category_id
+      } 
+
       options.fields = cat_ids.map { |v| v.to_s }
    
       super(params)

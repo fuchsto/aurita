@@ -67,6 +67,10 @@ module Main
       Category.touch(category_id)
     end
 
+    def parent_id
+      category_id_parent || 0
+    end
+
     # Return (virtual) category "no category", which is Category with 
     # category_id '1'. 
     def self.unassigned_category

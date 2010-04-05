@@ -60,6 +60,10 @@ select {
   clear: both; 
 }
 
+.mceEditor table.mceLayout { 
+  width: 100% !important;
+} 
+
 .mceSelectList select { 
 } 
 

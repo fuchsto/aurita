@@ -245,7 +245,7 @@ JS
         dec  = Hierarchy_Map_Iterator.new(cats)
         dec.each_with_level { |cat, level|
           cat_label = ''
-          level.times { cat_label << '|&nbsp;&nbsp;' }
+          level.times { cat_label << '&nbsp;&nbsp;' }
           cat_label << cat.category_name
           @attrib[:option_values] << cat.category_id
           @attrib[:option_labels] << cat_label 
@@ -316,7 +316,7 @@ JS
       dec  = Hierarchy_Map_Iterator.new(cats)
       dec.each_with_level { |cat, level|
         cat_label = ''
-        level.times { cat_label << '|&nbsp;&nbsp;' }
+        level.times { cat_label << '&nbsp;&nbsp;' }
         cat_label << cat.category_name
 
         if cat.is_private then 
@@ -422,7 +422,7 @@ JS
       dec  = Hierarchy_Map_Iterator.new(cats)
       dec.each_with_level { |cat, level|
         cat_label = ''
-        level.times { cat_label << '|&nbsp;&nbsp;' }
+        level.times { cat_label << '&nbsp;&nbsp;' }
         cat_label << cat.category_name
 
         if cat.is_private == 't'

@@ -3,6 +3,7 @@ require('aurita/controller')
 require('cgi')
 Aurita.import_module :gui, :module
 Aurita.import_module :gui, :box
+Aurita.import_module :hierarchy_map
 
 module Aurita
 module GUI
@@ -44,58 +45,6 @@ module GUI
     end
   end
 
-  # Distributes flat list of hierarchy entries to a Hash so
-  # they are mapped to their parent entry id. 
-  #
-  # Usage: 
-  #
-  #   entries = Hierarchy.get(123).entries 
-  #
-  # Hierarchy#entries returns Hierarchy_Entry instances ordered 
-  # by position, but not mapped to parents. 
-  #
-  #   map     = Hierarchy_Map.new(entries)
-  #
-  # Using Hierarchy_Map, they can now be accessed by their parent id: 
-  #
-  #   map[0]  # All entries with parent_id = 0
-  #   --> [ Hierarchy_Entry(1), Hierarchy_Entry(2) ]
-  #
-  #   map[1]  # All entries with parent_id = 1
-  #   --> [ Hierarchy_Entry(10), Hierarchy_Entry(20) ]
-  #
-  #   map[2]  # All entries with parent_id = 2
-  #   --> []
-  # 
-  class Hierarchy_Map
-  # {{{
-
-    attr_reader :entry_map, :entry_model, :hierarchy
-    
-    def initialize(entities)
-      @entities    = entities
-      @entries     = false
-      @hierarchy   = @entities.first.hierarchy if @entities.first
-      @entry_model = @entities.first.class if @entities.first
-    end
-
-    def entries
-      if !@entries then
-        @entries = {}
-        @entities.each { |entry|
-          pid = entry.parent_id # Has to be provided by model instance
-          @entries[pid]  = Array.new unless @entries[pid]
-          @entries[pid] << entry
-        }
-      end
-      return @entries
-    end
-
-    def [](key)
-      entries[key] || []
-    end
-    
-  end # }}}
 
   class Hierarchy_Entries_Default_Decorator < Widget
   # {{{

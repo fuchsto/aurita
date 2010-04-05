@@ -13,6 +13,7 @@ Aurita.load_project ARGV[0].to_sym
 $core_styles = [ 
   :basic, 
   :main, 
+  :form, 
   :calendar
 ]
 

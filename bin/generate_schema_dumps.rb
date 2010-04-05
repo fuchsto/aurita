@@ -1,7 +1,12 @@
 #!/usr/bin/env ruby
 
 require('aurita')
-Aurita.load_project :test
+
+if !ARGV[0] then
+  exit 1
+end
+
+Aurita.load_project ARGV[0]
 Aurita.bootstrap
 
 def import_from_model_folder(folder_path, dump_path, plugin_name=false)
@@ -44,7 +49,7 @@ Dir.glob("#{Aurita.project_path}#{'plugins'}/*").each {|f|
   puts '-------------------------'
   plugin_name = f.split('/')[-1].gsub('.rb','')
   puts plugin_name
-  import_from_model_folder("#{Aurita::Configuration.plugins_path}#{plugin_name}/model", 
+  import_from_model_folder("#{Aurita::Configuration.plugins_path}#{plugin_name}/lib/model", 
                            "#{Aurita::Configuration.plugins_path}#{plugin_name}/schema_dump.sql", 
                            plugin_name)
 }

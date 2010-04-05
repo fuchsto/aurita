@@ -48,6 +48,7 @@ public--category--is_private:
     t: ja
     f: nein
 
+show_updates_in_categories : Letzte &Auml;nderungen folgender Kategorien anzeigen
 parent_category : Unterkategorie von
 no_category : Keine Kategorie
 category_name : Name der Kategorie

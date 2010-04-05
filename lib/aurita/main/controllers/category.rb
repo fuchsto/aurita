@@ -1,6 +1,7 @@
 
 require('aurita/controller')
 Aurita.import_module :gui, :custom_form_elements
+Aurita.import_module :hierarchy_map_decorator
 
 module Aurita
 module Main
@@ -183,16 +184,22 @@ module Main
         icon_tag(:categories) + tl(:add_content_category) 
       } 
       list = HTML.ul.no_bullets { } 
-      Category.all_with((Category.is_private == 'f') & 
-                        (Category.category_id >= '100')).sort_by(:category_name, :asc).each { |cat|
-        cat = Context_Menu_Element.new(HTML.a.entry(:onclick => link_to(cat, :action => :update)) {
-                                          cat.category_name
-                                       }, 
-                                       :entity => cat)
-        list << HTML.li { cat }
+
+      cats = Category.all_with((Category.is_private == 'f') & 
+                        (Category.category_id >= '100')).sort_by(:category_name, :asc).to_a
+      dec  = Hierarchy_Map_Decorator.new(cats) 
+      body = dec.render_tree { |cat, subs|
+        e = Context_Menu_Element.new(cat) { 
+          HTML.a.entry(:onclick => link_to(cat, :action => :update)) {
+            cat.category_name
+          } 
+        }
+        e  = HTML.li.list { e } 
+        e += HTML.ul.list { subs } if subs
+        cat = e
       }
-      body << list
-      HTML.div.scrollbox { body }
+
+      HTML.div.scrollbox { HTML.ul.no_bullets { body } }
     end
 
     def admin_box

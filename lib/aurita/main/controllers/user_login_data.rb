@@ -1,5 +1,6 @@
 
 require('aurita/controller')
+Aurita::Main.import_controller :user_category
 
 module Aurita
 module Main

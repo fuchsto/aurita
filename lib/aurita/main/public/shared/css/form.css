@@ -60,6 +60,10 @@ select {
   clear: both; 
 }
 
+.mceEditor table.mceLayout { 
+  width: 100% !important;
+} 
+
 .mceSelectList select { 
 } 
 
@@ -535,6 +539,13 @@ li ul.checkbox_options label {
   position: relative; 
   top: -1px; 
   color: #898989; 
+}
+
+.listbox .item .checkbox { 
+  display: inline; 
+  margin-top: 4px; 
+  float: left; 
+  margin-right: 10px; 
 }
 
 fieldset { 

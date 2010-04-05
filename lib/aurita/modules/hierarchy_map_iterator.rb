@@ -4,7 +4,21 @@ Aurita.import_module :hierarchy_map
 module Aurita
 module GUI
 
-  class Hierarchy_Map_Decorator
+  # Iterate over a hierarchy map instance by passing a 
+  # block. 
+  # Example for a simple tree view using HTML lists: 
+  #
+  #   dec  = Hierarchy_Map_Iterator.new(array_or_hierarchy_map)
+  #   list = dec.map_recursive { |entry, children, tree_level|
+  #     entry  = HTML.li.list { entry } 
+  #     entry += HTML.ul.list { children } if subs
+  #     entry.add_css_class("level_#{tree_level}")
+  #     entry
+  #   }
+  # 
+  #   list = HTML.ul.tree { list }
+  #
+  class Hierarchy_Map_Iterator
 
     attr_accessor :map
 
@@ -40,10 +54,18 @@ module GUI
       entries.map(&block)
     end
 
-    def render_tree(top_id=0, &block)
+    def each_with_level(top_id=0, level=0, &block)
+      return false unless entries[top_id]
+      entries[top_id].each { |e|
+        block.call(e, level)
+        each_with_level(e.pkey, level+1, &block)
+      }
+    end
+
+    def map_recursive(top_id=0, level=0, &block)
       return false unless entries[top_id]
       entries[top_id].map { |e|
-        block.call(e, render_tree(e.pkey, &block))
+        block.call(e, map_recursive(e.pkey, level+1, &block), level)
       }
     end
 

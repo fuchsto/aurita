@@ -1,7 +1,7 @@
 
 require('aurita/controller')
 Aurita.import_module :gui, :custom_form_elements
-Aurita.import_module :hierarchy_map_decorator
+Aurita.import_module :hierarchy_map_iterator
 
 module Aurita
 module Main
@@ -187,8 +187,8 @@ module Main
 
       cats = Category.all_with((Category.is_private == 'f') & 
                         (Category.category_id >= '100')).sort_by(:category_name, :asc).to_a
-      dec  = Hierarchy_Map_Decorator.new(cats) 
-      body = dec.render_tree { |cat, subs|
+      dec  = Hierarchy_Map_Iterator.new(cats) 
+      body = dec.map_recursive { |cat, subs|
         e = Context_Menu_Element.new(cat) { 
           HTML.a.entry(:onclick => link_to(cat, :action => :update)) {
             cat.category_name

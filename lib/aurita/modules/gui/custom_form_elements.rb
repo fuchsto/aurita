@@ -4,6 +4,7 @@ require('aurita-gui')
 require('aurita-gui/widget')
 # Aurita.import_module :gui, :erb_helpers
 Aurita.import_module :gui, :i18n_helpers
+Aurita.import_module :hierarchy_map_iterator
 
 module Aurita
 module GUI
@@ -211,10 +212,17 @@ JS
     def initialize(params={}, &block)
       values = [ '' ]
       labels = [ tl(:no_category) ]
-      Category.all_with(Category.is_private == 'f').sort_by(:category_name, :asc).each { |c|
-        values  << c.category_id
-        labels  << c.category_name 
+    
+      cats = Category.all_with(Category.is_private == 'f').sort_by(:category_name, :asc).to_a
+      dec  = Hierarchy_Map_Iterator.new(cats)
+      dec.each_with_level { |cat, level|
+        values    << cat.category_id
+        cat_label = ''
+        level.times { cat_label << '|&nbsp;&nbsp;' }
+        cat_label << cat.category_name
+        labels    << cat_label
       }
+     
       params[:option_labels] = labels
       params[:option_values] = values
 
@@ -233,9 +241,14 @@ JS
       if !@attrib[:value] then
         @attrib[:option_values] = [ '' ]
         @attrib[:option_labels] = [ tl(:select_additional_category) ]
-        Category.all_with(Category.is_private == 'f').sort_by(:category_name, :asc).each { |c|
-          @attrib[:option_values] << c.category_id
-          @attrib[:option_labels] << c.category_name
+        cats = Category.all_with(Category.is_private == 'f').sort_by(:category_name, :asc).to_a
+        dec  = Hierarchy_Map_Iterator.new(cats)
+        dec.each_with_level { |cat, level|
+          cat_label = ''
+          level.times { cat_label << '|&nbsp;&nbsp;' }
+          cat_label << cat.category_name
+          @attrib[:option_values] << cat.category_id
+          @attrib[:option_labels] << cat_label 
         }
       end
       @attrib[:onchange] = "Aurita.Main.category_selection_add('#{@parent.dom_id}');" if @parent
@@ -298,18 +311,25 @@ JS
       selected_category_ids ||= [ user.category_id ]
       
       own_category_id = user.category_id
-      
-      user.writeable_categories.each { |c|
-        if c.is_private then 
-          if c.category_id.to_s != own_category_id.to_s then
-            private_category_names << (tl(:user) + ': ' << c.category_name)
-            private_category_ids   << c.category_id
+
+      cats = user.writeable_categories
+      dec  = Hierarchy_Map_Iterator.new(cats)
+      dec.each_with_level { |cat, level|
+        cat_label = ''
+        level.times { cat_label << '|&nbsp;&nbsp;' }
+        cat_label << cat.category_name
+
+        if cat.is_private then 
+          if cat.category_id.to_s != own_category_id.to_s then
+            private_category_names << (tl(:user) + ': ' << cat.category_name)
+            private_category_ids   << cat.category_id
           end
         else
-          category_names << c.category_name
-          category_ids << c.category_id
+          category_names << cat_label
+          category_ids   << cat.category_id
         end
       }
+
       option_values = ['', own_category_id.to_s] + category_ids
       option_labels = [tl(:select_additional_category), tl(:your_private_category)] + category_names
       if Aurita.user.is_admin? then

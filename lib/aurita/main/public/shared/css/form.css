@@ -677,3 +677,15 @@ div.timespan_delimiter {
   padding-right: 10px; 
 }
 
+input.search { 
+  background: transparent url(/aurita/images/search.gif) no-repeat scroll 7px 4px;
+  padding-left: 30px !important; 
+}
+ul.form_fields input.search { 
+  width: 303px !important;
+}
+
+#message_box .form_box { 
+  margin: -20px; 
+}
+

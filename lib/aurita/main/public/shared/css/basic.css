@@ -1117,7 +1117,8 @@ span.inline_button, div.inline_button {
 .context_menu_button .label { 
   display: block; 
   float: right; 
-  padding-left: 4px; 
+  padding-left: 7px; 
+  padding-right: 7px; 
   font-size: 10px;
 }
 

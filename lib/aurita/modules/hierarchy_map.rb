@@ -38,8 +38,11 @@ module Aurita
     def entries
       return @entries if @entries
       @entries = {}
+      if @entities.first && !@entities.first.respond_to?(:parent_id) then
+        raise ArgumentError.new("Entries of Hierarchy_Map have to provide method #parent_id")
+      end
       @entities.each { |entry|
-        pid = entry.parent_id # Has to be provided by model instance
+        pid = entry.parent_id.to_i # Has to be provided by model instance
         @entries[pid] ||= []
         @entries[pid]  << entry
       }
@@ -69,6 +72,16 @@ module Aurita
 
     def [](key)
       entries[key] || []
+    end
+
+    def inspect
+      s = ''
+      entries.each_pair { |key,subs|
+        subs.each { |e|
+          s << "#{e.parent_id} -> (#{key} = #{e.pkey}) #{e.hierarchy_label}\n" 
+        }
+      }
+      s
     end
     
   end 

@@ -1,5 +1,6 @@
 
 require('aurita/controller')
+Aurita.import_module :gui, :list
 
 module Aurita
 module Main
@@ -29,21 +30,18 @@ module Main
     def index
       filter = Category_Feed_Filter.for(Aurita.user)
       return Page.new(:header => tl(:your_categories)) { 
-        HTML.div.listbox { 
-          HTML.h4 { tl(:show_updates_in_categories) } + 
-          HTML.div.items { 
-            Aurita.user.readable_categories.map { |c| 
-              HTML.div.item { 
-                HTML.input(:name       => 'category_id', 
-                           :type       => :checkbox, 
-                           :class      => :checkbox, 
-                           :value      => c.category_id, 
-                           :checked    => !filter.include?(c.category_id) || nil, 
-                           :style      => 'padding-top: 2px; margin-right: 10px; display: inline; ', 
-                           :onchange   => "Aurita.call({ action: 'Category_Feed_Filter/toggle/category_id=#{c.category_id}' });") +
-                HTML.div.item_label { link_to(c, :controller => 'Category') { c.category_name } }
-              }
-            } 
+        List.new(:header => tl(:show_updates_in_categories)) { 
+          Aurita.user.readable_categories.map { |c| 
+            HTML.div { 
+              HTML.input(:name       => 'category_id', 
+                         :type       => :checkbox, 
+                         :class      => :checkbox, 
+                         :value      => c.category_id, 
+                         :checked    => !filter.include?(c.category_id) || nil, 
+                         :style      => 'padding-top: 2px; margin-right: 10px; display: inline; ', 
+                         :onchange   => "Aurita.call({ action: 'Category_Feed_Filter/toggle/category_id=#{c.category_id}' });") +
+              HTML.div.item_label { link_to(c, :controller => 'Category') { c.category_name } }
+            }
           }
         }
       }

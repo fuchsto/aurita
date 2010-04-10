@@ -47,6 +47,12 @@ input {
   border: 1px solid #dedede; 
 }
 
+input.checkbox, input.radio { 
+  background: none !important;
+  background-color: none !important; 
+  border-color: transparent !important; 
+}
+
 select {
   font-family: Verdana,Arial,Helvetical; 
   font-size: 12px; 
@@ -541,10 +547,19 @@ li ul.checkbox_options label {
   color: #898989; 
 }
 
+.listbox .items { 
+  border: 1px outset white; 
+}
+.listbox .item { 
+  clear: both; 
+  padding: 3px; 
+  padding-left: 8px; 
+  background: url("/aurita/images/icons/row_bg.png") repeat-x scroll 0 0 #E2E2E2;
+}
 .listbox .item .checkbox { 
-  display: inline; 
-  margin-top: 4px; 
   float: left; 
+  display: inline; 
+  margin-top: 3px; 
   margin-right: 10px; 
 }
 

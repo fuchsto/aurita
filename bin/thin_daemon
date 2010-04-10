@@ -12,6 +12,7 @@ require 'zlib'
 begin
 
 opts = GetoptLong.new(
+         [ '--dev',       '-d', GetoptLong::OPTIONAL_ARGUMENT ],
          [ '--gatling',   '-g', GetoptLong::OPTIONAL_ARGUMENT ],
          [ '--short',     '-s', GetoptLong::OPTIONAL_ARGUMENT ],
          [ '--killold',   '-k', GetoptLong::OPTIONAL_ARGUMENT ], 
@@ -33,6 +34,11 @@ logfile   = false
 
 opts.each { |opt, arg| 
   case opt
+  when '--dev' then
+    port      = 3000
+    mode      = :development
+    logfile   = STDERR
+    verbosive = true
   when '--gatling' then
     gatling   = true
   when '--short' then

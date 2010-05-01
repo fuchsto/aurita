@@ -54,6 +54,7 @@ module Aurita
                              '/aurita/inc'            => Aurita_Theme_File_Application.new(root+'/inc'), 
                              '/aurita/css'            => Aurita_Theme_File_Application.new(root+'/css'), 
                              '/aurita/shared'         => Aurita_File_Application.new(root+'/shared'), 
+                             '/aurita/script'         => Aurita_File_Application.new(root+'/script'), 
                              '/aurita/assets'         => Aurita_File_Application.new(root+'/assets'), 
                              '/aurita/images'         => Aurita_Theme_File_Application.new(root+'/images'))
 

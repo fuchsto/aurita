@@ -177,16 +177,24 @@ module Handler
   #
   class Aurita_Poller_Application < Aurita_Rack_Application
     def initialize(options={})
+
+      STDERR.puts 'APA init'
+
       @options     = options
 
       @logger      = options[:logger]
       @logger    ||= ::Logger.new(STDERR) 
 
-      @app = Aurita::Handler::Aurita_Poll_Dispatch_Application.new(@logger)
+      @app = Aurita_Poll_Dispatch_Application.new(@logger)
       @app = Rack::ContentLength.new(@app)
       @app = Rack::Reloader.new(@app, 3) if [ :test, :development ].include?(Aurita.runmode)
 
       GC.disable if @gc_after_calls
+    end
+
+    def call
+      STDERR.puts 'APA call'
+      return [ 200, [], 'poll response']
     end
 
   end

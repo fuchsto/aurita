@@ -45,7 +45,7 @@ module Aurita
       app = Rack::URLMap.new('/'              => @aurita_std, 
                              '/aurita'        => @aurita_std, 
                              '/aurita'        => @aurita_std, 
-                             '/aurita/poll'   => @aurita_poll, 
+                             '/aurita/poll'   => @aurita_std, 
                              '/aurita/inc'    => Aurita_Theme_File_Application.new(root+'/inc'), 
                              '/aurita/css'    => Aurita_Theme_File_Application.new(root+'/css'), 
                              '/aurita/shared' => Aurita_File_Application.new(root+'/shared'), 

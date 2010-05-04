@@ -15,21 +15,14 @@ require 'rack/session/memcache'
 
 
 Aurita.import 'handler/dispatcher'
+Aurita.import 'handler/poll_dispatcher'
 
 module Aurita
 module Handler
 
   class Aurita_Rack_Application
     def call(env)
-      begin
-        return @app.call(env)
-      rescue ::Exception => e
-        return [ 200, { 'Content-type' => 'text/html' }, Aurita::GUI::Error_Page.new(e) ]
-        @logger.log(e.message)
-        e.backtrace.each { |l|
-          @logger.log(l)
-        }
-      end
+      @app.call(env)
     end
   end
 
@@ -81,6 +74,56 @@ module Handler
         response[1]['X-Accel-Redirect'] = sendfile # nginx sendfile
         response[1]['Content-Length']   = response[1]['X-Aurita-Filesize']
       end
+      return response
+    end
+
+  end
+
+  # Similar to Aurita_Dispatch_Application, but specialized for polling 
+  # (i.e. quick and frequent) requests, such as in autocompletion. 
+  # Note that this configuration uses Aurita::Poll_Dispatcher, which does 
+  # neither use session mechanisms not permission checks for the sake of 
+  # low latency. 
+  #
+  # Never route requests to a poller application if its response is not 
+  # considered public! 
+  #
+  class Aurita_Poll_Dispatch_Application
+
+    attr_accessor :logger, :gc_after_calls, :dispatcher
+    attr_reader :calls
+
+    def initialize(logger=nil)
+      @logger           = logger
+      @logger         ||= ::Logger.new(STDERR) 
+      @dispatcher       = Aurita::Poll_Dispatcher.new()
+      @calls            = 0
+      @gc_after_calls ||= 100
+      GC.disable
+    end
+
+    public
+
+    # Rack dispatch routine. 
+    # Expects request env params, returns 
+    # [ status, response header, response body ] 
+    # of Aurita::Rack_Dispatcher instance. 
+    #
+    def call(env)
+      @calls += 1
+      if (@gc_after_calls && @calls > @gc_after_calls) then
+        @calls = 0
+        GC.enable
+        GC.start
+        GC.disable
+      end
+      response = @dispatcher.dispatch(Rack::Request.new(Aurita::Routing.new.route(env)))
+      response[1]['Accept-Charset'] = 'utf-8' 
+      response[1]['type']           = 'text/html; charset=utf-8' 
+      response[1]['Connection']     = 'keep-alive'
+      response[1]['Cache-Control']  = 'private'
+      response[1]['Expires']        = '-1'       # For aggressive caching in IE8
+      response[1]['pragma']         = 'no-cache' # For aggressive caching in IE8
       return response
     end
 
@@ -139,21 +182,8 @@ module Handler
       @logger      = options[:logger]
       @logger    ||= ::Logger.new(STDERR) 
 
-      @app = Aurita::Handler::Aurita_Dispatch_Application.new(@logger)
-      @app.dispatcher.poller = true
+      @app = Aurita::Handler::Aurita_Poll_Dispatch_Application.new(@logger)
       @app = Rack::ContentLength.new(@app)
-
-      unless options[:no_session] then
-        begin
-          @app = Rack::Session::Memcache.new(@app)
-        rescue ::Exception => no_memcache
-          raise ::Exception.new("Memcache (gem: memcached) appears to be missing. ")
-
-          @logger.info { "#{self.class.to_s}: Falling back to Session::Pool" }
-          @app = Rack::Session::Pool.new(@app)
-        end
-      end
-    
       @app = Rack::Reloader.new(@app, 3) if [ :test, :development ].include?(Aurita.runmode)
 
       GC.disable if @gc_after_calls
@@ -180,6 +210,13 @@ module Handler
       response[1]['Expires'] = @far_future
       response[1].delete('Last-Modified')
       return response
+    end
+  end
+
+  class Aurita_Asset_Application < Aurita_File_Application
+    def initialize(root)
+      root << "/#{Aurita.runmode}/"
+      super(root)
     end
   end
 

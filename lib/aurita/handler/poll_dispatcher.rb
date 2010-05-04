@@ -6,6 +6,7 @@ Aurita.import(:base, :session)
 Aurita.import(:base, :exceptions)
 Aurita.import(:base, :log, :class_logger)
 Aurita.import(:base, :plugin_register)
+Aurita.import(:handler, :dispatcher)
 Aurita.import_module :decorators, :default
 Aurita.import_module :gui, :error_page
 
@@ -15,17 +16,17 @@ require('lore/validation/parameter_validator')
 require('lore')
 
 
-class Aurita::Dispatcher 
+class Aurita::Poll_Dispatcher < Aurita::Dispatcher
 
   attr_reader :params, :mode, :controller, :action, :benchmark_time, :num_dispatches, :logger
-  attr_accessor :decorator
+  attr_accessor :decorator, :poller
 
   public
 
   # Usage: 
   #
   #  require('my_app/application')
-  #  dispatcher = Aurita::Dispatcher.new(My_App::Application)
+  #  dispatcher = Aurita::Poll_Dispatcher.new(My_App::Application)
   #
   def initialize(application=Aurita::Main::Application)
     @application         = application
@@ -43,11 +44,8 @@ class Aurita::Dispatcher
   #
   def dispatch(request)
   # {{{
-    benchmark_start_time = Time.now 
-
     params                = Aurita::Attributes.new(request)
     params[:_request]     = request
-    params[:_session]     = Aurita::Session.new(request)
     params[:_application] = @application
     status                = 200
     response_body         = ''
@@ -62,9 +60,6 @@ class Aurita::Dispatcher
 
     Thread.current['request'] = params
 
-    Lore::Connection.reset_query_count()
-    Lore::Connection.reset_result_row_count()
-
     begin
       raise ::Exception.new('No controller given') if(controller.nil? || controller == '') 
 
@@ -77,8 +72,8 @@ class Aurita::Dispatcher
 
       response = false
       @logger.log("Calling model interface method #{controller}.#{action}")
-
-      element  = controller_instance.call_guarded(action)
+      
+      element  = controller_instance.call_unguarded(action)
       response = controller_instance.response
       if response[:html] == '' then
         if element.respond_to?(:string) then
@@ -101,21 +96,10 @@ class Aurita::Dispatcher
 
       @num_dispatches += 1
 
-      @benchmark_time = Time.now-benchmark_start_time
-      @num_queries    = Lore::Connection.query_count
-      @num_tuples     = Lore::Connection.result_row_count
-      Aurita::Plugin_Register.call(Hook.dispatcher.request_finished, 
-                                   controller_instance, 
-                                   :dispatcher  => self, 
-                                   :controller  => controller_instance, 
-                                   :action      => action, 
-                                   :time        => @benchmark_time, 
-                                   :num_queries => @num_queries, 
-                                   :num_tuples  => @num_tuples)
     rescue Exception => excep
       @logger.log(excep.message)
       @logger.log(excep.backtrace.join("\n"))
-      response_body = GUI::Error_Page.new(excep).string
+      response_body = excep.message
     end
 
     return [ status, response_header, response_body ]

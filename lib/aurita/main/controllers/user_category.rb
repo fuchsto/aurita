@@ -1,5 +1,6 @@
 
 require('aurita/controller')
+Aurita.import_module :gui, :list
 
 module Aurita
 module Main
@@ -29,10 +30,9 @@ module Main
     def index
       filter = Category_Feed_Filter.for(Aurita.user)
       return Page.new(:header => tl(:your_categories)) { 
-        HTML.div.listbox { 
-          HTML.h4 { tl(:show_updates_in_categories) } + 
+        List.new(:header => tl(:show_updates_in_categories)) { 
           Aurita.user.readable_categories.map { |c| 
-            HTML.div.item { 
+            HTML.div { 
               HTML.input(:name       => 'category_id', 
                          :type       => :checkbox, 
                          :class      => :checkbox, 
@@ -42,7 +42,7 @@ module Main
                          :onchange   => "Aurita.call({ action: 'Category_Feed_Filter/toggle/category_id=#{c.category_id}' });") +
               HTML.div.item_label { link_to(c, :controller => 'Category') { c.category_name } }
             }
-          } 
+          }
         }
       }
     end

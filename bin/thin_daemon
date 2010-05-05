@@ -12,6 +12,7 @@ require 'zlib'
 begin
 
 opts = GetoptLong.new(
+         [ '--dev',       '-d', GetoptLong::OPTIONAL_ARGUMENT ],
          [ '--gatling',   '-g', GetoptLong::OPTIONAL_ARGUMENT ],
          [ '--short',     '-s', GetoptLong::OPTIONAL_ARGUMENT ],
          [ '--killold',   '-k', GetoptLong::OPTIONAL_ARGUMENT ], 
@@ -33,6 +34,11 @@ logfile   = false
 
 opts.each { |opt, arg| 
   case opt
+  when '--dev' then
+    port      = 3000
+    mode      = :development
+    logfile   = STDERR
+    verbosive = true
   when '--gatling' then
     gatling   = true
   when '--short' then
@@ -93,8 +99,7 @@ if verbosive then
   STDERR.puts "bootstrapping aurita ..."
 end
 
-Aurita.load_project project_name
-Aurita.runmode = mode
+Aurita.load_project(project_name, mode)
 Aurita.bootstrap
 
 if verbosive then
@@ -122,6 +127,7 @@ if verbosive then
 end
 
 Aurita.import :handler, :thin_daemon
+Aurita.import :handler, :thin_gatling_daemon
 
 OPTIONS = {
   :port            => port,
@@ -131,12 +137,16 @@ OPTIONS = {
   :mode            => mode, 
   :chunked         => true
 }
+
+daemon_klass = Aurita::Thin_Daemon
+
 # Gatling mode is as fast as can be, but without 
 # sessions, e.g. only public services are available. 
 if gatling then
   OPTIONS[:compress]    = false
   OPTIONS[:chunked]     = false
   OPTIONS[:no_sessions] = true
+  daemon_klass = Aurita::Thin_Gatling_Daemon
 # Short mode is for requests that need session 
 # handling ( => user identification) but will 
 # return short responses. 
@@ -146,7 +156,7 @@ elsif short then
   OPTIONS[:no_sessions] = false
 end
 
-web_server             = Aurita::Thin_Daemon.new(OPTIONS)
+web_server             = daemon_klass.new(OPTIONS)
 daemon_logger          = ::Logger.new(logfile)
 daemon_logger.progname = "(Port #{port})"
 web_server.logger      = daemon_logger

@@ -9,10 +9,16 @@ require 'zlib'
 require 'mongrel'
 
 Aurita.import :handler, :aurita_application
+Aurita.import :handler, :thin_daemon
 
 module Aurita
 
-  # Simple Thin daemon.
+  # Simple Thin daemon, configured for *unguared*, short and frequent requests.
+  # Unguarded means there is no permission control and session management at all 
+  # for the sake of low latency. 
+  # Do not handle requests using the gatling daemon unless its responses are 
+  # considered public! 
+  #
   # Starts Aurita project at given port. 
   # All loggers are redirected to STDERR. 
   # Example usage: 
@@ -24,28 +30,19 @@ module Aurita
   # port 3001 and write all log messages to file 
   # 'daemon.log'. 
   #
-  class Thin_Daemon 
+  class Thin_Gatling_Daemon < Thin_Daemon 
     include Aurita::Handler
-
-    attr_accessor :logger
-
-    def initialize(options)
-      @options = options
-      @logger  = options[:logger]
-    end
 
     private 
 
     def setup
 
-      @aurita_std  = Aurita_Application.new(@options)
       @aurita_poll = Aurita_Poller_Application.new(@options)
       root = @options[:server_root]
 
-      app = Rack::URLMap.new('/'              => @aurita_std, 
-                             '/aurita'        => @aurita_std, 
-                             '/aurita'        => @aurita_std, 
-                             '/aurita/poll'   => @aurita_std, 
+      app = Rack::URLMap.new('/'              => @aurita_poll, 
+                             '/aurita'        => @aurita_poll, 
+                             '/aurita/poll'   => @aurita_poll, 
                              '/aurita/inc'    => Aurita_Theme_File_Application.new(root+'/inc'), 
                              '/aurita/css'    => Aurita_Theme_File_Application.new(root+'/css'), 
                              '/aurita/shared' => Aurita_File_Application.new(root+'/shared'), 
@@ -55,22 +52,6 @@ module Aurita
 
       @http_server = Thin::Server.new(@options[:ip], @options[:port], app) 
 
-    end
-
-    public
-    
-    def run
-      setup()
-
-      @logger.info { "Thin_Daemon: run entered" }
-      begin
-        @logger.info("Thin_Daemon: http_server.run")
-        @http_server.start
-      rescue StandardError, ::Exception => err
-        @logger.error { "Thin_Daemon: #{err}" }
-        @logger.error { err.backtrace.join("\n") }
-      end
-      @logger.info { "Thin_Daemon: run left" }
     end
     
   end # class

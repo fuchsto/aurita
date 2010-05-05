@@ -2,8 +2,8 @@
 require('aurita')
 require('mime/types')
 
-Aurita.load_project :wfv
-Aurita.session.user = User_Group.load(:user_group_id => 1144)
+Aurita.load_project(:cfmaier, :development)
+Aurita.session.user = User_Group.load(:user_group_id => 100)
 Aurita.import_plugin_model :wiki, :media_asset
 Aurita.import_plugin_model :wiki, :media_asset_folder
 Aurita.import_plugin_model :wiki, :media_asset_folder_category
@@ -35,40 +35,48 @@ def visit_folder(path, parent_folder_id=200)
 
   puts "-- Create folder #{path} "
   puts "    tags: " << tags.inspect
-  asset_folder = Media_Asset_Folder.create(:physical_path => folder_name, 
-                                           :user_group_id => 5, 
+  asset_folder = Media_Asset_Folder.create(:physical_path           => folder_name, 
+                                           :user_group_id           => 5, 
                                            :media_folder_id__parent => parent_folder_id, 
-                                           :access => 'PUBLIC', 
-                                           :trashbin => 'f')
+                                           :access                  => 'PUBLIC', 
+                                           :trashbin                => 'f')
   folder_id = asset_folder.media_asset_folder_id
   Media_Asset_Folder_Category.create(:media_asset_folder_id => folder_id, 
-                                     :category_id => 267)
+                                     :category_id           => 100)
+  Media_Asset_Folder_Category.create(:media_asset_folder_id => folder_id, 
+                                     :category_id           => 161) # Qualitaetsmanagement
+  Media_Asset_Folder_Category.create(:media_asset_folder_id => folder_id, 
+                                     :category_id           => 128) # EP
   Dir.glob("#{path}**").each { |f|
     puts "recurse into #{f}"
     if File.ftype(f) == 'file' then
       begin
         puts '    Create file: ' << f
         STDOUT << '     ' << tags.inspect
-#        f = tr.iconv(f)
+        f = tr.iconv(f)  # For imports from Windows shares only! 
         extension = f.split('.')[-1].downcase
-#       if extension == 'pdf' then
+        if ['dot', 'ppt', 'xls', 'doc','pdf'].include?(extension) then
           mime = MIME::Types.of(f).first
           mime = mime.content_type if mime
           mime = '?/?' unless mime
           STDOUT << ' mime: ' << mime.inspect
           STDOUT << ' ext: ' << extension.inspect << "\n"
-          media_asset = Media_Asset.create(:user_group_id => 5, 
-                                           :tags => (tags + [ f.split('/')[-1], extension ]).join(' '), 
-                                           :mime => mime,
-                                           :media_folder_id => asset_folder.media_asset_folder_id, 
-                                           :extension => extension, 
-                                           :title => f.split('/')[-1], 
+          media_asset = Media_Asset.create(:user_group_id     => 5, 
+                                           :tags              => (tags + [ f.split('/')[-1], extension ]).join(' '), 
+                                           :mime              => mime,
+                                           :media_folder_id   => asset_folder.media_asset_folder_id, 
+                                           :extension         => extension, 
+                                           :title             => f.split('/')[-1], 
                                            :original_filename => f.split('/')[-1], 
-                                           :description => f.split('/')[-1])
+                                           :description       => f.split('/')[-1])
           Content_Category.create(:content_id  => media_asset.content_id, 
-                                  :category_id => 267)
+                                  :category_id => 100)
+          Content_Category.create(:content_id  => media_asset.content_id, 
+                                  :category_id => 161)
+          Content_Category.create(:content_id  => media_asset.content_id, 
+                                  :category_id => 128)
           Media_Asset_Importer.new(media_asset).import_local_file(f)
-#       end
+        end
       rescue ::Exception => e
         STDERR.puts 'ERROR: '
         STDERR.puts e.message

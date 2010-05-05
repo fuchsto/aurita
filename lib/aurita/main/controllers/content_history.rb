@@ -50,7 +50,7 @@ module Main
               HTML.div(:class => [:index_entry, :listing ]) { 
                 HTML.div { link_to(c) { HTML.b { c.title } } } + 
                 HTML.div { datetime(c.changed) } +
-                HTML.div { "#{link_to(user) { user.user_group_name }} #{in_cats}" } 
+                HTML.div { "#{link_to(user) { user.label }} #{in_cats}" } 
               }
             }
           end

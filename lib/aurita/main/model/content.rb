@@ -101,6 +101,16 @@ module Main
       tags = tags.join(' ')
       tags
     }
+
+    # Called on every commit on an instance of Content. 
+    # Expexts optional argument hash of attribute values to be committed, or an
+    # instance of Content to be committed. 
+    # Returns true if this commit should be saved as a new content version, 
+    # otherwise false. 
+    #
+    def self.touch_on_update(args=nil)
+      true
+    end
     
     # Operations to perform befoe writing an instance to DB, such as: 
     # - Setting user_group_id (owner of this instance) according to Aurita.user
@@ -117,7 +127,12 @@ module Main
     # attributes. 
     # Prohibits changed on timestamp 'created'. 
     def self.before_update(args)
-      args[:changed] = Aurita::Datetime.now(:sql)
+      if touch_on_update?(args)
+        args[:changed] = Aurita::Datetime.now(:sql) 
+      else
+        args.delete(:changed)
+      end
+
       args.delete(:created)
       return args
     end
@@ -218,7 +233,16 @@ module Main
 
     # See Content.touch
     def commit()
-      super() && Content.touch(content_id)
+      res   = super() 
+      klass = false
+      if self.class == Content then
+        klass = concrete_instance().class
+      else
+        klass = self.class
+      end
+      if res && klass.touch_on_update?(self) then
+        Content.touch(content_id)
+      end
     end
     
     # Returns number of comments on this Content instance as Integer. 

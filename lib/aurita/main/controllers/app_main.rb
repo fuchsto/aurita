@@ -24,10 +24,25 @@ module Main
     }
 
     def on_request_finish(params={})
+      log_params = []
+      @params.each_pair { |k,v|
+        if (k.to_s.first != '_') && 
+            !([:controller, :dispatcher, :action, :element, :mode].include?(k.to_sym)) then
+          log_params << "#{k}=#{v.to_s[0..50]}" 
+        end
+      }
+
+      referer   = @params[:_request].env['HTTP_REFERER']
+      remote_ip = @params[:_request].env['REMOTE_ADDR']
+
       User_Action.create(:controller    => params[:controller].class.to_s, 
                          :method        => params[:action], 
+                         :params        => log_params.join('&'), 
                          :runmode       => Aurita.runmode.to_s.first, 
                          :user_group_id => Aurita.user.user_group_id, 
+                         :session_id    => Aurita.session.session_id, 
+                         :remote_ip     => remote_ip, 
+                         :referer       => referer, 
                          :duration      => params[:time], 
                          :num_queries   => params[:num_queries], 
                          :num_tuples    => params[:num_tuples])
@@ -51,10 +66,10 @@ module Main
     end
 
     def popup_box
-      render_view(:popup_box, :action =>  param(:action))
+      render_view(:popup_box, :action => param(:action))
     end
     def alert_box
-      render_view(:alert_box, :message =>  param(:message))
+      render_view(:alert_box, :message => param(:message))
     end
     def confirmation_box
       render_view(:confirmation_box, :message => param(:message))

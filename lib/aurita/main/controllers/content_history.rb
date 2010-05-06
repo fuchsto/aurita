@@ -9,11 +9,27 @@ module Main
 
     def list_body
 
+      user_filtered_cat_ids = Category_Feed_Filter.for(Aurita.user)
+      user_filtered_cat_ids = [0] unless user_filtered_cat_ids.first
+      feed_cat_ids          = Aurita.user.readable_category_ids
+      feed_cat_ids -= user_filtered_cat_ids
       updates = Content.select { |c|
-        c.where(Content.accessible)
+        c.where(Content.accessible & (Content.content_id.in { 
+          Content_Category.select(:content_id) { |cid|
+            cid.where(Content_Category.category_id.in(feed_cat_ids))
+          }
+        }))
         c.limit(20)
         c.order_by(:changed, :desc)
-      }.to_a.map { |c| c.concrete_instance }
+      }.to_a
+      
+      updates.each { |u|
+        STDERR.puts "------------------------------------------------------"
+        STDERR.puts "FILTER: " + u.category_ids.inspect
+      } 
+
+
+      updates = updates.map { |c| c.concrete_instance }
 
       changes = HTML.div(:class => [:recent_changes, :topic_inline]) { 
         updates.map { |c|
@@ -34,7 +50,7 @@ module Main
               HTML.div(:class => [:index_entry, :listing ]) { 
                 HTML.div { link_to(c) { HTML.b { c.title } } } + 
                 HTML.div { datetime(c.changed) } +
-                HTML.div { "#{link_to(user) { user.user_group_name }} #{in_cats}" } 
+                HTML.div { "#{link_to(user) { user.label }} #{in_cats}" } 
               }
             }
           end

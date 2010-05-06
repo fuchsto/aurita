@@ -133,12 +133,13 @@ module Aurita
     require("#{Aurita::App_Configuration.projects_base_path}#{project_name.to_s}/config.rb")
 
     @@project = Aurita::Project_Configuration
-    
+    runmode   = runmode.to_sym
+
     Lore.add_login_data @@project.databases[runmode] 
     Lore::Context.enter @@project.databases[runmode].keys.first
     Aurita.import('base/session')
 
-    @@runmode = runmode.to_sym
+    Aurita.runmode = runmode
   end
 
   # Return active project. 

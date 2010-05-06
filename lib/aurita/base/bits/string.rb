@@ -94,4 +94,8 @@ class String
     self.replace(rep)
   end
 
+  def begins_with(other)
+    (self[0...(other.length)] == other)
+  end
+
 end # class

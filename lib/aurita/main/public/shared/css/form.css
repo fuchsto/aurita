@@ -240,7 +240,7 @@ input.inline, textarea.inline {
 .button.form:hover, .form_button_bar .button:hover { 
   background: transparent url(/aurita/images/icons/button_hover.gif) repeat scroll 0px -1px;
 }
-.form_button_bar button.submit, .form_button_bar .submit { 
+.form_button_bar button.submit, .form_button_bar .submit, .form_button_bar .submit:hover { 
   margin-right: 10px; 
 }
 .form_button_bar button.cancel, .form_button_bar .cancel { 
@@ -306,8 +306,7 @@ a.icon_button .button_label {
 }
 a.icon_button, a.icon_button:hover { 
 /*  padding: 4px; */
-  padding: 3px; 
-  padding-top: 5px; 
+  padding: 5px 3px; 
 }
 
 button { 

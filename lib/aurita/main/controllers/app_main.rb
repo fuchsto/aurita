@@ -42,7 +42,7 @@ module Main
                          :user_group_id => Aurita.user.user_group_id, 
                          :session_id    => Aurita.session.session_id, 
                          :remote_ip     => remote_ip, 
-                         :referer       => referer, 
+                         :referer       => referer.to_s[0..254], 
                          :duration      => params[:time], 
                          :num_queries   => params[:num_queries], 
                          :num_tuples    => params[:num_tuples])

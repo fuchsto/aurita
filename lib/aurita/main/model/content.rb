@@ -240,7 +240,7 @@ module Main
       else
         klass = self.class
       end
-      if res && klass.touch_on_update?(self) then
+      if res && (!klass || klass.respond_to?(:touch_on_update?) && klass.touch_on_update?(self)) then
         Content.touch(content_id)
       end
     end

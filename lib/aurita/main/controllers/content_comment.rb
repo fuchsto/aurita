@@ -25,7 +25,7 @@ module Main
           pu.order_by(:time, :asc)
         }
       }.to_a
-
+      
       view_string(:content_comment_list, 
                   :entries => entries, 
                   :content => content)
@@ -33,22 +33,22 @@ module Main
 
     def box
       box = Box.new(:id => :content_comment_box, :class => :topic_inline)
-
+      
       box.header    = tl(:comments)
       box.body      = list_string(param(:content_id))
       box.collapsed = true
-
+      
       box
     end
 
-    def list
-      content_id   = param(:content_id)
-      content_id ||= param('?content_id')
+    def list(params={})
+      content_id   = params[:content].content_id if params[:content]
+      content_id ||= param(:content_id)
       puts list_string(content_id)
     end
 
     def recent_comments_box(params={})
-
+      
       amount   = params[:amount]
       amount ||= 3
 

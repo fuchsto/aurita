@@ -261,17 +261,17 @@ class Aurita::Base_Controller
     if !permission then
       raise Aurita::Auth_Exception.new('No permission to call \'' << method.to_s + '\'')
     end
-
+    
     begin
-
+      
       Aurita::Plugin_Register.call(Hook.__send__(self.class.to_s.downcase.gsub('::','__')).__send__("before_#{method}"), self)
       
       controller_cache = self.class.cache
       cached_actions   = self.class.cached_actions
-
+      
       if cached_actions.include?(method.to_sym) then
         cache_params = @params.to_hash.update(:action => method)
-
+        
         log('Using controller cache ' << controller_cache.inspect) 
         cached = controller_cache.get(cache_params)
         if cached then
@@ -289,7 +289,7 @@ class Aurita::Base_Controller
         log('No controller cache defined')
         result = __send__(method, *args)
       end
-
+      
       @response = Controller_Response.unify(result, @response)
       
       after_hooks = self.class.hooks_after(method)

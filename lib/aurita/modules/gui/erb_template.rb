@@ -92,7 +92,7 @@ module GUI
           @@template[@template_symbol] << line
         }
 
-        @@erb[@template_symbol] = ERB.new(@@template[@template_symbol], nil, '', '@output_buffer')
+        @@erb[@template_symbol] = ERB.new(@@template[@template_symbol], nil, nil, '@output_buffer')
       end
 
       @binding_params = ERB_Binding_Params.new(param_hash)
@@ -114,8 +114,21 @@ module GUI
     end
 
     def concat(string)
-      @output_buffer << string
+      # ActiveSupport patches ERB to auto-escape the whole buffer, 
+      # so we need to mark it as "html safe" in case ActiveSupport 
+      # is installed. In this case the String class is patched, too, 
+      # and String instances provide method #html_safe. 
+      #
+      # Concats in Aurita ERB templates are always safe, as only 
+      # aurita modules (such as GUI::Form_Helper) may use it. So it's 
+      # okay to assume safe strings here. 
+      #
+      # Plain ERB ruby output is of course not HTML safe, but 
+      # Aurita::GUI is. 
+      string = string.html_safe if string.respond_to?(:html_safe) 
+      @output_buffer << (string)
     end
+    alias safe_concat concat
     alias render concat
     alias puts concat
 

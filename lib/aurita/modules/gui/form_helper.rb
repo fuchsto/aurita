@@ -47,12 +47,12 @@ module GUI
       raise ::Exception.new("Could not resolve model klass: '#{model.inspect}'") unless model
       params[:name] = model.model_name.downcase.gsub('::','__') + "__#{action}_form" unless params[:name]
       form = Ajax_Form.new(params)
-      render form.header_string 
-      render '<ul class="form_fields">'
-      render form.hidden(:name => :controller, 
+      safe_concat form.header_string 
+      safe_concat '<ul class="form_fields">'
+      safe_concat form.hidden(:name => :controller, 
                          :value => model.model_name, 
                          :required => true)
-      render form.hidden(:name => :action, 
+      safe_concat form.hidden(:name => :action, 
                          :value => action, 
                          :required => true)
 
@@ -63,7 +63,7 @@ module GUI
             # and rather expensive. 
             table_attribs = instance.get_attribute_value_map[table]
             if table_attribs && table_attribs[key]then
-              render Hidden_Field.new(:name => "#{table}.#{key}", 
+              safe_concat Hidden_Field.new(:name => "#{table}.#{key}", 
                                       :value => table_attribs[key].to_s, 
                                       :required => true).string
             end
@@ -71,8 +71,8 @@ module GUI
         }
       end
       yield(form)
-      render '</ul>'
-      render '</form>'
+      safe_concat '</ul>'
+      safe_concat '</form>'
     end
 
   end

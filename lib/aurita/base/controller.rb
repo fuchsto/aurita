@@ -263,6 +263,8 @@ class Aurita::Base_Controller
     end
     
     begin
+
+      # TODO: Polish cache handling and after-hooks
       
       Aurita::Plugin_Register.call(Hook.__send__(self.class.to_s.downcase.gsub('::','__')).__send__("before_#{method}"), self)
       
@@ -282,22 +284,30 @@ class Aurita::Base_Controller
         else 
           log('Controller cache miss') 
           result    = __send__(method, *args)
+          
+          after_hooks = self.class.hooks_after(method)
+          if after_hooks then 
+            log("Calling hook after method #{method}")
+            after_hooks.each { |hook| hook.call(self) }
+          end
+
           controller_cache.store(cache_params) { { :response => @response, 
                                                    :result   => result } } 
         end
       else
         log('No controller cache defined')
         result = __send__(method, *args)
+        
+        after_hooks = self.class.hooks_after(method)
+        if after_hooks then 
+          log("Calling hook after method #{method}")
+          after_hooks.each { |hook| hook.call(self) }
+        end
+
       end
       
       @response = Controller_Response.unify(result, @response)
       
-      after_hooks = self.class.hooks_after(method)
-      if after_hooks then 
-        log("Calling hook after method #{method}")
-        after_hooks.each { |hook| hook.call(self) }
-      end
-
       Aurita::Plugin_Register.call(Hook.__send__(self.class.to_s.downcase.gsub('::','__')).__send__("after_#{method}"), self)
 
       log("Call finished (#{method}), query count is #{Lore::Connection.query_count}")

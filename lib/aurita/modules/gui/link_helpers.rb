@@ -29,8 +29,13 @@ module GUI
         url = options
       when Hash
         action     = options[:action]
-        action   ||= 'show'
         controller = options[:controller]
+        if action.is_a?(String) && action.include?('/') then
+          action     = action.split('/')
+          controller = action[0]
+          action     = action[1]
+        end
+        action   ||= 'show'
         if options[:entity] then
           entity       = options[:entity]
           controller ||= entity.model_name
@@ -137,6 +142,12 @@ module GUI
           controller ||= entity.model_name
           key          = entity.key
         end
+        if action && action.include?('/') then
+          action     = action.split('/')
+          controller = action[0]
+          action     = action[1]
+        end
+
         url = "#{controller}/#{key}" 
         url << "/#{action}" if action
         get_params = options.dup
@@ -239,10 +250,10 @@ module GUI
       end
 
       params ||= {}
-      params[:entity] = entity if entity
-      params[:label]  = label  if label
-      params[:action] = action if action
-      params[:url]    = url    if url
+      params[:entity]     = entity if entity
+      params[:label]      = label  if label
+      params[:action]     = action if action
+      params[:url]        = url    if url
 
       return params
     end

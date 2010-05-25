@@ -369,6 +369,7 @@ tr.highlighted td {
   line-height: 17px; 
   background-color: #dedede; 
   background: url('/aurita/images/icons/box_header_bright_bg.png'); 
+  cursor: pointer; 
   display: block; 
 }
 
@@ -376,13 +377,38 @@ tr.highlighted td {
   background: transparent url('/aurita/images/icons/box_header_bright_bg.png') repeat-x scroll 0 0;
 }
 
-.box_header .header {
+.box_header .box_header_label {
   font-family: Verdana, sans-serif; 
+  font-size: 13px; 
+  width: 90%; 
+  float: left; 
+  clear: none; 
+}
+.box_header .box_header_buttons {
+  clear: none; 
+  float: right; 
+  cursor: pointer; 
 }
 
 .box_body { 
   background: #F3F3F3 url(/aurita/images/icons/tall_row_brighter_bg.png) repeat-x scroll 0 0; 
 }
+.box_toolbar { 
+  padding: 0px; 
+  background: #f3f3f3; 
+  border-bottom: 1px solid #afafaf;
+}
+.toolbar_button { 
+  padding: 2px; 
+  display: block; 
+}
+.toolbar_button .label { 
+  display: inline; 
+}
+.toolbar_button .icon { 
+  display: inline; 
+}
+
 .main_content .box_body { 
   background: transparent; 
   padding: 2px; 

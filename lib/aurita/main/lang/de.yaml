@@ -332,6 +332,7 @@ confirm_empty_trash : Papierkorb leeren?
 
 structure : Struktur
 content : Inhalte
+newsletters : Newsletter
 link : URL in Popup
 
 users_with_read_access : Benutzer mit Leseberechtigung

@@ -5,6 +5,8 @@ plugin_name : Plattform
 ok : ok
 cancel : abbrechen
 
+select_option : -- w&auml;hlen --
+
 register : Registrieren
 logon : Anmelden
 

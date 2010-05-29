@@ -57,11 +57,11 @@ module GUI
     # Returns GUI::Icon instance with given icon
     #
     def icon_tag(icon_name)
-      GUI::Icon.new(icon_name)
+      GUI::Icon.new(icon_name).string
     end
     # Alias for icon_tag
     def icon(icon_name)
-      GUI::Icon.new(icon_name)
+      GUI::Icon.new(icon_name).string
     end
 
   end # module

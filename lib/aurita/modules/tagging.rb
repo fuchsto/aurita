@@ -92,7 +92,7 @@ module Aurita
   #
   module Taggable_Behaviour
     def has_tag(*tags)
-      tags = tags.first if tags.first.is_a?(Array)
+      tags.flatten!
 			constraints = Lore::Clause.new('')
       syn = Hash.new
       Tag_Synonym.all_with(Tag_Synonym.synonym.in(tags.map { |t| "'#{t}'" }.join(','))).entities.each { |s| 
@@ -115,6 +115,15 @@ module Aurita
     end
     alias has_tags has_tag
 
+    def has_exact_tag(*tags)
+      tags.flatten!
+			constraints = Lore::Clause.new('')
+			tags.each { |k|
+        constraints = constraints & (self.tags.has_element_ilike("#{k}"))
+			}
+      constraints
+    end
+    alias has_exact_tags has_exact_tag
     # Shortcut for
     #
     #   find(:all).by_tag(*tags)

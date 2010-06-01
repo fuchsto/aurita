@@ -21,8 +21,8 @@ module GUI
     # :value  - Selected value for GUI::Select_Field
     #
     def initialize(params={})
-      @parent = params[:parent]
-      @attrib = params
+      @parent ||= params[:parent]
+      @attrib ||= params
       @attrib.delete(:parent)
       if !@attrib[:value] then
         @attrib[:option_values] = [ '' ]
@@ -37,8 +37,14 @@ module GUI
           @attrib[:option_labels] << cat_label 
         }
       end
-      @attrib[:onchange] = "Aurita.Main.selection_list_add({ select_field:'#{@parent.dom_id}', 
-                                                             name: 'public.category.category_id' });" if @parent
+
+      if @attrib[:name].empty? then
+        @attrib[:name] ||= Category.category_id.to_s
+      end
+      if @parent then
+        @attrib[:onchange] = "Aurita.Main.selection_list_add({ select_field:'#{@attrib[:id]}', 
+                                                               name: '#{@parent.options_name}' });" 
+      end
       super()
     end
 

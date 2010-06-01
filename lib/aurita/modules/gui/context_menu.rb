@@ -55,6 +55,10 @@ module GUI
         element = yield 
       end
 
+      if !element.respond_to?(:dom_id) then
+        element = HTML.div(:id => entity.dom_id) { element }
+      end
+
       params ||= {}
       type = params[:type]
 

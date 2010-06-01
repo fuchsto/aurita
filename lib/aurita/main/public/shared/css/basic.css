@@ -945,6 +945,15 @@ div.column50 {
 .topic li a { 
   display: block; 
 }
+.topic li.entity a { 
+  display: inline; 
+}
+.topic li.entity { 
+  clear: both; 
+}
+.topic li.entity .label { 
+  display: inline; 
+}
 
 table.calendar_mini_month { 
   width: 100%; 

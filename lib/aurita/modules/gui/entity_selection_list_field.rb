@@ -20,7 +20,7 @@ module GUI
       end
       def element
         HTML.div { 
-          Hidden_Field.new(:name => "#{@parent.name}[]", :value => @value) + 
+          Hidden_Field.new(:name => "#{@attrib[:name]}[]", :value => @value) + 
           HTML.a(:onclick => "Element.remove('#{@parent.dom_id}');", 
                  :class   => :icon) { 
             HTML.img(:src => '/aurita/images/icons/delete_small.png') 
@@ -57,19 +57,18 @@ module GUI
       if !@entities then
         @entities = @model.find(:all).entities
       end
-
+      
       option_values  = []
       option_labels  = []
       @entities.each { |e|
         option_values << e.pkey
         option_labels << e.label
       }
-
+      
       option_values = [''] + option_values
       option_labels = [tl(:select_option)] + option_labels
       
       options = option_labels
-
       begin
         options.fields = option_values.map { |v| v.to_s }
       rescue ::Exception => e

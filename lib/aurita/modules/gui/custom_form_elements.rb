@@ -286,6 +286,8 @@ JS
       @user         = params[:user]
       @read_access  = {}
       @write_access = {}
+      field_name    = params[:name] # save for later
+
       params.delete(:user)
       active_categories = []
       User_Category.categories_of(@user).each { |c|
@@ -316,6 +318,7 @@ JS
       options.fields = cat_ids.map { |v| v.to_s }
    
       super(params)
+      @attrib[:name] = field_name # restore 'real' field name
       set_options(options) 
       set_value(active_categories)
 

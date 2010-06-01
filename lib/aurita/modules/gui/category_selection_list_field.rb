@@ -2,8 +2,8 @@
 require('aurita')
 require('aurita-gui')
 require('aurita-gui/widget')
-# Aurita.import_module :gui, :erb_helpers
 Aurita.import_module :gui, :i18n_helpers
+Aurita.import_module :gui, :entity_selection_list_field
 Aurita.import_module :gui, :category_select_field
 
 module Aurita
@@ -11,27 +11,12 @@ module GUI
 
   class Category_Selection_List_Field < Selection_List_Field
   include Aurita::GUI::I18N_Helpers
-
-    class Category_Selection_List_Option_Field < Selection_List_Option_Field
-      def initialize(params={})
-        super(params)
-      end
-      def element
-        HTML.div { 
-          Hidden_Field.new(:name => 'category_ids[]', :value => @value) + 
-          HTML.a(:onclick => "Element.remove('#{@parent.dom_id}');", :class => :icon) { 
-            HTML.img(:src => '/aurita/images/icons/delete_small.png') 
-          } + 
-          HTML.span { @label }
-        }
-      end
-    end
     
     def initialize(params={}, &block)
-      @option_field_decorator ||= Category_Selection_List_Option_Field
+      @option_field_decorator ||= Entity_Selection_List_Field::Entity_Selection_List_Option_Field
       @select_field_class     ||= Category_Select_Field
       
-      params[:name]  = Category.category_id if params[:name].to_s.empty?
+      params[:name]  = Category.category_id.to_s if params[:name].empty?
       params[:label] = tl(:categories) unless params[:label]
       
       user           = params[:user]

@@ -37,7 +37,7 @@ module Main
 
     def perform_add
       instance = super()
-      Hierarchy_Category.create_for(instance, param(:category_ids))
+      Hierarchy_Category.create_for(instance, param(:category_id))
       after_modification(instance)
     end
 
@@ -46,7 +46,7 @@ module Main
       return unless Aurita.user.is_admin? 
       super()
       instance = load_instance()
-      Hierarchy_Category.update_for(instance, param(:category_ids))
+      Hierarchy_Category.update_for(instance, param(:category_id))
       after_modification(Hierarchy.load(:hierarchy_id => param(:hierarchy_id)))
     end
 

@@ -2,12 +2,17 @@
 require('aurita')
 require('aurita-gui')
 require('aurita-gui/widget')
-# Aurita.import_module :gui, :erb_helpers
+
 Aurita.import_module :gui, :i18n_helpers
 Aurita.import_module :hierarchy_map_iterator
 
+Aurita.import_module :gui, :datetime_fields
 Aurita.import_module :gui, :category_select_field
 Aurita.import_module :gui, :category_selection_list_field
+Aurita.import_module :gui, :user_category_selection_list_field
+Aurita.import_module :gui, :category_user_selection_list_field
+Aurita.import_module :gui, :user_role_selection_list_field
+Aurita.import_module :gui, :user_group_selection_list_field
 
 
 module Aurita
@@ -234,169 +239,7 @@ JS
     end
 
   end
-
-
-  # Specialization of Aurita::GUI::Selection_List_Field:
-  # Sets
-  #   options: All available categories
-  #   value: Array of category ids currently assigned to user
-  # Expects: 
-  #   user: Instance of user to create selection list for
-  #
-  class User_Category_Selection_List_Field < Selection_List_Field
-  include Aurita::GUI::I18N_Helpers
-
-    attr_accessor :user, :read_access, :write_access
-
-    class User_Category_Selection_List_Option_Field < Selection_List_Option_Field
-    include Aurita::GUI::I18N_Helpers
-
-      def initialize(params={})
-        super(params)
-        @user     = @parent.user
-        @read     = @parent.read_access[@value.to_s]? 'read' : nil
-        @write    = @parent.write_access[@value.to_s]? 'write' : nil
-      end
-      def element
-        access_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_permissions", 
-                                                          :id   => "user_#{@value}_permissions", 
-                                                          :option_values => [ 'read', 'write' ], 
-                                                          :option_labels => [ tl(:read_permission), tl(:write_permission) ], 
-                                                          :value => [ @read.to_s, @write.to_s ] ).element
-
-        toggle_read  = "Aurita.call('User_Category/toggle_read_permission/user_group_id=#{@user.user_group_id}&category_id=#{@value}'); return true; "
-        toggle_write = "Aurita.call('User_Category/toggle_write_permission/user_group_id=#{@user.user_group_id}&category_id=#{@value}'); return true; "
-        access_checkbox[0].first.onchange = toggle_read
-        access_checkbox[1].first.onchange = toggle_write
-
-        HTML.div { 
-          HTML.a(:class => :icon, 
-                 :onclick => "Aurita.load({ element: 'dispatcher', 
-                                            onload: function() { Aurita.load({ element: 'user_category_list', 
-                                                                               action: 'User_Category/category_list/user_group_id=#{@user.user_group_id}' }); }, 
-                                            action: 'User_Category/perform_delete/user_group_id=#{@user.user_group_id}&category_id=#{@value}' });") { 
-            HTML.img(:src => '/aurita/images/icons/delete_small.png') 
-          } + 
-          @label.to_s + HTML.div { read_checkbox } + HTML.div { access_checkbox } 
-        }
-      end
-    end
-
-    def initialize(params={})
-      @user         = params[:user]
-      @read_access  = {}
-      @write_access = {}
-      field_name    = params[:name] # save for later
-
-      params.delete(:user)
-      active_categories = []
-      User_Category.categories_of(@user).each { |c|
-        if c.is_private != 't' then
-          active_categories << c.category_id
-          @read_access[c.category_id.to_s]  = c.read_permission
-          @write_access[c.category_id.to_s] = c.write_permission
-        end
-      }
-      options = []
-      cat_ids = []
-
-      cats = Category.all_with((Category.is_private == 'f') & (Category.category_id >= 100)).sort_by(Category.category_name).to_a
-      dec  = Hierarchy_Map_Iterator.new(cats)
-      dec.each_with_level { |cat, level|
-        cat_label = ''
-        level.times { cat_label << '&nbsp;&nbsp;' }
-        cat_label << cat.category_name
-
-        if cat.is_private == 't'
-          options << (tl(:user) + ': ' + cat.category_name) 
-        else
-          options << cat_label
-        end
-        cat_ids << cat.category_id
-      } 
-
-      options.fields = cat_ids.map { |v| v.to_s }
-   
-      super(params)
-      @attrib[:name] = field_name # restore 'real' field name
-      set_options(options) 
-      set_value(active_categories)
-
-      @option_field_decorator = User_Category_Selection_List_Option_Field
-    end
-
-  end
-
-  class Category_User_Selection_List_Field < Selection_List_Field
-  include Aurita::GUI::I18N_Helpers
-
-    attr_accessor :category, :read_access, :write_access
-
-    class Category_User_Selection_List_Option_Field < Selection_List_Option_Field
-    include Aurita::GUI::I18N_Helpers
-
-      def initialize(params={})
-        super(params)
-        @category = @parent.category
-        @read     = @parent.read_access[@value.to_s]? 'read' : nil
-        @write    = @parent.write_access[@value.to_s]? 'write' : nil
-      end
-      def element
-
-        access_checkbox = Aurita::GUI::Checkbox_Field.new(:name => "user_#{@value}_permissions", 
-                                                          :id   => "user_#{@value}_permissions", 
-                                                          :option_values => [ 'read', 'write' ], 
-                                                          :option_labels => [ tl(:read_permission), tl(:write_permission) ], 
-                                                          :value => [ @read, @write ] ).element
-
-        toggle_read  = "Aurita.call('User_Category/toggle_read_permission/user_group_id=#{@value}&category_id=#{@category.category_id}'); return true; "
-        toggle_write = "Aurita.call('User_Category/toggle_write_permission/user_group_id=#{@value}&category_id=#{@category.category_id}'); return true; "
-        access_checkbox[0].first.onchange = toggle_read
-        access_checkbox[1].first.onchange = toggle_write
-
-        HTML.div { 
-          HTML.a(:class => :icon, 
-                 :onclick => "Aurita.call({ method: 'POST', 
-                                            onload: function() { Aurita.load({ element: 'user_category_list', 
-                                                                               action: 'User_Category/user_list/category_id=#{@category.category_id}' }); }, 
-                                            action: 'User_Category/perform_delete/user_group_id=#{@value}&category_id=#{@category.category_id}' });") { 
-            HTML.img(:src => '/aurita/images/icons/delete_small.png')
-          } + 
-          @label.to_s + HTML.div { read_checkbox } + HTML.div { access_checkbox } 
-        }
-      end
-    end
-
-    def initialize(params={})
-      @category     = params[:category]
-      @read_access  = {}
-      @write_access = {}
-      params.delete(:category)
-      users = []
-      User_Category.members_of(@category).each { |u|
-          users << u.user_group_id
-          @read_access[u.user_group_id.to_s]  = u.read_permission
-          @write_access[u.user_group_id.to_s] = u.write_permission
-      }
-      options        = []
-      user_group_ids = []
-      User_Profile.all_with(User_Login_Data.deleted == 'f').order_by(User_Profile.surname).each { |u|
-        if !(['0','5'].include?(u.user_group_id.to_s)) then
-          options << u.label
-          user_group_ids << u.user_group_id
-        end
-      }
-      options.fields = user_group_ids.map { |v| v.to_s }
-   
-      super(params)
-      set_options(options) 
-      set_value(users)
-
-      @option_field_decorator = Category_User_Selection_List_Option_Field
-    end
-
-  end
-
+  
 
   class User_Selection_List_Field < Selection_List_Field
   include Aurita::GUI::I18N_Helpers
@@ -425,129 +268,6 @@ JS
       super(params, &block)
     end
   end
-  
-  # Specialisation of Aurita::GUI::Selection_List_Field:
-  # Sets
-  #   options: All available roles
-  #   value: Array of role ids currently assigned to user
-  # Expects: 
-  #   user: Instance of user to create selection list for
-  #
-  class User_Role_Selection_List_Field < Selection_List_Field
-  include Aurita::GUI::I18N_Helpers
-
-    attr_accessor :user
-
-    class User_Role_Selection_List_Option_Field < Selection_List_Option_Field
-      def initialize(params={})
-        @user = params[:parent].user
-        super(params)
-      end
-      def element
-        HTML.div { 
-          HTML.a(:class => :icon, 
-                 :onclick => "Aurita.call({ action: 'User_Role/perform_delete/user_group_id=#{@user.user_group_id}&role_id=#{@value}' });") { 
-            HTML.img(:src => '/aurita/images/icons/delete_small.png') 
-          } + 
-          @label.to_s
-        }
-      end
-    end
-
-    def initialize(params={})
-      @user = params[:user]
-      params.delete(:user)
-      active_roles = user.immediate_role_ids
-      options = {}
-      Role.find(:all).sort_by(Role.role_name).each { |c|
-        options[c.role_id] = c.role_name
-      }
-      super(params)
-      set_options(options)
-      set_value(active_roles)
-      @option_field_decorator = User_Role_Selection_List_Option_Field
-    end
-  end
-
-  class Duration_Field < Form_Field
-  include Aurita::GUI::I18N_Helpers
-
-    def initialize(params, &block)
-      @day_range = params[:day_range]
-      @day_range ||= (0..7)
-      @hour_range = params[:hour_range]
-      @hour_range ||= (0..23)
-      super(params, &block)
-      @value ||= [0,0]
-    end
-
-    def element
-      HTML.div { 
-        HTML.div.duration_days { Select_Field.new(:name => "#{@attrib[:name]}_days", :options => @day_range, :value => @value[0]) +
-         tl(:days) } + 
-        HTML.div.duration_hours { Select_Field.new(:name => "#{@attrib[:name]}_hours", :options => @hour_range, :value => @value[1]) + 
-         tl(:hours) } 
-      }
-    end
-  end
-
-  class Datepick_Field < Form_Field
-  include Aurita::GUI::I18N_Helpers
-
-    def initialize(params, &block)
-      params[:id] = params[:name]
-      super(params, &block)
-      add_css_class(:datepick)
-    end
-
-    def element
-      name = dom_id().to_s.gsub('.','_')
-      trigger_name = "#{name}_trigger"
-      trigger_onclick = "Aurita.GUI.open_calendar('#{name}','#{trigger_name}');"
-      clear_onclick   = "$('#{name}').value = '';"
-
-      @attrib[:onclick] = trigger_onclick
-      HTML.div.datepick_field { 
-        Input_Field.new(@attrib.update(:value => @value, :readonly => true, :id => name)) + 
-        Text_Button.new(:class   => :datepick_clear, 
-                        :onclick => clear_onclick) { 'X' }  + 
-        Text_Button.new(:id      => trigger_name, 
-                        :class   => :datepick, 
-                        :onclick => trigger_onclick) { tl(:choose_date) } 
-      }
-    end
-  end
-
-  class Timespan_Field < Form_Field
-  include Aurita::GUI::I18N_Helpers
-
-    attr_accessor :from, :to
-
-    def initialize(params={}, &block)
-      @from = params[:value][0]
-      @to   = params[:value][1]
-      @minute_range = params[:minute_range]
-      @minute_range ||= [0, 15, 30, 45]
-      params.delete(:value)
-      params.delete(:minute_range)
-      params.delete(:time_format)
-      super(params, &block)
-    end
-
-    def element
-      name      = @attrib[:name]
-      from_name = "#{name}_begin"
-      to_name   = "#{name}_end"
-
-      HTML.div.timespan_field { 
-        Time_Field.new(:name => from_name, :value => @from, :class => [ :timespan, :from ], :time_format => 'hm', :minute_range => @minute_range) + 
-        HTML.div(:class => :timespan_delimiter) { tl(:timespan_to) } + 
-        Time_Field.new(:name => to_name, :value => @to, :class => [ :timespan, :to ], :time_format => 'hm', :minute_range => @minute_range) + 
-        HTML.div(:style => 'clear: both;') { ' '}
-      }
-
-    end
-  end
 
   class Category_Access_Options_Field < Select_Field
   include Aurita::GUI::I18N_Helpers
@@ -571,60 +291,6 @@ JS
     end
   end
 
-  # Specialization of Aurita::GUI::Selection_List_Field:
-  # Sets
-  #   options: All available non-atomic user groups
-  #   value: Array of user group ids currently assigned to user
-  # Expects: 
-  #   user: Instance of user to create selection list for
-  #
-  class User_Group_Selection_List_Field < Selection_List_Field
-  include Aurita::GUI::I18N_Helpers
-
-    attr_accessor :user
-
-    class User_Group_Selection_List_Option_Field < Selection_List_Option_Field
-    include Aurita::GUI::I18N_Helpers
-
-      def initialize(params={})
-        super(params)
-        @user = @parent.user
-      end
-      def element
-        HTML.div { 
-          HTML.a(:class => :icon, 
-                 :onclick => "Aurita.call({ onload: function() { Aurita.load({ element: 'user_groups_list', 
-                                                                               action: 'User_Group/group_list/user_group_id=#{@user.user_group_id}' }); }, 
-                                            action: 'User_Group_Hierarchy/perform_delete/user_group_id=#{@user.user_group_id}&category_id=#{@value}' });") { 
-            HTML.img(:src => '/aurita/images/icons/delete_small.png') 
-          } + 
-          @label.to_s 
-        }
-      end
-    end
-
-    def initialize(params={})
-      @user         = params[:user]
-      active_groups = @user.parent_groups.map { |g| g.user_group_id }
-      options       = []
-      group_ids     = []
-      params.delete(:user)
-
-      User_Group.all_with(User_Group.atomic == false).sort_by(User_Group.user_group_name).each { |c|
-        STDERR.puts c.inspect
-        options << c.user_group_name
-        group_ids << c.user_group_id
-      }
-      options.fields = group_ids.map { |v| v.to_s }
-   
-      super(params)
-      set_options(options) 
-      set_value(active_groups)
-
-      @option_field_decorator = User_Group_Selection_List_Option_Field
-    end
-
-  end
 end
 end
 

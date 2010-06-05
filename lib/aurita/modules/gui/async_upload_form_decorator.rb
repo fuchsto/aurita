@@ -23,12 +23,8 @@ module GUI
         HTML.div.form_button_bar(:id => @form.dom_id + '_buttons')  {
           Text_Button.new(:class   => :submit, 
                           :onclick => Javascript.Aurita.submit_upload_form(@form.dom_id.to_s), 
-                          :icon    => 'button_ok.gif', 
-                          :label   =>  tl(:ok)).string + 
-          Text_Button.new(:class   => :cancel, 
-                          :onclick => Javascript.Aurita.cancel_form(@form.dom_id.to_s), 
-                          :icon    => 'button_cancel.gif', 
-                          :label   => tl(:cancel)).string
+                          :icon    => :ok, 
+                          :label   =>  tl(:ok)).string 
         }
       }
     end

@@ -221,7 +221,7 @@ add_synonym : Synonym hinzuf&uuml;gen
 add_synonyms : Synonyme hinzuf&uuml;gen
 select_synonym_tag : Begriff eingeben
 list_all_synonyms : Alle Synonyme 
-select_additional_category : \-\- Kategorie hinzuf&uuml;gen \-\-
+select_additional_category : \-\- Add category \-\-
 
 tag_relevance : Relevanz
 edit_tags : Edit tags

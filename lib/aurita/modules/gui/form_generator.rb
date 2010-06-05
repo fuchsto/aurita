@@ -2,6 +2,7 @@
 require 'rubygems'
 require 'aurita'
 Aurita.import_module :gui, :custom_form_elements
+Aurita.import_module :gui, :form_field_hint
 
 require('lore/gui/form_generator')
 
@@ -14,16 +15,24 @@ module GUI
 
   class Validating_Form_Field_Wrapper < Aurita::GUI::Form_Field_Wrapper
     def initialize(field)
-      if !(field.kind_of? Aurita::GUI::Hidden_Field) then
+      if (field.kind_of? Aurita::GUI::Form_Field) && !(field.kind_of? Aurita::GUI::Hidden_Field) then
         field.dom_id = field.name.to_s.gsub('.','_') unless field.dom_id
         data_type    = field.data_type
         data_type  ||= 0
         field.invalid! if (field.value.to_s == '' && field.required?)
         field.onfocus  = "Aurita.form_field_onfocus('#{field.dom_id}');" unless field.onfocus
         field.onblur   = "Aurita.form_field_onblur('#{field.dom_id}'); Aurita.validate_form_field_value(this, #{data_type}, #{field.required?});" unless field.onblur
+
 #       field.onchange = "Aurita.validate_form_field_value(this, #{data_type}, #{field.required?});" unless field.onchange
+
+        field.hint     = 'hint here'
+        field.touch
       end
       super(field)
+    end
+
+    def decorate_hint(hint)
+      Form_Field_Hint.new(@field) 
     end
   end
 

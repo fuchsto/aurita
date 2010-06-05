@@ -1,7 +1,7 @@
 
 require('aurita')
 require('aurita-gui')
-require('aurita-gui/widget')
+require('aurita-gui/form/select_field')
 
 Aurita.import_module :gui, :i18n_helpers
 
@@ -13,7 +13,7 @@ module GUI
   # already present in @value (an Array of category ids) are skipped. 
   # Calls 'Aurita.Main.category_selection_add(@parent.dom_id)
   #
-  class Category_Select_Field < Aurita::GUI::Widget
+  class Category_Select_Field < Select_Field
   include Aurita::GUI::I18N_Helpers
     
     # Paramters: 
@@ -22,35 +22,32 @@ module GUI
     #
     def initialize(params={})
       @parent ||= params[:parent]
-      @attrib ||= params
-      @attrib.delete(:parent)
-      if !@attrib[:value] then
-        @attrib[:option_values] = [ '' ]
-        @attrib[:option_labels] = [ tl(:select_additional_category) ]
+      params.delete(:parent)
+      if !params[:value] then
+        params[:option_values] = [ '' ]
+        params[:option_labels] = [ tl(:select_additional_category) ]
         cats = Category.all_with(Category.is_private == 'f').sort_by(:category_name, :asc).to_a
         dec  = Hierarchy_Map_Iterator.new(cats)
         dec.each_with_level { |cat, level|
           cat_label = ''
           level.times { cat_label << '&nbsp;&nbsp;' }
           cat_label << cat.category_name
-          @attrib[:option_values] << cat.category_id
-          @attrib[:option_labels] << cat_label 
+          params[:option_values] << cat.category_id
+          params[:option_labels] << cat_label 
         }
       end
 
-      if @attrib[:name].empty? then
-        @attrib[:name] ||= Category.category_id.to_s
+      if params[:name].empty? then
+        params[:name] ||= Category.category_id.to_s
       end
       if @parent then
-        @attrib[:onchange] = "Aurita.Main.selection_list_add({ select_field:'#{@attrib[:id]}', 
-                                                               name: '#{@parent.options_name}' });" 
+        params[:onchange] = "Aurita.Main.selection_list_add({ select_field:'#{params[:id]}', 
+                                                              name: '#{@parent.options_name}' });" 
       end
-      super()
+
+      super(params)
     end
 
-    def element
-      Select_Field.new(@attrib)
-    end
   end
   
 end

@@ -33,9 +33,9 @@ module GUI
         @level.to_i.times { label << '&nbsp;' }
         label << l
       }
-      @attrib[:label] = label
+      @attrib[:label]    = label
+      @attrib[:onchange] = "Aurita.hierarchy_node_select_onchange(this, '#{@real_attribute_name}', #{@level})"
       field = super()
-      field.onchange = "Aurita.hierarchy_node_select_onchange(this, '#{@real_attribute_name}', #{@level})"
       return HTML.div { field + HTML.div(:id => "#{@real_attribute_name}_#{@level}_next") }
     end
   end

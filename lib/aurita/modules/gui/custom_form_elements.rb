@@ -95,7 +95,12 @@ JS
       @data_type = false
     end
     def element
-      HTML.div { Input_Field.new(@attrib) + HTML.div(:style => "position: relative !important;", :id => :autocomplete_tags_choices, :class => :autocomplete, :force_closing_tag => true) }
+      HTML.div { 
+        Input_Field.new(@attrib).decorated_element + 
+        HTML.div(:id                => :autocomplete_tags_choices, 
+                 :class             => :autocomplete, 
+                 :force_closing_tag => true) 
+      }
     end
     def js_initialize()
 code =<<JS 

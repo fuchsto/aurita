@@ -14,7 +14,7 @@ module GUI
     end
 
     def string
-      HTML.img(:src => "/aurita/images/icons/#{@icon}.gif", :class => :icon).string 
+      HTML.img(:src => "/aurita/images/icons/#{@icon}.gif", :class => :icon)
     end
 
   end

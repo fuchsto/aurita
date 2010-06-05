@@ -15,7 +15,7 @@ module GUI
 
   class Validating_Form_Field_Wrapper < Aurita::GUI::Form_Field_Wrapper
     def initialize(field)
-      if (field.kind_of? Aurita::GUI::Form_Field) && !(field.kind_of? Aurita::GUI::Hidden_Field) then
+      if !(field.kind_of? Aurita::GUI::Hidden_Field) then
         field.dom_id = field.name.to_s.gsub('.','_') unless field.dom_id
         data_type    = field.data_type
         data_type  ||= 0

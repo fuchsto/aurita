@@ -24,6 +24,14 @@ module GUI
     end
   end
 
+  class Text_Editor_Field < Aurita::GUI::Widget
+    def decorated_element
+      Decobox.new(:class => :form_field) { 
+        element()
+      }
+    end
+  end
+
 end
 end
 

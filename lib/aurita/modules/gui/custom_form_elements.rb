@@ -18,11 +18,32 @@ Aurita.import_module :gui, :user_group_selection_list_field
 module Aurita
 module GUI
 
-  class Text_Editor_Field < Textarea_Field
+  class Text_Editor_Field < Aurita::GUI::Widget
+
     def initialize(params={}, &block)
-      super(params, &block)
-      add_css_class('editor')
-      add_css_class('simple')
+      @attrib = params
+      @value  = yield if block_given?
+      @attrib[:class] ||= []
+      @attrib[:class]  << [ :editor, :simple, :widget ]
+      super()
+    end
+
+    def dom_id
+      @attrib[:id]
+    end
+
+    def element
+      @field ||= GUI::Textarea_Field.new(@attrib)
+      @field
+    end
+
+    def js_initialize
+
+      "Event.observe($('#{@attrib[:id]}_ifr').contentDocument, 'focus', 
+                     function() { Aurita.form_field_onfocus('#{@attrib[:id]}') });
+       Event.observe($('#{@attrib[:id]}_ifr').contentDocument, 'blur', 
+                     function() { Aurita.form_field_onblur('#{@attrib[:id]}') });"
+
     end
   end
 

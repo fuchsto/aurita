@@ -14,6 +14,8 @@ module GUI
   end
 
   class Validating_Form_Field_Wrapper < Aurita::GUI::Form_Field_Wrapper
+  include Aurita::GUI::I18N_Helpers
+    
     def initialize(field)
       if !(field.kind_of? Aurita::GUI::Hidden_Field) then
         field.dom_id = field.name.to_s.gsub('.','_') unless field.dom_id
@@ -25,7 +27,7 @@ module GUI
 
 #       field.onchange = "Aurita.validate_form_field_value(this, #{data_type}, #{field.required?});" unless field.onchange
 
-        field.hint     = 'hint here'
+        field.hint     = tl("#{field.name.to_s.gsub('.','--')}--hint") unless field.hint
         field.touch
       end
       super(field)

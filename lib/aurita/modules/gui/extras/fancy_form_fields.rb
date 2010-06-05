@@ -18,6 +18,12 @@ module GUI
     end
   end
 
+  class Hierarchy_Node_Select_Field < Form_Field
+    def decorated_element
+      Decobox.new(:class => :form_field) { element() } 
+    end
+  end
+
   class Select_Field < Options_Field
     def decorated_element
       HTML.div.left { HTML.div.right { HTML.div.center { element() } } }

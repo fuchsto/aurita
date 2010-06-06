@@ -10,6 +10,7 @@ module GUI
     def initialize(params={}, &block)
       @params = params
       @params[:class] = [] unless @params[:class]
+      @exact_classes  = [ @params[:class] ]
       @params[:class] = [ @params[:class] ] unless @params[:class].is_a?(Array)
       @params[:class] << :decobox
       @dom_id        = @params[:id]
@@ -30,9 +31,9 @@ module GUI
         HTML.div.decobox_header { 
           HTML.div.decobox_header_tl { HTML.div.decobox_header_tr { ' ' } }
         } + 
-        HTML.div.decobox_content { HTML.div.top { 
-          HTML.div.decobox_content_left { HTML.div.top { 
-            HTML.div.decobox_content_right { HTML.div.top { 
+        HTML.div.decobox_content { HTML.div(:class => ([ :top ] + @exact_classes)) { 
+          HTML.div.decobox_content_left { HTML.div(:class => ([ :top ] + @exact_classes)) { 
+            HTML.div.decobox_content_right { HTML.div(:class => ([ :top ] + @exact_classes)) { 
               HTML.div(:id    => @body_dom_id, 
                        :class => @body_class) {
                 @content + HTML.div(:style => 'clear: both;') { } 

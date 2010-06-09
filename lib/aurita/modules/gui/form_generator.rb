@@ -27,7 +27,7 @@ module GUI
 
 #       field.onchange = "Aurita.validate_form_field_value(this, #{data_type}, #{field.required?});" unless field.onchange
 
-        field.hint     = tl("#{field.name.to_s.gsub('.','--')}--hint") unless field.hint
+#       field.hint     = tl("#{field.name.to_s.gsub('.','--')}--hint") unless field.hint
         field.touch
       end
       super(field)

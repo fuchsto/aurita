@@ -10,7 +10,7 @@ class Language_Pack
   end
 
   def [](symbol)
-    s = @pack[@plugin][@lang][symbol]
+    s = @pack[@plugin][@lang][symbol] if @pack[@plugin] && @pack[@plugin][@lang]
     return s if s
     s = @pack[:main][@lang][symbol] if symbol != :main
     return s if s

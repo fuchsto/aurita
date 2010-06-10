@@ -91,7 +91,7 @@ module Main
                                   :params => { :hierarchy_id => h.hierarchy_id } )
           box.header = h.header
           box.body   = dec.string
-          hierarchy_list << box
+          hierarchy_list << Context_Menu_Element.new(h) { box } 
         end
         count += 1
       }

@@ -39,9 +39,9 @@ module GUI
 
   protected
 
-    @@erb = {}
+    @@erb      = {}
     @@template = {}
-    @@logger = Aurita::Log::Class_Logger.new('ERB_Template')
+    @@logger   = Aurita::Log::Class_Logger.new('ERB_Template')
 
     attr_accessor :output_buffer
 
@@ -88,6 +88,7 @@ module GUI
         @@logger.log { 'Using template ' << template_path } 
 
         @@template[@template_symbol].chomp!("\n")
+        
         IO.foreach(template_path) { |line|
           @@template[@template_symbol] << line
         }

@@ -35,14 +35,14 @@ include Aurita::Plugins
 extend Aurita::Plugins
 
   @@form_generator = Aurita::GUI::Form_Generator
-  @@erb_template = Aurita::GUI::ERB_Template
+  @@erb_template   = Aurita::GUI::ERB_Template
 
   # Redefines App_Controller.render_view to load view
   # templates from plugin directorry. 
   #
   def render_view(template, params={})
     params[:controller] = self
-    template = "#{template}.rhtml" if template.instance_of? Symbol
+    template = "#{template}.rhtml" if template.is_a? Symbol
     content = @@erb_template.new(template, params, plugin_name()).string
     @response[:html] << content
     @response[:script] << params[:script] if params[:script]
@@ -53,8 +53,8 @@ extend Aurita::Plugins
   #
   def view_string(template, params={})
     params[:controller] = self
-    template = "#{template}.rhtml" if template.instance_of? Symbol
-    @@erb_template.new(template.to_s, params, plugin_name()).string
+    template = "#{template}.rhtml" if template.is_a? Symbol
+    @@erb_template.new(template, params, plugin_name()).string
   end
 
 end

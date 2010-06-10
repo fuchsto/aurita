@@ -182,7 +182,7 @@ module Aurita
           plugin_path = plugin_name.to_s.dup
         end
 
-        if File.exists?("#{project_path()}/plugins/#{plugin_name}/lang/") then
+        if File.exists?("#{project_path()}/lang/#{plugin_name}/") then
           Lang.add_project_language_pack(plugin_name)
         end
         Aurita.log { "Importing plugin #{plugin_name}" }

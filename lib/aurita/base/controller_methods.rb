@@ -599,6 +599,9 @@ module Aurita
       if(defined? form_groups) then
         form.fields = form_groups
       end
+      if(defined? form_hints) then
+        form.hints = form_hints
+      end
 
       form.set_values(form_values)
       title_key  = (klass.table_name).gsub('.','--')+'--add'

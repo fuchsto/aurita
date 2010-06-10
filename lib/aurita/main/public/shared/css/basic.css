@@ -1224,3 +1224,127 @@ table.listing_2_columns {
   width: 450px; 
 }
 
+
+
+
+
+a.button, span.button, div.button { 
+  cursor: pointer; 
+  color: #000000 !important; 
+  border: 0 none; 
+  font-size: 0.8em;
+  text-align: center; 
+  padding: 2px; 
+}
+
+a.button .label { 
+  display: inline; 
+}
+a.button .center { 
+  padding: 5px 5px 5px 0px; 
+  height: 18px; 
+  text-align: center; 
+}
+a.toolbar_button .center { 
+  text-align: left; 
+}
+
+
+/* generic icon button, default state */
+
+a.icon_button .center { 
+  background: url('/aurita/images/icons/button_bg.png');
+}
+a.icon_button .icon { 
+  padding: 6px 0px 7px 37px;
+  display: inline; 
+}
+a.icon_button .left { 
+  padding-left: 3px; 
+}
+a.icon_button .right { 
+  padding-right: 3px; 
+}
+a.icon_button .icon { 
+  background-repeat: no-repeat; 
+  background-position: 6px 0px; 
+  background-color: transparent; 
+}
+a.icon_button .left { 
+  background: url('/aurita/images/icons/button_l.png') no-repeat scroll 0 0 transparent;
+}
+a.icon_button .right { 
+  background: url('/aurita/images/icons/button_r.png') no-repeat scroll 100% 0 transparent;
+}
+
+/* generic icon button, hover state */
+
+a.icon_button:hover .center { 
+  background: url('/aurita/images/icons/button_bg_hover.png');
+}
+a.icon_button:hover .left { 
+  background: url('/aurita/images/icons/button_l_hover.png') no-repeat scroll 0 0 transparent;
+}
+a.icon_button:hover .right { 
+  background: url('/aurita/images/icons/button_r_hover.png') no-repeat scroll 100% 0 transparent;
+}
+
+/* toolbar button, default state */
+
+a.toolbar_button .center { 
+  background: none; 
+}
+a.toolbar_button .left { 
+  background: none; 
+}
+a.toolbar_button .right { 
+  background: none; 
+}
+
+/* toolbar button, hover state */
+
+a.toolbar_button:hover .center { 
+  background: url('/aurita/images/icons/button_bg.png');
+}
+a.toolbar_button:hover .left { 
+  background: url('/aurita/images/icons/button_l.png') no-repeat scroll 0 0 transparent;
+}
+a.toolbar_button:hover .right { 
+  background: url('/aurita/images/icons/button_r.png') no-repeat scroll 100% 0 transparent;
+}
+
+/* Begin button icons */
+
+a.icon_button.ok .icon { 
+  background-image: url('/aurita/images/icons/ok.png'); 
+  background-position: 11px 4px; 
+}
+a.icon_button.cancel .icon { 
+  background-image: url('/aurita/images/icons/cancel.png'); 
+  background-position: 11px 4px; 
+}
+a.icon_button.upload_small .icon { 
+  background-image: url('/aurita/images/icons/upload_16.png'); 
+  background-position: 11px 4px; 
+}
+a.icon_button.create_folder_small .icon { 
+  background-image: url('/aurita/images/icons/folder_add_16.png'); 
+  background-position: 11px 4px; 
+}
+a.icon_button.home .icon { 
+  background-image: url('/aurita/images/icons/home.png'); 
+}
+a.icon_button.upload .icon { 
+  background-image: url('/aurita/images/icons/upload.png'); 
+}
+a.icon_button.recent_changes .icon { 
+  background-image: url('/aurita/images/icons/recent_changes.png'); 
+}
+a.icon_button.media_bookmarks .icon { 
+  background-image: url('/aurita/images/icons/bookmarked_file.png'); 
+}
+a.icon_button.create_folder .icon { 
+  background-image: url('/aurita/images/icons/folder_add.png'); 
+}
+
+/* End button icons */

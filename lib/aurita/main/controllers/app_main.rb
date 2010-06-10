@@ -34,6 +34,14 @@ module Main
 
       referer   = @params[:_request].env['HTTP_REFERER']
       remote_ip = @params[:_request].env['REMOTE_ADDR']
+      remote_ip = false if remote_ip == '127.0.0.1' 
+      
+      # Proxy pass always leads to localhost as remote address. 
+      remote_ip ||= @params[:_request].env['X-Real-IP'] 
+      remote_ip ||= @params[:_request].env['HTTP_X_REAL_IP']
+      host        = @params[:_request].env['HTTP_HOST']
+
+      referer   = '' if referer && host && referer.include?(host)
 
       User_Action.create(:controller    => params[:controller].class.to_s, 
                          :method        => params[:action], 
@@ -41,7 +49,8 @@ module Main
                          :runmode       => Aurita.runmode.to_s.first, 
                          :user_group_id => Aurita.user.user_group_id, 
                          :session_id    => Aurita.session.session_id, 
-                         :remote_ip     => remote_ip, 
+                         :remote_ip     => remote_ip.to_s, 
+                         :host          => host.to_s, 
                          :referer       => referer.to_s[0..254], 
                          :duration      => params[:time], 
                          :num_queries   => params[:num_queries], 
@@ -59,8 +68,6 @@ module Main
     end
 
     def login
-#     exec_js("Effect.Appear('login_box', { afterFinish: function() { $('login').focus(); } }); ")
-#     exec_js("Effect.Appear('login_box');")
       exec_js("$('login').focus(); "); 
       render_view(:login)
     end

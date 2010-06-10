@@ -9,7 +9,7 @@ input, select, textarea {
 ul.form_fields {
   margin: 0px; 
   padding: 0px; 
-  width: 340px; 
+  width: 320px; 
 }
 .wide ul.form_fields {
   margin: 0px; 
@@ -18,19 +18,75 @@ ul.form_fields {
 }
 
 ul.form_fields input, ul.form_fields textarea, ul.form_fields select {
-  border: 0px solid transparent; 
   color: #000000;
   font-family: inherit; 
   font-size: inherit; 
   font-weight: inherit; 
-  background-color: #eaeaea;
   padding: 5px; 
+  padding-left: 0px; 
   margin: 0px; 
+  background-color: transparent; 
+  background: none; 
+  border: 0 none; 
+  width: 298px; 
 }
-ul.form_fields input, ul.form_fields textarea, textarea.editor {
-  width: 327px; 
-  padding-left: 6px;
+ul.form_fields textarea { 
+  width: 291px; 
 }
+table.mceLayout { 
+  width: 100% !important; 
+}
+
+select option { 
+  background-color: white; 
+}
+select option[selected] { 
+  background-color: #efefef; 
+}
+
+ul.form_fields .hierarchy_node_select select { 
+  padding: 0px; 
+  margin-top: 1px; 
+}
+
+li.form_field .left { 
+  background-image: url('/aurita/images/icons/input_l.png'); 
+  background-repeat: no-repeat; 
+  background-position: 0 0; 
+  padding-left: 11px;
+}
+li.form_field .right { 
+  background-image: url('/aurita/images/icons/input_r.png'); 
+  background-repeat: no-repeat; 
+  background-position: 100% 0; 
+  padding-right: 11px;
+}
+li.form_field .center { 
+  background-image: url('/aurita/images/icons/input_bg.png'); 
+  background-repeat: repeat-x; 
+  background-position: 0 0; 
+  height: 32px; 
+  padding-top: 6px; 
+}
+li.form_field.focussed .left { 
+  background-image: url('/aurita/images/icons/input_l_focus.png'); 
+}
+li.form_field.focussed .right { 
+  background-image: url('/aurita/images/icons/input_r_focus.png'); 
+}
+li.form_field.focussed .center { 
+  background-image: url('/aurita/images/icons/input_bg_focus.png'); 
+}
+li.form_field.invalid .left, li.form_field.error .left { 
+  background-image: url('/aurita/images/icons/input_l_invalid.png'); 
+}
+li.form_field.invalid .right, li.form_field.error .right { 
+  background-image: url('/aurita/images/icons/input_r_invalid.png'); 
+}
+li.form_field.invalid .center, li.form_field.error .center { 
+  background-image: url('/aurita/images/icons/input_bg_invalid.png'); 
+}
+
 ul.form_fields textarea { 
   padding: 5px; 
   padding-right: 6px; 
@@ -40,38 +96,6 @@ ul.form_fields textarea {
 ul.form_fields textarea.large_editor { 
   height: 165px; 
 }
-input {
-  line-height: 120%; 
-  padding: 5px; 
-  background-color: #eaeaea;
-  border: 1px solid #dedede; 
-}
-
-input.checkbox, input.radio { 
-  background: none !important;
-  background-color: none !important; 
-  border-color: transparent !important; 
-}
-
-select {
-  font-family: Verdana,Arial,Helvetical; 
-  font-size: 12px; 
-  color: #000000; 
-  font-weight: normal;
-  padding: 4px; 
-  padding-left: 3px !important;
-  width: 100%; 
-  background-color: #eaeaea;
-  border: 1px solid #dedede; 
-  clear: both; 
-}
-
-.mceEditor table.mceLayout { 
-  width: 100% !important;
-} 
-
-.mceSelectList select { 
-} 
 
 .varwidth { 
   width: auto; 
@@ -103,17 +127,8 @@ textarea.lore_textarea_wide:focus {
   margin-bottom: 3px; 
 }
 
-
-input.focussed textarea.focussed, select.focussed, .focussed input, .focussed textarea, .focussed select {
-  color: #000000;
-  background-color: #f5f5f5; 
-}
-
 textarea.fullwidth { 
   width: 100%; 
-}
-textarea.editor.fullwidth { 
-
 }
 
 select:focus, select:active, select.focussed { 
@@ -125,18 +140,15 @@ textarea.text_editor {
   height: 200px; 
   overflow: auto; 
 
-  border: 1px solid #cccccc; 
   color: #000000;
-  font-family: Verdana,Arial,Helvetical; 
+  font-family: inherit; 
   font-size: 12px; 
   font-weight: lighter;
-  background-color: #cccccc;
   padding: 3px; 
 }
 textarea.text_editor:focus, textarea.text_editor:active { 
-  border: 1px solid #cccccc; 
   color: #000000;
-  font-family: Verdana,Arial,Helvetical; 
+  font-family: inherit; 
   font-size: 12px; 
   font-weight: lighter;
   padding: 3px;
@@ -151,16 +163,12 @@ textarea.text_editor:focus, textarea.text_editor:active {
 .lore_form_element_listed .lore_radio_row, .lore_form_element_listed .lore_checkbox_row { 
   margin: 0px; 
 }
-textarea_lore_readonly { 
+textarea.lore_readonly { 
   margin: 0px; 
   padding: 6px; 
   height: 70px; 
   overflow-x: hidden; 
   overflow-y: scroll; 
-}
-input.button_green:hover { 
-  color: #009900;
-  border-color: #009900;
 }
 
 button.mini { 
@@ -174,7 +182,7 @@ input.inline, textarea.inline {
 
 .form_box { 
   padding: 10px; 
-  width: 340px; 
+  width: 321px; 
   background-color: #f4f4f4; 
 }
 .form_box.wide { 
@@ -185,16 +193,17 @@ input.inline, textarea.inline {
 
 .section_content .form_box { 
   padding: 10px; 
-/*  
   margin: -10px; 
   margin-top: 0px; 
-*/
-  margin: 0px; 
+
+  background-color: rgba(255,255,255,0.5);
+  border: 1px solid #dfdfdf; 
+  border-radius: 3px; 
+  -moz-border-radius: 3px; 
 }
 
 .form_inline_box { 
   padding: 7px; 
-  border: 1px solid #000000; 
   width: 340px; 
 }
 
@@ -204,79 +213,201 @@ input.inline, textarea.inline {
 
 .form_inline_table { 
   width: 450px; 
-  border: 1px solid #000000; 
 }
 
 .button_bar { 
   margin-bottom: 10px; 
   clear: both; 
-  height: 23px; 
+  height: 35px; 
 }
 .button_bar .button, .button_bar .button:hover { 
-  margin-right: 4px; 
-  margin-left: 1px; 
-  padding-left: 7px; 
-  padding-right: 7px; 
-  padding: 2px 12px; 
   float: left; 
 }
 
 .form_button_bar { 
   margin-top: 12px; 
-  margin-left: 0px; 
+  margin-left: 3px; 
   margin-bottom: 6px; 
-  height: 22px; 
   clear: both; 
+  height: 28px; 
 }
 
 .button.form, .button.form:hover, .form_button_bar .button, .form_button_bar .button:hover { 
   width: 138px; 
-  padding: 2px 12px; 
-  font-size: 0.8em;
-  background: transparent url(/aurita/images/icons/box_header_bg.png) repeat scroll 0 0;
-}
-.form_button_bar .button, .form_button_bar .button:hover { 
   float: left; 
-  padding: 2px 12px; 
-} 
+}
 
-.button.form:hover, .form_button_bar .button:hover { 
-  background: transparent url(/aurita/images/icons/button_hover.gif) repeat scroll 0px -1px;
-}
-.form_button_bar button.submit, .form_button_bar .submit, .form_button_bar .submit:hover { 
-  margin-right: 10px; 
-}
-.form_button_bar button.cancel, .form_button_bar .cancel { 
-  margin-right: 0px; 
+.form_button_bar .submit { 
+  margin-right: 30px; 
 }
 
 a.button, span.button, div.button { 
   cursor: pointer; 
-  background: transparent url(/aurita/images/icons/box_header_bright_bg.png) repeat scroll 0 0;
   color: #000000 !important; 
-  background-color: #c0c0c0; 
-  padding: 2px; 
-  padding-left: 5px; 
-  padding-right: 5px; 
-  border-width: 1px; 
-  border-style: solid; 
-  border-color: #a0a0a0; 
-  font-size: 0.8em;
+  border: 0 none; 
   text-align: center; 
-  -moz-border-radius: 3px; 
-}
-a.button:hover { 
-  background: url('/aurita/images/icons/button_hover.gif') repeat scroll 0px -1px;
-  border-color: #676767; 
-}
-a.button:active { 
-  border-style: inset; 
+  padding: 2px; 
 }
 
-.toolbar a.button, .toolbar a.button:hover { 
-  position: relative; 
-  top: -1px; 
+a.button, a.icon_button { 
+  display: block; 
+  width: 120px; 
 }
+.toolbar a.button, .toolbar a.icon_button, .button_bar a.button, .button_bar a.icon_button { 
+  width: auto; 
+}
+
+a.button .label { 
+  display: inline; 
+}
+a.button .center { 
+  padding: 5px 5px 5px 5px; 
+  height: 18px; 
+  text-align: center; 
+}
+a.icon_button .center { 
+  padding: 5px 5px 5px 0px; 
+}
+a.toolbar_button .center { 
+  text-align: left; 
+}
+
+/* generic icon button, default state */
+
+a.button .center, a.icon_button .center { 
+  background: url('/aurita/images/icons/button_bg.png');
+}
+a.icon_button .icon { 
+  padding: 6px 0px 7px 37px;
+  display: inline; 
+  width: 24px; 
+  height: 24px; 
+}
+a.button .left, a.icon_button .left { 
+  padding-left: 3px; 
+}
+a.button .right, a.icon_button .right { 
+  padding-right: 3px; 
+}
+a.icon_button .icon { 
+  background-repeat: no-repeat; 
+  background-position: 6px 0px; 
+  background-color: transparent; 
+}
+a.button .left, a.icon_button .left { 
+  background: url('/aurita/images/icons/button_l.png') no-repeat scroll 0 0 transparent;
+}
+a.button .right, a.icon_button .right { 
+  background: url('/aurita/images/icons/button_r.png') no-repeat scroll 100% 0 transparent;
+}
+
+/* generic icon button, hover state */
+
+a.button:hover .center, a.icon_button:hover .center { 
+  background: url('/aurita/images/icons/button_bg_hover.png');
+}
+a.button:hover .left, a.icon_button:hover .left { 
+  background: url('/aurita/images/icons/button_l_hover.png') no-repeat scroll 0 0 transparent;
+}
+a.button:hover .right, a.icon_button:hover .right { 
+  background: url('/aurita/images/icons/button_r_hover.png') no-repeat scroll 100% 0 transparent;
+}
+
+/* toolbar button, default state */
+
+a.toolbar_button .center { 
+  background: none; 
+}
+a.toolbar_button .left { 
+  background: none; 
+}
+a.toolbar_button .right { 
+  background: none; 
+}
+
+/* toolbar button, hover state */
+
+a.toolbar_button:hover .center { 
+  background: url('/aurita/images/icons/button_bg.png');
+}
+a.toolbar_button:hover .left { 
+  background: url('/aurita/images/icons/button_l.png') no-repeat scroll 0 0 transparent;
+}
+a.toolbar_button:hover .right { 
+  background: url('/aurita/images/icons/button_r.png') no-repeat scroll 100% 0 transparent;
+}
+
+/* Begin button icons */
+
+a.icon_button.ok .icon { 
+  background-image: url('/aurita/images/icons/ok.png'); 
+  background-position: 11px 4px; 
+}
+a.icon_button.cancel .icon { 
+  background-image: url('/aurita/images/icons/cancel.png'); 
+  background-position: 11px 4px; 
+}
+a.icon_button.upload_small .icon { 
+  background-image: url('/aurita/images/icons/upload_16.png'); 
+  background-position: 11px 4px; 
+}
+a.icon_button.create_folder_small .icon { 
+  background-image: url('/aurita/images/icons/folder_add_16.png'); 
+  background-position: 11px 4px; 
+}
+a.icon_button.home .icon { 
+  background-image: url('/aurita/images/icons/home.png'); 
+}
+a.icon_button.upload .icon { 
+  background-image: url('/aurita/images/icons/upload.png'); 
+}
+a.icon_button.recent_changes .icon { 
+  background-image: url('/aurita/images/icons/recent_changes.png'); 
+}
+a.icon_button.media_bookmarks .icon { 
+  background-image: url('/aurita/images/icons/bookmarked_file.png'); 
+}
+a.icon_button.create_folder .icon { 
+  background-image: url('/aurita/images/icons/folder_add.png'); 
+}
+
+/* End button icons */
+
+/* Begin form field hint boxes */
+
+.form_field .hint { 
+  background: url('/aurita/images/icons/form_field_hint_t.png') no-repeat scroll 9px 0 transparent !important;
+  position: absolute; /* ul li.form_field must have position: relative */
+  right: -225px; 
+  top: 16px; 
+  width: 235px; 
+  display: none; 
+}
+.form_field.focussed .hint { 
+  display: inline; 
+}
+.form_field .hint .top {  
+  background: none !important; 
+  padding-top: 12px; 
+}
+.form_field .hint .middle { 
+  background: url('/aurita/images/icons/form_field_hint_m.png') repeat-y scroll 18px 0 transparent;
+  min-height: 20px; 
+  padding-left: 34px;
+  padding-right: 20px;
+  margin-top: 27px; 
+  font-size: 0.9em; 
+}
+.form_field .hint .middle .hint_text { 
+  position: relative;
+  top: -27px; 
+}
+.form_field .hint .bottom { 
+  background: url('/aurita/images/icons/form_field_hint_b.png') no-repeat scroll 18px 100% transparent;
+  height: 12px; 
+}
+
+/* End form field hint boxes */
 
 button.icon_button {
   width: 32px; 
@@ -293,31 +424,10 @@ button.icon_button img {
   margin: 0px; 
 }
 
-.form_fields .label { 
-  padding: 4px; 
-  display: block; 
-  padding-left: 8px; 
-  background-color: #e7e7e7; 
-  font-weight: normal; 
-}
-
-a.icon_button img { 
-  margin: -5px 0px 0px 0px; 
-}
-a.icon_button .button_label { 
-  margin-left: 4px; 
-}
-a.icon_button, a.icon_button:hover { 
-/*  padding: 4px; */
-  padding: 5px 3px; 
-}
-
 button { 
-/*  background: url('/aurita/images/icons/button_grey_bg.png'); */
   border-color: #898989 #343434 #343434 #898989; 
   background-color: #cfcfcf;
   background: url('/aurita/images/icons/button_normal.gif') repeat;  
-/*  border-color: transparent;  */
   border-width: 1px; 
   line-height: 130%;
   color: black; 
@@ -378,6 +488,7 @@ label {
   padding-top: 3px; 
   padding-bottom: 3px; 
   background-color: transparent; 
+  font-size: 1.1em; 
 /*  
   float: left; 
   padding: 6px; 
@@ -405,22 +516,6 @@ label {
   padding: 2px; 
 }
 
-li.focussed label { 
-/*  background: #e3bb88; */
-  background: #ffdba8; 
-  border-color: #ffdba8;
-  color: #000000;
-}
-li.focussed {
-  background-color: #F3CB98; 
-  border-color: #F3CB98; 
-}
-li.focussed input, li.focussed select, li.focussed textarea { 
-  color: #000000;
-  background: #ffffff; 
-  border-color: #f3cb98; 
-}
-
 li.form_field .readonly { 
   padding: 3px; 
   padding-left: 7px; 
@@ -439,6 +534,11 @@ ul li.form_field {
   list-style-type: none; 
   padding: 0px; 
   margin-bottom: 3px; 
+  position: relative; 
+}
+
+ul li.form_field .autocomplete {
+  z-index: 10; 
 }
 
 li.form_field.required {
@@ -446,13 +546,6 @@ li.form_field.required {
 li.form_field.required label {
 /*  color: #ff6855; */
   color: #dd0000;
-} 
-
-li.form_field.invalid { 
-  border-left: 1px solid red !important; 
-} 
-li.form_field.error { 
-  border: 1px solid red !important; 
 } 
 
 iframe.mceEditorIframe { 
@@ -549,38 +642,9 @@ li ul.checkbox_options label {
   color: #898989; 
 }
 
-.listbox .items { 
-  border: 1px outset white; 
-}
-.listbox .item { 
-  clear: both; 
-  padding: 3px; 
-  padding-left: 8px; 
-  background: url("/aurita/images/icons/row_bg.png") repeat-x scroll 0 0 #E2E2E2;
-}
-.listbox .item .checkbox { 
-  float: left; 
-  display: inline; 
-  margin-top: 3px; 
-  margin-right: 10px; 
-}
-
-fieldset { 
-  border: 1px solid #cccccc;
-  margin-top: 12px; 
-  padding: 4px; 
-}
-
-legend { 
-  font-size: 17px; 
-  font-color: #000000; 
-  font-weight: bold; 
-}
-
 fieldset.list table.list { 
   border-color: transparent; 
 }
-
 fieldset.list { 
   width: 450px; 
   border: 1px solid #909090; 
@@ -640,26 +704,23 @@ fieldset legend {
   padding: 10px; 
   margin-left: -10px; 
   padding-top: 0px; 
-}
-
-.tag_autocomplete_field_wrap li.autocomplete { 
-  width: 100% !important; 
-  padding-left: 4px !important; 
-}
-.tag_autocomplete_field_wrap ul.autocomplete { 
-  width: 100% !important; 
+  padding-bottom: 0px; 
 }
 
 .category_select_field button { 
   width: 30px; 
 }
 
-.selection_list_field { 
-/*  border: 1px solid #dfdfdf; */
-  background-color: #f0f0f0; 
-}
 .selection_list_field ul { 
-  padding-bottom: 2px !important; 
+  padding-bottom: 5px !important; 
+  padding-left: 5px; 
+  margin-left: 10px; 
+  margin-right: 10px; 
+  border: 1px solid white; 
+  background-color: rgba(255,255,255,0.4);
+  border-radius: 3px; 
+  -moz-border-radius: 3px; 
+  -webkit-border-radius: 3px; 
 }
 
 .selection_list_field ul ul.checkbox_options { 
@@ -669,6 +730,7 @@ fieldset legend {
 
 ul.form_fields .multi_file_field_wrap input { 
   margin-left: 4px; 
+  border: 0px solid transparent; 
 }
 ul.form_fields .multi_file_entry input { 
 /*  width: 312px; */
@@ -694,11 +756,11 @@ div.timespan_delimiter {
   padding-right: 10px; 
 }
 
-input.search { 
-  background: transparent url(/aurita/images/search.gif) no-repeat scroll 7px 4px;
-  padding-left: 30px !important; 
+#autocomplete_tags_choices { 
+  border-top: 0 none; 
+  margin-left: 10px; 
+  margin-top: -8px; 
 }
-ul.form_fields input.search { 
-  width: 303px !important;
+#autocomplete_tags_choices ul.autocomplete { 
+  width: 295px; 
 }
-

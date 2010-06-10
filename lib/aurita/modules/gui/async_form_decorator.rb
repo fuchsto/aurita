@@ -66,11 +66,11 @@ module GUI
       @buttons        ||= Proc.new { |btn_params|
         Text_Button.new(:class   => :submit, 
                         :onclick => btn_params[:onclick_ok].to_s, 
-                        :icon    => 'button_ok.gif', 
+                        :icon    => :ok, 
                         :label   => btn_params[:label_ok].to_s).string + 
         Text_Button.new(:class   => :cancel, 
                         :onclick => btn_params[:onclick_cancel].to_s, 
-                        :icon    => 'button_cancel.gif', 
+                        :icon    => :cancel, 
                         :label   => btn_params[:label_cancel].to_s).string
       }
       super()

@@ -27,9 +27,14 @@ $plugin_styles = Dir.glob("#{Aurita.project.base_path}plugins/*.rb").map { |path
 
 project_style_base = "#{Aurita.project.base_path}public/css/"
 $project_styles = Dir.glob("#{project_style_base}*.css").map { |path|
-  path = path.split('/')[-1].gsub('.css','').to_sym 
+  if !(path =~ /(.+)_ie.\.css/) then
+    path = path.split('/')[-1].gsub('.css','').to_sym 
+  end
 }
 $project_styles -= [ :aurita_bundle ]
+$project_styles = $project_styles.reject { |p|
+  p.nil?
+}
 
 def append_style(file_to, path_from)
   File.open(path_from, "r") { |f|

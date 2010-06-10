@@ -221,7 +221,7 @@ add_synonym : Synonym hinzuf&uuml;gen
 add_synonyms : Synonyme hinzuf&uuml;gen
 select_synonym_tag : Begriff eingeben
 list_all_synonyms : Alle Synonyme 
-select_additional_category : \-\- Kategorie hinzuf&uuml;gen \-\-
+select_additional_category : \-\- Add category \-\-
 
 tag_relevance : Relevanz
 edit_tags : Edit tags
@@ -310,3 +310,14 @@ enable_category_versions : activate
 disable_category_versions : deactivate
 
 confirm_empty_trash : Empty trash? 
+
+
+public--content--tags--hint : You can find this content later by searching for one of the keywords you enter here. 
+public--category--category_id--hint : Select categories to publish this content in. Other users will only be allowed to see and edit this content if they are a member of at least one category you selected. 
+public--media_asset--title--hint : The name of this file. This will also be its filename when downloading it. 
+public--media_asset--description--hint : Enter an (optional) description for this file. 
+public--media_asset--media_folder_id--hint : Select a directory to upload this file into. 
+public--media_asset_folder--physical_path--hint : An arbitrary name for the new directory
+upload_file[]--hint : Select a file to upload
+
+

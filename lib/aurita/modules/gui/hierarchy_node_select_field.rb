@@ -24,8 +24,9 @@ module GUI
 
     def element
       return HTML.div unless @option_values.length > 0
+     # return @element if @element
       
-      @option_labels = [ '-- Unterordner-- '] + @option_labels
+      @option_labels = [ '--&gt; '] + @option_labels
       @option_values = [ '' ] + @option_values
       
       @option_labels.map! { |l|
@@ -33,10 +34,12 @@ module GUI
         @level.to_i.times { label << '&nbsp;' }
         label << l
       }
-      @attrib[:label] = label
+      @attrib[:label]    = label
+      @attrib[:onchange] = "Aurita.hierarchy_node_select_onchange(this, '#{@real_attribute_name}', #{@level})"
       field = super()
-      field.onchange = "Aurita.hierarchy_node_select_onchange(this, '#{@real_attribute_name}', #{@level})"
-      return HTML.div { field + HTML.div(:id => "#{@real_attribute_name}_#{@level}_next") }
+      
+      @element = HTML.div { field + HTML.div(:id => "#{@real_attribute_name}_#{@level}_next") }
+      return @element
     end
   end
   
@@ -58,6 +61,14 @@ module GUI
     end
     
     def element
+      HTML.div.hierarchy_node_select { 
+        Hidden_Field.new(:id    => @attrib[:name], 
+                         :name  => @attrib[:name], 
+                         :value => @value) + select_boxes()
+      }
+    end
+
+    def select_boxes
       result   = Array.new
       levels   = reverse_node_map(@value) if @value
       levels ||= []
@@ -65,7 +76,9 @@ module GUI
         field = @entry_type.new(:name          => @attrib[:name],
                                 :class         => [ :hierarchy_node_select, "hierarchy_level_#{idx}" ], 
                                 :option_values => level[:option_values], 
-                                :option_labels => level[:option_labels],  
+                                :option_labels => level[:option_labels], 
+                                :onfocus       => @onfocus, 
+                                :onblur        => @onblur, 
                                 :level         => idx, 
                                 :value         => level[:value])
         inject_element = result
@@ -74,18 +87,28 @@ module GUI
         end
         inject_element << field.element if inject_element
       }
-      
-      return HTML.div.hierarchy_node_select { 
-        Hidden_Field.new(:id    => @attrib[:name], 
-                         :name  => @attrib[:name], 
-                         :value => @value) + result 
-      }
+      @select_boxes = result
+      return @select_boxes
     end
     
     def readonly_element
       HTML.div { @value } 
     end
     
+    def onfocus=(fun)
+      @onfocus = fun
+      @select_boxes ||= select_boxes()
+      @select_boxes.each { |s| s.onfocus = fun }
+      touch()
+    end
+
+    def onblur=(fun)
+      @onblur = fun
+      @select_boxes ||= select_boxes()
+      @select_boxes.each { |s| s.onblur = fun }
+      touch()
+    end
+
   protected
 
     # Returns parent node ids of given node id. 
@@ -105,13 +128,10 @@ module GUI
       levels = []
       e      = @model.get(node_id)
 
-      STDERR.puts "e: #{e}"
-
       return [] unless e
 
       children = e.child_nodes 
 
-      STDERR.puts "c: #{children.inspect}"
       if children then
         values = []
         labels = []

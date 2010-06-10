@@ -14,6 +14,7 @@ $core_styles = [
   :basic, 
   :main, 
   :form, 
+  :fancy, 
   :calendar
 ]
 

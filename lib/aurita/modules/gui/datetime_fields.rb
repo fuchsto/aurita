@@ -48,7 +48,7 @@ module GUI
 
       @attrib[:onclick] = trigger_onclick
       HTML.div.datepick_field { 
-        Input_Field.new(@attrib.update(:value => @value, :readonly => true, :id => name)) + 
+        Input_Field.new(@attrib.update(:value => @value, :readonly => true, :id => name)).decorated_element + 
         Text_Button.new(:class   => :datepick_clear, 
                         :onclick => clear_onclick) { 'X' }  + 
         Text_Button.new(:id      => trigger_name, 
@@ -56,6 +56,7 @@ module GUI
                         :onclick => trigger_onclick) { tl(:choose_date) } 
       }
     end
+
   end
 
   class Timespan_Field < Form_Field
@@ -79,7 +80,7 @@ module GUI
       from_name = "#{name}_begin"
       to_name   = "#{name}_end"
 
-      HTML.div.timespan_field { 
+      Decobox.new(:class => :form_field) { 
         Time_Field.new(:name => from_name, :value => @from, :class => [ :timespan, :from ], :time_format => 'hm', :minute_range => @minute_range) + 
         HTML.div(:class => :timespan_delimiter) { tl(:timespan_to) } + 
         Time_Field.new(:name => to_name, :value => @to, :class => [ :timespan, :to ], :time_format => 'hm', :minute_range => @minute_range) + 

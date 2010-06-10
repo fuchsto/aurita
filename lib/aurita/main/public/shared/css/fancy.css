@@ -102,6 +102,64 @@
 
 /* End deco box */
 
+/* Begin form field deco box */
+
+.form_field .decobox_header { 
+  padding: 0px; 
+  height: 8px; 
+  margin: 0px; 
+}
+.form_field .decobox_header_tl { 
+  height: 8px; 
+  margin-left: 8px; 
+}
+.form_field .decobox_header_tr { 
+  height: 8px; 
+  margin-right: 8px;
+}
+.form_field .decobox_footer { 
+  height: 8px; 
+}
+.form_field .decobox_footer_tl { 
+  height: 8px; 
+  margin-left: 8px; 
+}
+.form_field .decobox_footer_tr { 
+  height: 8px; 
+  margin-right: 8px;
+}
+
+/* End form field deco box */
+
+/* Begin inset deco box */
+
+.inset .decobox_header { 
+  padding: 0px; 
+  height: 5px; 
+  margin: 0px; 
+}
+.inset .decobox_header_tl { 
+  height: 5px; 
+  margin-left: 5px; 
+}
+.inset .decobox_header_tr { 
+  height: 5px; 
+  margin-right: 5px;
+}
+.inset .decobox_footer { 
+  height: 5px; 
+}
+.inset .decobox_footer_tl { 
+  height: 5px; 
+  margin-left: 5px; 
+}
+.inset .decobox_footer_tr { 
+  height: 5px; 
+  margin-right: 5px;
+}
+
+/* End form inset box */
+
 .decobox { 
   margin: 0pt auto; 
 }

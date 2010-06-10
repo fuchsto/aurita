@@ -1,4 +1,10 @@
 
+
+.icon_button.categories .icon { 
+  background: url('/aurita/images/icons/categories.gif') no-repeat scroll 6px 3px; 
+}
+
+
 .main_autocomplete_box { 
   border-top: 1px solid white; 
   border-left: 1px solid white; 

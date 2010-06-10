@@ -17,7 +17,8 @@ ul.form_fields {
   width: 540px; 
 }
 
-ul.form_fields input, ul.form_fields textarea, ul.form_fields select {
+ul.form_fields input, ul.form_fields textarea, ul.form_fields select, 
+.form_field input, .form_field textarea, .form_field select {
   color: #000000;
   font-family: inherit; 
   font-size: inherit; 
@@ -28,8 +29,9 @@ ul.form_fields input, ul.form_fields textarea, ul.form_fields select {
   background-color: transparent; 
   background: none; 
   border: 0 none; 
-  width: 298px; 
+  width: 300px; 
 }
+
 ul.form_fields textarea { 
   width: 291px; 
 }
@@ -49,42 +51,54 @@ ul.form_fields .hierarchy_node_select select {
   margin-top: 1px; 
 }
 
-li.form_field .left { 
+.form_field .left { 
   background-image: url('/aurita/images/icons/input_l.png'); 
   background-repeat: no-repeat; 
   background-position: 0 0; 
   padding-left: 11px;
 }
-li.form_field .right { 
+.form_field .right { 
   background-image: url('/aurita/images/icons/input_r.png'); 
   background-repeat: no-repeat; 
   background-position: 100% 0; 
   padding-right: 11px;
 }
-li.form_field .center { 
+.form_field .center { 
   background-image: url('/aurita/images/icons/input_bg.png'); 
   background-repeat: repeat-x; 
   background-position: 0 0; 
   height: 32px; 
   padding-top: 6px; 
 }
-li.form_field.focussed .left { 
+.form_field.focussed .left { 
   background-image: url('/aurita/images/icons/input_l_focus.png'); 
 }
-li.form_field.focussed .right { 
+.form_field.focussed .right { 
   background-image: url('/aurita/images/icons/input_r_focus.png'); 
 }
-li.form_field.focussed .center { 
+.form_field.focussed .center { 
   background-image: url('/aurita/images/icons/input_bg_focus.png'); 
 }
-li.form_field.invalid .left, li.form_field.error .left { 
+.form_field.invalid .left, .form_field.error .left { 
   background-image: url('/aurita/images/icons/input_l_invalid.png'); 
 }
-li.form_field.invalid .right, li.form_field.error .right { 
+.form_field.invalid .right, .form_field.error .right { 
   background-image: url('/aurita/images/icons/input_r_invalid.png'); 
 }
-li.form_field.invalid .center, li.form_field.error .center { 
+.form_field.invalid .center, .form_field.error .center { 
   background-image: url('/aurita/images/icons/input_bg_invalid.png'); 
+}
+.form_field.readonly_wrap .left, 
+.form_field.readonly_wrap .right, 
+.form_field.readonly_wrap .center { 
+  background-image: none !important; 
+}
+
+input.search { 
+  padding-left: 20px !important; 
+  background: url('/aurita/images/icons/search.gif') no-repeat scroll 2px 4px !important; 
+  border: 0 none; 
+  background-color: transparent; 
 }
 
 ul.form_fields textarea { 
@@ -193,7 +207,6 @@ input.inline, textarea.inline {
 
 .section_content .form_box { 
   padding: 10px; 
-  margin: -10px; 
   margin-top: 0px; 
 
   background-color: rgba(255,255,255,0.5);
@@ -251,7 +264,6 @@ a.button, span.button, div.button {
 
 a.button, a.icon_button { 
   display: block; 
-  width: 120px; 
 }
 .toolbar a.button, .toolbar a.icon_button, .button_bar a.button, .button_bar a.icon_button { 
   width: auto; 
@@ -372,6 +384,27 @@ a.icon_button.create_folder .icon {
 }
 
 /* End button icons */
+
+/* Begin buttons with no border */
+
+a.no_border.button .left, a.no_border.button .right, a.no_border.button .center, 
+a.no_border.icon_button .left, a.no_border.icon_button .right, a.no_border.icon_button .center { 
+  background: none; 
+  background-image: none; 
+  background-color: transparent; 
+}
+
+a.no_border.button:hover .center { 
+  background: url('/aurita/images/icons/button_bg.png');
+}
+a.no_border.button:hover .left { 
+  background: url('/aurita/images/icons/button_l.png') no-repeat scroll 0 0 transparent;
+}
+a.no_border.button:hover .right { 
+  background: url('/aurita/images/icons/button_r.png') no-repeat scroll 100% 0 transparent;
+}
+
+/* End buttons with no border */
 
 /* Begin form field hint boxes */
 
@@ -579,6 +612,15 @@ input.datepick {
   line-height: 19px; 
   position: relative; 
   top: -1px; 
+  float: left; 
+  padding-top: 4px; 
+}
+.datepick_field .left { 
+  width: 178px; 
+  float: left; 
+}
+.datepick_field .button .left { 
+  width: 52px; 
 }
 
 ul.radio_options { 

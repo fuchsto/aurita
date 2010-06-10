@@ -1224,10 +1224,6 @@ table.listing_2_columns {
   width: 450px; 
 }
 
-
-
-
-
 a.button, span.button, div.button { 
   cursor: pointer; 
   color: #000000 !important; 
@@ -1348,3 +1344,54 @@ a.icon_button.create_folder .icon {
 }
 
 /* End button icons */
+
+
+/* Begin deco field */
+
+.decofield { 
+  display: inline; 
+}
+.decofield.inset { 
+  margin-top: 1px; 
+} 
+.decofield.inset .left { 
+  padding-left: 13px; 
+  background: url('/aurita/images/icons/inset_input_l.png');
+  background-repeat: no-repeat; 
+}
+.decofield.inset .right { 
+  padding-right: 13px; 
+  background: url('/aurita/images/icons/inset_input_r.png');
+  background-repeat: no-repeat; 
+  background-position: 100% 0;
+}
+.decofield.inset .center { 
+  background: url('/aurita/images/icons/inset_input_m.png');
+  background-repeat: repeat-x; 
+  padding: 3px 3px 3px 3px; 
+  height: 24px; 
+  line-height: 24px;
+}
+
+.decofield.inset_light .left { 
+  padding-left: 14px; 
+  background: url('/aurita/images/icons/inset_input_light_l.png');
+  background-repeat: no-repeat; 
+}
+.decofield.inset_light .right { 
+  padding-right: 14px; 
+  background: url('/aurita/images/icons/inset_input_light_r.png');
+  background-repeat: no-repeat; 
+  background-position: 100% 0;
+}
+.decofield.inset_light .center { 
+  background: url('/aurita/images/icons/inset_input_light_m.png');
+  background-repeat: repeat-x; 
+  padding: 3px 3px 3px 3px; 
+  height: 24px; 
+  line-height: 24px;
+}
+
+/* End deco field */
+
+

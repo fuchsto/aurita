@@ -98,16 +98,17 @@ module Main
     def system_box
       result = []
 
-      user_categories = HTML.a(:class => :icon, 
-                               :onclick => "Aurita.load({ action: 'User_Category/index'});") { 
-          icon_tag(:categories) +
+      user_categories = Text_Button.new(:class  => :toolbar_button, 
+                                        :icon   => :categories, 
+                                        :action => 'User_Category/index') { 
           tl(:user_categories) 
       }
 
-      components = plugin_get(Hook.main.toolbar)
-      tool_box = Box.new(:class => :topic, :id => 'toolbox', :type => :none)
+      components      = plugin_get(Hook.main.toolbar).map { |button| button.add_css_class(:toolbar_button); button }
+
+      tool_box        = Box.new(:class => :topic, :id => 'toolbox', :type => :none)
       tool_box.header = tl(:tools)
-      tool_box.body = [ user_categories ] + components
+      tool_box.body   = HTML.div.toolbar { [ user_categories ] + components } 
 
       result << tool_box
 

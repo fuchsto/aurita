@@ -89,9 +89,9 @@ module Main
                                   :class  => :topic, 
                                   :id     => "hierarchy_#{h.hierarchy_id}", 
                                   :params => { :hierarchy_id => h.hierarchy_id } )
-          box.header = h.header
+          box.header = Context_Menu_Element.new(h) { h.header }
           box.body   = dec.string
-          hierarchy_list << Context_Menu_Element.new(h) { box } 
+          hierarchy_list << box 
         end
         count += 1
       }

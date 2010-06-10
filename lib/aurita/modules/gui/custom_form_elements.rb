@@ -14,6 +14,8 @@ Aurita.import_module :gui, :category_user_selection_list_field
 Aurita.import_module :gui, :user_role_selection_list_field
 Aurita.import_module :gui, :user_group_selection_list_field
 
+Aurita.import_module :gui, :extras, :decofield
+Aurita.import_module :gui, :extras, :decobox
 
 module Aurita
 module GUI

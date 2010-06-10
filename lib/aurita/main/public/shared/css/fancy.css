@@ -64,89 +64,89 @@
 }
 
 .white .decobox_header { 
-  background: url('/aurita/images/box_white/box_tl.png') no-repeat 0 0; 
+  background: url('/aurita/images/icons/box_white/box_tl.png') no-repeat 0 0; 
 }
 .white .decobox_header_tl { 
-  background: url('/aurita/images/box_white/box_tr.png') 100% 0 no-repeat; 
+  background: url('/aurita/images/icons/box_white/box_tr.png') 100% 0 no-repeat; 
 }
 .white .decobox_header_tr { 
-  background: url('/aurita/images/box_white/box_t.png') 0 0 repeat-x; 
+  background: url('/aurita/images/icons/box_white/box_t.png') 0 0 repeat-x; 
 }
 .white .decobox_footer { 
-  background: url('/aurita/images/box_white/box_bl.png') 0 0 no-repeat; 
+  background: url('/aurita/images/icons/box_white/box_bl.png') 0 0 no-repeat; 
 }
 .white .decobox_footer_tl { 
-  background: url('/aurita/images/box_white/box_br.png') 100% 0 no-repeat; 
+  background: url('/aurita/images/icons/box_white/box_br.png') 100% 0 no-repeat; 
 }
 .white .decobox_footer_tr { 
-  background: url('/aurita/images/box_white/box_b.png') 0 0 repeat-x; 
+  background: url('/aurita/images/icons/box_white/box_b.png') 0 0 repeat-x; 
 }
 .white .decobox_content_left div.top.white { 
-  background: url('/aurita/images/box_white/box_l.png') 0 0 repeat-y; 
+  background: url('/aurita/images/icons/box_white/box_l.png') 0 0 repeat-y; 
 }
 .white .decobox_content_right div.top.white { 
-  background: url('/aurita/images/box_white/box_r.png') 100% 0 repeat-y; 
+  background: url('/aurita/images/icons/box_white/box_r.png') 100% 0 repeat-y; 
 }
 .white .decobox_content_body { 
-  background: url('/aurita/images/box_white/box_m.png'); 
+  background: url('/aurita/images/icons/box_white/box_m.png'); 
 }
 
 
 .form_field .decobox_header { 
-  background: url('/aurita/images/box_form_field/box_tl.png') no-repeat 0 0; 
+  background: url('/aurita/images/icons/box_form_field/box_tl.png') no-repeat 0 0; 
 }
 .form_field .decobox_header_tl { 
-  background: url('/aurita/images/box_form_field/box_tr.png') 100% 0 no-repeat; 
+  background: url('/aurita/images/icons/box_form_field/box_tr.png') 100% 0 no-repeat; 
 }
 .form_field .decobox_header_tr { 
-  background: url('/aurita/images/box_form_field/box_t.png') 0 0 repeat-x; 
+  background: url('/aurita/images/icons/box_form_field/box_t.png') 0 0 repeat-x; 
 }
 .form_field .decobox_footer { 
-  background: url('/aurita/images/box_form_field/box_bl.png') 0 0 no-repeat; 
+  background: url('/aurita/images/icons/box_form_field/box_bl.png') 0 0 no-repeat; 
 }
 .form_field .decobox_footer_tl { 
-  background: url('/aurita/images/box_form_field/box_br.png') 100% 0 no-repeat; 
+  background: url('/aurita/images/icons/box_form_field/box_br.png') 100% 0 no-repeat; 
 }
 .form_field .decobox_footer_tr { 
-  background: url('/aurita/images/box_form_field/box_b.png') 0 0 repeat-x; 
+  background: url('/aurita/images/icons/box_form_field/box_b.png') 0 0 repeat-x; 
 }
 .form_field .decobox_content_left div.top.form_field { 
   background: none; 
-  background: url('/aurita/images/box_form_field/box_l.png') 0 0 repeat-y !important; 
+  background: url('/aurita/images/icons/box_form_field/box_l.png') 0 0 repeat-y !important; 
 }
 .form_field .decobox_content_right div.top.form_field { 
   background: none; 
-  background: url('/aurita/images/box_form_field/box_r.png') 100% 0 repeat-y !important; 
+  background: url('/aurita/images/icons/box_form_field/box_r.png') 100% 0 repeat-y !important; 
 }
 .form_field .decobox_content_body { 
-  background: url('/aurita/images/box_form_field/box_m.png'); 
+  background: url('/aurita/images/icons/box_form_field/box_m.png'); 
 }
 
 .form_field.focussed .decobox_header { 
-  background: url('/aurita/images/box_form_field/box_tl_focus.png') no-repeat 0 0; 
+  background: url('/aurita/images/icons/box_form_field/box_tl_focus.png') no-repeat 0 0; 
 }
 .form_field.focussed .decobox_header_tl { 
-  background: url('/aurita/images/box_form_field/box_tr_focus.png') 100% 0 no-repeat; 
+  background: url('/aurita/images/icons/box_form_field/box_tr_focus.png') 100% 0 no-repeat; 
 }
 .form_field.focussed .decobox_header_tr { 
-  background: url('/aurita/images/box_form_field/box_t_focus.png') 0 0 repeat-x; 
+  background: url('/aurita/images/icons/box_form_field/box_t_focus.png') 0 0 repeat-x; 
 }
 .form_field.focussed .decobox_footer { 
-  background: url('/aurita/images/box_form_field/box_bl_focus.png') 0 0 no-repeat; 
+  background: url('/aurita/images/icons/box_form_field/box_bl_focus.png') 0 0 no-repeat; 
 }
 .form_field.focussed .decobox_footer_tl { 
-  background: url('/aurita/images/box_form_field/box_br_focus.png') 100% 0 no-repeat; 
+  background: url('/aurita/images/icons/box_form_field/box_br_focus.png') 100% 0 no-repeat; 
 }
 .form_field.focussed .decobox_footer_tr { 
-  background: url('/aurita/images/box_form_field/box_b_focus.png') 0 0 repeat-x; 
+  background: url('/aurita/images/icons/box_form_field/box_b_focus.png') 0 0 repeat-x; 
 }
 .form_field.focussed .decobox_content_left div.top { 
   background: none; 
-  background: url('/aurita/images/box_form_field/box_l_focus.png') 0 0 repeat-y !important; 
+  background: url('/aurita/images/icons/box_form_field/box_l_focus.png') 0 0 repeat-y !important; 
 }
 .form_field.focussed .decobox_content_right div.top { 
   background: none; 
-  background: url('/aurita/images/box_form_field/box_r_focus.png') 100% 0 repeat-y !important; 
+  background: url('/aurita/images/icons/box_form_field/box_r_focus.png') 100% 0 repeat-y !important; 
 }
 .form_field.focussed .decobox_content_body { 
   background: white; 
@@ -154,31 +154,31 @@
 
 
 .inset .decobox_header { 
-  background: url('/aurita/images/box_inset/box_tl.png') no-repeat 0 0; 
+  background: url('/aurita/images/icons/box_inset/box_tl.png') no-repeat 0 0; 
 }
 .inset .decobox_header_tl { 
-  background: url('/aurita/images/box_inset/box_tr.png') 100% 0 no-repeat; 
+  background: url('/aurita/images/icons/box_inset/box_tr.png') 100% 0 no-repeat; 
 }
 .inset .decobox_header_tr { 
-  background: url('/aurita/images/box_inset/box_t.png') 0 0 repeat-x; 
+  background: url('/aurita/images/icons/box_inset/box_t.png') 0 0 repeat-x; 
 }
 .inset .decobox_footer { 
-  background: url('/aurita/images/box_inset/box_bl.png') 0 0 no-repeat; 
+  background: url('/aurita/images/icons/box_inset/box_bl.png') 0 0 no-repeat; 
 }
 .inset .decobox_footer_tl { 
-  background: url('/aurita/images/box_inset/box_br.png') 100% 0 no-repeat; 
+  background: url('/aurita/images/icons/box_inset/box_br.png') 100% 0 no-repeat; 
 }
 .inset .decobox_footer_tr { 
-  background: url('/aurita/images/box_inset/box_b.png') 0 2px repeat-x; 
+  background: url('/aurita/images/icons/box_inset/box_b.png') 0 2px repeat-x; 
 }
 .inset .decobox_content_left div.top.inset { 
-  background: url('/aurita/images/box_inset/box_l.png') 0 0 repeat-y; 
+  background: url('/aurita/images/icons/box_inset/box_l.png') 0 0 repeat-y; 
 }
 .inset .decobox_content_right div.top.inset { 
-  background: url('/aurita/images/box_inset/box_r.png') 100% 0 repeat-y; 
+  background: url('/aurita/images/icons/box_inset/box_r.png') 100% 0 repeat-y; 
 }
 .inset .decobox_content_body { 
-  background: url('/aurita/images/box_inset/box_m.png'); 
+  background: url('/aurita/images/icons/box_inset/box_m.png'); 
 }
 
 

@@ -43,6 +43,65 @@
   line-height: 24px;
 }
 
+/* Begin deco box */
+
+.decobox_content { 
+  margin: 0px; 
+  padding: 0px; 
+}
+.light_black .decobox_content, .black .decobox_content { 
+  color: white; 
+}
+.decobox_header { 
+  padding: 0px; 
+  height: 16px; 
+  margin: 0px; 
+}
+.decobox_header_tl { 
+  height: 16px; 
+  margin-left: 16px; 
+}
+.decobox_header_tr { 
+  height: 16px; 
+  margin-right: 16px;
+}
+.decobox_footer { 
+  padding: 0px;      
+  font-size: 13px; 
+  height: 16px; 
+}
+.decobox_footer_tl { 
+  height: 16px; 
+  margin-left: 16px; 
+}
+.decobox_footer_tr { 
+  height: 16px; 
+  margin-right: 16px;
+}
+.decobox_content_left {
+  height: 100%; 
+}
+.decobox_content_left div.top { 
+  height: 100%; 
+}
+.decobox_content_right {
+  height: 100%; 
+}
+.decobox_content_right div.top { 
+  height: 100%; 
+  padding: 0px; 
+}
+.decobox h3 { 
+  padding: 0px;
+  margin: 0px; 
+  text-align: right; 
+  font-family: Helvetica,Verdana,Arial,sans-serif;
+  font-weight: lighter; 
+  font-size: 1.8em;
+}
+
+/* End deco box */
+
 .decobox { 
   margin: 0pt auto; 
 }

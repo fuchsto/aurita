@@ -1,7 +1,7 @@
 
 require('aurita')
 require('aurita-gui')
-require('aurita-gui/widget')
+require('aurita-gui/form/select_field')
 
 Aurita.import_module :gui, :i18n_helpers
 
@@ -13,7 +13,7 @@ module GUI
   # is already present in @value (an Array of primary keys) are skipped. 
   # Calls 'Aurita.Main.selection_list_add(@parent.dom_id)
   #
-  class Entity_Select_Field < Aurita::GUI::Widget
+  class Entity_Select_Field < Select_Field
   include Aurita::GUI::I18N_Helpers
     
     # Paramters: 
@@ -26,33 +26,30 @@ module GUI
       @parent   ||= params[:parent]
       @entities ||= params[:entities]
       @entities ||= @parent.entities if @parent && @parent.respond_to?(:entities)
-      @attrib   ||= params
-      @attrib.delete(:parent)
-      @attrib.delete(:entities)
+      params   ||= params
+      params.delete(:parent)
+      params.delete(:entities)
       
-      if !@attrib[:options] && !@attrib[:option_values] then
-        @attrib[:option_values] ||= [ '' ]
-        @attrib[:option_labels] ||= [ tl(:select_option) ]
+      if !params[:options] && !params[:option_values] then
+        params[:option_values] ||= [ '' ]
+        params[:option_labels] ||= [ tl(:select_option) ]
         @entities.each { |e|
-          @attrib[:option_values] << e.pkey
-          @attrib[:option_labels] << e.label
+          params[:option_values] << e.pkey
+          params[:option_labels] << e.label
         }
       end
       
-      if @attrib[:name].empty? then
-        @attrib[:name] ||= @entities.first.class.primary_key_name if @entities.first
+      if params[:name].empty? then
+        params[:name] ||= @entities.first.class.primary_key_name if @entities.first
       end
       if @parent then
-        @attrib[:onchange] ||= "Aurita.Main.selection_list_add({ select_field:'#{@attrib[:id]}', 
+        params[:onchange] ||= "Aurita.Main.selection_list_add({ select_field:'#{params[:id]}', 
                                                                  name: '#{@parent.options_name}' });" 
       end
       
-      super()
+      super(params)
     end
 
-    def element
-      Select_Field.new(@attrib)
-    end
   end
   
 end

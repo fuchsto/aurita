@@ -2,7 +2,7 @@
 require('aurita')
 require('aurita-gui')
 require('aurita-gui/widget')
-# Aurita.import_module :gui, :erb_helpers
+
 Aurita.import_module :gui, :i18n_helpers
 Aurita.import_module :gui, :entity_select_field
 

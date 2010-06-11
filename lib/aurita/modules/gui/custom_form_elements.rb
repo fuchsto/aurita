@@ -116,9 +116,10 @@ JS
       @onselect    ||= ''
       super(params, &block)
       @data_type = false
+      add_css_class(:search)
     end
     def element
-      HTML.div { 
+      HTML.div.form_field { 
         Input_Field.new(@attrib).decorated_element + 
         HTML.div(:id                => :autocomplete_tags_choices, 
                  :class             => :autocomplete, 

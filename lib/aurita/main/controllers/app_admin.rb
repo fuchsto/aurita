@@ -21,7 +21,7 @@ module Main
         } + 
         Toolbar_Button.new(:icon   => :synonyms, 
                         :action => 'Tag_Synonym/edit') { 
-          tl(:edit_tags)
+          tl(:edit_synonyms)
         } 
       }
 

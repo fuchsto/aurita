@@ -24,7 +24,8 @@
                :name    => :category_id, 
                :user    => user) 
   %>
-  <%= gui.button(:onclick => "Aurita.submit_form('user_category_form', { 
+  <%= gui.button(:class   => :small, 
+                 :onclick => "Aurita.submit_form('user_category_form', { 
                                 onload: function() { 
                                   Aurita.load({ element: 'user_category_list',  
                                                 action: 'User_Category/category_list/user_group_id=#{user.user_group_id}'}); 

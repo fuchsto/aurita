@@ -111,14 +111,16 @@ module Main
       exec_js("Aurita.Main.init_autocomplete_tag_selection(); ")
 
       Page.new(:header => tl(:edit_synonyms)) { 
+
+        HTML.div.form_box { 
+          Text_Button.new(:icon   => :synonyms, 
+                          :action => 'Tag_Synonym/list_all') { tl(:list_all_synonyms) }
+        } + 
         HTML.div.form_box {
           HTML.label { tl(:select_synonym_tag) } + 
           GUI::Tag_Autocomplete_Field.new(:name => :tag, :label => tl(:tag), :style => 'width: 329px; ') 
         } + 
-        HTML.div(:id => :tag_form) { show() if param(:tag) } + 
-        HTML.div { 
-          link_to(:action => :list_all) { tl(:list_all_synonyms) }
-        }
+        HTML.div(:id => :tag_form) { show() if param(:tag) } 
       }
     end
 

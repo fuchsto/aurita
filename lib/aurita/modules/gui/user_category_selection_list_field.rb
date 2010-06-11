@@ -46,7 +46,7 @@ module GUI
         access_checkbox[1].first.onchange = toggle_write
 
         HTML.div { 
-          HTML.a(:class => :icon, 
+          HTML.a(:class   => :icon, 
                  :onclick => "Aurita.load({ element: 'dispatcher', 
                                             onload: function() { Aurita.load({ element: 'user_category_list', 
                                                                                action: 'User_Category/category_list/user_group_id=#{@user.user_group_id}' }); }, 

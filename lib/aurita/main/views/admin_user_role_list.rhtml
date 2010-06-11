@@ -19,6 +19,12 @@
                :name    => :role_id, 
                :user    => user) 
   %>
-  <%= f.custom(:element => Text_Button, :onclick => "Aurita.submit_form('user_role_form')") { '+' } %>
+  <%= gui.button(:onclick => "Aurita.submit_form('user_role_form', { 
+                                onload: function() { 
+                                  Aurita.load({ element: 'user_role_list',  
+                                                action: 'User_Role/list/user_group_id=#{user.user_group_id}'}); 
+                                } 
+                              });") { '+' } 
+  %>
 <% end %>
 

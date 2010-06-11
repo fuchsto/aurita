@@ -35,7 +35,7 @@
     <%= tl(:delete_user_group_hints) %>
     <br />
     <br />
-    <%= gui.button(:class => [ :red, :form ], :onclick => "Aurita.load({ action: 'User_Group/delete_group/user_group_id=#{group.user_group_id}' });") { tl(:delete_user_group) } %>
+    <%= gui.button(:class => [ :red ], :onclick => "Aurita.load({ action: 'User_Group/delete_group/user_group_id=#{group.user_group_id}' });") { tl(:delete_user_group) } %>
   </div>
 </div>
 

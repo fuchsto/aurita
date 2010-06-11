@@ -82,7 +82,7 @@ module GUI
       @data_type = false
     end
     def element
-      HTML.div { Input_Field.new(@attrib) + HTML.div(:id => :autocomplete_username_choices, :class => :autocomplete, :force_closing_tag => true, :style => 'position: relative !important;' ) }
+      HTML.div { Input_Field.new(@attrib).decorated_element + HTML.div(:id => :autocomplete_username_choices, :class => :autocomplete, :force_closing_tag => true, :style => 'position: relative !important;' ) }
     end
     def js_initialize()
 code =<<JS 

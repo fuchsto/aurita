@@ -118,13 +118,9 @@ module Main
     end
 
     def admin_box_body
-      body = Array.new
-      body << HTML.a(:class   => :icon, 
-                     :onclick => link_to(:add_group)) { 
-        icon_tag(:user) + tl(:add_user_group) 
-      } 
+      body   = Array.new
       groups = User_Group.all_with(User_Group.atomic == false).sort_by(:user_group_name, :asc).to_a
-      list = HTML.ul.no_bullets { } 
+      list   = HTML.ul.no_bullets { } 
       groups.map { |g|
         entry = HTML.div { 
           link_to(g, :action => :update_group) { g.user_group_name } 
@@ -135,9 +131,15 @@ module Main
       HTML.div { body }
     end
     def admin_box
-      box = Box.new(:header => tl(:user_groups), 
-                    :id     => :admin_user_groups_box, :class => :topic)
-      box.body = admin_box_body()
+      box         = Box.new(:header => tl(:user_groups), 
+                            :id     => :admin_user_groups_box, :class => :topic)
+      box.body    = admin_box_body()
+      box.toolbar = [ 
+        Toolbar_Button.new(:icon   => :add_user_group, 
+                           :action => 'User_Group/add_group') { 
+          tl(:add_user_group)
+        }
+      ]
       box
     end
     

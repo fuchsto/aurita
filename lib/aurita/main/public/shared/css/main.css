@@ -4,6 +4,18 @@
   background: url('/aurita/images/icons/categories.gif') no-repeat scroll 6px 3px; 
 }
 
+.icon_button.add_user .icon { 
+  background: url('/aurita/images/icons/user_add_16.gif') no-repeat scroll 8px 4px; 
+}
+.icon_button.add_user_group .icon { 
+  background: url('/aurita/images/icons/users_add_16.gif') no-repeat scroll 8px 4px; 
+}
+.icon_button.add_role .icon { 
+  background: url('/aurita/images/icons/role_add_16.gif') no-repeat scroll 8px 4px; 
+}
+.icon_button.add_category .icon { 
+  background: url('/aurita/images/icons/category_add_16.gif') no-repeat scroll 8px 4px; 
+}
 
 .main_autocomplete_box { 
   border-top: 1px solid white; 

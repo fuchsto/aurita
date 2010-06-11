@@ -153,10 +153,6 @@ module Main
       body  = Array.new
       guest = User_Login_Data.get(0)
       list  = HTML.ul.no_bullets {  }
-      body << HTML.a(:class   => :icon, 
-                     :onclick => link_to(:admin_add)) { 
-        icon_tag(:user) + tl(:add_user) 
-      } 
       
       user_profiles = [ guest ] + User_Profile.all_with((User_Group.atomic == true) & 
                                                         (User_Login_Data.locked == 'f') & 
@@ -174,9 +170,15 @@ module Main
       HTML.div.scrollbox { body } 
     end
     def admin_box
-      box = Box.new(:type => :box, :class => :topic, :id => :admin_users_box)
-      box.header = tl(:users)
-      box.body   = admin_box_body()
+      box         = Box.new(:type => :box, :class => :topic, :id => :admin_users_box)
+      box.header  = tl(:users)
+      box.body    = admin_box_body()
+      box.toolbar = [ 
+        Toolbar_Button.new(:icon   => :add_user, 
+                           :action => 'User_Profile/admin_add') { 
+          tl(:add_user)
+        }
+      ]
       box
     end
 

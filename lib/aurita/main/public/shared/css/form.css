@@ -303,7 +303,7 @@ a.button .right, a.icon_button .right {
 }
 a.icon_button .icon { 
   background-repeat: no-repeat; 
-  background-position: 6px 0px; 
+  background-position: 8px 4px; 
   background-color: transparent; 
 }
 a.button .left, a.icon_button .left { 
@@ -363,10 +363,6 @@ a.icon_button.upload_small .icon {
   background-image: url('/aurita/images/icons/upload_16.png'); 
   background-position: 11px 4px; 
 }
-a.icon_button.create_folder_small .icon { 
-  background-image: url('/aurita/images/icons/folder_add_16.png'); 
-  background-position: 11px 4px; 
-}
 a.icon_button.home .icon { 
   background-image: url('/aurita/images/icons/home.png'); 
 }
@@ -378,9 +374,6 @@ a.icon_button.recent_changes .icon {
 }
 a.icon_button.media_bookmarks .icon { 
   background-image: url('/aurita/images/icons/bookmarked_file.png'); 
-}
-a.icon_button.create_folder .icon { 
-  background-image: url('/aurita/images/icons/folder_add.png'); 
 }
 
 /* End button icons */

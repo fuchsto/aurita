@@ -189,7 +189,7 @@ table.sortable th {
 table.list { 
   border-width: 1px; 
   border-style: solid; 
-  border-color: white #C8C8C8 #C8C8C8 white
+  border-color: #C8C8C8; 
 } 
 table.list td { 
   padding: 6px; 
@@ -212,13 +212,12 @@ table.list tr.highlighted td {
   background: #f9cf88 url(/aurita/images/icons/tall_row_highlighted_bg.png) repeat-x scroll 0 0px; 
 }
 table.list th, table.list th.first { 
-  background: transparent url('/aurita/images/icons/box_header_bg.png') repeat-x scroll 0 0;
+  background: url("/aurita/images/icons/button_grey_bg.png") repeat-x scroll 0 -1px transparent;
   color: #000000; 
-  padding: 3px 5px; 
+  padding: 3px 6px; 
   font-size: 12px; 
   line-height: 16px; 
   height: 16px; 
-  border-left: 1px solid #cccccc; 
 }
 table.list th img { 
   display: inline !important; 
@@ -393,10 +392,12 @@ tr.highlighted td {
 .box_body { 
   background: #F3F3F3 url(/aurita/images/icons/tall_row_brighter_bg.png) repeat-x scroll 0 0; 
 }
+.toolbar .box_body { 
+  border-top: 1px solid #c8c8c8;
+}
 .box_toolbar { 
   padding: 0px; 
   background: #f3f3f3; 
-  border-bottom: 1px solid #afafaf;
 }
 .toolbar_button { 
   padding: 2px; 

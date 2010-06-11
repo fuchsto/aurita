@@ -11,18 +11,22 @@ module Main
     guard_interface(:all) { Aurita.user.is_admin? } 
 
     def system_box
-      box            = Box.new(:type => :system, :class => :topic)
-      box.header     = tl(:admin_tools)
-      edit_tags      = HTML.a(:class => :icon, :onclick => link_to(:controller => 'Tag_Blacklist', 
-                                                                   :action => :edit)) { 
-        HTML.img(:src => '/aurita/images/icons/tags.gif') + tl(:edit_tags) 
+      box          = Box.new(:type => :system, :class => :topic)
+      box.header   = tl(:admin_tools)
+
+      body         = HTML.div.toolbar { 
+        Toolbar_Button.new(:icon   => :tags, 
+                        :action => 'Tag_Blacklist/edit') { 
+          tl(:edit_tags)
+        } + 
+        Toolbar_Button.new(:icon   => :synonyms, 
+                        :action => 'Tag_Synonym/edit') { 
+          tl(:edit_tags)
+        } 
       }
-      edit_synonyms  = HTML.a(:class => :icon, :onclick => link_to(:controller => 'Tag_Synonym', 
-                                                                   :action => :edit)) { 
-        HTML.img(:src => '/aurita/images/icons/synonym.gif') + tl(:edit_synonyms) 
-      }
-      plugin_buttons = plugin_get(Hook.admin.toolbar_buttons)
-      box.body       = [ edit_tags, edit_synonyms ] + plugin_buttons
+
+      body        += plugin_get(Hook.admin.toolbar_buttons)
+      box.body     = body
       return box
     end
 

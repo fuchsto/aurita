@@ -170,10 +170,6 @@ module Main
 
     def admin_box_body
       body = Array.new
-      body << HTML.a(:class   => :icon, 
-                     :onclick => link_to(:add)) { 
-        icon_tag(:role) + tl(:add_role) 
-      } 
       
       list = HTML.ul.no_bullets { } 
       Role.find(:all).sort_by(:role_name).each { |role|
@@ -192,6 +188,12 @@ module Main
       box = Box.new(:class => :topic, :id => :admin_roles_box)
       box.header = tl(:roles)
       box.body = admin_box_body
+      box.toolbar = [ 
+        Toolbar_Button.new(:icon   => :add_role, 
+                           :action => 'Role/add') { 
+          tl(:add_role)
+        }
+      ]
       box
     end
 

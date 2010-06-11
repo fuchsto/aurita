@@ -179,10 +179,6 @@ module Main
 
     def admin_box_body
       body = Array.new
-      body << HTML.a(:class   => :icon, 
-                     :onclick => link_to(:add)) { 
-        icon_tag(:categories) + tl(:add_content_category) 
-      } 
 
       cats = Category.all_with((Category.is_private == 'f') & 
                         (Category.category_id >= '100')).sort_by(:category_name, :asc).to_a
@@ -203,11 +199,17 @@ module Main
     end
 
     def admin_box
-      box        = Box.new(:type  => :category_index, 
-                           :class => :topic, 
-                           :id    => :admin_categories_box)
-      box.header = tl(:categories_box_header)
-      box.body   = admin_box_body()
+      box         = Box.new(:type  => :category_index, 
+                            :class => :topic, 
+                            :id    => :admin_categories_box)
+      box.header  = tl(:categories_box_header)
+      box.body    = admin_box_body()
+      box.toolbar = [ 
+        Toolbar_Button.new(:icon => :add_category, 
+                           :action => 'Category/add') { 
+          tl(:add_content_category)
+        }
+      ]
       box
     end
 

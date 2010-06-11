@@ -68,6 +68,10 @@ module GUI
                                           :params       => @context_menu_params) 
       end
 
+      if @toolbar then
+        add_css_class(:toolbar)
+      end
+
       tools_args = @params.dup
       tools_args[:class]  = [ :box_toolbar ]
       tools_args[:class] << "#{@type}_toolbar" if @type

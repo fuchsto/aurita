@@ -1,9 +1,8 @@
 
 
 .icon_button.categories .icon { 
-  background: url('/aurita/images/icons/categories.gif') no-repeat scroll 6px 3px; 
+  background: url('/aurita/images/icons/globe_16.png') no-repeat scroll 8px 4px; 
 }
-
 .icon_button.add_user .icon { 
   background: url('/aurita/images/icons/user_add_16.png') no-repeat scroll 8px 4px; 
 }

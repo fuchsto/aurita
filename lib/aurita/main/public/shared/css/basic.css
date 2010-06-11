@@ -1246,6 +1246,10 @@ a.toolbar_button .center {
   text-align: left; 
 }
 
+a.button .icon_nopadding { 
+  padding: 6px 0px 7px 16px !important; 
+}
+
 
 /* generic icon button, default state */
 
@@ -1332,7 +1336,7 @@ a.icon_button.home .icon {
   background-image: url('/aurita/images/icons/home.png'); 
 }
 a.icon_button.upload .icon { 
-  background-image: url('/aurita/images/icons/upload.png'); 
+  background-image: url('/aurita/images/icons/upload_16.png'); 
 }
 a.icon_button.recent_changes .icon { 
   background-image: url('/aurita/images/icons/recent_changes.png'); 

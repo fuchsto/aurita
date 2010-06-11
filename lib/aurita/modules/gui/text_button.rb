@@ -29,10 +29,17 @@ module GUI
 
       super(params)
 
+      inner  = []
+      if @label then
+        inner  << HTML.div.icon { '&nbsp;' } if @icon
+        inner  << HTML.div.label { @label } 
+      else
+        inner  << HTML.div(:class => [ :icon, :icon_nopadding]) { '&nbsp;' } if @icon
+      end
       button = HTML.div.left { 
                  HTML.div.right {
                    HTML.div.center { 
-                     HTML.div.icon { } + HTML.div.label { @label }
+                     inner
                    }
                  }
                }

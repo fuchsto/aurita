@@ -29,7 +29,10 @@ ul.form_fields input, ul.form_fields textarea, ul.form_fields select,
   background-color: transparent; 
   background: none; 
   border: 0 none; 
-  width: 300px; 
+  width: 276px; 
+}
+ul.form_fields select, .form_field select {
+  width: 300px;  
 }
 
 ul.form_fields textarea { 
@@ -67,7 +70,7 @@ ul.form_fields .hierarchy_node_select select {
   background-image: url('/aurita/images/icons/input_bg.png'); 
   background-repeat: repeat-x; 
   background-position: 0 0; 
-  height: 32px; 
+  height: 29px; 
   padding-top: 6px; 
 }
 .form_field.focussed .left { 
@@ -303,7 +306,7 @@ a.button .right, a.icon_button .right {
 }
 a.icon_button .icon { 
   background-repeat: no-repeat; 
-  background-position: 8px 4px; 
+  background-position: 14px 4px; 
   background-color: transparent; 
 }
 a.button .left, a.icon_button .left { 
@@ -359,22 +362,6 @@ a.icon_button.cancel .icon {
   background-image: url('/aurita/images/icons/cancel.png'); 
   background-position: 11px 4px; 
 }
-a.icon_button.upload_small .icon { 
-  background-image: url('/aurita/images/icons/upload_16.png'); 
-  background-position: 11px 4px; 
-}
-a.icon_button.home .icon { 
-  background-image: url('/aurita/images/icons/home.png'); 
-}
-a.icon_button.upload .icon { 
-  background-image: url('/aurita/images/icons/upload.png'); 
-}
-a.icon_button.recent_changes .icon { 
-  background-image: url('/aurita/images/icons/recent_changes.png'); 
-}
-a.icon_button.media_bookmarks .icon { 
-  background-image: url('/aurita/images/icons/bookmarked_file.png'); 
-}
 
 /* End button icons */
 
@@ -398,6 +385,23 @@ a.no_border.button:hover .right {
 }
 
 /* End buttons with no border */
+
+/* Begin inline button */
+
+a.button.inline { 
+  display: inline; 
+}
+a.button.inline .left { 
+  
+}
+a.button.inline .center { 
+  
+}
+a.button.inline .right { 
+  
+}
+
+/* End inline button */
 
 /* Begin form field hint boxes */
 

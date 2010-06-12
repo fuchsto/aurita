@@ -9,6 +9,7 @@ select_option : -- w&auml;hlen --
 
 register : Registrieren
 logon : Anmelden
+logout : Abmelden
 
 role_permissions : Berechtigungen 
 role_preferences : Einstellungen

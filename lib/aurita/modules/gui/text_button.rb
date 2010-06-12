@@ -25,6 +25,7 @@ module GUI
       params[:onclick] = "#{link_to(:action => @action)} return false;" if @action
       params.delete(:action)
 
+      params[:href] = params[:link] if params[:link]
       params[:href] = "/aurita/#{@action}" if @action
 
       super(params)

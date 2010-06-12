@@ -87,7 +87,7 @@ module Aurita
       end
 
       user_id = param('user_group_id')
-      @user   = Aurita::Main::User_Group.load(:user_group_id => user_id)
+      @user   = Aurita::Main::User_Group.load(:user_group_id => user_id) if user_id
       return (@user || @@guest_user)
     end
 

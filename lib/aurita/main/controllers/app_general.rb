@@ -13,17 +13,18 @@ module Main
   class App_General_Controller < App_Controller
 
     def account_box
-      account = Box.new(:type => :none, :class => :topic)
+      account        = Box.new(:type => :none, :class => :topic, :id => :account_box )
       account.header = tl(:account)
       if Aurita.user.is_registered? then
-        logout_string = HTML.a(:href => "/aurita/App_Main/logout") { 
-                          HTML.img(:src => '/aurita/images/icons/logout.gif') +  '&nbsp; Logout' 
-                        }
-        account.body = tl(:logged_in_as) + ' ' + link_to(:controller => 'User_Profile') { Aurita.user.user_group_name } + '<br /><br />' + logout_string
+        logout  = Toolbar_Button.new(:icon   => :logout, 
+                                     :link   => '/aurita/App_Main/logout') { tl(:logout) }
+        profile = Toolbar_Button.new(:icon   => :user, 
+                                     :action => 'User_Profile/show_own') { Aurita.user.user_group_name } 
+        account.body = profile + logout
       else
-        account.body = HTML.a(:class => :icon, :onclick => "Aurita.load({ action: 'App_Main/login/' })") { 
-                         HTML.img(:src => "/aurita/images/icons/login.gif") + tl(:logon) 
-                       }.string
+        logon   = Toolbar_Button.new(:icon    => :login, 
+                                     :onclick => "Aurita.load({ action: 'App_Main/login/' });") { tl(:logon) }
+        account.body = logon
       end
       return account
     end

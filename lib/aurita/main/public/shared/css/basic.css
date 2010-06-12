@@ -1347,6 +1347,15 @@ a.icon_button.media_bookmarks .icon {
 a.icon_button.create_folder .icon { 
   background-image: url('/aurita/images/icons/folder_add.png'); 
 }
+a.icon_button.user .icon { 
+  background-image: url('/aurita/images/icons/user_16.png'); 
+}
+a.icon_button.logout .icon { 
+  background-image: url('/aurita/images/icons/logout_16.png'); 
+}
+a.icon_button.login .icon { 
+  background-image: url('/aurita/images/icons/login_16.png'); 
+}
 
 /* End button icons */
 

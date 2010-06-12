@@ -59,7 +59,7 @@ class Lang
   def self.get(plugin, symbol)
     plugin = plugin.to_sym
     symbol = symbol.to_s
-    lang = Aurita.session.language.to_sym
+    lang   = Aurita.session.language.to_sym
     if !@@language_packs[plugin] || !@@language_packs[plugin][lang] then
       error  = 'Missing language pack: Plugin ' << plugin.inspect + ', language ' << lang.inspect + "\n"
       raise ::Exception.new(error) 

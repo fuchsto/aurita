@@ -423,6 +423,13 @@ class Aurita::Base_Controller
     }
   end
 
+  def self.clear_after(*methods)
+    return unless @hooks_after
+    methods.each { |m|
+      @hooks_after.delete(m)
+    }
+  end
+
   # Returns Hash of all hooks defined via Controller.after()
   # by method name. 
   def self.hooks_after(method)

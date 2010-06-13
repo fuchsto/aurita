@@ -35,7 +35,7 @@ module Console
       @path             = argv[:path]
       @parent_folder_id = argv[:to_folder]
       @user_group_id    = argv[:user_id]
-      @uaer_group_id  ||= 5
+      @user_group_id  ||= 5
     end
 
     def run

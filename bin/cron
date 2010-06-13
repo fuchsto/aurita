@@ -17,8 +17,11 @@ def usage
   puts '00  */1  *  *  *  aurita/bin/cron <project name> hourly'
 end
 
+runmode   = ARGV[2]
+runmode ||= :development
+
 begin
-Aurita.load_project ARGV[0] 
+Aurita.load_project ARGV[0], runmode
 rescue ::Exception => e
   STDERR.puts "    Unable to load project #{ARGV[0].inspect}"
   STDERR.puts e.message if ARGV[0] 

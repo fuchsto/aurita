@@ -207,6 +207,7 @@ table.list tr.deact {
 table.list td {
   border-top: 1px solid #cecece; 
   background: #f3f3f3 url('/aurita/images/icons/tall_row_brighter_bg.png') repeat-x; 
+  vertical-align: top; 
 }
 table.list tr.highlighted td { 
   background: #f9cf88 url(/aurita/images/icons/tall_row_highlighted_bg.png) repeat-x scroll 0 0px; 

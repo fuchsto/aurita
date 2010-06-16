@@ -105,7 +105,7 @@ module GUI
         button_bar << edit_button
       end
       
-      type_css_class = type.gsub('::','__')
+      type_css_class = type.to_s.gsub('::','__') if type
 
       if params[:show_button] == true then
         element = HTML.div(:class => [ type_css_class, :context_menu_element ] ) { 

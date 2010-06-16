@@ -231,6 +231,14 @@ table.list th.first {
 table.list td.tab_left { 
   text-align: right; 
 }
+.table_footer { 
+  padding: 5px; 
+  display: inline-block; 
+  background: #dedede; 
+  border: 1px solid #bfbfbf; 
+  border-top: 0px;
+}
+
 .index_entry { 
   display: block; 
   margin-left: 0px; 
@@ -952,6 +960,9 @@ div.column50 {
 }
 .topic li.entity { 
   clear: both; 
+}
+.topic li.entity.indented { 
+  padding-left: 10px; 
 }
 .topic li.entity .label { 
   display: inline; 

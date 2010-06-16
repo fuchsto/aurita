@@ -372,7 +372,7 @@ module GUI
       unless html_options[:onclick] then
         html_options[:onclick]  = "Aurita.call({ action: '#{resource_url_for(params)}'}); return false; "
       end
-      HTML.a(html_options) { label }.string
+      HTML.a(html_options) { label }
     end
 
     def js_link_to(params)

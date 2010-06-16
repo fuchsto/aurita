@@ -2,6 +2,7 @@
 require('aurita')
 require('aurita-gui')
 require('aurita-gui/widget')
+require('aurita-gui/form/form_field_widget')
 
 Aurita.import_module :gui, :i18n_helpers
 Aurita.import_module :hierarchy_map_iterator
@@ -20,26 +21,25 @@ Aurita.import_module :gui, :extras, :decobox
 module Aurita
 module GUI
 
-  class Text_Editor_Field < Aurita::GUI::Widget
-
+  class Text_Editor_Field < Aurita::GUI::Form_Field_Widget
+    
     def initialize(params={}, &block)
-      @attrib = params
-      @value  = yield if block_given?
-      @attrib[:class] ||= []
-      @attrib[:class]  << [ :editor, :simple, :widget ]
-      super()
+      params[:class] ||= []
+      params[:class]  << [ :editor, :simple, :widget ]
+      super(params, &block)
     end
 
-    def dom_id
-      @attrib[:id]
-    end
+    def form_field
+      return @form_field if @form_field
 
-    def element
-      @field ||= GUI::Textarea_Field.new(@attrib)
-      @field
+      attrib = @attrib
+      attrib.delete(:value)
+      @form_field ||= GUI::Textarea_Field.new(attrib) { @value }
+      @form_field
     end
 
     def js_initialize
+      return '' # This is already done in Aurita.Editor.init
 
       "Event.observe($('#{@attrib[:id]}_ifr').contentDocument, 'focus', 
                      function() { Aurita.form_field_onfocus('#{@attrib[:id]}') });

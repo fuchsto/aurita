@@ -59,6 +59,7 @@ opts.each { |opt, arg|
     mode = :production if mode == :p
     mode = :development if mode == :d
     mode = :test if mode == :t
+    mode ||= :development
     if ![:production,:test,:development].include?(mode) then
       puts "Mode has to be 'production' (or 'p'), 'test' (or 't') or 'development' (or 'd')"
       exit
@@ -69,20 +70,30 @@ opts.each { |opt, arg|
 if !project_name then
   puts "Usage: "
   puts ""
-  puts "  daemon project_name [OPTIONS] "
+  puts "  thin_daemon <project_name> [OPTIONS] "
   puts ""
   puts "Following options are supported: "
   puts ""
-  puts "  --port, -p    : Which port to run this daemon on"
-  puts "  --gatling, -g : Optimize for short requests, without session handling"
-  puts "  --short, -s   : Optimize for short requests with session handling"
-  puts "  --killold     : Kill existing thin_daemon running on same port"
-  puts "  --mode, -m    : In which mode to run application. "
-  puts "                  Modes are production (or p), test (or t) and "
-  puts "                  developlent (or d)"
-  puts "Example: "
+  puts "  --port, -p        : Which port to run this daemon on"
+  puts "  --gatling, -g     : Optimize for short requests, without session handling"
+  puts "  --short, -s       : Optimize for short requests with session handling"
+  puts "  --killold, -k     : Kill existing thin_daemon running on same port"
+  puts "  --log, -l         : Logfile to use"
+  puts "  --verbosive, -v   : Also logs SQL queries"
+  puts "  --mode, -m        : In which mode to run application. "
+  puts "                      Modes are production (or p), test (or t) and "
+  puts "                      developlent (or d)"
+  puts " Default options are " 
   puts ""
-  puts "   thin_daemon --port=3001 --mode=test my_project"
+  puts "  --log stderr --port 3000 --mode development"
+  puts ""
+  puts "Examples: "
+  puts ""
+  puts "   thin_daemon <project_name> --port 3000 --mode development --log stderr --verbosive"
+  puts ""
+  puts "Which is the same as: "
+  puts ""
+  puts "   thin_daemon <project_name> --dev"
   puts ""
   exit
 end
@@ -91,16 +102,16 @@ logfile ||= "/var/log/aurita/aurita_#{project_name}_#{port}_#{mode}.log"
 
 if killold then
   # TODO: This is really quick'n'dirty
-  command = "ps aux | grep 'thin_daemon' | grep '#{port}' | grep -v #{$$} | grep -v 'grep' | awk '{print $2}' | xargs sudo kill -9 2>/dev/null" 
+  command = "ps aux | grep 'thin_daemon' | \
+                      grep '#{project_name}' | \ 
+                      grep '#{port}' | \
+                      grep -v #{$$} | \
+                      grep -v 'grep' | \
+                      awk '{print $2}' | \
+                      xargs sudo kill -9 2>/dev/null" 
   system(command)
 end
 
-if verbosive then
-  STDERR.puts "bootstrapping aurita ..."
-end
-
-Aurita.load_project(project_name, mode)
-Aurita.bootstrap
 
 if verbosive then
   Lore.enable_logging
@@ -120,6 +131,13 @@ else
   Aurita::Configuration.sys_log_path = false
   Aurita::Configuration.run_log_path = false
 end
+
+if verbosive then
+  STDERR.puts "bootstrapping aurita ..."
+end
+Aurita.load_project(project_name, mode)
+Aurita.bootstrap
+
 
 if verbosive then
   STDERR.puts "Running thin daemon for project #{project_name} on port #{port} in mode #{mode}"

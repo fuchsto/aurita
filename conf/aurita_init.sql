@@ -302,7 +302,7 @@ CREATE TABLE user_group (
     atomic boolean DEFAULT true,
     hidden boolean DEFAULT false NOT NULL,
     division character varying(100) DEFAULT ''::character varying,
-    language character varying(3) DEFAULT 'en'::character varying NOT NULL
+    language character varying(3) DEFAULT 'de'::character varying NOT NULL
 );
 
 
@@ -779,7 +779,8 @@ CREATE TABLE category (
     public_readable boolean DEFAULT false,
     registered_writeable boolean DEFAULT false,
     registered_readable boolean DEFAULT false,
-    versioned boolean DEFAULT true
+    versioned boolean DEFAULT true,
+    category_id_parent integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1691,7 +1692,7 @@ ALTER TABLE public.media_asset_folder_category_id_seq OWNER TO fuchsto;
 -- Name: media_asset_folder_category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: fuchsto
 --
 
-SELECT pg_catalog.setval('media_asset_folder_category_id_seq', 1320, true);
+SELECT pg_catalog.setval('media_asset_folder_category_id_seq', 1321, true);
 
 
 --
@@ -1711,7 +1712,7 @@ ALTER TABLE public.media_asset_folder_id_seq OWNER TO aurita;
 -- Name: media_asset_folder_id_seq; Type: SEQUENCE SET; Schema: public; Owner: aurita
 --
 
-SELECT pg_catalog.setval('media_asset_folder_id_seq', 1025, true);
+SELECT pg_catalog.setval('media_asset_folder_id_seq', 1026, true);
 
 
 --
@@ -2700,7 +2701,7 @@ ALTER TABLE public.user_action_id_seq OWNER TO fuchsto;
 -- Name: user_action_id_seq; Type: SEQUENCE SET; Schema: public; Owner: fuchsto
 --
 
-SELECT pg_catalog.setval('user_action_id_seq', 2135766, true);
+SELECT pg_catalog.setval('user_action_id_seq', 2135876, true);
 
 
 --
@@ -2931,9 +2932,9 @@ COPY role_permission (role_permission_id, role_id, name, value) FROM stdin;
 --
 
 COPY user_group (user_group_id, user_group_name, atomic, hidden, division, language) FROM stdin;
-0	guest	t	t	\N	en
-5	aurita	t	t	\N	en
-100	admin	t	t	\N	en
+0	guest	t	t	\N	de
+5	aurita	t	t	\N	de
+100	admin	t	t	\N	de
 \.
 
 
@@ -2951,9 +2952,9 @@ COPY user_group_hierarchy (user_group_id__parent, user_group_id__child) FROM std
 
 COPY user_login_data (login, pass, user_group_id, locked, deleted) FROM stdin;
 none	none	0	f	f
-21232f297a57a5a743894a0e4a801fc3	bcfb6e47cf890dea35364272182b9364	100	f	f
 none2	none2	5	f	f
 fadfbb67bc6ed1b077c6c737ab6f943d	098f6bcd4621d373cade4e832627b4f6	1	f	f
+21232f297a57a5a743894a0e4a801fc3	098f6bcd4621d373cade4e832627b4f6	100	f	f
 \.
 
 
@@ -2963,8 +2964,8 @@ fadfbb67bc6ed1b077c6c737ab6f943d	098f6bcd4621d373cade4e832627b4f6	1	f	f
 
 COPY user_profile (user_group_id, forename, surname, title, picture_asset_id, phone_office, phone_home, mobile_office, mobile_home, email_office, email_home, tags, hits, time_registered, gender, location, about_me, occupation, messenger, signature, tag_count, nick_youtube, user_profile_config_id, comment, theme) FROM stdin;
 5				0	\N	\N	\N	\N	\N		\N	0	2010-02-24 18:51:01.231043	t	\N	\N			\N	0		0		default
-100	 	admin	 	2657		-					{admin}	7	2010-02-24 18:51:01.231043	t						0		0		default
 0	guest	 	 	1	\N	-	\N	\N	\N		{user}	0	2010-02-24 18:51:01.231043	t	\N	\N			\N	0		0		default
+100	 	admin	 	2657		-				\N	{admin}	7	2010-02-24 18:51:01.231043	t						0		0		default
 \.
 
 
@@ -3071,10 +3072,10 @@ COPY bookmark_folder (bookmark_folder_id, parent_folder_id, folder_name, user_gr
 -- Data for Name: category; Type: TABLE DATA; Schema: public; Owner: aurita
 --
 
-COPY category (category_id, category_name, is_private, public_writeable, public_readable, registered_writeable, registered_readable, versioned) FROM stdin;
-100	admin	t	f	f	f	f	t
-1000	tl:general	f	f	t	f	f	t
-1	tl:no_category	f	f	f	f	f	t
+COPY category (category_id, category_name, is_private, public_writeable, public_readable, registered_writeable, registered_readable, versioned, category_id_parent) FROM stdin;
+100	admin	t	f	f	f	f	t	0
+1000	tl:general	f	f	t	f	f	t	0
+1	tl:no_category	f	f	f	f	f	t	0
 \.
 
 
@@ -3288,6 +3289,7 @@ COPY media_asset_folder (media_asset_folder_id, physical_path, media_folder_id__
 1	Medien	0	1	PUBLIC	f
 100	Benutzer	0	1	PUBLIC	f
 0	/	\N	0	PUBLIC	f
+1026	admin	0	100	PRIVATE	f
 \.
 
 
@@ -3296,6 +3298,7 @@ COPY media_asset_folder (media_asset_folder_id, physical_path, media_folder_id__
 --
 
 COPY media_asset_folder_category (folder_category_id, media_asset_folder_id, category_id) FROM stdin;
+1321	1026	100
 \.
 
 
@@ -3530,6 +3533,116 @@ COPY todo_time_calc_entry (todo_time_calc_entry_id, unit_cost, todo_entry_id) FR
 --
 
 COPY user_action (user_group_id, "time", controller, method, params, excep_trace, user_action_id, num_queries, num_tuples, duration, runmode) FROM stdin;
+0	2010-06-18 00:45:04.410567	Aurita::AHA::App_Main_Controller	start	\N	\N	2135767	9	2	0.031695000000000001	d
+0	2010-06-18 00:45:04.598912	Aurita::AHA::App_Main_Controller	start	\N	\N	2135768	6	0	0.026700999999999999	d
+0	2010-06-18 00:47:46.334841	Aurita::AHA::App_Main_Controller	start	\N	\N	2135769	6	0	0.027189999999999999	d
+0	2010-06-18 00:47:46.604516	Aurita::AHA::App_Main_Controller	start	\N	\N	2135770	6	0	0.038989000000000003	d
+0	2010-06-18 00:48:01.619786	Aurita::AHA::App_Main_Controller	start	\N	\N	2135771	6	0	0.026516000000000001	d
+0	2010-06-18 00:48:05.001716	Aurita::AHA::App_Main_Controller	start	\N	\N	2135772	6	0	0.027026000000000001	d
+0	2010-06-18 00:48:35.940219	Aurita::AHA::App_Main_Controller	start	\N	\N	2135773	6	0	0.027144000000000001	d
+0	2010-06-18 00:48:38.434004	Aurita::AHA::App_Main_Controller	start	\N	\N	2135774	6	0	0.026415000000000001	d
+0	2010-06-18 00:49:27.761935	Aurita::AHA::App_Main_Controller	start	\N	\N	2135775	6	0	0.027394999999999999	d
+0	2010-06-18 00:49:28.010071	Aurita::AHA::App_Main_Controller	start	\N	\N	2135776	6	0	0.026159999999999999	d
+0	2010-06-18 00:50:21.765411	Aurita::AHA::App_Main_Controller	start	\N	\N	2135777	6	0	0.027	d
+0	2010-06-18 00:50:22.007391	Aurita::AHA::App_Main_Controller	start	\N	\N	2135778	6	0	0.025874000000000001	d
+0	2010-06-18 00:50:22.829851	Aurita::AHA::App_Main_Controller	start	\N	\N	2135779	6	0	0.026808999999999999	d
+0	2010-06-18 00:50:44.923512	Aurita::AHA::App_Main_Controller	start	\N	\N	2135780	6	0	0.026549	d
+0	2010-06-18 00:50:47.001637	Aurita::AHA::App_Main_Controller	start	\N	\N	2135781	6	0	0.026787999999999999	d
+0	2010-06-18 00:50:51.26952	Aurita::AHA::App_Main_Controller	login	\N	\N	2135782	0	0	0.001756	d
+100	2010-06-18 00:50:55.647541	Aurita::AHA::App_Main_Controller	validate_user	pass=bcfb6e47cf890dea35364272182b9364&login=21232f297a57a5a743894a0e4a801fc3	\N	2135783	1	1	0.0028340000000000001	d
+100	2010-06-18 00:50:55.801221	Aurita::AHA::App_Main_Controller	start	password=eskimo&login=admin	\N	2135784	47	8	0.11725099999999999	d
+100	2010-06-18 00:50:55.923744	Aurita::AHA::App_Main_Controller	start	\N	\N	2135785	47	9	0.115371	d
+100	2010-06-18 00:50:56.199158	Aurita::AHA::App_Main_Controller	start	\N	\N	2135786	47	10	0.117213	d
+100	2010-06-18 00:50:59.446276	Aurita::Main::App_Admin_Controller	left	\N	\N	2135787	5	5	0.026769000000000001	d
+100	2010-06-18 00:50:59.456756	Aurita::Main::App_Admin_Controller	main	\N	\N	2135788	0	0	0.00086300000000000005	d
+100	2010-06-18 00:51:01.805881	Aurita::Main::User_Profile_Controller	show_own	\N	\N	2135789	4	3	0.012152	d
+100	2010-06-18 00:51:03.424037	Aurita::Main::User_Profile_Controller	update	user_group_id=100	\N	2135790	2	2	0.023560999999999999	d
+0	2010-06-18 00:51:18.276897	Aurita::AHA::App_Main_Controller	logout	\N	\N	2135791	0	0	0.0031649999999999998	d
+0	2010-06-18 00:51:18.401869	Aurita::AHA::App_Main_Controller	logout	\N	\N	2135792	0	0	0.0029359999999999998	d
+0	2010-06-18 00:51:23.674207	Aurita::AHA::App_Main_Controller	start	\N	\N	2135793	6	0	0.027005000000000001	d
+0	2010-06-18 00:51:23.857219	Aurita::AHA::App_Main_Controller	start	\N	\N	2135794	6	0	0.026436999999999999	d
+0	2010-06-18 00:51:31.726317	Aurita::AHA::App_Main_Controller	login	\N	\N	2135795	0	0	0.0017910000000000001	d
+100	2010-06-18 00:51:36.840301	Aurita::AHA::App_Main_Controller	validate_user	pass=bcfb6e47cf890dea35364272182b9364&login=21232f297a57a5a743894a0e4a801fc3	\N	2135796	1	1	0.0018929999999999999	d
+100	2010-06-18 00:51:36.963001	Aurita::AHA::App_Main_Controller	start	password=eskimo&login=admin	\N	2135797	47	16	0.084404000000000007	d
+100	2010-06-18 00:51:37.089741	Aurita::AHA::App_Main_Controller	start	\N	\N	2135798	47	17	0.119324	d
+100	2010-06-18 00:51:37.36028	Aurita::AHA::App_Main_Controller	start	\N	\N	2135799	47	18	0.118766	d
+100	2010-06-18 00:51:39.51278	Aurita::Main::App_Admin_Controller	left	\N	\N	2135800	5	5	0.026953999999999999	d
+100	2010-06-18 00:51:39.524796	Aurita::Main::App_Admin_Controller	main	\N	\N	2135801	0	0	0.00092599999999999996	d
+0	2010-06-18 00:52:30.921905	Aurita::AHA::App_Main_Controller	logout	\N	\N	2135802	0	0	0.003101	d
+0	2010-06-18 00:52:31.052611	Aurita::AHA::App_Main_Controller	logout	\N	\N	2135803	0	0	0.002967	d
+0	2010-06-18 00:52:32.082184	Aurita::AHA::App_Main_Controller	start	\N	\N	2135804	6	0	0.026702	d
+0	2010-06-18 00:52:34.720342	Aurita::AHA::App_Main_Controller	login	\N	\N	2135805	0	0	0.0017489999999999999	d
+100	2010-06-18 00:52:37.329621	Aurita::AHA::App_Main_Controller	validate_user	pass=bcfb6e47cf890dea35364272182b9364&login=21232f297a57a5a743894a0e4a801fc3	\N	2135806	1	1	0.0029350000000000001	d
+100	2010-06-18 00:52:37.461334	Aurita::AHA::App_Main_Controller	start	password=eskimo&login=admin	\N	2135807	47	22	0.119751	d
+100	2010-06-18 00:52:37.558343	Aurita::AHA::App_Main_Controller	start	\N	\N	2135808	47	23	0.089819999999999997	d
+100	2010-06-18 00:52:40.656906	Aurita::Main::User_Profile_Controller	show_own	\N	\N	2135809	4	3	0.011686999999999999	d
+100	2010-06-18 00:52:41.603223	Aurita::Main::User_Profile_Controller	update	user_group_id=100	\N	2135810	2	2	0.022891999999999999	d
+100	2010-06-18 00:52:44.495601	Aurita::Main::User_Profile_Controller	show_own	\N	\N	2135811	4	3	0.011918	d
+100	2010-06-18 00:52:46.289418	Aurita::Main::User_Profile_Controller	update	user_group_id=100	\N	2135812	2	2	0.023182000000000001	d
+100	2010-06-18 00:52:53.725255	Aurita::Main::User_Profile_Controller	perform_update	pass_confirm=test&internal.user_profile.picture_asset_id=2657&forename= &pass=&internal.user_login_data.pass=&picture_asset_id=2657&email_home=&internal.user_profile.forename= &user_group_name=admin&internal.user_profile.email_home=&internal.user_login_data.login=21232f297a57a5a743894a0e4a801fc3&tags=admin&login=21232f297a57a5a743894a0e4a801fc3&internal.user_profile.tags=admin&internal.user_profile.user_group_id=100&user_group_id=100&internal.user_group.user_group_name=admin&internal.user_group.user_group_id=100&surname=admin&internal.user_login_data.user_group_id=100&internal.user_profile.surname=admin	\N	2135813	5	2	0.025852	d
+100	2010-06-18 00:52:53.804018	Aurita::Main::User_Profile_Controller	show	id=100	\N	2135814	5	4	0.013875999999999999	d
+100	2010-06-18 00:52:55.62206	Aurita::Main::App_General_Controller	left	\N	\N	2135815	189	8	0.40899200000000002	d
+100	2010-06-18 00:52:55.731825	Aurita::Main::App_General_Controller	main	\N	\N	2135816	43	6	0.093469999999999998	d
+100	2010-06-18 00:52:58.989236	Aurita::Plugins::Wiki::Article_Controller	add	\N	\N	2135817	13	26	0.028958999999999999	d
+100	2010-06-18 00:53:22.049316	Aurita::Plugins::Calendar::Event_Controller	list	day=2010.06.16	\N	2135818	2	2	0.0044260000000000002	d
+100	2010-06-18 00:53:22.742723	Aurita::Plugins::Calendar::Event_Controller	list	day=2010.06.17	\N	2135819	2	2	0.0038600000000000001	d
+100	2010-06-18 00:53:23.979561	Aurita::Plugins::Wiki::Media_Asset_Folder_Controller	add	\N	\N	2135820	11	25	0.022089000000000001	d
+100	2010-06-18 00:53:26.811936	Aurita::Plugins::Wiki::Media_Asset_Folder_Controller	perform_add	public.category.category_id=100&media_folder_id__parent=0&concrete_model=Aurita::Plugins::Wiki::Media_Asset_Folder&public.category.category_id_select=-&user_group_id=100&public.media_asset_folder.media_folder_id__parent=0&category_id_select=-&physical_path=admin&category_id=100&trashbin=f&public.media_asset_folder.physical_path=admin	\N	2135821	10	4	0.017417999999999999	d
+100	2010-06-18 00:53:26.891742	Aurita::Plugins::Wiki::Media_Asset_Folder_Controller	tree_box_body	\N	\N	2135822	7	4	0.015599	d
+100	2010-06-18 00:53:26.947974	Aurita::Plugins::Wiki::Media_Asset_Folder_Controller	show	id=1026	\N	2135823	8	5	0.018183000000000001	d
+100	2010-06-18 00:53:28.477527	Aurita::Main::User_Profile_Controller	show_own	\N	\N	2135824	4	3	0.011996	d
+100	2010-06-18 00:53:29.637916	Aurita::Plugins::Wiki::Media_Asset_Folder_Controller	add	\N	\N	2135825	11	25	0.021953	d
+100	2010-06-18 00:53:38.181807	Aurita::Main::Async_Feedback_Controller	get	x=1	\N	2135826	1	1	0.0027409999999999999	d
+100	2010-06-18 00:54:38.197812	Aurita::Main::App_General_Controller	users_online_box_body	\N	\N	2135827	1	35	0.016118	d
+100	2010-06-18 00:54:38.213255	Aurita::Main::Async_Feedback_Controller	get	x=1	\N	2135828	1	1	0.0022100000000000002	d
+100	2010-06-18 00:55:38.185694	Aurita::Main::Async_Feedback_Controller	get	x=1	\N	2135829	1	1	0.0024940000000000001	d
+100	2010-06-18 00:56:00.084912	Aurita::Main::App_My_Place_Controller	left	\N	\N	2135830	14	4	0.031167	d
+100	2010-06-18 00:56:00.183716	Aurita::Main::App_My_Place_Controller	main	\N	\N	2135831	43	6	0.091922000000000004	d
+100	2010-06-18 00:56:02.081402	Aurita::Main::App_General_Controller	left	\N	\N	2135832	190	9	0.42199399999999998	d
+100	2010-06-18 00:56:02.164553	Aurita::Main::App_General_Controller	main	\N	\N	2135833	43	6	0.068237999999999993	d
+100	2010-06-18 00:56:08.650309	Aurita::Main::App_General_Controller	left	\N	\N	2135834	190	9	0.471111	d
+100	2010-06-18 00:56:08.755717	Aurita::Main::App_General_Controller	main	\N	\N	2135835	43	6	0.090884000000000006	d
+100	2010-06-18 00:56:38.201725	Aurita::Main::App_General_Controller	users_online_box_body	\N	\N	2135836	1	32	0.015339	d
+100	2010-06-18 00:56:38.219691	Aurita::Main::Async_Feedback_Controller	get	x=1	\N	2135837	1	1	0.0022680000000000001	d
+100	2010-06-18 00:56:54.714502	Aurita::Plugins::Wiki::Media_Asset_Folder_Controller	add	\N	\N	2135838	11	25	0.023713000000000001	d
+100	2010-06-18 00:56:56.40153	Aurita::Plugins::Wiki::Media_Asset_Folder_Controller	show	media_asset_folder_id=1026	\N	2135839	8	5	0.019075000000000002	d
+100	2010-06-18 00:56:57.157266	Aurita::Plugins::Wiki::Media_Asset_Controller	add	media_folder_id=1026	\N	2135840	21	33	0.039399000000000003	d
+100	2010-06-18 00:57:38.212131	Aurita::Main::Async_Feedback_Controller	get	x=1	\N	2135841	1	1	0.0025709999999999999	d
+100	2010-06-18 00:57:54.89195	Aurita::Plugins::Wiki::Article_Controller	add	\N	\N	2135842	13	26	0.027737999999999999	d
+100	2010-06-18 01:04:55.300032	Aurita::AHA::App_Main_Controller	start	\N	\N	2135843	47	7	0.26891399999999999	d
+100	2010-06-18 01:05:00.549594	Aurita::AHA::App_Main_Controller	start	\N	\N	2135844	47	8	0.32913300000000001	d
+100	2010-06-18 01:05:02.261377	Aurita::Main::App_General_Controller	left	\N	\N	2135845	190	9	0.98025499999999999	d
+100	2010-06-18 01:05:02.512189	Aurita::Main::App_General_Controller	main	\N	\N	2135846	43	6	0.215305	d
+100	2010-06-18 01:05:04.183008	Aurita::Plugins::Wiki::Article_Controller	add	\N	\N	2135847	13	26	0.029843000000000001	d
+100	2010-06-18 01:05:26.671668	Aurita::Plugins::Calendar::Event_Controller	add	\N	\N	2135848	11	25	0.043123000000000002	d
+100	2010-06-18 01:05:32.278648	Aurita::Main::App_My_Place_Controller	left	\N	\N	2135849	14	4	0.032076	d
+100	2010-06-18 01:05:32.568528	Aurita::Main::App_My_Place_Controller	main	\N	\N	2135850	43	6	0.28298099999999998	d
+100	2010-06-18 01:05:33.528775	Aurita::Plugins::Wiki::Article_Controller	add	\N	\N	2135851	13	26	0.028757000000000001	d
+100	2010-06-18 01:05:35.930343	Aurita::Plugins::Wiki::Article_Controller	add	\N	\N	2135852	13	26	0.029117000000000001	d
+100	2010-06-18 01:06:00.189881	Aurita::Main::Async_Feedback_Controller	get	x=1	\N	2135853	1	1	0.0029099999999999998	d
+100	2010-06-18 01:06:08.75027	Aurita::Main::App_Admin_Controller	left	\N	\N	2135854	5	5	0.027268000000000001	d
+100	2010-06-18 01:06:08.766531	Aurita::Main::App_Admin_Controller	main	\N	\N	2135855	0	0	0.00092199999999999997	d
+100	2010-06-18 01:06:11.24697	Aurita::Main::User_Profile_Controller	show_own	\N	\N	2135856	4	3	0.012019	d
+100	2010-06-18 01:06:13.42237	Aurita::Main::User_Profile_Controller	update	user_group_id=100	\N	2135857	2	2	0.025006	d
+100	2010-06-18 01:06:14.7262	Aurita::Plugins::Wiki::Media_Asset_Controller	choose_from_user_folders	user_group_id=&image_dom_id=internal_user_profile_picture_asset_id	\N	2135858	7	5	0.013651999999999999	d
+100	2010-06-18 01:06:56.925683	Aurita::Main::Category_Controller	update	category_id=1000	\N	2135859	10	11	0.036489000000000001	d
+100	2010-06-18 01:07:00.160654	Aurita::Main::App_General_Controller	users_online_box_body	\N	\N	2135860	1	17	0.010198	d
+100	2010-06-18 01:07:00.190729	Aurita::Main::Async_Feedback_Controller	get	x=1	\N	2135861	1	1	0.0028389999999999999	d
+100	2010-06-18 01:07:06.586012	Aurita::Main::App_General_Controller	left	\N	\N	2135862	190	9	1.064808	d
+100	2010-06-18 01:07:06.822996	Aurita::Main::App_General_Controller	main	\N	\N	2135863	43	6	0.22320400000000001	d
+100	2010-06-18 01:07:09.891695	Aurita::Main::App_My_Place_Controller	left	\N	\N	2135864	14	4	0.031343999999999997	d
+100	2010-06-18 01:07:10.179186	Aurita::Main::App_My_Place_Controller	main	\N	\N	2135865	43	6	0.275453	d
+100	2010-06-18 01:07:10.893032	Aurita::Plugins::Wiki::Article_Controller	add	\N	\N	2135866	13	26	0.028892000000000001	d
+100	2010-06-18 01:07:12.269783	Aurita::Plugins::Messaging::Mailbox_Controller	show	\N	\N	2135867	4	1	0.013958	d
+100	2010-06-18 01:07:15.753455	Aurita::Main::App_Admin_Controller	left	\N	\N	2135868	5	5	0.027208	d
+100	2010-06-18 01:07:15.768557	Aurita::Main::App_Admin_Controller	main	\N	\N	2135869	0	0	0.00087000000000000001	d
+100	2010-06-18 01:07:16.62744	Aurita::Main::Tag_Synonym_Controller	edit	\N	\N	2135870	0	0	0.0033440000000000002	d
+100	2010-06-18 01:07:18.068433	Aurita::Main::Tag_Synonym_Controller	list_all	\N	\N	2135871	1	0	0.0026380000000000002	d
+100	2010-06-18 01:07:19.11044	Aurita::Main::User_Login_Data_Controller	update	user_group_id=0	\N	2135872	11	8	0.030036	d
+100	2010-06-18 01:07:19.957104	Aurita::Main::User_Login_Data_Controller	update	user_group_id=100	\N	2135873	14	11	0.043406	d
+100	2010-06-18 01:07:20.434711	Aurita::Main::User_Profile_Controller	admin_add	\N	\N	2135874	0	0	0.015058999999999999	d
+100	2010-06-18 01:07:24.355777	Aurita::Main::App_General_Controller	left	\N	\N	2135875	190	9	1.0622670000000001	d
+100	2010-06-18 01:07:24.58754	Aurita::Main::App_General_Controller	main	\N	\N	2135876	43	6	0.218718	d
 \.
 
 

@@ -2,6 +2,7 @@
 require('aurita-gui/form/input_field')
 require('aurita-gui/form/file_field')
 require('aurita-gui/form/select_field')
+require('aurita-gui/form/form_field_widget')
 
 module Aurita
 module GUI

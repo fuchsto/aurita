@@ -1,6 +1,9 @@
 
 require 'rubygems'
 require 'aurita'
+require 'aurita-gui/form'
+require 'aurita-gui/form/form_field_widget'
+
 Aurita.import_module :gui, :custom_form_elements
 Aurita.import_module :gui, :form_field_hint
 

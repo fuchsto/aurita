@@ -302,7 +302,7 @@ module Aurita
       end
 
       params ||= {}
-      params[:controller] = controller_name() unless params[:controller]
+      params[:controller] = short_model_name() unless params[:controller]
       params[:action]     = params[:to] if params[:to]
       params[:action]     = :show unless params[:action]
       params.delete(:to)

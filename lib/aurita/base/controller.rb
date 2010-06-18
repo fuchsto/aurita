@@ -606,13 +606,14 @@ class Aurita::Base_Controller
   #
   def self.controller_name
   # {{{
-    parts  = self.to_s.split('::')
-    if parts[-2] == 'Main'
-      c_name = parts[-1] 
-    else
-      c_name = parts[-2..-1].join('::')
+    c_name = self.to_s
+
+    c_name.sub!('Aurita::','')
+    c_name.sub!('Main::','')
+    if !c_name.sub!('Plugins::','') then
+      c_name = c_name.split('::').last
     end
-    c_name.gsub('_Controller','')
+    c_name
   end # }}}
   def controller_name
     self.class.controller_name
@@ -654,14 +655,18 @@ class Aurita::Base_Controller
   def short_model_name
     short_name = model_name
     short_name.sub!('Aurita::','')
-    short_name.sub!('Plugins::','')
     short_name.sub!('Main::','')
+    if !short_name.sub!('Plugins::','') then
+      short_name = short_name.split('::').last
+    end
     short_name
   end
   def self.short_model_name
     short_name = model_name
     short_name.sub!('Aurita::','')
-    short_name.sub!('Plugins::','')
+    if !short_name.sub!('Plugins::','') then
+      short_name = short_name.split('::').last
+    end
     short_name.sub!('Main::','')
     short_name
   end

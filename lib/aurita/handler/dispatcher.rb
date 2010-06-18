@@ -1,5 +1,6 @@
 
 require('aurita')
+require('aurita-gui/xml')
 
 Aurita.import(:base, :attributes)
 Aurita.import(:base, :session)
@@ -81,7 +82,9 @@ class Aurita::Dispatcher
       element  = controller_instance.call_guarded(action)
       response = controller_instance.response
       if response[:html] == '' then
-        if element.respond_to?(:string) then
+        if element.is_a?(Aurita::GUI::XML::Document) then
+          response[:mode] = :none if (!response[:mode] || response[:mode] == :default)
+        elsif element.respond_to?(:string) then
           response[:html] = element.string 
         elsif element.is_a?(Array) then
           element.each { |e|

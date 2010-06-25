@@ -185,7 +185,7 @@ module Main
       HTML.div { body }
     end
     def admin_box
-      box = Box.new(:class => :topic, :id => :admin_roles_box)
+      box = Box.new(:class => :topic, :id => :admin_roles_box, :collapsed => true)
       box.header = tl(:roles)
       box.body = admin_box_body
       box.toolbar = [ 

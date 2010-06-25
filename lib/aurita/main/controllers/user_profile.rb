@@ -170,7 +170,7 @@ module Main
       HTML.div.scrollbox { body } 
     end
     def admin_box
-      box         = Box.new(:type => :box, :class => :topic, :id => :admin_users_box)
+      box         = Box.new(:type => :box, :class => :topic, :id => :admin_users_box, :collapsed => true)
       box.header  = tl(:users)
       box.body    = admin_box_body()
       box.toolbar = [ 

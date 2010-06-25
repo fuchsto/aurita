@@ -14,7 +14,7 @@ module GUI
     
     def initialize(args)
       @entity       = args[:entity]
-      @collapsed    = false
+      @collapsed    = args[:collapsed]
       @header_class = 'header'
       @sortable     = args[:sortable]
       @sortable     = false unless Aurita.user.is_registered?   
@@ -26,6 +26,7 @@ module GUI
       @context_menu_params   = args[:params]
       @context_menu_params ||= {}
       @params       = args
+      @params.delete(:collapsed)
       @params.delete(:sortable)
       @params.delete(:entity)
       @params.delete(:header)

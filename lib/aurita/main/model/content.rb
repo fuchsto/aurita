@@ -73,17 +73,18 @@ module Main
         tags.strip!
         tags = tags.split(' ')
       end
-      tags.map! { |t| 
+      tags = tags.map { |t| 
         t = t.to_s.downcase
         t.gsub!("'","\'")
         t.gsub!('{','')
         t.gsub!('}','')
-        t.gsub(',','') 
+        t.gsub(',',' ') 
       }
       tags = tags.reject { |t| t.to_s.length < 3 }
       tags.uniq!
       tags = tags.join(',')
       tags = '{' << tags + '}'
+    # STDERR.puts 'Content.input_filter: ' + tags.inspect
       tags
     }
     # {cms,worldwide,hype,ajax} => cms worldwide hype ajax
@@ -99,6 +100,7 @@ module Main
       tags.map! { |t| t.downcase!; t }
       tags.uniq!
       tags = tags.join(' ')
+    # STDERR.puts 'Content.output_filter: ' + tags.inspect
       tags
     }
 
@@ -117,6 +119,7 @@ module Main
     # - Setting timestamps (created, changed)
     # etc. 
     def self.before_create(args)
+      puts 'in Content.before_create'
       args[:user_group_id] = Aurita.user.user_group_id if Aurita.user
       args[:changed] = Aurita::Datetime.now(:sql)
       args[:created] = Aurita::Datetime.now(:sql)
@@ -182,9 +185,13 @@ module Main
     # Also see Content#add_tags!
     #
     def add_tags(*tags_string_or_list)
-      new_tags = tags.split(' ')
-      if tags_string_or_list.length == 1 then
-        tags_string_or_list = tags_string_or_list.first.to_s.split(' ')
+      new_tags = tags.dup
+      if !new_tags.is_a?(Array) then
+        new_tags = new_tags.to_s.strip.squeeze(' ').split(' ') 
+      end
+      tags_string_or_list.flatten!
+      if !tags_string_or_list.is_a?(Array) then
+        tags_string_or_list = tags_string_or_list.to_s.strip.squeeze(' ').split(' ') 
       end
       new_tags += tags_string_or_list
       new_tags.map! { |t| t.to_s.downcase.to_sym }

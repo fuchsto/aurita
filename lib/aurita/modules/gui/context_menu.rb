@@ -37,6 +37,10 @@ module GUI
   # or
   #  
   #    Context_Menu_Element.new(HTML.div { article.title }, :entity => article)
+  #
+  # To build context menus for elements that have no Model connected with it, use: 
+  #
+  #    Context_Menu_Element.new(HTML.div { 'Right-click me' }, :type => :some_name, :id => :some_id)
   # 
   class Context_Menu_Element < DelegateClass(Element)
 
@@ -55,12 +59,13 @@ module GUI
         element = yield 
       end
 
-      if !element.respond_to?(:dom_id) then
-        element = HTML.div(:id => entity.dom_id) { element }
-      end
-
       params ||= {}
       type = params[:type]
+
+      if !element.respond_to?(:dom_id) then
+        element   = HTML.div(:id => entity.dom_id) { element } if entity
+        element ||= HTML.div(:id => "#{type}_#{params[:id]}") { element }
+      end
 
       additional_params      = params[:params] 
       additional_params    ||= {} 

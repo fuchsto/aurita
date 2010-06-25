@@ -38,6 +38,10 @@ module GUI
       @form_field
     end
 
+    def element
+      form_field().decorated_element
+    end
+
     def js_initialize
       return '' # This is already done in Aurita.Editor.init
 

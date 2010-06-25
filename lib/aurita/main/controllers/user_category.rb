@@ -47,6 +47,11 @@ module Main
       }
     end
 
+    def perform_add
+      param[:category_id] = param(:category_id_select) if !param(:category_id) 
+      super()
+    end
+
     def perform_delete
       User_Category.delete { |u|
         u.where((u.user_group_id == param(:user_group_id)) & 

@@ -33,9 +33,9 @@ module Main
                                 :value => param(:hierarchy_entry_id_parent)))
       form[Hierarchy_Entry.hierarchy_entry_id_parent].hide! 
       
-      options = { 'Tag_Autocomplete_Field'       => tl(:filter_entry), 
-                  "Text_Field({ name: 'link' })" => tl(:link), 
-                  'BLANK_NODE'                   => tl(:blank_node_entry) }
+      options = { 'Tag_Autocomplete_Field'                        => tl(:filter_entry), 
+                  "Text_Field({ name: 'link', decorated: true })" => tl(:link), 
+                  'BLANK_NODE'                                    => tl(:blank_node_entry) }
 
       plugin_get(Hook.main.hierarchy_entry.entry_types).each { |p|
         if p[:request] then
@@ -49,8 +49,8 @@ module Main
                                      :id       => :hierarchy_entry_type_selector, 
                                      :label    => tl(:context_entry_type), 
                                      :onchange => "$('active_type_element').innerHTML = ''; 
-                                                  Aurita.load_widget($('hierarchy_entry_type_selector').value, { }, 
-                                                     Aurita.load_widget_to('active_type_element'));", 
+                                                   Aurita.load_widget($('hierarchy_entry_type_selector').value, { }, 
+                                                                      Aurita.load_widget_to('active_type_element'));", 
                                      :value    => 'BLANK_NODE', 
                                      :options  => options)
       form.add(type_select)
@@ -59,7 +59,7 @@ module Main
       
       return decorate_form(form) 
     end
-
+    
     def update
       entry = load_instance()
       form = update_form()

@@ -7,7 +7,13 @@ module Main
   # This controller serves as a remote widget factory. 
   # Example: 
   # 
-  #   Aurita.get_widget('MyPlugin::Entity_Table', { id: 'table_widget', columns: 5 }); 
+  #   Aurita.load_widget('MyPlugin::Entity_Table', { id: 'table_widget', columns: 5 }, callback_fun); 
+  # 
+  # In case the widget loaded should be put into a DOM element; 
+  #
+  #   Aurita.load_widget('MyPlugin::Entity_Table', 
+  #                      { id: 'table_widget', columns: 5 }, 
+  #                      Aurita.load_widget_to('target_dom_id'); 
   # --> (on server)
   #   Widget_Service_Controller.get(:widget  => 'MyPlugin::Entity_Table', 
   #                                 :id      => 'table_widget', 
@@ -47,7 +53,9 @@ module Main
       raise ::Exception.new("Could not resolve widget #{param(:widget).inspect}") unless widget
       
       ctor_args = @params.clean
+      decorated = ctor_args[:decorated]
       ctor_args.delete(:widget)
+      ctor_args.delete(:decorated)
       begin
         instance  = widget.new(ctor_args)
       rescue ::Exception => excep
@@ -60,7 +68,11 @@ module Main
 
       exec_js(instance.js_initialize.gsub(/\s+/,' ')) if instance.respond_to?(:js_initialize)
 
-      puts instance.to_s
+      if decorated then
+        puts instance.decorated_element.to_s
+      else
+        puts instance.to_s
+      end
     end
     
   end

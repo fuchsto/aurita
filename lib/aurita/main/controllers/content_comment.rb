@@ -32,12 +32,9 @@ module Main
     end
 
     def box
-      box = Box.new(:id => :content_comment_box, :class => :topic_inline)
-      
-      box.header    = tl(:comments)
-      box.body      = list_string(param(:content_id))
-      box.collapsed = true
-      
+      box        = Box.new(:id => :content_comment_box, :class => :topic_inline, :collapsed => true)
+      box.header = tl(:comments)
+      box.body   = list_string(param(:content_id))
       box
     end
 

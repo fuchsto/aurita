@@ -604,6 +604,7 @@ module Aurita
       end
 
       form.set_values(form_values)
+
       title_key  = (klass.table_name).gsub('.','--')+'--add'
       form.title = (Lang[plugin_name][title_key]) unless Lang[plugin_name][title_key] == title_key
       klassname  = @klass.to_s.gsub('Aurita::','').gsub('Main::','').gsub('Plugins::','').gsub('::','__').downcase

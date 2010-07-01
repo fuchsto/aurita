@@ -982,9 +982,13 @@ div.column50 {
 }
 .topic li.entity a { 
   display: inline; 
+  line-height: 23px; 
+/*  float: left; */
 }
 .topic li.entity { 
   clear: both; 
+  padding-left: 3px; 
+  background: url("/aurita/images/icons/row_bg.png") repeat scroll 0 0 transparent;
 }
 .topic li.entity.indented { 
   padding-left: 10px; 

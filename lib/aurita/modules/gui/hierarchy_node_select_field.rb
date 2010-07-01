@@ -53,11 +53,12 @@ module GUI
     attr_accessor :field_type, :model
     
     def initialize(params={}, &block) 
+      
+      super(params, &block)
+      
       @entry_type = Hierarchy_Node_Select_Entry
-      @value      = params[:value]
       @model      = params[:model]
       @model    ||= Aurita::Plugins::Wiki::Media_Asset_Folder
-      super(params, &block)
     end
     
     def element
@@ -69,6 +70,7 @@ module GUI
     end
 
     def select_boxes
+
       result   = Array.new
       levels   = reverse_node_map(@value) if @value
       levels ||= []
@@ -92,7 +94,7 @@ module GUI
     end
     
     def readonly_element
-      HTML.div { @value } 
+      HTML.div { @model.get(@value).label } 
     end
     
     def onfocus=(fun)

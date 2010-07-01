@@ -130,22 +130,8 @@ JS
                  :force_closing_tag => true) 
       }
     end
+    
     def js_initialize()
-code =<<JS 
-      autocomplete_selected_users = {}; 
-      new Ajax.Autocompleter("autocomplete_username", 
-                             "autocomplete_username_choices", 
-                             "/aurita/poll", 
-                             { 
-                               minChars: 2, 
-                               updateElement: function(li) { #{@onselect} } , 
-                               frequency: 0.1, 
-                               tokens: [], 
-                               parameters: 'controller=Autocomplete&action=usernames&mode=none'
-                             }
-      );
-JS
-      code
     end
   end
 

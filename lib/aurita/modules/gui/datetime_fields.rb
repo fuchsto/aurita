@@ -2,6 +2,7 @@
 require('aurita')
 require('aurita-gui')
 require('aurita-gui/widget')
+require('aurita-gui/form/date_field')
 
 Aurita.import_module :gui, :i18n_helpers
 
@@ -9,13 +10,40 @@ Aurita.import_module :gui, :i18n_helpers
 module Aurita
 module GUI
 
+  # Overload default behaviour from Aurita::GUI
+  class Date_Field < Form_Field
+  include Aurita::GUI::I18N_Helpers
+
+    alias basic_element element
+    def element
+      @date_format = tl(:date_field_format)
+
+      field_id  = @attrib[:name].gsub('.','_')
+      target_id = "#{field_id}_target"
+
+      onchange  = "Aurita.GUI.update_date_field('#{target_id}');"
+
+      year_element().dom_id    = "#{field_id}_target_year"
+      month_element().dom_id   = "#{field_id}_target_month"
+      day_element().dom_id     = "#{field_id}_target_day"
+      year_element().onchange  = onchange
+      month_element().onchange = onchange
+      day_element().onchange   = onchange
+      field = basic_element << HTML.input(:type  => :hidden, 
+                                          :id    => target_id, 
+                                          :name  => @attrib[:name], 
+                                          :value => @value)
+      field
+    end
+  end
+
   class Duration_Field < Form_Field
   include Aurita::GUI::I18N_Helpers
 
     def initialize(params, &block)
-      @day_range = params[:day_range]
-      @day_range ||= (0..7)
-      @hour_range = params[:hour_range]
+      @day_range    = params[:day_range]
+      @day_range  ||= (0..7)
+      @hour_range   = params[:hour_range]
       @hour_range ||= (0..23)
       super(params, &block)
       @value ||= [0,0]

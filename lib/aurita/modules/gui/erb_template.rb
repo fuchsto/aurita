@@ -63,12 +63,12 @@ module GUI
         @plugin_name = 'main'
         @template_symbol = template_filename.split('.')[0].intern
       end
-
+      
       if Aurita.runmode == :development || @@template[@template_symbol].nil? then
         @@template[@template_symbol] = ''
 
         if plugin then
-
+          
           if File.exists?(Aurita.project_path + "views/#{@plugin_name}/#{template_filename}") then
             template_path = Aurita.project_path + "views/#{@plugin_name}/#{template_filename}"
           elsif File.exists?(Aurita::App_Configuration.plugins_path + "#{@plugin_name}/views/#{template_filename}") then

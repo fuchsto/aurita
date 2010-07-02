@@ -108,6 +108,8 @@ home : Home
 date_format : "%d.%m.%Y"
 time_format : "%H:%M:%S"
 datetime_format : "%d.%m.%Y - %H:%M:%S"
+date_field_format : 'dmy'
+datetime_field_format : 'dmy:hms'
 
 timespan_to : bis
 

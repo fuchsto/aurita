@@ -24,7 +24,7 @@ module GUI
       @parent ||= params[:parent]
       params.delete(:parent)
       if !params[:value] then
-        params[:option_values] = [ '' ]
+        params[:option_values] = [ '0' ]
         params[:option_labels] = [ tl(:select_additional_category) ]
         cats = Category.all_with(Category.is_private == 'f').sort_by(:category_name, :asc).to_a
         dec  = Hierarchy_Map_Iterator.new(cats)

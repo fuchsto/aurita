@@ -103,11 +103,11 @@ module Main
       position_tree = []
       position_tree = param("hierarchy_sortable_list_#{hid}")
       position_tree = parse_position_tree(position_tree)
-      position_tree.each_with_index { |entry, sortpos|
+      position_tree.each { |entry|
         Hierarchy_Entry.update { |e|
           e.where(e.hierarchy_entry_id == entry[0]) 
           e.set(:hierarchy_entry_id_parent => entry[1], 
-                :sortpos => sortpos)
+                :sortpos => entry[2])
         }
       }
     end
@@ -118,7 +118,7 @@ module Main
       position = 0
       while mapping[position.to_s] && mapping[position.to_s]['id'] do 
         entry_id = mapping[position.to_s]['id']
-        tree << [ entry_id, last_parent_entry_id ]
+        tree << [ entry_id, last_parent_entry_id, position ]
         tree = parse_position_tree(mapping[position.to_s], entry_id, tree)
         position += 1
       end

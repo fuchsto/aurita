@@ -9,8 +9,8 @@ body {
 }
 
 pre { color:#000; background-color: #dfdfdf;  font-family:monospace; font-size:12px; margin:0px; padding: 5px; }
-body { background: #eaeaea; }
-body.mceForceColors { background: #eaeaea; color:#000;}
+body { background: none; background-color: white; }
+body.mceForceColors { background: none; background-color: white;; color:#000;}
 h1 {font-size: 2em}
 h2 {font-size: 1.5em}
 h3 {font-size: 1.17em}

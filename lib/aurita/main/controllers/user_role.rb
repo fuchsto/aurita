@@ -8,6 +8,11 @@ module Main
 
     guard_interface(:list, :perform_add, :perform_delete, :perform_update) { Aurita.user.is_admin? }
 
+    def perform_add
+      param[:role_id] = param(:role_id_select) unless param(:role_id)
+      super()
+    end
+
     def list
       puts list_string(param(:user_group_id))
     end

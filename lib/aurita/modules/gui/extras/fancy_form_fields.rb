@@ -13,11 +13,13 @@ module GUI
     end
   end
 
+=begin
   class File_Field < Form_Field
     def element
       HTML.div.left { HTML.div.right { HTML.div.center { HTML.input(@attrib) } } } 
     end
   end
+=end
 
   class Hierarchy_Node_Select_Field < Form_Field
     def decorated_element
@@ -31,9 +33,15 @@ module GUI
     end
   end
 
-  class Aurita::GUI::Textarea_Field < Form_Field
+  class Textarea_Field < Form_Field
     def decorated_element
       GUI::Decobox.new(:class => :form_field) { element() } 
+    end
+  end
+
+  class File_Field < Form_Field
+    def decorated_element
+      HTML.div.left { HTML.div.right { HTML.div.center { element() } } }
     end
   end
   

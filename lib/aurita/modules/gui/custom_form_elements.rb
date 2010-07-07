@@ -39,7 +39,7 @@ module GUI
     end
 
     def element
-      form_field().decorated_element
+      form_field().element
     end
 
     def js_initialize

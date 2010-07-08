@@ -23,9 +23,12 @@ module GUI
 
   class Text_Editor_Field < Aurita::GUI::Form_Field_Widget
     
+    attr_accessor :label
+
     def initialize(params={}, &block)
       params[:class] ||= []
       params[:class]  << [ :editor, :simple, :widget ]
+      @label = params[:label]
       super(params, &block)
     end
 
@@ -238,7 +241,7 @@ JS
   include Aurita::GUI::I18N_Helpers
 
     def initialize(params={}, &block)
-      values = [ '' ]
+      values = [ '0' ]
       labels = [ tl(:no_category) ]
     
       cats = Category.all_with(Category.is_private == 'f').sort_by(:category_name, :asc).to_a

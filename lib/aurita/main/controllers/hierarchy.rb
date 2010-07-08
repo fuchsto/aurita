@@ -1,4 +1,6 @@
+
 require('aurita/controller')
+
 Aurita::Main.import_model :hierarchy
 Aurita::Main.import_model :hierarchy_entry
 Aurita::Main.import_model :hierarchy_category

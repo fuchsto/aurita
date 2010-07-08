@@ -101,6 +101,8 @@ module Main
         param[:interface] = link
       else
         # Delegate entry type handling to plugin
+        plugin_params = @params.dup
+        plugin_params[:hierarchy] = hierarchy
         content = plugin_get(Hook.main.hierarchy_entry.add_entry, @params).first[:content]
         param[:content_id] ||= content.content_id if content
       end

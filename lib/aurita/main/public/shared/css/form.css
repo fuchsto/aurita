@@ -417,6 +417,8 @@ a.no_border.button:hover .right {
   border: 1px outset white; 
   -moz-border-radius: 4px; 
   -moz-box-shadow: 0px 1px 15px #898989;
+  -webkit-border-radius: 4px; 
+  -webkit-box-shadow: 0px 1px 15px #898989;
   border-radius: 4px; 
   box-shadow: 0px 1px 15px #898989;
 }

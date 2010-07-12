@@ -998,12 +998,28 @@ div.column50 {
 .topic li.entity { 
   clear: both; 
   padding-left: 3px; 
-  background: url("/aurita/images/icons/row_bg.png") repeat scroll 0 0 transparent;
+  background: url("/aurita/images/icons/row_bg.png") repeat-x scroll 0 0 #efefef
 }
 .topic li.entity.indented { 
   padding-left: 10px; 
 }
 .topic li.entity .label { 
+  display: inline; 
+}
+
+.listbox .items { 
+  border: 1px outset white; 
+}
+.listbox .item a { 
+  display: inline; 
+  line-height: 23px; 
+}
+.listbox .item { 
+  clear: both; 
+  padding-left: 3px; 
+  background: url("/aurita/images/icons/row_bg.png") repeat-x scroll 0 0 #efefef
+}
+.listbox .item_label { 
   display: inline; 
 }
 

@@ -207,6 +207,9 @@ module Main
         i.order_by(:position, :asc)
       }.flatten.map { |dom_id| dom_id.split('_').last.to_i }
 
+      filtered_cat_ids = Category_Feed_Filter.find(1).with(:user_group_id => Aurita.user.user_group_id).entity
+      filtered_cat_ids = filtered_cat_ids.category_ids if filtered_cat_ids
+
       # Map categories to Hash, so we can iterate over positions
       categories = {}
       Aurita.user.readable_categories.each { |c|
@@ -222,6 +225,8 @@ module Main
         positions += categories.keys - positions
       end
       
+      positions -= filtered_cat_ids if filtered_cat_ids
+
       positions.each { |cat_id|
         cat_result = ''
         cat = categories[cat_id]

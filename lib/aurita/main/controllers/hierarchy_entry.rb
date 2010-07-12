@@ -16,6 +16,8 @@ module Main
   #   'ENTRY_TYPE' => 'label string'
   #
   class Hierarchy_Entry_Controller < App_Controller
+    
+    guard(:CUD) { Aurita.user.may(:edit_hierarchies) }
 
     def add
       form = model_form(:model => Hierarchy_Entry, :action => :perform_add)

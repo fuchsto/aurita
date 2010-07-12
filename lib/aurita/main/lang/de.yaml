@@ -78,6 +78,7 @@ surname : Nachname
 upload_image : Upload
 
 delete_hierarchies : Navigationslisten l&ouml;schen
+edit_hierarchies : Navigationslisten bearbeiten
 view_recent_comments : Liste der letzten Kommentare anzeigen
 
 allow_access_to_users : Folgenden Benutzern Zugriff erteilen

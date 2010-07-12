@@ -14,6 +14,8 @@ module Main
 
   class Hierarchy_Controller < App_Controller
 
+    guard(:CUD) { Aurita.user.may(:edit_hierarchies) }
+
     def form_groups
       [
         Hierarchy.header, 

@@ -27,8 +27,8 @@ module Main
     alias user_group user_profile
 
     def hierarchy()
+      return unless Aurita.user.may(:edit_hierarchies)
       
-
       hierarchy_id = param(:hierarchy_id)
       hid = hierarchy_id
       targets = { "hierarchy_#{hid}_body" => "Hierarchy/body/hierarchy_id=#{hid}" }
@@ -59,6 +59,7 @@ module Main
     end
 
     def hierarchy_entry()
+      return unless Aurita.user.may(:edit_hierarchies)
 
       entry   = Hierarchy_Entry.load(:hierarchy_entry_id => param(:hierarchy_entry_id))
       hid     = entry.hierarchy_id

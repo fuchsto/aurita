@@ -16,6 +16,8 @@ module GUI
 
     alias basic_element element
     def element
+      value   = @value
+      value ||= "#{@year_range.to_a.first}-1-1"
       @date_format = tl(:date_field_format)
 
       field_id  = @attrib[:name].gsub('.','_')
@@ -32,7 +34,7 @@ module GUI
       field = basic_element << HTML.input(:type  => :hidden, 
                                           :id    => target_id, 
                                           :name  => @attrib[:name], 
-                                          :value => @value)
+                                          :value => value)
       field
     end
   end

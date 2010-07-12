@@ -274,6 +274,7 @@ a.button, span.button, div.button {
 
 .button .label { 
   display: inline; 
+  padding-left: 4px; 
 }
 .button .center { 
   padding: 5px 5px 5px 5px; 

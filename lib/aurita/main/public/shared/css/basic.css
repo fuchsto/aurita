@@ -1319,7 +1319,6 @@ a.icon_button .right {
 }
 a.icon_button .icon { 
   background-repeat: no-repeat; 
-  background-position: 6px 0px; 
   background-color: transparent; 
 }
 a.icon_button .left { 

@@ -78,11 +78,16 @@ module Main
       hierarchy_boxes(params[:perspective])
     end
 
-    def hierarchy_boxes(category=nil) 
+    def hierarchy_boxes(params={})
+
+      category   = params[:section]
       category ||= 'GENERAL'
+      filter     = params[:filter]
+      filter   ||= (Hierarchy.category == category)
+      
       hierarchy_list = []
       count = 0
-      Hierarchy.all_with((Hierarchy.category == category) & (Hierarchy.accessible)).each { |h|
+      Hierarchy.all_with(filter & (Hierarchy.accessible)).each { |h|
         entries = Hierarchy_Entry.all_with(Hierarchy_Entry.hierarchy_id == h.hierarchy_id).entities
         map = Hierarchy_Map.new(entries)
         dec = Hierarchy_Entries_Default_Decorator.new(map)
@@ -143,17 +148,23 @@ module Main
 
     def add
       form = add_form()
-      form.add(Hidden_Field.new(:name => Hierarchy.category.to_s, :value => param(:category)))
+      form.add(Hidden_Field.new(:name  => Hierarchy.category.to_s, 
+                                :value => param(:category)))
       form.add(GUI::Category_Selection_List_Field.new())
-      render_form(form)
+      form = render_form(form)
+
+      return form unless param(:element) == 'app_main_content'
+      return Page.new(:header => tl(:add_hierarchy)) { form } 
     end
 
     def delete
       form = delete_form()
       instance = load_instance()
-      form.add(Hidden_Field.new(:name => Hierarchy.category.to_s, :value => param(:category)))
+      form.add(Hidden_Field.new(:name  => Hierarchy.category.to_s, 
+                                :value => param(:category)))
       render_form(form)
-      form.add(Hidden_Field.new(:name => Hierarchy.category.to_s, :value => instance.category))
+      form.add(Hidden_Field.new(:name  => Hierarchy.category.to_s, 
+                                :value => instance.category))
     end
 
     def sort

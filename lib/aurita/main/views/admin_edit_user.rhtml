@@ -46,6 +46,13 @@
 </div>
 <br />
 
+<% params.plugin_get(Hook.admin.edit_user, :user => user).each do |component| %>
+<div class="form_box">
+  <%= component %>
+</div>
+<br />
+<% end %>
+
 <% if !user.is_system_user? then %>
 
 <div class="form_box">

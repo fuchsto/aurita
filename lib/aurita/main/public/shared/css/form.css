@@ -527,6 +527,10 @@ label {
 */
 }
 
+label.inline { 
+  display: inline; 
+}
+
 .form_view_vertical label { 
   width: 160px; 
   padding: 2px; 

@@ -123,7 +123,7 @@ add_sub_entry : Neuer Unterpunkt
 edit_entry : Eintrag umbenennen
 delete_hierarchy : Liste l&ouml;schen
 delete_entry : Eintrag l&ouml;schen
-add_hierarchy : Neue Liste erstellen
+add_hierarchy : Neuer Hauptmen&uuml;punkt
 sort_hierarchy : Liste sortieren
 
 add_custom_entry : Neuer Eintrag

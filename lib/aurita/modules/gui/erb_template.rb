@@ -146,7 +146,7 @@ module GUI
       begin
         @binding_params.get(method)
       rescue ::Exception => excep
-        puts 'Error when calling ' << method.to_s + ': ' << excep.message
+        raise ::Exception.new('Error when calling ' << method.to_s + ': ' << excep.message)
       end
     end
 

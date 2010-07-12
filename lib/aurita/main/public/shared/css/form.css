@@ -199,7 +199,7 @@ input.inline, textarea.inline {
 
 .form_box { 
   padding: 10px; 
-  width: 321px; 
+  width: 320px; 
   background-color: #f4f4f4; 
 }
 .form_box.wide { 
@@ -265,54 +265,54 @@ a.button, span.button, div.button {
   padding: 2px; 
 }
 
-a.button, a.icon_button { 
+.button, .icon_button { 
   display: block; 
 }
-.toolbar a.button, .toolbar a.icon_button, .button_bar a.button, .button_bar a.icon_button { 
+.toolbar .button, .toolbar .icon_button, .button_bar .button, .button_bar .icon_button { 
   width: auto; 
 }
 
-a.button .label { 
+.button .label { 
   display: inline; 
 }
-a.button .center { 
+.button .center { 
   padding: 5px 5px 5px 5px; 
   height: 18px; 
   text-align: center; 
 }
-a.icon_button .center { 
+.icon_button .center { 
   padding: 5px 5px 5px 0px; 
 }
-a.toolbar_button .center { 
+.toolbar_button .center { 
   text-align: left; 
 }
 
 /* generic icon button, default state */
 
-a.button .center, a.icon_button .center { 
+.button .center, .icon_button .center { 
   background: url('/aurita/images/icons/button_bg.png');
 }
-a.icon_button .icon { 
+.icon_button .icon { 
   padding: 6px 0px 7px 37px;
   display: inline; 
   width: 24px; 
   height: 24px; 
 }
-a.button .left, a.icon_button .left { 
+.button .left, .icon_button .left { 
   padding-left: 3px; 
 }
-a.button .right, a.icon_button .right { 
+.button .right, .icon_button .right { 
   padding-right: 3px; 
 }
-a.icon_button .icon { 
+.icon_button .icon { 
   background-repeat: no-repeat; 
   background-position: 14px 4px; 
   background-color: transparent; 
 }
-a.button .left, a.icon_button .left { 
+.button .left, .icon_button .left { 
   background: url('/aurita/images/icons/button_l.png') no-repeat scroll 0 0 transparent;
 }
-a.button .right, a.icon_button .right { 
+.button .right, .icon_button .right { 
   background: url('/aurita/images/icons/button_r.png') no-repeat scroll 100% 0 transparent;
 }
 
@@ -330,35 +330,44 @@ a.button:hover .right, a.icon_button:hover .right {
 
 /* toolbar button, default state */
 
-a.toolbar_button .center { 
+.toolbar_button .center, 
+.button_group.hover a.toolbar_button .center { 
   background: none; 
 }
-a.toolbar_button .left { 
+.toolbar_button .left, 
+.button_group.hover a.toolbar_button .left { 
   background: none; 
 }
-a.toolbar_button .right { 
+.toolbar_button .right, 
+.button_group.hover a.toolbar_button .right { 
   background: none; 
 }
 
 /* toolbar button, hover state */
 
-a.toolbar_button:hover .center { 
+a.toolbar_button:hover .center, 
+.button_group.hover .center, 
+.button_group.hover .center a.toolbar_button:hover .center { 
   background: url('/aurita/images/icons/button_bg.png');
 }
-a.toolbar_button:hover .left { 
+a.toolbar_button:hover .left, 
+.button_group.hover .left, 
+.button_group.hover .left a.toolbar_button:hover .left { 
   background: url('/aurita/images/icons/button_l.png') no-repeat scroll 0 0 transparent;
 }
-a.toolbar_button:hover .right { 
+a.toolbar_button:hover .right, 
+.button_group.hover .right, 
+.button_group.hover .right a.toolbar_button:hover .right { 
   background: url('/aurita/images/icons/button_r.png') no-repeat scroll 100% 0 transparent;
 }
 
 /* Begin button icons */
 
-a.icon_button.ok .icon { 
+.icon_button.ok .icon { 
   background-image: url('/aurita/images/icons/ok.png'); 
   background-position: 11px 4px; 
 }
-a.icon_button.cancel .icon { 
+.icon_button.cancel .icon { 
   background-image: url('/aurita/images/icons/cancel.png'); 
   background-position: 11px 4px; 
 }
@@ -367,8 +376,8 @@ a.icon_button.cancel .icon {
 
 /* Begin buttons with no border */
 
-a.no_border.button .left, a.no_border.button .right, a.no_border.button .center, 
-a.no_border.icon_button .left, a.no_border.icon_button .right, a.no_border.icon_button .center { 
+.no_border.button .left, .no_border.button .right, .no_border.button .center, 
+.no_border.icon_button .left, .no_border.icon_button .right, .no_border.icon_button .center { 
   background: none; 
   background-image: none; 
   background-color: transparent; 
@@ -388,17 +397,39 @@ a.no_border.button:hover .right {
 
 /* Begin inline button */
 
-a.button.inline { 
+.button.inline { 
   display: inline; 
 }
-a.button.inline .left { 
+.button.inline .left { 
   
 }
-a.button.inline .center { 
+.button.inline .center { 
   
 }
-a.button.inline .right { 
+.button.inline .right { 
   
+}
+
+.button_group .button_set .button_wrap { 
+  background: #efefef; 
+  padding: 4px; 
+  border: 1px outset white; 
+  -moz-border-radius: 4px; 
+  -moz-box-shadow: 0px 1px 15px #898989;
+  border-radius: 4px; 
+  box-shadow: 0px 1px 15px #898989;
+}
+.button_group .button_set { 
+  position: absolute; 
+  z-index: 10; 
+  padding-left: 210px; 
+  margin-top: -30px; 
+}
+.button_group .button { 
+  font-size: 1em; 
+}
+.button_group .button .center { 
+  text-align: left; 
 }
 
 /* End inline button */

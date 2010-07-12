@@ -11,11 +11,11 @@ module GUI
     attr_accessor :icon, :label, :action
 
     def initialize(params={}, &block)
-      params[:tag] = :a
-      @icon   = params[:icon]
-      @label  = params[:label]
-      @label  = yield if block_given?
-      @action = params[:action]
+      params[:tag] = :a unless params[:tag]
+      @icon     = params[:icon]
+      @label    = params[:label]
+      @label  ||= yield if block_given?
+      @action   = params[:action]
       params.delete(:icon)
       params.delete(:label)
       params[:class] = [ params[:class] ] unless params[:class].is_a?(Array)
@@ -30,6 +30,10 @@ module GUI
 
       super(params)
 
+      set_content(button())
+    end
+
+    def button
       inner  = []
       if @label then
         inner  << HTML.div.icon { '&nbsp;' } if @icon
@@ -37,15 +41,14 @@ module GUI
       else
         inner  << HTML.div(:class => [ :icon, :icon_nopadding]) { '&nbsp;' } if @icon
       end
-      button = HTML.div.left { 
-                 HTML.div.right {
-                   HTML.div.center { 
-                     inner
-                   }
-                 }
-               }
       
-      set_content(button)
+      HTML.div.left { 
+        HTML.div.right {
+          HTML.div.center { 
+            inner
+          }
+        }
+      }
     end
     
   end

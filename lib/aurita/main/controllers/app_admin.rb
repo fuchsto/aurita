@@ -9,18 +9,18 @@ module Main
   class App_Admin_Controller < App_Controller
 
     guard_interface(:all) { Aurita.user.is_admin? } 
-
+    
     def system_box
       box          = Box.new(:type => :system, :class => :topic)
       box.header   = tl(:admin_tools)
 
       body         = HTML.div.toolbar { 
         Toolbar_Button.new(:icon   => :tags, 
-                        :action => 'Tag_Blacklist/edit') { 
+                           :action => 'Tag_Blacklist/edit') { 
           tl(:edit_tags)
         } + 
         Toolbar_Button.new(:icon   => :synonyms, 
-                        :action => 'Tag_Synonym/edit') { 
+                           :action => 'Tag_Synonym/edit') { 
           tl(:edit_synonyms)
         } 
       }
@@ -29,18 +29,18 @@ module Main
       box.body     = body
       return box
     end
-
+    
     def left
       puts plugin_get(Hook.admin.left.top).map { |component| component.string } 
       puts plugin_get(Hook.admin.left).map { |component| component.string } 
       puts plugin_get(Hook.admin.left.hierarchies, :perspective => 'ADMIN').map { |h| h.string } 
     end
-
+    
     def main
       puts plugin_get(Hook.admin.workspace.top).map { |component| component.string } 
       puts plugin_get(Hook.admin.workspace).map { |component| component.string } 
     end
-
+    
     def locked_users_box
       box = Box.new(:type => :box, :class => :topic, :id => :locked_users_box)
       box.header = tl(:locked_users)

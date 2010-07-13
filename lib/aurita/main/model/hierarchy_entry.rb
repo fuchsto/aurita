@@ -42,6 +42,10 @@ module Main
     def hierarchy
       Hierarchy.get(hierarchy_id)
     end
+
+    def position
+      sortpos
+    end
     
   end 
 

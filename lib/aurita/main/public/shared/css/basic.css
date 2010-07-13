@@ -131,6 +131,10 @@ p {
   line-height: inherit; 
 }
 
+.debug_hint { 
+  display: none; 
+}
+
 .no_border { 
   border: 0 !important; 
   border-width: 0px !important; 

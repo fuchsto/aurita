@@ -46,9 +46,15 @@ module Aurita
         @entries[pid] ||= []
         @entries[pid]  << entry
       }
+      if @entities.first.respond_to?(:position) then
+        @entries.each_pair { |pid,mapping|
+          @entries[pid] = mapping.sort_by { |a| a.position } 
+        }
+      end
+
       return @entries 
     end
-
+    
     def set_entries(*entries)
       entries = entries.flatten
       if !entries.first.respond_to?(:parent_id) then
@@ -74,7 +80,7 @@ module Aurita
       entries[key] || []
     end
 
-    def inspect
+    def to_s
       s = ''
       entries.each_pair { |key,subs|
         subs.each { |e|

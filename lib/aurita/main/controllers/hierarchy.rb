@@ -90,7 +90,7 @@ module Main
       hierarchy_list = []
       count = 0
       Hierarchy.all_with(filter & (Hierarchy.accessible)).each { |h|
-        entries = Hierarchy_Entry.all_with(Hierarchy_Entry.hierarchy_id == h.hierarchy_id).entities
+        entries = Hierarchy_Entry.all_with(Hierarchy_Entry.hierarchy_id == h.hierarchy_id)
         map = Hierarchy_Map.new(entries)
         dec = Hierarchy_Entries_Default_Decorator.new(map)
         if dec.string || Aurita.user.is_registered? then

@@ -67,6 +67,7 @@ module GUI
     def recurse(parent_id, indent=1)
       return [] unless @entry_map[parent_id] 
       elements = []
+      
       for e in @entry_map[parent_id] do
 
         entry_id   = e.pkey
@@ -123,7 +124,7 @@ module GUI
                  :hierarchy_id       => e.hierarchy_id }
       entry  = Context_Menu_Element.new(:entity => e, 
                                         :params => params) { 
-        HTML.div { entry }
+        HTML.div { entry + HTML.span.debug_hint { e.sortpos} } 
       }
 
       return HTML.li { entry + next_level }

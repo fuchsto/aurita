@@ -777,8 +777,6 @@ fieldset legend {
 }
 
 .section_content form { 
-  padding: 10px; 
-  margin-left: -10px; 
   padding-top: 0px; 
   padding-bottom: 0px; 
 }

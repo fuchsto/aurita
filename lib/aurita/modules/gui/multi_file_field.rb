@@ -21,7 +21,7 @@ module GUI
       append_file = "Aurita.load_widget('Multi_File_Entry_Field', 
                                         { 
                                           name: '#{@attrib[:name]}', 
-                                          id: '#{@attrib[:id]}_entry' 
+                                          id: '#{@attrib[:id]}_entry'
                                         }, 
                                         Aurita.append_widget_to('#{entries_id}'));"
       HTML.div(:id => @attrib[:id]) { 

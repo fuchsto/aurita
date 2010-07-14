@@ -70,7 +70,7 @@ ul.form_fields .hierarchy_node_select select {
   background-image: url('/aurita/images/icons/input_bg.png'); 
   background-repeat: repeat-x; 
   background-position: 0 0; 
-  height: 29px; 
+/*  height: 29px;   lead to problem with multi file field */
   padding-top: 6px; 
 }
 .form_field.focussed .left { 
@@ -809,6 +809,10 @@ ul.form_fields .multi_file_field_wrap input {
 ul.form_fields .multi_file_entry input { 
 /*  width: 312px; */
 }
+.multi_file_field_wrap .add_file_button { 
+  margin-top: 10px; 
+}
+
 
 .datepick_field_wrap .datepick_field { 
   background-color: #eaeaea; 

@@ -124,7 +124,7 @@ module GUI
                  :hierarchy_id       => e.hierarchy_id }
       entry  = Context_Menu_Element.new(:entity => e, 
                                         :params => params) { 
-        HTML.div { entry + HTML.span.debug_hint { e.sortpos} } 
+        HTML.div { entry }
       }
 
       return HTML.li { entry + next_level }

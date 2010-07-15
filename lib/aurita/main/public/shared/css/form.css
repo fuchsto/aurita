@@ -23,13 +23,12 @@ ul.form_fields input, ul.form_fields textarea, ul.form_fields select,
   font-family: inherit; 
   font-size: inherit; 
   font-weight: inherit; 
-  padding: 5px; 
-  padding-left: 0px; 
   margin: 0px; 
   background-color: transparent; 
   background: none; 
   border: 0 none; 
   width: 276px; 
+  padding: 5px 5px 9px 0; 
 }
 ul.form_fields select, .form_field select {
   width: 300px;  

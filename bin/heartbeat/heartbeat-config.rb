@@ -1,8 +1,9 @@
 
-MY_NAME = "intra.wortundform.de"
+MY_NAME = "wuerttfv.de"
 
 MAILTO_ADDRESS = [
-#   'mail@domain.com',
+   'fuchs@wortundform.de',
+   'diehr@wortundform.de'
 ]
 
 MAX_INVOCATIONS_PER_DAY = 50
@@ -15,13 +16,12 @@ LOG_FILE      = File.dirname(__FILE__) + "/heartbeat.log"
 
 # Shellcode zum Restarten des Servers
 RESTART_CODE = <<END
-/usr/share/gitwc/aurita_projects/cfmaier/bin/stop_production; 
 /etc/init.d/postgresql-8.4 restart; 
-/usr/share/gitwc/aurita_projects/cfmaier/bin/flush_production; 
+/usr/share/gitwc/flush_production; 
 END
 
 # Welche URL soll abgerufen werden?
-CHECK_URL = 'http://127.0.0.1/aurita/App_Main/ping/'
+CHECK_URL = 'http://wuerttfv.de/aurita/App_Main/ping/'
 
 # Welche Strings muessen in der Ausgabe auftauchen?
 CHECK_STRINGS = [

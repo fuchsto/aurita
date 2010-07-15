@@ -67,6 +67,10 @@ dl.table dt {
   width: 150px; 
 }
 
+table th { 
+  white-space: nowrap; 
+}
+
 dl dt { 
   font-weight: bold; 
 }

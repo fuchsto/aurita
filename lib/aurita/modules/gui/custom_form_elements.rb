@@ -45,6 +45,10 @@ module GUI
       form_field().element
     end
 
+    def readonly_element
+      HTML.div { @value } 
+    end
+
     def js_initialize
       return '' # This is already done in Aurita.Editor.init
 

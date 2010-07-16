@@ -30,11 +30,11 @@ module Main
     end
 
     def left
-      puts plugin_get(Hook.public.main.left.top).map { |component| component.string } 
-      puts plugin_get(Hook.main.left.top).map { |component| component.string } 
-      puts plugin_get(Hook.public.main.left).map { |component| component.string } 
-      puts plugin_get(Hook.main.left).map { |component| component.string } 
-      puts plugin_get(Hook.main.left.hierarchies, :perspective => 'GENERAL').map { |h| h.string } 
+      plugin_get(Hook.public.main.left.top).each { |component| render(component) } 
+      plugin_get(Hook.main.left.top).each { |component| render(component) } 
+      plugin_get(Hook.public.main.left).each { |component| render(component) } 
+      plugin_get(Hook.main.left).each { |component| render(component) } 
+      plugin_get(Hook.main.left.hierarchies, :perspective => 'GENERAL').each { |h| render(h) } 
       exec_js("new accordion('app_left_column', { classNames: { content: 'accordion_box_body', toggle: 'accordion_box_header', toggleActive: 'accordion_box_header_active' } });");
     end
 

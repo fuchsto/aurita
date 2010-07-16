@@ -8,9 +8,13 @@ module GUI
 
     attr_accessor :icon
 
-    def initialize(icon_name)
+    def initialize(icon_name, params={})
       @icon = icon_name
-      super(:tag => :img, :src => "/aurita/images/icons/#{@icon}.gif", :class => :icon)
+      params[:tag] = :img
+      params[:src] = "/aurita/images/icons/#{@icon}.gif"
+      params[:class] = [ params[:class] ]
+      params[:class] << :icon
+      super(params)
     end
 
   end

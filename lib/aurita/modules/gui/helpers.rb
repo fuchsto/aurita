@@ -20,34 +20,6 @@ module GUI
   include I18N_Helpers
   include Link_Helpers
 
-    def render(*args)
-      first = args[0]
-      case first
-        when String
-          if args[0][0] == '/' then
-            render_file(args.at(0))
-          elsif(false) then
-          end
-        when Form
-          render_form(first)
-        when Hash 
-        when Symbol
-          render_view(first, args[1..-1])
-        else
-      end
-    end
-
-    def render_file(aurita_path)
-      path = Aurita::Main::Application.base_path + aurita_path
-      if File.exists? path then
-        File.open(path) { |file|
-          file.each { |line| 
-            puts line
-          }
-        }
-      end
-    end
-
     def js(&block)
       if block_given? then
         Javascript.build(&block)

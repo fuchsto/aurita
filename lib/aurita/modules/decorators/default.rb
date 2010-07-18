@@ -83,8 +83,11 @@ module Main
   #
   class Default_Decorator
 
+    attr_reader :element_scripts
+
     def initialize
-      @templates = {}
+      @templates       = {}
+      @element_scripts = ''
     end
 
     # Expects model klass to decorate, the controllers response 
@@ -166,6 +169,11 @@ module Main
 
     def print()
       puts @content
+    end
+
+    def render_element(element)
+      @element_scripts << element.script
+      return element.string
     end
 
   end # class

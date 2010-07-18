@@ -829,6 +829,34 @@ class Aurita::Base_Controller
     @response[:html] << text
   end
 
+  def render_file(path)
+    File.open(path) { |file|
+      file.each { |line| 
+        puts line
+      }
+    }
+  end
+
+  def render(element, params={})
+    @response[:html]   = '' unless @response[:html]
+    @response[:script] = '' unless @response[:script]
+
+    if element.respond_to?(:string) && element.respond_to?(:script) then
+      @response[:html]   << element.string
+      @response[:script] << element.script
+    elsif element.is_a?(Array)
+      element.each { |e| render(e) }
+    elsif element.is_a?(File) then
+      render_file(file)
+    elsif element.is_a?(String)
+      @response[:html]   << element
+    elsif element.is_a?(Symbol)
+      render_view(element, params)
+    else
+      puts element.to_s
+    end
+  end
+
   # Define which content decorator to use. 
   #
   # Decorators are like regular templates that wrap around 

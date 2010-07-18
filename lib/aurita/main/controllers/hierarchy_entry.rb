@@ -36,8 +36,10 @@ module Main
       form[Hierarchy_Entry.hierarchy_entry_id_parent].hide! 
       
       options = { 'Tag_Autocomplete_Field'                        => tl(:filter_entry), 
-                  "Text_Field({ name: 'link', decorated: true })" => tl(:link), 
-                  'BLANK_NODE'                                    => tl(:blank_node_entry) }
+                  'BLANK_NODE'                                    => tl(:blank_node_entry),
+                  "Text_Field({ name: 'link', decorated: true })" => tl(:link) }
+
+      default_value = 'BLANK_NODE'
 
       plugin_get(Hook.main.hierarchy_entry.entry_types).each { |p|
         if p[:request] then
@@ -45,7 +47,11 @@ module Main
         elsif p[:name] then
           options[p[:name].to_s] = p[:label] 
         end
+        if p[:default] then
+          default_value = p[:name]
+        end
       }
+
       
       type_select = Select_Field.new(:name     => Hierarchy_Entry.entry_type, 
                                      :id       => :hierarchy_entry_type_selector, 
@@ -53,7 +59,7 @@ module Main
                                      :onchange => "$('active_type_element').innerHTML = ''; 
                                                    Aurita.load_widget($('hierarchy_entry_type_selector').value, { }, 
                                                                       Aurita.load_widget_to('active_type_element'));", 
-                                     :value    => 'BLANK_NODE', 
+                                     :value    => default_value, 
                                      :options  => options)
       form.add(type_select)
 

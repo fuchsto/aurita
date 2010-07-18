@@ -159,6 +159,17 @@ module Aurita
       })
     end
 
+    def has_category_in(*cat_ids)
+      cat_ids.flatten! 
+
+      @category_map               ||= Content_Category
+      @category_map_key_attrib    ||= :content_id
+      @category_map_cat_id_attrib ||= :category_id
+      __send__(@category_map_key_attrib).in(@category_map.select(@category_map_key_attrib) { |cid|
+        cid.where(@category_map.__send__(@category_map_cat_id_attrib).in(cat_ids))
+      })
+    end
+
     def self.extended(extended_klass)
       extended_klass.import(Categorized_Behaviour) unless extended_klass.is_a?(Module)
     end

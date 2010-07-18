@@ -19,7 +19,7 @@ module Main
 
     def self.update_for(hierarchy, category_ids)
       delete { |cc|
-        cc.where(Hierarchy_Category.hierarchy_id == hierarchy.hierarchy_id)
+        cc.where(hierarchy_id == hierarchy.hierarchy_id)
       }
       create_for(hierarchy, category_ids)
     end

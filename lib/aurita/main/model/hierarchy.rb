@@ -20,6 +20,10 @@ module Main
       Hierarchy_Entry.all_with(:hierarchy_id => hierarchy_id).sort_by(:sortpos, :asc).to_a
     end
 
+    def root_entries
+      Hierarchy_Entry.all_with(:hierarchy_id => hierarchy_id, :hierarchy_entry_id_parent => 0).sort_by(:sortpos, :asc).to_a
+    end
+
     def concrete_entries
       # TODO: Use this as a test case for Lore. 
       # Does not yet work as expected, as result 

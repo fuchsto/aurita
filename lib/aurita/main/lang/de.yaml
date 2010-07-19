@@ -85,7 +85,7 @@ allow_access_to_users : Folgenden Benutzern Zugriff erteilen
 
 article_entry : Artikel
 filter_entry : Suchfilter
-blank_node_entry : Strukturknoten
+blank_node_entry : Leerer Eintrag
 
 show_all : Alle anzeigen
 fulltext_search : Volltextsuche

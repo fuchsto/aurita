@@ -41,6 +41,9 @@ module Main
       remote_ip ||= @params[:_request].env['HTTP_X_REAL_IP']
       host        = @params[:_request].env['HTTP_HOST']
 
+      return if host.to_s.empty?
+      return unless Aurita.project.domains && Aurita.project.domains.include?(host.to_s.split(':').first)
+
       referer   = '' if referer && host && referer.include?(host)
 
       User_Action.create(:controller    => params[:controller].class.to_s, 

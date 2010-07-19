@@ -274,6 +274,21 @@ table.list th.first {
 table.list td.tab_left { 
   text-align: right; 
 }
+
+
+table.inline th { 
+  background: transparent; 
+  padding: 2px; 
+}
+table.inline td { 
+  background: transparent; 
+  padding: 2px; 
+}
+
+table td.inline_box { 
+  background: #dfdfdf; 
+}
+
 .table_footer { 
   padding: 5px; 
   display: inline-block; 

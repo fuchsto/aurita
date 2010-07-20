@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby1.8
+
+require 'aurita'
+
+project_name = ARGV.shift
+mode = ARGV.shift
+mode ||= :production
+mode = mode.to_sym
+  
+unless project_name and mode then
+  puts "Usage: lint_project project_name [mode]"
+  exit 1
+end
+
+asset_dir = "/usr/share/gitwc/aurita_projects/#{project_name}/public/assets"
+
+Aurita.load_project(project_name, mode)
+#Aurita.bootstrap
+
+Aurita.import_plugin_model :wiki, :media_asset or
+puts 'Module load error'
+
+import Aurita::Plugins
+
+Wiki::Media_Asset.find(:all).each { |asset|
+  filename = "#{asset_dir}/asset_#{asset.media_asset_id}.#{asset.extension}"
+  unless File.exists? filename then
+    puts "WARNING: #{filename} not found"
+    candidates = Dir.glob("#{asset_dir}/asset_#{asset.media_asset_id}*").map { |a| 
+      a.split('/')[-1]
+    }
+    candidates = candidates.compact.join(' ')
+    puts 'Candidates: ' + candidates unless candidates == ''
+    #  s.split('/')[-1]
+    #}.join(', ')
+    #puts "Candidates: #{candidates}" unless candidates
+    
+  end
+}
+
+
+
+

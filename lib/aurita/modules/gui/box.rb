@@ -33,6 +33,8 @@ module GUI
       @params.delete(:toolbar)
       @params.delete(:type)
 
+      raise ::Exception.new("Must provide DOM id for GUI::Box") unless @params[:id]
+
       super()
     end
 

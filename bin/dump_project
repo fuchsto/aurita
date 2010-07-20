@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby1.8
+
+require 'aurita'
+
+dump_path = ARGV.shift
+project_name = ARGV.shift
+mode = :production
+
+unless dump_path and project_name then
+  puts "Usage: dump_project dump_path project_name"
+  exit 1
+end
+
+Aurita.load_project(project_name, mode)
+
+schema = Aurita.project.databases[mode].keys[0]
+
+projects_root_path = '/usr/share/gitwc/aurita_projects/'
+project_path = projects_root_path + project_name
+dbdump_dir = project_path + '/dumps/'
+dbdump_filename = dbdump_dir + schema + Time.now.strftime("_%Y-%m-%d_%H-%M") + '.sql'
+archive_filename = dump_path + '/' + project_name + Time.now.strftime("_%Y-%m-%d_%H-%M") + '.tar.gz'
+
+if File.exists?(dbdump_dir) and File.directory?(dbdump_dir) then
+  system("pg_dump #{schema} >#{dbdump_filename}")
+  if $? == 0 then
+    puts "SAVED: #{dbdump_filename}"
+  else
+    puts "ERROR WHILE SAVING #{dbdump_filename}"
+    exit 1
+  end
+else
+  puts "WARNING: directory #{dbdump_dir} not found. Database not saved."
+end
+
+system("tar -czf #{archive_filename} -C #{projects_root_path} #{project_name}")
+
+if $? == 0 then
+  puts "SAVED: #{archive_filename}"
+else
+  puts "ERROR WHILE SAVING #{achive_filename}"
+  exit 1
+end

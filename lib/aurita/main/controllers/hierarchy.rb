@@ -20,7 +20,8 @@ module Main
       [
         Hierarchy.header, 
         Hierarchy.category, 
-        Category.category_id
+        Category.category_id, 
+        Hierarchy.interface
       ]
     end
 
@@ -29,13 +30,17 @@ module Main
       form[Hierarchy.category].hidden = true
       category = Category_Selection_List_Field.new()
       category.value = load_instance.category_ids
+      if !Aurita.user.is_admin? then
+        form[Hierarchy.interface.to_s].hide!
+      end
       form.add(category)
       render_form(form)
     end
 
     def delete
       form = delete_form
-      form[Hierarchy.category].hidden = true
+      form[Hierarchy.category.to_s].hide! 
+      form[Hierarchy.interface.to_s].hide! 
       render_form(form)
     end
 
@@ -153,6 +158,9 @@ module Main
       form.add(Hidden_Field.new(:name  => Hierarchy.category.to_s, 
                                 :value => param(:category)))
       form.add(GUI::Category_Selection_List_Field.new())
+      if !Aurita.user.is_admin? then
+      #  form[Hierarchy.interface.to_s].hide!
+      end
       form = render_form(form)
 
       return form unless param(:element) == 'app_main_content'

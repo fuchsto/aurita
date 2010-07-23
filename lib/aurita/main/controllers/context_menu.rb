@@ -34,7 +34,7 @@ module Main
       targets = { "hierarchy_#{hid}_body" => "Hierarchy/body/hierarchy_id=#{hid}" }
       hierarchy = Hierarchy.load(:hierarchy_id => hierarchy_id)
 
-      if hierarchy.locked then
+      if hierarchy.locked && !Aurita.user.is_admin? then
         puts tl(:hierarchy_may_not_be_edited)
         return
       end

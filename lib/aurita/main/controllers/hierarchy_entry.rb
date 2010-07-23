@@ -29,6 +29,9 @@ module Main
          Hierarchy_Entry.hierarchy_entry_id_parent, 
          :active_type_element
       ]
+      if Aurita.user.is_admin? then
+        form.fields << Hierarchy_Entry.interface
+      end
       form.add(Hidden_Field.new(:name  => Hierarchy_Entry.hierarchy_id, 
                                 :value => param(:hierarchy_id)))
       form.add(Hidden_Field.new(:name  => Hierarchy_Entry.hierarchy_entry_id_parent, 
@@ -70,13 +73,16 @@ module Main
     
     def update
       entry = load_instance()
-      form = update_form()
+      form  = update_form()
       form.fields = [
         :controller, 
         :action, 
         Hierarchy_Entry.hierarchy_entry_id, 
         Hierarchy_Entry.label
       ]
+      if Aurita.user.is_admin? then
+        form.fields << Hierarchy_Entry.interface
+      end
       if entry.entry_type == 'FILTER'
         form.fields << Hierarchy_Entry.interface 
         form[Hierarchy_Entry.interface].value = entry.interface.sub('App_Main/find/key=', '')

@@ -38,7 +38,7 @@ public--content--layouter_id : Layout
 public--content--locked : Schreibgesch&uuml;tzt
 public--hierarchy--header : Name
 public--hierarchy_entry--label : Titel
-public--hierarchy_entry--interface : Modul
+public--hierarchy_entry--interface : Interface
 public--hierarchy_entry--type : Typ
 internal--user_group--user_group_name : Login
 internal--user_group--division : Firma
@@ -121,7 +121,7 @@ hierarchy : Liste
 update_hierarchy : Liste bearbeiten
 add_entry : Neuer Eintrag
 add_sub_entry : Neuer Unterpunkt
-edit_entry : Eintrag umbenennen
+edit_entry : Eintrag bearbeiten
 delete_hierarchy : Liste l&ouml;schen
 delete_entry : Eintrag l&ouml;schen
 add_hierarchy : Neuer Hauptmen&uuml;punkt

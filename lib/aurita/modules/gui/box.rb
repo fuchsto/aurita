@@ -32,8 +32,10 @@ module GUI
       @params.delete(:header)
       @params.delete(:toolbar)
       @params.delete(:type)
-
-      raise ::Exception.new("Must provide DOM id for GUI::Box") unless @params[:id]
+      
+      unless Aurita.runmode == :production
+        raise ::Exception.new("Must provide DOM id for GUI::Box") unless @params[:id]
+      end
 
       super()
     end

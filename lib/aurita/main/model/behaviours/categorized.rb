@@ -27,7 +27,7 @@ module Aurita
       end
       @category_ids
     end
-
+    
     def categories
       if !@categories then
         mapping      = self.class.category_mapping()
@@ -42,7 +42,7 @@ module Aurita
       end
       @categories
     end
-
+    
     def add_category(cat_id)
       mapping      = self.class.category_mapping()
       map          = mapping[:map]
@@ -63,6 +63,12 @@ module Aurita
       end
     end
 
+    # Sets categories of this instance to given categories. 
+    # Parameter is (possibly mixed) list of category instances 
+    # and/or category ids. 
+    # When not giving any parameter, all category associations 
+    # to this instance will be deleted. 
+    #
     def set_categories(*category_ids)
       mapping      = self.class.category_mapping()
       map          = mapping[:map]
@@ -84,6 +90,7 @@ module Aurita
       @category_ids = category_ids
     end
     alias set_category_ids set_categories
+    alias categories= set_categories
 
     def remove_category(cat_id)
       mapping      = self.class.category_mapping()
@@ -102,7 +109,7 @@ module Aurita
       }
       @category_ids.delete(category_id) if @category_ids
     end
-
+    
     def remove_categories()
       set_categories([])
     end

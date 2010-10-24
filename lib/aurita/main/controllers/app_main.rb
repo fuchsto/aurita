@@ -28,7 +28,7 @@ module Main
       @params.each_pair { |k,v|
         if (k.to_s.first != '_') && 
             !([:controller, :dispatcher, :action, :element, :mode].include?(k.to_sym)) then
-          log_params << "#{k}=#{v.to_s[0..50]}" 
+          log_params << "#{k}=#{v.to_s[0..50]}" if v.is_a?(Numeric) || v.is_a?(String)
         end
       }
 

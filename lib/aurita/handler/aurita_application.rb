@@ -63,10 +63,10 @@ module Handler
         GC.disable
       end
       response = @dispatcher.dispatch(Rack::Request.new(Aurita::Routing.new.route(env)))
-      response[1]['Accept-Charset'] = 'utf-8' 
-      response[1]['type']           = 'text/html; charset=utf-8' 
-      response[1]['Connection']     = 'keep-alive'
-      response[1]['Cache-Control']  = 'private'
+      response[1]['Accept-Charset'] = 'utf-8' unless response[1]['Accept-Charset']
+      response[1]['type']           = 'text/html; charset=utf-8' unless response[1]['type']
+      response[1]['Connection']     = 'keep-alive' unless response[1]['Connection']
+      response[1]['Cache-Control']  = 'private' unless response[1]['Cache-Control']
       response[1]['Expires']        = '-1'       # For aggressive caching in IE8
       response[1]['pragma']         = 'no-cache' # For aggressive caching in IE8
       sendfile = response[1]['X-Aurita-Sendfile']
@@ -74,6 +74,7 @@ module Handler
         response[1]['X-Accel-Redirect'] = sendfile # nginx sendfile
         response[1]['Content-Length']   = response[1]['X-Aurita-Filesize']
       end
+
       return response
     end
 
@@ -118,10 +119,10 @@ module Handler
         GC.disable
       end
       response = @dispatcher.dispatch(Rack::Request.new(Aurita::Routing.new.route(env)))
-      response[1]['Accept-Charset'] = 'utf-8' 
-      response[1]['type']           = 'text/html; charset=utf-8' 
+      response[1]['Accept-Charset'] = 'utf-8' unless response[1]['Accept-Charset']
+      response[1]['type']           = 'text/html; charset=utf-8' unless response[1]['type']
       response[1]['Connection']     = 'keep-alive'
-      response[1]['Cache-Control']  = 'private'
+      response[1]['Cache-Control']  = 'private' unless response[1]['Cache-Control']
       response[1]['Expires']        = '-1'       # For aggressive caching in IE8
       response[1]['pragma']         = 'no-cache' # For aggressive caching in IE8
       return response
@@ -178,8 +179,6 @@ module Handler
   class Aurita_Poller_Application < Aurita_Rack_Application
     def initialize(options={})
 
-      STDERR.puts 'APA init'
-
       @options     = options
 
       @logger      = options[:logger]
@@ -193,7 +192,6 @@ module Handler
     end
 
     def call
-      STDERR.puts 'APA call'
       return [ 200, [], 'poll response']
     end
 

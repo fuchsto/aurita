@@ -11,7 +11,7 @@ module Main
     guard_interface(:all) { Aurita.user.is_admin? } 
     
     def system_box
-      box          = Box.new(:type => :system, :class => :topic)
+      box          = Box.new(:type => :system, :class => :topic, :id => :admin_tools_box)
       box.header   = tl(:admin_tools)
 
       body         = HTML.div.toolbar { 

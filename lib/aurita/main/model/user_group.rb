@@ -52,7 +52,8 @@ module Main
       if !@label then
         @label   = tl(:unregistered_user) if user_group_id == 0
         if !@label && (surname.nonempty? || forename.nonempty?) then
-          @label ||= surname.capitalize + ' ' + forename.capitalize 
+          #@label ||= surname.capitalize + ' ' + forename.capitalize 
+          @label ||= "#{surname} #{forename}"
         end
         @label ||= user_group_name.to_s
         @label << ' (' + division + ')' if division.nonempty?

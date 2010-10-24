@@ -2,7 +2,7 @@
 
 require('aurita')
 
-if ARGV.length != 1 then
+if ARGV.length < 1 then
   STDERR.puts "No project name given"
   STDERR.puts "Usage: gen_script.rb <project_name>"
   exit(1)
@@ -30,10 +30,32 @@ $core_scripts = [
   :login, 
   :main, 
 ]
-
 $core_scripts_after = [
   :onload
 ]
+
+$core_frontend_scripts = [ 
+  :log, 
+  :helpers, 
+  :cookie, 
+  :xhconn, 
+  :md5, 
+  :aurita, 
+  :error, 
+  :backbutton, 
+  :message_box, 
+  :aurita_gui, 
+  :login, 
+  :main
+]
+$core_frontend_scripts_after = [ 
+  :onload
+]
+
+if ARGV[1] == 'frontend' || ARGV[1] == 'public' then
+  $core_scripts       = $core_frontend_scripts
+  $core_scripts_after = $core_frontend_scripts_after
+end
 
 def path_to_token(path)
   path.split('/')[-1].gsub('.rb','').to_sym
@@ -45,9 +67,13 @@ $plugin_scripts = Dir.glob("#{Aurita.project.base_path}plugins/*.rb").map { |pat
 
 project_script_base = "#{Aurita.project.base_path}public/inc/"
 $project_scripts = Dir.glob("#{project_script_base}*.js").map { |path|
-  path = path.split('/')[-1].gsub('.js','').to_sym 
+  if path[-7..-1] != '.src.js' then
+    path = path.split('/')[-1].gsub('.js','').to_sym 
+    path = nil if [:ie6, :ie7].include?(path)
+  end
 }
 $project_scripts -= [ :aurita_bundle ]
+$project_scripts.reject! { |s| s.nil? }
 
 def append_script(file_to, path_from)
   File.open(path_from, "r") { |f|

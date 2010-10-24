@@ -41,6 +41,13 @@ ol.list {
 
 ol li { list-style-type: decimal; }
 
+ul.empty { 
+  margin-top: 0px; 
+  margin-bottom: 0px; 
+  padding-top: 0px; 
+  padding-bottom: 0px; 
+}
+
 a { 
   outline: none; 
   font-weight: inherit; 

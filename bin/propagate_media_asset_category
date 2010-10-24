@@ -1,0 +1,50 @@
+#!/usr/bin/env ruby1.8
+
+require 'aurita'
+
+project_name = ARGV.shift
+mode = ARGV.shift
+category = ARGV.shift
+mime = ARGV.shift
+
+def error(errorlevel, message)
+  puts message
+  exit errorlevel
+end
+
+unless project_name and mode and category then
+  error 1, "Usage: propagate_media_asset_category project_name mode category [mime-type]"
+end
+
+Aurita.load_project(project_name, mode.to_sym)
+#Aurita.bootstrap
+
+Aurita::Main.import_model :content_category
+Aurita::Main.import_model :category
+Aurita.import_plugin_model :wiki, :media_asset or error 2, 'Module load error'
+
+import Aurita
+import Aurita::Plugins
+
+category = Category.find(1).with(:category_name => category).entity
+category or error 3, 'Category not found'
+
+
+Wiki::Media_Asset_Folder.select {
+  join(Wiki::Media_Asset_Folder_Category).using(:media_asset_folder_id) {
+    where(:category_id => category.category_id)
+    
+  }
+}.each { |f|
+  puts f.inspect
+  Wiki::Media_Asset.find(:all).with(:media_folder_id => f.media_asset_folder_id).each{ |a|
+    #a.add_category(category) unless a.member_of_category?(category)
+    unless Content_Category.find(1).where(:content_id => a.content_id, :category_id => category.category_id).entities.any? then
+      Content_Category.create(:content_id => a.content_id, :category_id => category.category_id)
+    end
+  }
+}
+
+
+
+

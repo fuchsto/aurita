@@ -10,6 +10,7 @@ class Time
     offset = Rational(utc_offset, 60 * 60 * 24)
     DateTime.new(year, month, day, hour, min, seconds, offset)
   end
+
 end
 
 class DateTime
@@ -22,6 +23,14 @@ class DateTime
     # offset = Rational(utc_offset, 60 * 60 * 24)
     Date.civil(year, month, day)
   end
+end
+
+class Date
+
+  def to_time
+    Time.parse(self)
+  end
+
 end
 
 class Integer

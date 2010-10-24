@@ -17,8 +17,7 @@ module Main
       users = []
       User_Profile.select { |s|
         s.join(User_Action).using(:user_group_id) { |u| 
-          u.where((User_Action.time > Time.now() - 5.minutes) & 
-                  (User_Action.user_group_id <=> 0))
+          u.where((User_Action.time > Time.now() - 5.minutes))
         }
       }.each { |u|
         if !reg[u.user_group_id] then

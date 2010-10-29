@@ -17,7 +17,7 @@ module GUI
       def element
         list = super()
         @entities.each { |e|
-          sort_handle = Icon.new(:move, 
+          sort_handle = Icon.new(:move_ns, 
                                  :class => :sort_handle)
           list["#{@dom_id}_icons_#{e.pkey}"] << sort_handle
         }

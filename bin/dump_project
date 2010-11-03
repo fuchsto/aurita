@@ -14,6 +14,8 @@ end
 Aurita.load_project(project_name, mode)
 
 schema = Aurita.project.databases[mode].keys[0]
+username = Aurita.project.databases[mode][schema][0]
+password = Aurita.project.databases[mode][schema][0]
 
 projects_root_path = '/usr/share/gitwc/aurita_projects/'
 project_path = projects_root_path + project_name
@@ -22,6 +24,7 @@ dbdump_filename = dbdump_dir + schema + Time.now.strftime("_%Y-%m-%d_%H-%M") + '
 archive_filename = dump_path + '/' + project_name + Time.now.strftime("_%Y-%m-%d_%H-%M") + '.tar.gz'
 
 if File.exists?(dbdump_dir) and File.directory?(dbdump_dir) then
+#  system("echo #{password}| pg_dump -U #{username} -W #{schema} >#{dbdump_filename}")
   system("pg_dump #{schema} >#{dbdump_filename}")
   if $? == 0 then
     puts "SAVED: #{dbdump_filename}"

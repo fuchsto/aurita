@@ -265,13 +265,21 @@ module Main
     # Whether user has read permissions on given Content instance. 
     # Behaviour depends on the content's access strategy. 
     def may_view_content?(content)
-      content.access_strategy.permits_read_access_for(self)
+      if content.is_a?(Aurita::Model) then
+        content.access_strategy.permits_read_access_for(self)
+      else
+        get(content).access_strategy.permits_read_access_for(self)
+      end
     end 
     
     # Whether user has permissions to perform changes on given Content instance. 
     # Behaviour depends on the content's access strategy. 
     def may_edit_content?(content)
-      content.access_strategy.permits_write_access_for(self)
+      if content.is_a?(Aurita::Model) then
+        content.access_strategy.permits_write_access_for(self)
+      else
+        get(content).access_strategy.permits_read_access_for(self)
+      end
     end 
 
   end

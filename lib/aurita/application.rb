@@ -276,6 +276,7 @@ module Aurita
             controller_name << '_Controller'
             controller = namespace.const_get(controller_name)
           elsif File.exists?("#{Aurita::App_Configuration.plugins_path}#{namespace.downcase}/lib/controllers/#{controller_name.downcase}.rb") then
+            Aurita.import_plugin_controller namespace.downcase, controller_name.downcase
             namespace = Aurita::Plugins.const_get(name_parts[0])
             controller_name << '_Controller'
             controller = namespace.const_get(controller_name)

@@ -219,7 +219,8 @@ module GUI
         if label then
           # Label has been set via block already, 
           # so first String argument must be URL: 
-          url = args.at(0)
+          url    = args.at(0)
+          params = args.at(1)
         else
           # Label has not been set via block, so 
           # first argument might be label: 
@@ -347,7 +348,11 @@ module GUI
         html_options[:onclick] << "Aurita.load({ action: '#{resource_url_for(params)}' #{target_part}}); return false; "
       end
       if !target then
-        html_options[:href] = "/aurita/#{resource_url_for(params)}" 
+        if params[:url] then
+          html_options[:href] = params[:url]
+        else
+          html_options[:href] = "/aurita/#{resource_url_for(params)}" 
+        end
         html_options[:target] = params[:target]
       end
       HTML.a(html_options) { label }.string

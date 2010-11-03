@@ -230,8 +230,9 @@ module Aurita
     # Note: Use method redirect_to for latter case. 
     #
     def set_http_status(status_code, params={})
+      set_http_header('status_code' => status_code.to_s)
       status_code = HTTP_STATUS_CODES[status_code]
-      set_http_header('status' => status_code)
+      set_http_header('status'      => status_code)
       set_http_header(params)
     end
 

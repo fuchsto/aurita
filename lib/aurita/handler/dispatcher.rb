@@ -94,6 +94,10 @@ class Aurita::Dispatcher
       end
 
       response_header.update(response[:http_header]) if response[:http_header]
+      if response_header['status_code'] then
+        status = response_header['status_code'].to_i 
+        response_header.delete!('status_code')
+      end
 
       mode                 = response[:mode].to_sym if response && response[:mode]
       mode               ||= :default 

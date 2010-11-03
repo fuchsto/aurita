@@ -103,7 +103,7 @@ logfile ||= "/var/log/aurita/aurita_#{project_name}_#{port}_#{mode}.log"
 if killold then
   # TODO: This is really quick'n'dirty
   command = "ps aux | grep 'thin_daemon' | \
-                      grep '#{project_name}' | \ 
+                      grep ' #{project_name} ' | \ 
                       grep '#{port}' | \
                       grep -v #{$$} | \
                       grep -v 'grep' | \

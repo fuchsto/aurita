@@ -18,10 +18,11 @@ CYAN='\e[1;36m'
 NC='\e[0m' # No Color
 
 if [ $# -lt 2 ]; then
+  echo "No port range given"
   exit 1
 fi
 if [ $# -eq 2 ]; then
-  echo "no end port"
+  echo "No port range given"
   PORT_END=$2
 fi
 
@@ -40,6 +41,6 @@ function test_success {
 }
 
 echo -e "Flushing cluster for $PROJECT ... \t\t\t\t"
-ps aux | grep 'thin_daemon' | grep $PROJECT | grep -v 'vim' | awk '{print $2}' | xargs $CMDPREF kill -9 >/dev/null 2>&1
+ps aux | grep 'thin_daemon' | grep " $PROJECT " | grep -v 'vim' | awk '{print $2}' | xargs $CMDPREF kill -9 >/dev/null 2>&1
 
 $CMDPREF $AURITA_BIN_PATH/start_cluster $PROJECT $PORT_START $PORT_END

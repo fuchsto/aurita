@@ -257,7 +257,7 @@ module Main
                               :action     => :list_body, 
                               :element    => 'recent_changes_page_content') { 
                         HTML.img(:src => '/aurita/images/icons/clock.png') 
-                      }.gsub('"','\"')
+                      }.string.gsub('"','\"')
       exec_js("$('recent_changes_viewmode_icon').innerHTML = \"#{viewmode_icon}\"")
       return result
     end

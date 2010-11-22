@@ -22,6 +22,7 @@ module GUI
       params[:class] << :button
       params[:class] << :icon_button if @icon
       params[:class] << @icon if @icon
+      params[:class] << :nolabel unless @label
       params[:onclick] = "#{link_to(:action => @action)} return false;" if @action
       params.delete(:action)
 

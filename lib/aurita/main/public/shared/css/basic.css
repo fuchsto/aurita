@@ -1344,7 +1344,8 @@ a.toolbar_button .center {
 }
 
 a.button .icon_nopadding { 
-  padding: 6px 0px 7px 16px !important; 
+  padding: 6px 0px 7px 16px;
+  background-position: 4px 4px !important;
 }
 
 
@@ -1356,6 +1357,10 @@ a.icon_button .center {
 a.icon_button .icon { 
   padding: 6px 0px 7px 37px;
   display: inline; 
+}
+a.icon_button.nolabel .icon { 
+  padding: 6px 0px 7px 16px;
+  background-position: 4px 4px !important;
 }
 a.icon_button .left { 
   padding-left: 3px; 
@@ -1504,4 +1509,29 @@ a.icon_button.login .icon {
 
 /* End deco field */
 
+.biglet { 
+  font-size: 14px; 
+}
+.highlight_bright { 
+  color: #adadad;
+}
+.highlight_dark { 
+  color: #3287D7; 
+}
+.image_left { 
+  color: #676767; 
+}
+img.image_left { 
+  float: left; 
+  margin-right: 20px; 
+  margin-bottom: 10px; 
+}
+img.image_right { 
+  float: right; 
+  margin-left: 20px; 
+  margin-bottom: 10px; 
+}
+.no_float { 
+  clear: both; 
+}
 

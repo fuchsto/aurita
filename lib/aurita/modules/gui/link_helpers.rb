@@ -355,7 +355,7 @@ module GUI
         end
         html_options[:target] = params[:target]
       end
-      HTML.a(html_options) { label }.string
+      HTML.a(html_options) { label }
     end
 
     def link_to_call(*args, &block)

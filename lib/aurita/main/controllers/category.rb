@@ -238,6 +238,7 @@ module Main
 
         if implicit_users then
           impl_users_box = Box.new(:type      => :none, 
+                                   :id        => :implicit_users, 
                                    :class     => :topic_inline)
           impl_users_box.collapsed = true
           impl_users_box.body   = view_string(:user_compact_list, 

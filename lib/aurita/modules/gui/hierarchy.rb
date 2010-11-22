@@ -68,6 +68,7 @@ module GUI
       return [] unless @entry_map[parent_id] 
       elements = []
       
+      entry_idx = 0
       for e in @entry_map[parent_id] do
 
         entry_id   = e.pkey
@@ -76,8 +77,11 @@ module GUI
           next_level = decorate_level(e, recurse(entry_id, indent+1))
           next_level.add_css_class("indent-#{indent}")
         end
-        entry = decorate_entry(e, next_level, indent)
-        elements << entry if entry 
+        entry = decorate_entry(e, next_level, indent, entry_idx)
+        if entry then
+          elements << entry 
+          entry_idx += 1
+        end
       end
       return elements
     end
@@ -109,7 +113,7 @@ module GUI
 
     # Overload method decorate_entry to support other 
     # model instances for hierarchies
-    def decorate_entry(e, next_level, indent)
+    def decorate_entry(e, next_level, indent, entry_idx=0)
       entry = decorate_item(e, indent)
 
 #     if !e.allow_access?(Aurita.user) then
@@ -154,7 +158,8 @@ module GUI
       super(hierarchy_map)
     end
 
-    def decorate_entry(entry, child_elements, indent)
+    def decorate_entry(entry, child_elements, indent, entry_idx=0)
+      d_entry = nil
       if child_elements.length > 0 then
         onclick = link_to(Content.get(entry.content_id).concrete_instance) if entry.content_id
         dom_id  = "hierarchy_#{entry.hierarchy_id}_#{entry.pkey}"
@@ -164,7 +169,7 @@ module GUI
                                     :id      => dom_id)
         box.header = entry.label 
         box.body   = child_elements
-        box
+        d_entry = box
       else
         item = decorate_item(entry, indent)
         if @context_menu then
@@ -175,8 +180,9 @@ module GUI
             item
           }
         end
-        HTML.div.accordion_item { item }
+        d_entry = item 
       end
+      HTML.div(:class => [ :accordion_item, "accordion_item_#{entry_idx}" ]) { d_entry }
     end
 
     def element

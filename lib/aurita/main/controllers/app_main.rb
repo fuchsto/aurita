@@ -72,7 +72,7 @@ module Main
 
     def login
       exec_js("$('login').focus(); "); 
-      render_view(:login)
+      HTML.div { view_string(:login) }
     end
 
     def popup_box
@@ -315,7 +315,8 @@ module Main
       Aurita.session.close()
       Aurita.session = false
 
-      render_view(:after_logout)
+      # render_view(:after_logout)
+      http_redirect_to('/')
     end
 
     def my_profile

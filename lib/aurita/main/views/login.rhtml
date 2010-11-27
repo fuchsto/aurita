@@ -2,7 +2,7 @@
 
 <div class="centered">
 
-<form target="asset_upload_frame" method="POST" name="login_form" id="login_form" action="/" onsubmit="return Login.remote_login(document.getElementById('login').value, document.getElementById('pass').value);" >
+<form target="asset_upload_frame" method="POST" name="login_form" id="login_form" action="/" onsubmit="Login.remote_login(document.getElementById('login').value, document.getElementById('pass').value); return false; " >
 
 <div class="login_box" id="login_box">
   <div style="whitespace: none; ">

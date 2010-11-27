@@ -667,6 +667,10 @@ input.login, input.login_button {
   margin-bottom: 6px; 
   background-color: #dfdfdf;
   padding: 3px; 
+
+  -moz-border-radius: 3px; 
+  -webkit-border-radius: 3px; 
+  border-radius: 3px; 
 }
 /*
 input.form_builder_entry { 
@@ -713,6 +717,14 @@ input.login_button {
   right: 0;  
   margin: 0 auto; 
   background-color: #ffffff; 
+
+  -moz-box-shadow: 3px 3px 14px #232323;
+  -webkit-box-shadow: 3px 3px 14px #232323;
+  box-shadow: 3px 3px 14px #232323;
+
+  -moz-border-radius: 5px; 
+  -webkit-border-radius: 5px; 
+  border-radius: 5px; 
 }
 .label_big {
   color: #000000;

@@ -8,7 +8,12 @@ if ARGV.length != 1 then
   exit(1)
 end
 
-Aurita.load_project ARGV[0].to_sym
+begin
+  Aurita.load_project ARGV[0].to_sym
+rescue LoadError => le
+  STDERR.puts "Project #{ARGV[0]} not found."
+  exit
+end
 
 $core_styles = [ 
   :basic, 

@@ -1305,6 +1305,14 @@ span.inline_button, div.inline_button {
   font-size: 11px; 
 }
 
+table.map_table { 
+  margin: 3px; 
+}
+table.map_table td.left { 
+  width: 100px; 
+  padding-right: 10px;
+}
+
 table.listing_2_columns th { 
   background: url('/aurita/images/icons/box_header_bright_bg.png');
   background-color: #cfcfcf; 

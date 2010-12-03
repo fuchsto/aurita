@@ -1306,7 +1306,10 @@ span.inline_button, div.inline_button {
 }
 
 table.map_table { 
-  margin: 3px; 
+  margin: 0px; 
+}
+table.map_table td { 
+  vertical-align: top; 
 }
 table.map_table td.left { 
   width: 100px; 

@@ -24,8 +24,12 @@ module GUI
     #
     def initialize(params={})
       @parent   ||= params[:parent]
-      @entities ||= params[:entities]
-      @entities ||= @parent.entities if @parent && @parent.respond_to?(:entities)
+      if params[:model] then
+        @entities ||= params[:model].find(:all).entities
+      else
+        @entities ||= params[:entities]
+        @entities ||= @parent.entities if @parent && @parent.respond_to?(:entities)
+      end
       params   ||= params
       params.delete(:parent)
       params.delete(:entities)

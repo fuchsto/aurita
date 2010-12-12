@@ -41,6 +41,7 @@ module Aurita
       @aurita_std  = Aurita_Application.new(@options)
       @aurita_poll = Aurita_Poller_Application.new(@options)
       root = @options[:server_root]
+      @logger.debug("Server root is #{root}")
 
       app = Rack::URLMap.new('/'              => @aurita_std, 
                              '/aurita'        => @aurita_std, 

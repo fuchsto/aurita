@@ -11,6 +11,7 @@ Aurita.import_module :gui, :async_form_decorator
 Aurita.import_module :cache, :simple
 Aurita.import(:base, :plugin_register)
 Aurita.import(:base, :controller_response)
+Aurita.import(:base, :plugin_methods)
 
 
 # All controller classes are derived from Aurita::Base_Controller. 
@@ -139,6 +140,7 @@ Aurita.import(:base, :controller_response)
 # 
 class Aurita::Base_Controller 
   include Aurita::Base_Controller_Methods
+  include Aurita::Plugin_Methods
 
   attr_reader :response, :request, :session, :params
 
@@ -157,31 +159,6 @@ class Aurita::Base_Controller
   def log(message=nil, level=nil, &block)
     return @logger unless (message || block_given?)
     @logger.log(message, level, &block)
-  end
-
-  # Send a plugin hook signal that will not be answered with 
-  # GUI components. An optinal parameter Hash can be passed. 
-  #
-  # Example: 
-  #
-  #   plugin_call(Hook.mail.after_send, [ :params => values ])
-  #
-  #
-  def plugin_call(hook, call_params=nil)
-    Aurita::Plugin_Register.call(hook, self, call_params)
-  end
-  # Send a plugin hook signal that will be answered with an 
-  # array of GUI components. An optinal parameter Hash can be passed. 
-  #
-  # GUI components have to be derived from Aurita::GUI::Element. 
-  #
-  # Example: 
-  #
-  #   components = plugin_get(Hook.profile.left, [ :params => values ])
-  #
-  #
-  def plugin_get(hook, call_params=nil)
-    Aurita::Plugin_Register.get(hook, self, call_params)
   end
 
 
@@ -716,7 +693,7 @@ class Aurita::Base_Controller
     if controller.is_a?(String) then
       iface      = controller.split('/')
       controller = resolve_controller_klass(iface[0])
-      action     = iface[1].to_sym
+      action   ||= iface[1].to_sym if iface[1]
       cparams    = iface[2].split('&') if iface[2]
       cparams  ||= []
       cparams.each { |kv|

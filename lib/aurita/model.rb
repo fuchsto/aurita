@@ -186,12 +186,14 @@ module Aurita
     #
     def label
       label_field = table_accessor.get_label
-      if label_field then
+      if label_field && label_field != :label then
         # If field is translated, a wrapper method has 
         # been auto-defined that translates it, otherwise 
         # this just returns the label value from the DB as-is. 
         # See Model.translate_field.
         __send__(label_field) 
+      elsif label_field == :label
+        @attribute_values_flat[:label]
       end
     end
 

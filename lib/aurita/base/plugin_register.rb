@@ -80,14 +80,11 @@ module Aurita
           call_params.update(component.params) if component.params
           caller_params   = calling_controller.params if calling_controller
           caller_params ||= {}
+#         caller_params[:calling_controller] = calling_controller
           if call_params.size > 0 then
-          # TODO: Should be: 
             result = component.controller.new(caller_params).call_guarded(component.method, call_params) 
-          # result = component.controller.new(caller_params).__send__(component.method, call_params) 
           else
-          # TODO: Should be: 
             result = component.controller.new(caller_params).call_guarded(component.method)
-          # result = component.controller.new(caller_params).__send__(component.method)
           end
           if result then
             if result.is_a?(Hash) || result.is_a?(String) || result.is_a?(Aurita::GUI::Element) || result.respond_to?(:aurita_gui_element) then
@@ -135,6 +132,7 @@ module Aurita
           call_params.update(component.params) if component.params
           caller_params   = calling_controller.params if calling_controller
           caller_params ||= {}
+#         caller_params[:calling_controller] = calling_controller
           if call_params.size > 0 then
             result = component.controller.new(caller_params).__send__(component.method, call_params) 
           else

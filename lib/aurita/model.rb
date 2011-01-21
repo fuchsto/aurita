@@ -141,6 +141,9 @@ module Aurita
     #
     # Values with no prefix will be returned unchanged: 
     #
+    #   value in database: 
+    #     category_name: 'Movies'
+    #
     #   cat.category_name 
     #   -> 'Movies'
     
@@ -176,6 +179,22 @@ module Aurita
     def is_translated?(attrib)
       attrib_sym = attrib.to_sym
       return (self.class.has_translated_field?(attrib_sym)) && (attr[attrib_sym].to_s[0..2] == 'tl:')
+    end
+    
+    # Wraps method 'label' with auto-translation features. 
+    # (see Model.translate_field)
+    #
+    def label
+      label_field = table_accessor.get_label
+      if label_field && label_field != :label then
+        # If field is translated, a wrapper method has 
+        # been auto-defined that translates it, otherwise 
+        # this just returns the label value from the DB as-is. 
+        # See Model.translate_field.
+        __send__(label_field) 
+      elsif label_field == :label
+        @attribute_values_flat[:label]
+      end
     end
 
   end # class

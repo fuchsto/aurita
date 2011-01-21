@@ -18,12 +18,18 @@ module GUI
       @action   = params[:action]
       params.delete(:icon)
       params.delete(:label)
+
+      link_params = params.dup
+      link_params.delete(:tag)
+      link_params.delete(:class)
+      params.delete(:element)
+      
       params[:class] = [ params[:class] ] unless params[:class].is_a?(Array)
       params[:class] << :button
       params[:class] << :icon_button if @icon
       params[:class] << @icon if @icon
       params[:class] << :nolabel unless @label
-      params[:onclick] = "#{link_to(:action => @action)} return false;" if @action
+      params[:onclick] = "#{link_to(link_params)} return false;" if @action
       params.delete(:action)
 
       params[:href] = params[:link] if params[:link]

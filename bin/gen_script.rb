@@ -15,6 +15,7 @@ $core_scripts = [
   'jscalendar/lang/calendar-de', 
   'jscalendar/calendar-setup', 
   :log, 
+  :math, 
   :helpers, 
   :cookie, 
   :xhconn, 
@@ -29,6 +30,7 @@ $core_scripts = [
   :editor, 
   :login, 
   :main, 
+  :htmlentities
 ]
 $core_scripts_after = [
   :onload
@@ -36,6 +38,7 @@ $core_scripts_after = [
 
 $core_frontend_scripts = [ 
   :log, 
+  :math, 
   :helpers, 
   :cookie, 
   :xhconn, 
@@ -46,7 +49,8 @@ $core_frontend_scripts = [
   :message_box, 
   :aurita_gui, 
   :login, 
-  :main
+  :main, 
+  :htmlentities
 ]
 $core_frontend_scripts_after = [ 
   :onload

@@ -1,6 +1,7 @@
 
 require('lore')
 require('aurita/base/exceptions')
+require('aurita-gui/form')
 
 Aurita.import_module :gui, :custom_form_elements
 Aurita.import_module :gui, :form_generator
@@ -616,6 +617,13 @@ module Aurita
       log('Update form elements: ' << form.element_map.keys.inspect)
       return form
     end # def }}}
+
+    def custom_form(params={})
+      form = GUI::Form.new(:id => params[:id], :name => params[:name])
+      form.add(GUI::Hidden_Field.new(:name => :controller, :value => params[:controller]))
+      form.add(GUI::Hidden_Field.new(:name => :action,     :value => params[:action]))
+      form
+    end
 
     # Returns plain form object for a model instance identified by 
     # controller request parameters. 

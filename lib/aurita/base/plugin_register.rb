@@ -1,6 +1,7 @@
 
 require 'aurita'
 Aurita.import_module :gui, :module
+Aurita.import_module :procedure
 
 module Aurita
 
@@ -78,7 +79,7 @@ module Aurita
           call_params = {}
           call_params.update(params) if params
           call_params.update(component.params) if component.params
-          caller_params   = calling_controller.params if calling_controller
+          caller_params   = calling_controller.params if calling_controller && calling_controller.respond_to?(:params)
           caller_params ||= {}
 #         caller_params[:calling_controller] = calling_controller
           if call_params.size > 0 then
@@ -87,7 +88,7 @@ module Aurita
             result = component.controller.new(caller_params).call_guarded(component.method)
           end
           if result then
-            if result.is_a?(Hash) || result.is_a?(String) || result.is_a?(Aurita::GUI::Element) || result.respond_to?(:aurita_gui_element) then
+            if result.is_a?(Hash) || result.is_a?(String) || result.is_a?(Aurita::GUI::Element) || result.is_a?(Aurita::Procedure) || result.respond_to?(:aurita_gui_element) then
               components << result
             elsif result.instance_of?(Array) then
               components += result
@@ -101,7 +102,7 @@ module Aurita
     end
 
     # Like Plugin_Register.get, but for plugin calls that do not 
-    # respond with a GUI element. 
+    # respond with a GUI element or anything else. 
     # This is mostly used in 'perform_' methods, for example: 
     #
     #  def perform_add

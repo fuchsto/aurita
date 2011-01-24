@@ -351,3 +351,6 @@ hierarchy_may_not_be_edited : Diese Liste kann nicht bearbeitet werden
 select_additional_language : Sprache hinzuf&uuml;gen
 languages : Sprachen
 public--product--product_name : Name
+
+show_in_menu : In Men&uuml; anzeigen
+

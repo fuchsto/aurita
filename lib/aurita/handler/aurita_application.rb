@@ -59,8 +59,9 @@ module Handler
       if (@gc_after_calls && @calls > @gc_after_calls) then
         @calls = 0
         GC.enable
+        puts 'Dispatch: START GC'
         GC.start
-        GC.disable
+        # GC.disable
       end
       response = @dispatcher.dispatch(Rack::Request.new(Aurita::Routing.new.route(env)))
       response[1]['Accept-Charset'] = 'utf-8' unless response[1]['Accept-Charset']
@@ -99,8 +100,8 @@ module Handler
       @logger         ||= ::Logger.new(STDERR) 
       @dispatcher       = Aurita::Poll_Dispatcher.new()
       @calls            = 0
-      @gc_after_calls ||= 100
-      GC.disable
+      @gc_after_calls ||= 40
+      # GC.disable
     end
 
     public
@@ -115,8 +116,9 @@ module Handler
       if (@gc_after_calls && @calls > @gc_after_calls) then
         @calls = 0
         GC.enable
+        puts 'Poll: START GC'
         GC.start
-        GC.disable
+        # GC.disable
       end
       response = @dispatcher.dispatch(Rack::Request.new(Aurita::Routing.new.route(env)))
       response[1]['Accept-Charset'] = 'utf-8' unless response[1]['Accept-Charset']
@@ -166,7 +168,7 @@ module Handler
       @app = Rack::Reloader.new(@app, 3) if [ :test, :development ].include?(Aurita.runmode)
       @app = Rack::Chunked.new(@app) if options[:chunked]
 
-      GC.disable if @gc_after_calls
+      # GC.disable if @gc_after_calls
     end
 
   end
@@ -188,7 +190,7 @@ module Handler
       @app = Rack::ContentLength.new(@app)
       @app = Rack::Reloader.new(@app, 3) if [ :test, :development ].include?(Aurita.runmode)
 
-      GC.disable if @gc_after_calls
+      # GC.disable if @gc_after_calls
     end
 
     def call

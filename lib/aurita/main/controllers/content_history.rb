@@ -61,7 +61,8 @@ module Main
                               :action     => 'recent_changes_in_categories', 
                               :element    => 'recent_changes_page_content') { 
         HTML.img(:src => '/aurita/images/icons/category_view.png')
-      }.gsub('"','\"')
+      }.to_s.gsub('"','\"')
+      
       exec_js("$('recent_changes_viewmode_icon').innerHTML = \"#{viewmode_icon}\"")
 
       return changes

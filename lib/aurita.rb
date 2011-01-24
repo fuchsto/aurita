@@ -280,6 +280,9 @@ module Aurita
     Dir.glob("#{Aurita.project.base_path}model/*.rb").each { |model| 
       Aurita::Project.import_model(model.split('/').last) 
     }
+    Dir.glob("#{Aurita.project.base_path}controllers/*.rb").each { |controller| 
+      Aurita::Project.import_controller(controller.split('/').last) 
+    }
     if File.exists?("#{project_path()}policy.rb") then
       require("#{project_path()}policy.rb")
     else 

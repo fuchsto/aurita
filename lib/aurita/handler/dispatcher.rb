@@ -50,6 +50,7 @@ class Aurita::Dispatcher
     params                = Aurita::Attributes.new(request)
     params[:_request]     = request
     params[:_session]     = Aurita::Session.new(request)
+    params[:_logger]      = @logger
     params[:_application] = @application
     status                = 200
     response_body         = ''
@@ -120,6 +121,7 @@ class Aurita::Dispatcher
                                    :time        => @benchmark_time, 
                                    :num_queries => @num_queries, 
                                    :num_tuples  => @num_tuples)
+      @logger.debug("Num queries: #{@num_queries}")
     rescue Exception => excep
       @logger.error(excep.message)
       @logger.error(excep.backtrace.join("\n"))

@@ -73,11 +73,12 @@ module Handler
   # See Aurita::Handler::Aurita_Application for an 
   # example of how to use this class. 
   #
-  class Aurita_Dispatch_Application
+  class Aurita_Dispatch_Application < Aurita_Rack_Application
 
     attr_accessor :dispatcher
 
-    def initialize(params={})
+    def initialize(options={})
+      super(options)
       @dispatcher = Aurita::Dispatcher.new(:logger => @logger)
     end
 

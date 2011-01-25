@@ -10,8 +10,6 @@ module Log
   end
 
   class Class_Logger 
-    
-    @name = self.to_s
 
     @all_disabled = false
     
@@ -70,14 +68,14 @@ module Log
       @logger.debug(mesg)
     end
     
-    def initialize(name)
+    def initialize(name, params={})
+      @logger = params[:logger]
+      @name   = name.to_s
       if Aurita::Configuration.run_log_path then
-        @name = name.to_s
-        @logger = ::Logger.new(Aurita::Configuration.run_log_path)
-        @logger.level = ::Logger::DEBUG
-        @disabled = false
+        @logger       ||= ::Logger.new(Aurita::Configuration.run_log_path)
+        @disabled       = false
       else
-        @logger = Null_Logger.new
+        @logger   = Null_Logger.new
         @disabled = true
       end
     end

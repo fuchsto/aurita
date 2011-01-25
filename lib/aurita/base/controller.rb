@@ -639,7 +639,7 @@ class Aurita::Base_Controller
     @response[:http_header]  = nil
     @klass   = model_klass
     @klass ||= resolve_model_klass 
-    @logger  = Aurita::Log::Class_Logger.new(self.class.to_s)
+    @logger  = Aurita::Log::Class_Logger.new(self.class.to_s, :logger => params[:_logger])
   end # }}}
 
   # Call action from a foreign controller. This is useful for 

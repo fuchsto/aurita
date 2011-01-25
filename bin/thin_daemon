@@ -148,12 +148,14 @@ Aurita.import :handler, :thin_daemon
 Aurita.import :handler, :thin_gatling_daemon
 
 OPTIONS = {
-  :port            => port,
-  :ip              => "0.0.0.0",
-  :server_root     => Aurita.project.base_path + '/public/', 
-  :compress        => deflate, 
-  :mode            => mode, 
-  :chunked         => true
+  :port              => port,
+  :ip                => "0.0.0.0",
+  :server_root       => Aurita.project.base_path + '/public/', 
+  :compress          => deflate, 
+  :mode              => mode, 
+  :chunked           => true, 
+  :gc_after_calls    => Aurita.project.gc_after_calls, 
+  :process_mem_limit => Aurita.project.process_mem_limit, 
 }
 
 daemon_klass = Aurita::Thin_Daemon

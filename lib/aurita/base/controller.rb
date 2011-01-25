@@ -8,6 +8,7 @@ Aurita.import(:base, :exception, :parameter_exception)
 Aurita.import(:base, :log, :class_logger)
 Aurita.import_module :gui, :erb_template
 Aurita.import_module :gui, :async_form_decorator
+Aurita.import_module :gui, :form_helpers
 Aurita.import_module :cache, :simple
 Aurita.import(:base, :plugin_register)
 Aurita.import(:base, :controller_response)
@@ -141,6 +142,7 @@ Aurita.import(:base, :plugin_methods)
 class Aurita::Base_Controller 
   include Aurita::Base_Controller_Methods
   include Aurita::Plugin_Methods
+  include Aurita::GUI::Form_Helpers
 
   attr_reader :response, :request, :session, :params
 
@@ -161,41 +163,6 @@ class Aurita::Base_Controller
     @logger.log(message, level, &block)
   end
 
-
-  # Expects Lore::Exceptions::Validation_Failure. 
-  #
-  # Triggered if invalid attribute values are passed to a model 
-  # method like Model.create, Model.update etc.
-  #
-  # Used to notify users of e.g. invalid form values. 
-  #
-  # Extends @response object by field 'error' in asynchronous mode, 
-  # like
-  #
-  #   { html:  "<b>Something went wrong</b>", 
-  #     error: "Aurita.handle_form_error({ field_id: 'name', 
-  #                                        reason: 'Name must not be empty'})
-  #   }
-  #
-  # See Aurita::Main::Default_Decorator for additional info on 
-  # asynchronous response handling. 
-  #
-  def notify_invalid_params(validation_failure)
-  # {{{
-    script = 'Aurita.handle_form_error('
-    error_details = []
-    validation_failure.serialize.each_pair { |table, fields| 
-      fields.each_pair { |attrib_name, reason|
-        message = tl("#{table.sub('.','_')}_#{attrib_name}__#{reason}".to_sym)
-        form_element_id = "#{table}.#{attrib_name}"
-        error_details << "{ field: '#{form_element_id}', reason: '#{reason.to_s}', " +
-                           "value: '#{param(attrib_name.to_sym)}', message: '#{message}}' }"
-      }
-    }
-    script << error_details.join(',')
-    script << ');'
-    exec_error_js(script)
-  end # }}}
 
   public
   
@@ -1036,25 +1003,6 @@ public
     end
     return @instance_id_hash
   end # }}}
-
-  # Returns Hash of klasses derived from Lore::GUI::Custom_Element 
-  # that will be used instead Lore's built-in element klasses. 
-  # Example: 
-  # 
-  #   { User.profile_pic => Select_Picture_Element }
-  #
-  def custom_form_elements
-    Hash.new
-  end
-
-  # Returns Hash of form values to be used in model_form 
-  # in case no other value has been specified. Example: 
-  # 
-  #   { User.is_admin => false }
-  #
-  def default_form_values
-    Hash.new
-  end
 
   def self.set_default_redirects
     after(:perform_add, :perform_update, :perform_delete) { |c|

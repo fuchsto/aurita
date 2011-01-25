@@ -21,9 +21,48 @@ module Aurita
 module Handler
 
   class Aurita_Rack_Application
-    def call(env)
-      @app.call(env)
+
+    attr_accessor :logger, :gc_after_calls
+    attr_reader :calls
+
+    def initialize(options={})
+      @options                       = options
+      @options[:logger]            ||= ::Logger.new(STDERR)
+      @calls                         = 0
+      @gc_after_calls                = @options[:gc_after_calls]
+      @gc_after_calls              ||= 1
+      @logger                        = @options[:logger]
+
+      GC.disable if @options[:process_mem_limit]
     end
+
+    def call(env)
+      @calls += 1
+      result = @app.call(env)
+
+      return result unless @options[:process_mem_limit]
+
+      pid    = Process.pid
+      mem_mb = `ps -o rss= -p #{pid}`.to_i/1024
+      @logger.debug("-----")
+      @logger.debug("MEM: Current mem usage of process #{pid}: #{mem_mb} MiB")
+
+      if @options[:process_mem_limit] && mem_mb > @options[:process_mem_limit] then
+        @logger.debug("MEM: Exceeded process memory limit of #{@options[:process_mem_limit]} MiB")
+        if @calls % @gc_after_calls > 0 then
+          @logger.debug("MEM: Delaying garbage collection (call #{@calls} GC every #{@gc_after_calls} calls)")
+        else
+          @logger.debug("MEM: Starting garbage collection (call #{@calls}, GC every #{@gc_after_calls} calls)")
+          GC.enable
+          GC.start
+          @logger.debug("MEM: Garbage collection finished")
+        end
+      end
+      
+      @logger.debug("-----")
+      result
+    end
+
   end
 
 
@@ -36,15 +75,10 @@ module Handler
   #
   class Aurita_Dispatch_Application
 
-    attr_accessor :logger, :gc_after_calls, :dispatcher
-    attr_reader :calls
+    attr_accessor :dispatcher
 
-    def initialize(logger=nil)
-      @logger         = logger
-      @logger       ||= ::Logger.new(STDERR) 
-      @dispatcher     = Aurita::Dispatcher.new()
-      @calls          = 0
-      @gc_after_calls = 100
+    def initialize(params={})
+      @dispatcher = Aurita::Dispatcher.new(:logger => @logger)
     end
 
     public
@@ -55,14 +89,6 @@ module Handler
     # of Aurita::Rack_Dispatcher instance. 
     #
     def call(env)
-      @calls += 1
-      if (@gc_after_calls && @calls > @gc_after_calls) then
-        @calls = 0
-        GC.enable
-        puts 'Dispatch: START GC'
-        GC.start
-        # GC.disable
-      end
       response = @dispatcher.dispatch(Rack::Request.new(Aurita::Routing.new.route(env)))
       response[1]['Accept-Charset'] = 'utf-8' unless response[1]['Accept-Charset']
       response[1]['type']           = 'text/html; charset=utf-8' unless response[1]['type']
@@ -90,18 +116,14 @@ module Handler
   # Never route requests to a poller application if its response is not 
   # considered public! 
   #
-  class Aurita_Poll_Dispatch_Application
+  class Aurita_Poll_Dispatch_Application < Aurita_Rack_Application
 
     attr_accessor :logger, :gc_after_calls, :dispatcher
     attr_reader :calls
 
-    def initialize(logger=nil)
-      @logger           = logger
-      @logger         ||= ::Logger.new(STDERR) 
-      @dispatcher       = Aurita::Poll_Dispatcher.new()
-      @calls            = 0
-      @gc_after_calls ||= 40
-      # GC.disable
+    def initialize(options={})
+      super(options)
+      @dispatcher   = Aurita::Poll_Dispatcher.new(:logger => @logger)
     end
 
     public
@@ -112,14 +134,6 @@ module Handler
     # of Aurita::Rack_Dispatcher instance. 
     #
     def call(env)
-      @calls += 1
-      if (@gc_after_calls && @calls > @gc_after_calls) then
-        @calls = 0
-        GC.enable
-        puts 'Poll: START GC'
-        GC.start
-        # GC.disable
-      end
       response = @dispatcher.dispatch(Rack::Request.new(Aurita::Routing.new.route(env)))
       response[1]['Accept-Charset'] = 'utf-8' unless response[1]['Accept-Charset']
       response[1]['type']           = 'text/html; charset=utf-8' unless response[1]['type']
@@ -143,18 +157,15 @@ module Handler
   #
   class Aurita_Application < Aurita_Rack_Application
     def initialize(options={})
-      @options     = options
+      super(options)
 
-      @logger      = options[:logger]
-      @logger    ||= ::Logger.new(STDERR) 
-
-      @app = Aurita_Dispatch_Application.new(@logger)
+      @app = Aurita_Dispatch_Application.new(options)
       @app = Rack::ETag.new(@app)
       @app = Rack::ConditionalGet.new(@app)
       @app = Rack::Deflater.new(@app) if @options[:compress]
       @app = Rack::ContentLength.new(@app)
 
-      unless options[:no_session] then
+      unless @options[:no_session] then
         begin
           @app = Rack::Session::Memcache.new(@app)
         rescue ::Exception => no_memcache
@@ -166,35 +177,23 @@ module Handler
       end
     
       @app = Rack::Reloader.new(@app, 3) if [ :test, :development ].include?(Aurita.runmode)
-      @app = Rack::Chunked.new(@app) if options[:chunked]
-
-      # GC.disable if @gc_after_calls
+      @app = Rack::Chunked.new(@app) if @options[:chunked]
     end
 
   end
 
-  # Rack application wrapping Aurita_Dispatch_Application, 
+  # Rack application wrapping Aurita_Poll_Dispatch_Application, 
   # optimized for short response bodies. Almost all middlewares 
   # are disabled, except for Session, ContentLength and, in :test 
   # and :development modes, Reloader. 
   #
   class Aurita_Poller_Application < Aurita_Rack_Application
     def initialize(options={})
+      super(options)
 
-      @options     = options
-
-      @logger      = options[:logger]
-      @logger    ||= ::Logger.new(STDERR) 
-
-      @app = Aurita_Poll_Dispatch_Application.new(@logger)
+      @app = Aurita_Poll_Dispatch_Application.new(:logger => @logger)
       @app = Rack::ContentLength.new(@app)
       @app = Rack::Reloader.new(@app, 3) if [ :test, :development ].include?(Aurita.runmode)
-
-      # GC.disable if @gc_after_calls
-    end
-
-    def call
-      return [ 200, [], 'poll response']
     end
 
   end

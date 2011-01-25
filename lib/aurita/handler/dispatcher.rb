@@ -28,10 +28,11 @@ class Aurita::Dispatcher
   #  require('my_app/application')
   #  dispatcher = Aurita::Dispatcher.new(My_App::Application)
   #
-  def initialize(application=Aurita::Main::Application)
-    @application         = application
+  def initialize(params={})
+    @application         = Aurita::Main::Application
     @decorator           = Aurita::Main::Default_Decorator.new
-    @logger              = Aurita::Log::Class_Logger.new('Dispatcher')
+    @logger              = params[:logger]
+    @logger            ||= Aurita::Log::Class_Logger.new('Dispatcher')
     @benchmark_time      = 0
     @num_dispatches      = 0 
   end
@@ -77,7 +78,7 @@ class Aurita::Dispatcher
       controller_instance = controller_klass.new(params, model_klass)
 
       response = false
-      @logger.log("Calling model interface method #{controller}.#{action}")
+      @logger.debug("Calling model interface method #{controller}.#{action}")
 
       element  = controller_instance.call_guarded(action)
       response = controller_instance.response
@@ -120,8 +121,8 @@ class Aurita::Dispatcher
                                    :num_queries => @num_queries, 
                                    :num_tuples  => @num_tuples)
     rescue Exception => excep
-      @logger.log(excep.message)
-      @logger.log(excep.backtrace.join("\n"))
+      @logger.error(excep.message)
+      @logger.error(excep.backtrace.join("\n"))
       response_body = GUI::Error_Page.new(excep).string
     end
 

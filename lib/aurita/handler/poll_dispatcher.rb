@@ -28,8 +28,9 @@ class Aurita::Poll_Dispatcher < Aurita::Dispatcher
   #  require('my_app/application')
   #  dispatcher = Aurita::Poll_Dispatcher.new(My_App::Application)
   #
-  def initialize(application=Aurita::Main::Application)
-    @application         = application
+  def initialize(params={})
+    @application         = params[:application]
+    @application       ||= Aurita::Main::Application
     @decorator           = Aurita::Main::Default_Decorator.new
     @logger              = Aurita::Log::Class_Logger.new('Dispatcher')
     @benchmark_time      = 0

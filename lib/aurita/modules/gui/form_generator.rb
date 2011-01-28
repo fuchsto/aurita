@@ -42,9 +42,31 @@ module GUI
   end
 
   class Ajax_Form < Aurita::GUI::Form
+  
+    attr_accessor :hide_on_submit
+
     def initialize(params={}, &block)
       super(params, &block)
+      @hide_on_submit  = false
       @field_decorator = Validating_Form_Field_Wrapper
+    end
+
+    def onsubmit=(fun)
+      @attrib[:onsubmit] = "#{fun}; return false; "
+    end
+
+    def hide_on_submit=(do_hide)
+      @hide_on_submit = do_hide
+      if do_hide then
+        @attrib[:onsubmit] = "Aurita.submit_form(this, { hide_on_submit: true }); return false; "
+      else
+        @attrib[:onsubmit] = "Aurita.submit_form(this); return false; "
+      end
+    end
+
+    def hide_on_submit!
+      @hide_on_submit = true
+      @attrib[:onsubmit] = "Aurita.submit_form(this, { hide_on_submit: true }); return false; "
     end
   end
 

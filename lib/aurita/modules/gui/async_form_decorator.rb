@@ -50,14 +50,14 @@ module GUI
     attr_accessor :form
 
     def initialize(form, params={})
-      @form            = form
-      @params          = params
-      @params[:header] = @params[:title] unless @params[:header]
-      @form.enctype    = 'multipart/form-data'
-      @form.method     = 'POST'
-      @form.onsubmit   = 'Aurita.submit_form(this); return false;' unless form.onsubmit
+      @form             = form
+      @params           = params
+      @params[:header]  = @params[:title] unless @params[:header]
+      @form.enctype     = 'multipart/form-data'
+      @form.method      = 'POST'
+      @form.onsubmit    = 'Aurita.submit_form(this); return false;' unless form.onsubmit
       @onclick_ok       = params[:onclick_ok] 
-      @onclick_ok     ||= Javascript.Aurita.submit_form(@form.dom_id.to_s) 
+      @onclick_ok     ||= Javascript.Aurita.submit_form(@form.dom_id.to_s, { :hide_on_submit => @form.hide_on_submit }) 
       @onclick_cancel   = params[:onclick_cancel] 
       @onclick_cancel ||= Javascript.Aurita.cancel_form(@form.dom_id.to_s) 
       @label_ok         = tl(:ok)

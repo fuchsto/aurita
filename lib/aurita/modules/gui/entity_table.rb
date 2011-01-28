@@ -2,6 +2,7 @@
 require('aurita')
 require('aurita-gui/table')
 Aurita.import_module :gui, :context_menu
+Aurita.import_module :gui, :i18n_helpers
 
 module Aurita
 module GUI
@@ -32,18 +33,37 @@ module GUI
   #   puts t[0].entity.title
   #
   class Entity_Table < Table
+  include Aurita::GUI::I18N_Helpers
+
     attr_accessor :entities, :attributes
 
     def initialize(entities=[], params={})
       @entities     = entities
       @attributes   = params[:attributes]
-      @attributes ||= entities.first.class.get_fields_flat() if entities.first
+      @model        = entities.first.class if entities.first
       @row_class    = Entity_Table_Row
-      if params[:headers] == :auto then
-        @headers = @attributes.dup
-        params.delete(:headers)
+      @headers      = params[:headers]
+      
+      if params[:keys] then
+        @attributes ||= @model.get_fields_flat() if @model
+        @headers    ||= @attributes.map { |a| tl(a.to_sym) }
+      else
+        headers   = []
+        fields    = @model.get_fields_flat() if @model
+        fields  ||= []
+        attribs   = []
+        fields.each_with_index { |attrib,idx|
+          if !@model.key_array.include?(attrib.to_sym) then
+            headers    << tl(attrib.to_sym)
+            attribs << attrib
+          end
+        }
+        @attributes   = attribs
+        @headers    ||= headers
       end
-
+      
+      params.delete(:headers)
+      params.delete(:keys)
       params.delete(:attributes)
       super(params)
     end

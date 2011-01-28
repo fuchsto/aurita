@@ -14,14 +14,20 @@ module GUI
     
     def initialize(params={}, &block)
       params[:tag]    = :div
-      @buttons        = yield
+      @buttons        = yield.to_a
       params[:class]  = [ params[:class] ] unless params[:class].is_a?(Array)
       params[:class]  << :button_group
 
-      set_id               = "#{params[:id]}_button_set"
-      params[:onmouseover] = "Aurita.hover(this);"
-      params[:onmouseout]  = "Aurita.unhover(this); "
-      params[:onclick]     = "Element.toggle('#{set_id}');"
+      set_id          = "#{params[:id]}_button_set"
+
+      if params[:expand] == :onclick then
+        params[:onmouseover] = "Aurita.hover(this);"
+        params[:onmouseout]  = "Aurita.unhover(this); "
+        params[:onclick]     = "Element.toggle('#{set_id}');"
+      else
+        params[:onmouseover] = "Aurita.hover(this); Element.toggle('#{set_id}');"
+        params[:onmouseout]  = "Aurita.unhover(this); Element.toggle('#{set_id}');"
+      end
 
       super(params)
     end
@@ -44,7 +50,7 @@ module GUI
           HTML.div.center { 
             inner + 
             HTML.div.button_set(:id    => dom_id, 
-                                        :style => 'display: none;') { 
+                                :style => 'display: none;') { 
               HTML.div.button_wrap { @buttons } 
             } 
           }

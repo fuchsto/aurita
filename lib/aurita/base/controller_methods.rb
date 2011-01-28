@@ -260,26 +260,9 @@ module Aurita
                       'pragma'        => 'No-cache')
     end
 
-    # Ajax redirect. 
-    # Examples: 
-    #
-    # To redirect withing current controller: 
-    #
-    #   redirect_to(:action => :list)
-    #
-    #   redirect(:element => :some_element_dom_id, :to => :show)
-    #
-    # To redirect to another controller: 
-    #   
-    #   redirect_to(:controller => 'Other_Controller', :action => :show)
-    #
-    # Any parameter different from :controller, :action, :to, :element and :target
-    # are used as GET parameters: 
-    #
-    #   redirect(:element => :some_element_dom_id, :to => :show, :product_id => 123)
-    #
-    def redirect_to(*args)
-    # {{{
+  protected
+
+    def to_async_call_params(*args, &block)
       if args.at(0).is_a?(Symbol) then
         params   = args.at(1)
         params ||= {}
@@ -300,13 +283,43 @@ module Aurita
       else
         params = args.at(0)
       end
-
       params ||= {}
       params[:controller] = short_model_name() unless params[:controller]
       params[:action]     = params[:to] if params[:to]
       params[:action]     = :show unless params[:action]
       params.delete(:to)
 
+      return params
+    end
+
+  public
+
+    # Ajax redirect. 
+    # Examples: 
+    #
+    # To redirect withing current controller: 
+    #
+    #   redirect_to(:action => :list)
+    #
+    #   redirect(:element => :some_element_dom_id, :to => :show)
+    #
+    # To redirect to another controller: 
+    #   
+    #   redirect_to(:controller => 'Other_Controller', :action => :show)
+    #
+    # Any parameter different from :controller, :action, :to, :element and :target
+    # are used as GET parameters: 
+    #
+    #   redirect(:element => :some_element_dom_id, :to => :show, :product_id => 123)
+    #
+    # Redirecting using a model entity works like 
+    #
+    #   redirect_to(Article.get(234), :action => :update)
+    #
+    def redirect_to(*args)
+    # {{{
+      params = to_async_call_params(*args)
+      
       onload = params[:onload]
 
       url = "#{params[:controller]}/#{params[:action]}/"
@@ -333,6 +346,56 @@ module Aurita
       exec_js("Aurita.load({ action: '#{url}' #{call_target}#{call_onload}});")
     end # }}}
     alias redirect redirect_to
+
+    # Like #redirect, but inserting the request response after or before the given 
+    # element with given DOM id, like: 
+    #
+    #   dom_insert(:after_element => 'header', 
+    #              :controller    => 'Injecting_Controller', 
+    #              :action        => :subheader)
+    #
+    # and respectively
+    #
+    #   dom_insert(:before_element => 'footer', 
+    #              :controller     => 'Injecting_Controller', 
+    #              :action         => :footer_head)
+    #
+    def dom_insert(*args)
+      params = to_async_call_params(*args)
+      
+      onload = params[:onload]
+
+      url = "#{params[:controller]}/#{params[:action]}/"
+      target   = params[:target]
+      target ||= params[:element]
+      params.delete(:controller)
+      params.delete(:action)
+      params.delete(:target)
+      params.delete(:element)
+      params.delete(:onload)
+      
+      if params.size > 0 then
+        get_params = []
+        params.each_pair { |k,v|
+          get_params << "#{k}=#{v}"
+        }
+      end
+
+      call_onload = ", onload: '#{onload}'" if onload
+
+      url << get_params.join('&') if get_params
+    
+      call_target = ''
+      if params[:before_element] then
+        target      = params[:before_element]
+        call_target = ", before_element: '#{target}'"
+      elsif params[:after_element] then
+        target      = params[:after_element]
+        call_target = ", after_element: '#{target}'" 
+      end
+
+      exec_js("Aurita.insert({ action: '#{url}' #{call_target}#{call_onload}});")
+    end
 
     # Redirect to controller method or URL using an HTTP 302 
     # status code. 

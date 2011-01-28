@@ -337,16 +337,27 @@ module GUI
         params.delete(:options)
       end
       html_options ||= {}
-      target ||= params[:element]
-
-      params.delete(:element)
-      params.delete(:label)
+      target = false
 
       unless params[:target] then
-        target_part = ", element: '#{target}' " if target
+        params.delete(:element)
+        params.delete(:label)
+
         html_options[:onclick] = '' unless html_options[:onclick]
-        html_options[:onclick] << "Aurita.load({ action: '#{resource_url_for(params)}' #{target_part}}); return false; "
+        if params[:after_element] then
+          target      = params[:after_element]
+          html_options[:onclick] << "Aurita.insert({ action: '#{resource_url_for(params)}', after_element: '#{target}'}); return false; "
+        elsif params[:before_element] then
+          target      = params[:before_element]
+          html_options[:onclick] << "Aurita.insert({ action: '#{resource_url_for(params)}', before_element: '#{target}'}); return false; "
+        else
+          if params[:element] then
+            target_part = ", element: '#{params[:element]}'"
+          end
+          html_options[:onclick] << "Aurita.load({ action: '#{resource_url_for(params)}'#{target_part} }); return false; "
+        end
       end
+      
       if !target then
         if params[:url] then
           html_options[:href] = params[:url]

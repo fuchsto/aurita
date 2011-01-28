@@ -3,6 +3,7 @@ require('lore')
 require('aurita/base/exceptions')
 require('aurita-gui/form')
 
+Aurita.import(:base, :logging_methods)
 Aurita.import_module :gui, :custom_form_elements
 Aurita.import_module :gui, :form_generator
 Aurita.import_module :gui, :button
@@ -11,6 +12,7 @@ module Aurita
 module GUI
 
   module Form_Helpers
+    include Aurita::Logging_Methods
 
     @@form_generator = Aurita::GUI::Form_Generator
 

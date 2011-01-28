@@ -13,6 +13,7 @@ Aurita.import_module :cache, :simple
 Aurita.import(:base, :plugin_register)
 Aurita.import(:base, :controller_response)
 Aurita.import(:base, :plugin_methods)
+Aurita.import(:base, :logging_methods)
 
 
 # All controller classes are derived from Aurita::Base_Controller. 
@@ -142,6 +143,7 @@ Aurita.import(:base, :plugin_methods)
 class Aurita::Base_Controller 
   include Aurita::Base_Controller_Methods
   include Aurita::Plugin_Methods
+  include Aurita::Logging_Methods
   include Aurita::GUI::Form_Helpers
 
   attr_reader :response, :request, :session, :params
@@ -149,16 +151,11 @@ class Aurita::Base_Controller
   private
 
   @guard_blocks    = Hash.new 
-  @logger          = Aurita::Log::Class_Logger.new(self)
   @@erb_template   = Aurita::GUI::ERB_Template
 
   protected
 
   def self.log(message, level=nil, &block)
-    return @logger unless (message || block_given?)
-    @logger.log(message, level, &block)
-  end
-  def log(message=nil, level=nil, &block)
     return @logger unless (message || block_given?)
     @logger.log(message, level, &block)
   end

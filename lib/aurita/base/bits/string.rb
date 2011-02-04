@@ -98,4 +98,19 @@ class String
     (self[0...(other.length)] == other)
   end
 
+  def contexts_of(keys=[], params={}, &block)
+    len   = params[:length] || 200
+    contexts = []
+    keys.each { |k|
+      parts = partition(/#{k}/i) 
+      parts[1] = yield parts[1]
+      pre = 0
+      pre = parts[0].length-len if parts[0].length > len
+      parts[0] = parts[0][pre,len].to_s
+      parts[2] = parts[2][0,len]
+      contexts << parts.join('')
+    }
+    contexts
+  end
+
 end # class

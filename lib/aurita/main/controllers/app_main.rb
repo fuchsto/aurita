@@ -315,7 +315,6 @@ module Main
       Aurita.session.close()
       Aurita.session = false
 
-      # render_view(:after_logout)
       http_redirect_to('/')
     end
 

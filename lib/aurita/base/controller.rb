@@ -657,7 +657,7 @@ class Aurita::Base_Controller
     if controller.is_a?(String) then
       iface      = controller.split('/')
       controller = resolve_controller_klass(iface[0])
-      action   ||= iface[1].to_sym if iface[1]
+      action     = iface[1].to_sym if iface[1] && action == :show
       cparams    = iface[2].split('&') if iface[2]
       cparams  ||= []
       cparams.each { |kv|

@@ -14,6 +14,7 @@ module GUI
       @entries   = params[:entries]
       @entries ||= []
       @element   = params[:element]
+      @key       = params[:key]
 
       params.delete(:element)
 
@@ -43,7 +44,7 @@ module GUI
                     }
 
         # Delimiters must provide an id, too! 
-        list_elements << HTML.li(:class => :delimiter, :id => "none_#{@@pseudo_index}") { e[:header] } if count == 0
+        list_elements << HTML.li(:class => :delimiter, :id => "find_full__#{@key}") { e[:header] } if count == 0 && e[:header]
         list_elements << HTML.li(:class => classes, 
                                  :style => 'width: 419px;', 
                                  :id    => e[:id]) { 

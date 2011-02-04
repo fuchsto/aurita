@@ -47,19 +47,21 @@ module Main
       }
 
       puts '<ul class="autocomplete" style="width: 419px; " >'
-      puts '<li class="autocomplete autocomplete_first_entry autocomplete_space_bottom" 
-                style="border-bottom: 1px solid #454545; width: 420px; height: 35px; " 
-                id="find_all__'<< param(:key) << '">
-              <nobr>
-                <b>' << tl(:show_all) + '</b>
-              </nobr>
-              <br />
-              <br />
-            </li>'
+      if param(:show_all_entry) != '0' then
+        puts '<li class="autocomplete autocomplete_first_entry autocomplete_space_bottom autocomplete_show_all" 
+                  style="border-bottom: 1px solid #454545; width: 420px; height: 35px; " 
+                  id="find_all__'<< param(:key) << '">
+                <nobr>
+                  <b>' << tl(:show_all) + '</b>
+                </nobr>
+                <br />
+                <br />
+              </li>'
+      end
 
       puts items
 
-      puts '<li class="autocomplete autocomplete_first_entry autocomplete_space_bottom" 
+      puts '<li class="autocomplete autocomplete_first_entry autocomplete_space_bottom autocomplete_show_fulltext" 
                 style="width: 420px; height: 35px; " 
                 id="find_full__'<< param(:key) + '">
               <nobr>

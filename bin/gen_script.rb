@@ -74,9 +74,14 @@ $project_scripts = Dir.glob("#{project_script_base}*.js").map { |path|
   if path[-7..-1] != '.src.js' then
     path = path.split('/')[-1].gsub('.js','').to_sym 
     path = nil if [:ie6, :ie7].include?(path)
+    path
+  else 
+    puts 'Ignored ' + path
   end
 }
 $project_scripts -= [ :aurita_bundle ]
+$project_scripts -= [ :aurita_bundle_public ]
+
 $project_scripts.reject! { |s| s.nil? }
 
 def append_script(file_to, path_from)
@@ -115,11 +120,6 @@ File.open(target_file, "w") { |out|
       append_script(out, plugin_script)
     }
   end
-  $project_scripts.each do |script_filename|
-    project_script = "#{project_script_base}#{script_filename}.js"
-    puts "Using #{project_script}"
-    append_script(out, project_script)
-  end
   $core_scripts_after.each do |script_filename|
     core_script    = "#{Aurita::App_Configuration.base_path}main/public/shared/script/#{script_filename}.js"
     project_script = "#{project_script_base}main/#{script_filename}.js"
@@ -128,6 +128,11 @@ File.open(target_file, "w") { |out|
     end
     puts "Using #{core_script}"
     append_script(out, core_script)
+  end
+  $project_scripts.each do |script_filename|
+    project_script = "#{project_script_base}#{script_filename}.js"
+    puts "Using #{project_script}"
+    append_script(out, project_script)
   end
 }
 

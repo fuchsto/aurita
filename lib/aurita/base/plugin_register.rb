@@ -33,7 +33,7 @@ module Aurita
   end
 
   class Plugin_Call # :nodoc:
-    attr_reader :plugin, :controller, :method, :params, :constraint
+    attr_reader :plugin, :controller, :method, :params, :constraint, :response
 
     def initialize(params)
       @plugin     = params[:plugin]
@@ -41,6 +41,7 @@ module Aurita
       @method     = params[:method]
       @params     = params[:params]
       @constraint = params[:constraint]
+      @response   = params[:response]
     end
 
     def exec
@@ -54,8 +55,8 @@ module Aurita
     @@permission_register = {}
 
     # It is somehow a notify_observers method. 
-    # 
-    # 
+    # Plugin_Register.get is used indirectly via Plugin_Methods.plugin_get(hook) and 
+    # returns all results of controller methods mapped to the given hook. 
     # 
     def self.get(hook, *args)
       Aurita.log { 'PLUGIN REGISTER GET: ' << hook.inspect }
@@ -82,7 +83,13 @@ module Aurita
           caller_params   = calling_controller.params if calling_controller && calling_controller.respond_to?(:params)
           caller_params ||= {}
 #         caller_params[:calling_controller] = calling_controller
-          if call_params.size > 0 then
+          if component.response then
+            if component.response.is_a?(Proc) then
+              result = component.response.call(caller_params)
+            else
+              result = component.response
+            end
+          elsif call_params.size > 0 then
             result = component.controller.new(caller_params).call_guarded(component.method, call_params) 
           else
             result = component.controller.new(caller_params).call_guarded(component.method)
@@ -110,6 +117,8 @@ module Aurita
     #    instance = super()
     #    plugin_call(Hook.main.user_group.after_add, :user => instance)
     #  end
+    #
+    # Plugin_Register.call is used indirectly via Plugin_Methods.plugin_call(hook) and 
     #
     def self.call(hook, *args)
       Aurita.log { 'PLUGIN REGISTER CALL: ' << hook.inspect }

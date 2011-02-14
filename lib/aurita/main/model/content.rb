@@ -224,7 +224,7 @@ module Main
       #    Content.content_id == content_id
       #  ).perform
       Content.update { |c|
-        c.set(:changed => now) 
+        c.set(:changed => now, :version => c.version + 1) 
         c.where(Content.content_id == content_id)
       } 
       Content_History.create(:time          => now, 

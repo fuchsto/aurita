@@ -6,7 +6,7 @@ require 'aurita'
 require 'yaml'
 require 'zlib'
 
-require 'mongrel'
+# require 'mongrel'
 
 Aurita.import :handler, :aurita_application
 Aurita.import :handler, :thin_daemon

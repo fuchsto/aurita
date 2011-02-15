@@ -3,6 +3,7 @@ require('aurita/controller')
 require('aurita-gui/javascript')
 Aurita.import_module :gui, :context_menu
 Aurita.import_module :gui, :helpers
+Aurita.import_module :gui, :toggle_button
 Aurita::Main.import_model :hierarchy_entry
 Aurita::Main.import_model :hierarchy
 Aurita::Main.import_model :user_online
@@ -170,13 +171,13 @@ module Main
         component.sortable = true if component.respond_to?(:sortable) 
         dom_id = 'component_' << component.dom_id.to_s
         sorted << dom_id 
-        components[dom_id] = HTML.li(:id => dom_id) { component.string }.string
+        components[dom_id] = HTML.li(:id => dom_id) { component }
       }
       plugin_get(Hook.main.workspace).each { |component|
         component.sortable = true if component.respond_to?(:sortable) 
         dom_id = 'component_' << component.dom_id.to_s
         sorted << dom_id 
-        components[dom_id] = HTML.li(:id => dom_id) { component.string }.string
+        components[dom_id] = HTML.li(:id => dom_id) { component }
       }
 
       if positions.length == 0 then
@@ -187,11 +188,12 @@ module Main
       positions.each { |dom_id|
         result << components[dom_id]
       }
-
-      puts HTML.ul(:id => 'workspace_components', :class => 'no_bullets' ) { result.join("\n") }.string
+      
       exec_js("Aurita.GUI.init_sortable_components('workspace_components', { handle: 'box_sort_handle' } ); ")
       exec_js("Aurita.GUI.init_sortable_components('recent_category_changes', { handle: 'box_sort_handle' } ); ")
       exec_js("Aurita.GUI.collapse_boxes(); ")
+      
+      HTML.ul(:id => :workspace_components, :class => :no_bullets ) { result }
     end
 
     def frontpage
@@ -253,27 +255,30 @@ module Main
         end
       }
       return unless count > 0
-      viewmode_icon = link_to(:controller => 'Content_History', 
-                              :action     => :list_body, 
-                              :element    => 'recent_changes_page_content') { 
-                        HTML.img(:src => '/aurita/images/icons/clock.png') 
-                      }.string.gsub('"','\"')
-      exec_js("$('recent_changes_viewmode_icon').innerHTML = \"#{viewmode_icon}\"")
+
+      exec_js("Aurita.GUI.init_sortable_components('workspace_components', { handle: 'box_sort_handle' } ); ")
+      exec_js("Aurita.GUI.init_sortable_components('recent_category_changes', { handle: 'box_sort_handle' } ); ")
+      exec_js("Aurita.GUI.collapse_boxes(); ")
+      
       return result
     end
 
     def recent_changes
-      viewmode_icon = link_to(:controller => 'Content_History', 
-                              :action     => :list_body, 
-                              :element    => 'recent_changes_page_content') { 
-                        HTML.img(:src => '/aurita/images/icons/clock.png') 
-                      }
-      return Page.new(:header   => tl(:recent_changes), 
+
+      viewmode_btn  = GUI::Toggle_Button.new(:id => :recent_changes_viewmode_button)
+      viewmode_btn.add_mode(:categories, { :action  => 'App_Main/recent_changes_in_categories', 
+                                           :element => :recent_changes_page_content,
+                                           :icon    => 'category_view.png' }) # category_view.png
+      viewmode_btn.add_mode(:timeline, { :action  => 'Content_History/list_body', 
+                                         :element => :recent_changes_page_content,
+                                         :icon    => 'clock.png' }) # clock.png
+      viewmode_btn.active_mode = :categories
+      
+      page = Page.new(:header   => tl(:recent_changes), 
                       :sortable => true, 
-                      :tools    => HTML.span(:id => :recent_changes_viewmode_icon) { 
-                                     viewmode_icon
-                                   }, 
+                      :tools    => viewmode_btn, 
                       :id       => :recent_changes_page) { recent_changes_in_categories } 
+      return page
     end
     
     def tag_index

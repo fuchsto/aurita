@@ -28,7 +28,6 @@ module Main
         STDERR.puts "FILTER: " + u.category_ids.inspect
       } 
 
-
       updates = updates.map { |c| c.concrete_instance }
 
       changes = HTML.div(:class => [:recent_changes, :topic_inline]) { 
@@ -56,30 +55,24 @@ module Main
           end
         }
       }
-
-      viewmode_icon = link_to(:controller => 'App_Main', 
-                              :action     => 'recent_changes_in_categories', 
-                              :element    => 'recent_changes_page_content') { 
-        HTML.img(:src => '/aurita/images/icons/category_view.png')
-      }.to_s.gsub('"','\"')
       
-      exec_js("$('recent_changes_viewmode_icon').innerHTML = \"#{viewmode_icon}\"")
-
       return changes
     end
 
     def list
 
-      viewmode_icon = link_to(:controller => 'App_Main', 
-                              :action     => 'recent_changes_in_categories', 
-                              :element    => 'recent_changes_page_content') { 
-        HTML.img(:src => '/aurita/images/icons/category_view.png')
-      }
+      viewmode_btn  = GUI::Toggle_Button.new(:id => :recent_changes_viewmode_button)
+      viewmode_btn.add_mode(:categories, { :action  => 'App_Main/recent_changes_in_categories', 
+                                           :element => :recent_changes_page_content,
+                                           :icon    => 'category_view.png' }) 
+      viewmode_btn.add_mode(:timeline, { :action  => 'Content_History/list_body', 
+                                         :element => :recent_changes_page_content,
+                                         :icon    => 'clock.png' }) 
+      viewmode_btn.active_mode = :timeline
+
       return Page.new(:header   => tl(:recent_changes), 
                       :sortable => true, 
-                   #  :tools    => HTML.span(:id => :recent_changes_viewmode_icon) { 
-                   #                 viewmode_icon
-                   #               }, 
+                      :tools    => viewmode_btn, 
                       :id       => :recent_changes_page) { list_body } 
 
     end

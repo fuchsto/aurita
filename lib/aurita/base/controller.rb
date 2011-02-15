@@ -247,7 +247,8 @@ class Aurita::Base_Controller
 
       end
       
-      @response = Controller_Response.unify(result, @response)
+   # This is done by Dispatcher itself now: 
+   #  @response = Controller_Response.unify(result, @response)
       
       Aurita::Plugin_Register.call(Hook.__send__(self.class.to_s.downcase.gsub('::','__')).__send__("after_#{method}"), self)
 

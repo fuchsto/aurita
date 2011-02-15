@@ -126,6 +126,7 @@ class Aurita::Dispatcher
       @logger.error(excep.message)
       @logger.error(excep.backtrace.join("\n"))
       response_body = GUI::Error_Page.new(excep).string
+      response_body = ''
     end
 
     return [ status, response_header, response_body ]

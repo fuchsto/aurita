@@ -650,7 +650,15 @@ class Aurita::Base_Controller
   # In this example, method Some_Foreign_Controller.list is 
   # called with fake request parameter 'user_id': 
   #   
-  #   render_controller(Some_Foreign_Controller, :list, :user_id => 123)
+  #   render_controller(Some_Foreign_Controller, :list, :user_id => 123, :foo => 'bar')
+  #
+  # same as
+  #
+  #   render_controller('Some_Foreign_Controller/list/user_id=123&foo=bar')
+  #
+  # same as 
+  #
+  #   render_controller('Some_Foreign_Controller', :list, :user_id => 123, :foo =>'bar')
   #
   def render_controller(controller, action=:show, params={})
   # {{{

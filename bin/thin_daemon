@@ -1,15 +1,17 @@
 #!/usr/bin/env ruby1.8
 
+begin
+
 require 'getoptlong'
 require 'rubygems'
+require 'ruby-prof'
+
 require 'logger'
 require 'aurita'
 
 require 'thin'
 require 'yaml'
 require 'zlib'
-
-begin
 
 opts = GetoptLong.new(
          [ '--dev',       '-d', GetoptLong::OPTIONAL_ARGUMENT ],
@@ -19,6 +21,7 @@ opts = GetoptLong.new(
          [ '--port',      '-p', GetoptLong::OPTIONAL_ARGUMENT ], 
          [ '--verbosive', '-v', GetoptLong::OPTIONAL_ARGUMENT ], 
          [ '--mode',      '-m', GetoptLong::OPTIONAL_ARGUMENT ], 
+         [ '--profile',   '-P', GetoptLong::OPTIONAL_ARGUMENT ], 
          [ '--log',       '-l', GetoptLong::OPTIONAL_ARGUMENT ]
        )
 
@@ -31,6 +34,7 @@ killold   = false
 verbosive = false
 deflate   = false # usually the master webserver, like nginx, is already applying gzip or deflate
 logfile   = false
+profiling = false
 
 opts.each { |opt, arg| 
   case opt
@@ -49,6 +53,8 @@ opts.each { |opt, arg|
     verbosive = true
   when '--port' then
     port      = arg.to_i
+  when '--profile' then
+    profiling = true
   when '--log' then
     logfile = arg
     if arg == 'stderr' then

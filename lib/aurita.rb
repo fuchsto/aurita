@@ -22,6 +22,23 @@ require('aurita/base/bits/mock')
 
 require('aurita/modules/file_helpers')
 
+
+class Array
+  
+  def bytesize
+    return self.flatten.to_s.bytesize
+    begin
+      raise ::Exception.new('bytesize called from here')
+    rescue ::Exception => e
+      puts self.inspect
+      e.backtrace.each { |line|
+        puts line
+      }
+    end
+  end
+
+end
+
 if not defined? RUBY_PATCHLEVEL or (RUBY_VERSION <= '1.8.5' and RUBY_PATCHLEVEL < 2)
   raise SecurityError, 'Please use Ruby 1.8.5-p2 or later!'
 end

@@ -3,12 +3,15 @@ require 'aurita'
 require 'aurita/modules/gui/error_page'
 require 'aurita/base/routing'
 require 'stringio'
+# require 'ruby-prof'
+
 require 'rack'
 require 'rack/content_length'
 require 'rack/chunked'
 require 'rack/deflater'
 require 'rack/static'
 require 'rack/contrib'
+# require 'rack/contrib/profiler'
 
 require 'memcache'
 require 'rack/session/memcache'
@@ -102,7 +105,6 @@ module Handler
         response[1]['X-Accel-Redirect'] = sendfile # nginx sendfile
         response[1]['Content-Length']   = response[1]['X-Aurita-Filesize']
       end
-
       return response
     end
 

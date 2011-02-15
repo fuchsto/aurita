@@ -217,7 +217,9 @@ module Main
       cat    = load_instance()
       cat_id = cat.category_id
 
-      return unless Aurita.user.readable_category_ids.include?(cat_id)
+      if !Aurita.user.readable_category_ids.include?(cat_id) then
+        return HTML.div.warning_box { tl(:no_read_access_to_category) }
+      end
 
       users = cat.users
       implicit_users = false

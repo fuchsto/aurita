@@ -51,6 +51,7 @@ public--category--is_private:
     t: ja
     f: nein
 
+no_read_access_to_category: Sie haben nicht die erforderliche Berechtigung, um Inhalte aus dieser Kategorie zu sehen
 show_updates_in_categories : Letzte &Auml;nderungen folgender Kategorien anzeigen
 parent_category : Unterkategorie von
 no_category : Keine Kategorie

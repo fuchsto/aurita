@@ -8,18 +8,29 @@ module GUI
   class Page < Widget
   include I18N_Helpers
 
-    attr_accessor :header, :tools, :content, :sortable, :script
+    attr_accessor :header, :tools, :content, :sortable#, :script
 
     def initialize(params={}, &block)
-      @header   = params[:header]
-      @tools    = params[:tools] 
-      @tools    = [ @tools ] if @tools && !@tools.is_a?(Array)
+      @header     = params[:header]
+      @tools      = params[:tools] 
+      @tools      = [ @tools ] if @tools && !@tools.is_a?(Array)
       params.delete(:header)
-      @content  = yield
-      @script   = @content.script if @content.respond_to?(:script)
-      @params   = params
-      @sortable = params[:sortable]
-      @sortable = false unless Aurita.user.is_registered?
+      @content    = yield
+
+      # TODO: Find out if handling children's scripts like this 
+      # is necessary, also consider the attr_accessor :script that 
+      # used to be active. 
+=begin
+      @script     = script
+      @script   ||= ''
+      @script    << @content.script if @content.respond_to?(:script)
+      @tools.each { |t|
+        @script << t.script
+      }
+=end
+      @params     = params
+      @sortable   = params[:sortable]
+      @sortable   = false unless Aurita.user.is_registered?
       params.delete(:sortable)
       super()
     end

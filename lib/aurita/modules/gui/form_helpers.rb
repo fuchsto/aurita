@@ -61,7 +61,8 @@ module GUI
     #
     def render_form(form, params={})
       element = GUI::Async_Form_Decorator.new(form, params)
-      @response[:html] << element
+    # Should be avoided if possible: 
+    # @response[:html] << element
       element
     end
 

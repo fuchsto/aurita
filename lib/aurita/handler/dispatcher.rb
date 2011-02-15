@@ -85,9 +85,12 @@ class Aurita::Dispatcher
       response = controller_instance.response
       if response[:html] == '' then
         if element.is_a?(Aurita::GUI::XML::Document) then
+          # Don't use default decorator for XML documents: 
           response[:mode] = :none if (!response[:mode] || response[:mode] == :default)
         elsif element.respond_to?(:string) then
-          response[:html] = element.string 
+          # Response is an instance of Aurita::GUI::Element
+          response[:html]    = element.string 
+          response[:script] << element.script if element.respond_to?(:script)
         elsif element.is_a?(Array) then
           element.each { |e|
             response[:html] << e.to_s

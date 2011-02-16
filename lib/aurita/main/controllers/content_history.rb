@@ -32,25 +32,31 @@ module Main
 
       changes = HTML.div(:class => [:recent_changes, :topic_inline]) { 
         updates.map { |c|
-          user = c.user_profile
-          cats = c.categories
-          if cats.length == 1 then
-            cat = cats[0]
-            in_cats = "#{tl(:in_category)} #{link_to(cat) { cat.category_name } }"
-          elsif cats.length > 1 then
-            in_cats = "#{tl(:in_categories)} "
-            in_cats << cats.map { |cat|
-              "#{link_to(cat) { cat.category_name } }"
-            }.join(', ')
-          end
 
-          if user then
-            Context_Menu_Element.new(:entity => c) { 
-              HTML.div(:class => [:index_entry, :listing ]) { 
+        # Filter changes by system users (0 <= user_group_id < 100): 
+        
+          if c.user_group_id == 0 || c.user_group_id >= 100 then
+            entry = plugin_get(Hook.main.content_history.list_entry, :entity => c).first
+            if !entry then
+              user = c.user_profile
+              cats = c.categories
+              if cats.length == 1 then
+                cat = cats[0]
+                in_cats = "#{tl(:in_category)} #{link_to(cat) { cat.category_name } }"
+              elsif cats.length > 1 then
+                in_cats = "#{tl(:in_categories)} "
+                in_cats << cats.map { |cat|
+                  "#{link_to(cat) { cat.category_name } }"
+                }.join(', ')
+              end
+              entry = HTML.div(:class => [:index_entry, :listing ]) { 
                 HTML.div { link_to(c) { HTML.b { c.title } } } + 
                 HTML.div { datetime(c.changed) } +
                 HTML.div { "#{link_to(user) { user.label }} #{in_cats}" } 
               }
+            end
+            Context_Menu_Element.new(:entity => c) { 
+              entry
             }
           end
         }

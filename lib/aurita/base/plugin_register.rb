@@ -85,7 +85,7 @@ module Aurita
 #         caller_params[:calling_controller] = calling_controller
           if component.response then
             if component.response.is_a?(Proc) then
-              result = component.response.call(caller_params)
+              result = component.response.call(caller_params.update(call_params))
             else
               result = component.response
             end

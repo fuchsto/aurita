@@ -140,7 +140,7 @@ module Main
         end
 
         @erb = ERB.new(@templates[@mode])
-        @binding = binding_for(response[:html], response[:script], model_klass, params, Lang)
+        @binding = binding_for(response[:html], response[:script], response[:error], model_klass, params, Lang)
 
         @content = @erb.result(@binding)
       end
@@ -157,7 +157,7 @@ module Main
 
   protected
 
-    def binding_for(content, init_script, model_klass, params, lang, project=Aurita::Project_Configuration, gui=Aurita::GUI::ERB_Helpers)
+    def binding_for(content, init_script, error_script, model_klass, params, lang, project=Aurita::Project_Configuration, gui=Aurita::GUI::ERB_Helpers)
       binding
     end
 

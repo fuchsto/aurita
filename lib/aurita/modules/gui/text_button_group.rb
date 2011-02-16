@@ -28,6 +28,7 @@ module GUI
         params[:onmouseover] = "Aurita.hover(this); Element.toggle('#{set_id}');"
         params[:onmouseout]  = "Aurita.unhover(this); Element.toggle('#{set_id}');"
       end
+      params.delete(:expand)
 
       super(params)
     end

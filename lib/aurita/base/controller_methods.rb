@@ -64,52 +64,6 @@ module Aurita
       raise Aurita::User_Runtime_Error.new(tag)
     end
     
-    # Raise an Aurita::User_Runtime_Error. 
-    # Expects a language key to be translated for 
-    # user interfaces. 
-    #
-    # Usage: 
-    #
-    #   validation_error(User_Group.user_group_name => tl(:must_be_longer_than_3_characters), 
-    #                    User_Login_Data.pass => tl(:must_contain_numbers))
-    #
-    # Example: 
-    #
-    #    runtime_error(:username_already_exists)
-    #
-    # raises Exception with message
-    #
-    #    'This user name already exists. Please choose another one.'
-    #
-    def validation_error(params={})
-      klass = params[:model]
-      klass = @klass unless klass
-      params.each_pair { |clause,message|
-        errors[clause.table_name] = Invalid_Parameters.new(clause.field_name => message)
-      }
-      raise Lore::Exception::Invalid_Klass_Parameters.new(klass, errors)
-    end
-
-    # Raise an Aurita::Type_Validation_Error. 
-    # Expects a language key to be translated for 
-    # user interfaces. 
-    #
-    # Usage: 
-    #
-    #   type_error(Content.created => tl(:must_be_timestamp), 
-    #              Content.user_group_id => tl(:expected_integer))
-    #
-    def type_error(params)
-      klass = params[:model]
-      klass = @klass unless klass
-      params.each_pair { |clause,message|
-        # Resolve expected type by looking it up in model
-        expected_type = klass.get_types[clause.to_s] 
-        errors[clause.table_name] = Invalid_Types.new(clause.field_name => expected_type)
-      }
-      raise Lore::Exception::Invalid_Klass_Parameters.new(klass, errors)
-    end
-
     # Updates attributes of model instance with values 
     # in request parameters (@params). 
     # Either a model instance to be updated is passed, 
@@ -141,7 +95,7 @@ module Aurita
     public
 
     # Default implementation of creation routine on a 
-    # business object. 
+    # model. 
     #
     # If not overloaded, this method implements the following 
     # procedure: 
@@ -162,7 +116,13 @@ module Aurita
       log { 'perform_add <--' }
       return @instance
     end # }}}
-    
+
+    def validate_add()
+      @klass ||= resolve_model_klass()
+      @klass.validate_create(@params)
+      return true
+    end
+
     # Default implementation of update routine on a 
     # business object. 
     #
@@ -184,6 +144,13 @@ module Aurita
       @klass_instance.commit()
       return @klass_instance
     end # def }}}
+
+    def validate_update()
+      @klass_instance = load_instance() 
+      @klass_instance = update_instance(@klass_instance)
+      @klass_instance.validate_commit()
+      return true
+    end
 
     # Default implementation of deletion routine on a 
     # business object. 

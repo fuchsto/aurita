@@ -2,6 +2,8 @@
 require('lore')
 require('aurita/base/exceptions')
 require('aurita-gui/form')
+require('lore/exceptions/invalid_field')
+require('lore/exceptions/validation_failure')
 
 Aurita.import(:base, :logging_methods)
 Aurita.import_module :gui, :custom_form_elements
@@ -40,7 +42,7 @@ module GUI
       error_details = []
       validation_failure.serialize.each_pair { |table, fields| 
         fields.each_pair { |attrib_name, reason|
-          message = tl("#{table.sub('.','_')}_#{attrib_name}__#{reason}".to_sym)
+          message = tl("#{table.sub('.','--')}--#{attrib_name}--#{reason}".to_sym)
           form_element_id = "#{table}.#{attrib_name}"
           error_details << "{ field: '#{form_element_id}', reason: '#{reason.to_s}', " +
                              "value: '#{param(attrib_name.to_sym)}', message: '#{message}}' }"
@@ -50,6 +52,80 @@ module GUI
       script << ');'
       exec_error_js(script)
     end # }}}
+
+    # Validate a param manually using a block. 
+    # Note that usually the model is responsible for handling validation
+    # (See Base_Controller.call_guarded and its handling of 
+    # Lore::Exceptions::Validation_Failure). 
+    # Try to avoid manual parameter validation where possible. 
+    # Usage: 
+    #
+    #   validate_param(User_Info.email, :format_error) { |value|
+    #     value.is_email?
+    #   }
+    #
+    # If validation fails, the error message is derived from the 
+    # parameter name and the validation failure reason code 
+    # (here: :format) like: 
+    #
+    #   tl('public--user_info--email--format_error')
+    #
+    def validate_param(param_name, reason=:invalid, &block)
+      value             = param(param_name)
+      param_name        = param_name.to_s if param_name.is_a?(Lore::Clause)
+      valid             = yield(value)
+      @invalid_params ||= {}
+      @invalid_params[param_name] = { :value => value, :reason => reason } unless valid
+    end
+
+    # Returns true if a previous manual validate_param call failed, 
+    # otherwise returns false. 
+    #
+    def invalid_params?
+      @invalid_params.keys.length == 0
+    end
+
+    # Opens a manual validation block. If one or more validations fail 
+    # (#invalid_params? returned true), an Aurita::Validation_Exception 
+    # is raised. 
+    # Note that usually the model is responsible for handling validation
+    # (See Base_Controller.call_guarded and its handling of 
+    # Lore::Exceptions::Validation_Failure). 
+    # Try to avoid manual parameter validation where possible. 
+    # 
+    # Usage: 
+    #
+    #   validation { 
+    #     validate_param(:email, :format_error) { |value|
+    #       value.is_email?
+    #     }
+    #     validate_param(:name, :missing) { |value|
+    #       value.to_s != ''
+    #     }
+    #   }
+    #
+    #
+    def validation(&block)
+      yield()
+
+      return if @invalid_params.keys.length == 0
+      
+      errors = {}
+      exceps = {}
+      @invalid_params.each_pair { |param, info|
+        given_value     = info[:value]
+        table           = param.to_s.split('.')[0..-2].join('.')
+        table           = 'custom' if table == ''
+        param_name      = param.to_s.split('.')[-1]
+        errors[table] ||= {}
+        errors[table][param_name] = info[:reason]
+      }
+      errors.each_pair { |table, failures|
+        exceps[table] = Lore::Exceptions::Unmet_Constraints.new(failures)
+      }
+      
+      raise Lore::Exceptions::Validation_Failure.new(@klass, exceps)
+    end
 
     # Decorates GUI::Form instance with GUI::Async_Form_Decorator 
     # and shifts resulting element into HTML part of response. 

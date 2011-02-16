@@ -62,16 +62,19 @@ module GUI
       @onclick_cancel ||= Javascript.Aurita.cancel_form(@form.dom_id.to_s) 
       @label_ok         = tl(:ok)
       @label_cancel     = tl(:cancel)
+      @button_class     = params[:button_class]
+      @button_class   ||= Aurita.project.default_form_button_class
+      @button_class   ||= Text_Button
       @buttons          = params[:buttons]
       @buttons        ||= Proc.new { |btn_params|
-        Text_Button.new(:class   => :submit, 
-                        :onclick => btn_params[:onclick_ok].to_s, 
-                        :icon    => :ok, 
-                        :label   => btn_params[:label_ok].to_s).string + 
-        Text_Button.new(:class   => :cancel, 
-                        :onclick => btn_params[:onclick_cancel].to_s, 
-                        :icon    => :cancel, 
-                        :label   => btn_params[:label_cancel].to_s).string
+        @button_class.new(:class   => :submit, 
+                          :onclick => btn_params[:onclick_ok].to_s, 
+                          :icon    => :ok, 
+                          :label   => btn_params[:label_ok].to_s).string + 
+        @button_class.new(:class   => :cancel, 
+                          :onclick => btn_params[:onclick_cancel].to_s, 
+                          :icon    => :cancel, 
+                          :label   => btn_params[:label_cancel].to_s).string
       }
       super()
     end

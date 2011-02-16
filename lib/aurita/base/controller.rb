@@ -155,7 +155,7 @@ class Aurita::Base_Controller
 
   protected
 
-  def self.log(message, level=nil, &block)
+  def self.log(message=nil, level=nil, &block)
     return @logger unless (message || block_given?)
     @logger.log(message, level, &block)
   end

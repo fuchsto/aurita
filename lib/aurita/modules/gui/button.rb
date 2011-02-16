@@ -9,6 +9,17 @@ module GUI
 
   end
 
+  class OS_Button < Element
+
+    def initialize(params={})
+      params[:tag] = :button
+      label        = params[:label]
+      params.delete(:label)
+      super(params) { label }
+    end
+
+  end
+
 end
 end
 

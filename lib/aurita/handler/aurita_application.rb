@@ -163,6 +163,7 @@ module Handler
       super(options)
 
       @app = Aurita_Dispatch_Application.new(options)
+#     @app = Rack::Profiler.new(@app) if @options[:profiling]
       @app = Rack::ETag.new(@app)
       @app = Rack::ConditionalGet.new(@app)
       @app = Rack::Deflater.new(@app) if @options[:compress]

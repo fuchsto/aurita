@@ -94,8 +94,9 @@ module GUI
       entry = e.label
       if e.attr[:entry_type] != 'BLANK_NODE' then
         if e.content_id then
-          onclick = link_to(Content.get(e.content_id).concrete_instance) 
-          entry   = HTML.a(:onclick => onclick) { e.label } 
+#         onclick = link_to(Content.get(e.content_id).concrete_instance) 
+#         entry   = HTML.a(:onclick => onclick) { e.label } 
+          entry   = link_to(Content.get(e.content_id).concrete_instance) { e.label }
         else
           if e.interface then
             if e.interface.include?('://') then
@@ -161,7 +162,7 @@ module GUI
     def decorate_entry(entry, child_elements, indent, entry_idx=0)
       d_entry = nil
       if child_elements.length > 0 then
-        onclick = link_to(Content.get(entry.content_id).concrete_instance) if entry.content_id
+        onclick = "#{link_to(Content.get(entry.content_id).concrete_instance)} return false;" if entry.content_id
         dom_id  = "hierarchy_#{entry.hierarchy_id}_#{entry.pkey}"
         box     = Accordion_Box.new(:entity  => entry, 
                                     :level   => indent, 

@@ -61,6 +61,7 @@ module GUI
         @attributes   = attribs
         @headers    ||= headers
       end
+      @headers = @headers.map { |h| if h.instance_of?(Symbol) then tl(h) else h end }
       
       params.delete(:headers)
       params.delete(:keys)

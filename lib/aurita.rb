@@ -142,6 +142,10 @@ module Aurita
     @@app_base_path
   end
 
+  def self.plugin_manifest(plugin_name)
+    @plugin_manifests[plugin_name.to_sym]
+  end
+
   # Activate a project by loading its config.rb and 
   # establishing a DB connection. 
   # Project can later be retreived via Aurita.project. 
@@ -178,27 +182,37 @@ module Aurita
     return false
   end
     
-  # Import a plugins. Imports all plugin models, controllers, 
-  # modules, permission configuration, and its language packs. 
+  # Import a plugin. Imports all plugin models, controllers, 
+  # modules, permission configuration, its manifest and its language packs. 
   def self.import_plugin(plugin_name)
+
+    # Only import plugin if there is a plugin configuration in 
+    # the project's plugin folder (empty config file is ok). 
     if File.exists?("#{project_path()}/plugins/#{plugin_name.to_s}.rb") then
 
       Lang.add_plugin_language_pack(plugin_name)
+      manifest = false
 
       begin
         Aurita.log { "Trying to load #{plugin_name} from gem ..." } 
         require("aurita-#{plugin_name}-plugin")
         require("aurita-#{plugin_name}-plugin/plugin.rb")
+        
+        manifest = "aurita-#{plugin_name}-plugin/manifest.yaml"
+
       rescue ::Exception => no_gem_found
-        Aurita.log { "Trying to load #{plugin_name} from #{Aurita::App_Configuration.plugins_path} ..." } 
         # No gem found, so try to load from Aurita::App_Configuration.plugins_path.
-      
+        
+        Aurita.log { "Trying to load #{plugin_name} from #{Aurita::App_Configuration.plugins_path} ..." } 
+        
+        manifest = "#{Aurita::App_Configuration.plugins_path}#{plugin_name}/manifest.yaml"
+        
         if(File.exists?("#{Aurita::App_Configuration.plugins_path}#{plugin_name.to_s}/lib")) then
           plugin_path = "#{plugin_name}/lib"
         else 
           plugin_path = plugin_name.to_s.dup
         end
-
+        
         if File.exists?("#{project_path()}/lang/#{plugin_name}/") then
           Lang.add_project_language_pack(plugin_name)
         end
@@ -212,6 +226,13 @@ module Aurita
         if File.exists?(perms_file) then
           require perms_file
         end
+
+      end
+      if manifest && File.exists?(manifest) then
+        @plugin_manifests ||= {}
+        File.open(manifest, "r") { |f|
+          @plugin_manifests[plugin_name.to_sym] = YAML.load(f)
+        }
       end
     end
 
@@ -331,10 +352,15 @@ module Aurita
     Dir.glob("#{Aurita::App_Configuration.plugins_path}/*").each { |plugin_folder| 
       Dir.glob("#{Aurita::App_Configuration.plugins_path}/#{plugin_folder.split('/').last.gsub('.rb','')}/model/*").each { |model| 
         begin
-          plugin = plugin_folder.split('/').last
+          plugin      = plugin_folder.split('/').last
           model_klass = model.split('/').last.gsub('.rb','')
 
-          @models << Aurita::Plugins.const_get(plugin.camelcase).const_get(model_klass.camelcase) 
+          plugin_namespace = plugin.camelcase
+          if @plugin_manifests[plugin.to_sym] then
+            plugin_namespace = @plugin_manifests[plugin.to_sym]['namespace']
+          end
+
+          @models << Aurita::Plugins.const_get(plugin_namespace).const_get(model_klass.camelcase) 
         rescue ::Exception => e
           puts e.message
         end

@@ -67,14 +67,14 @@ module Aurita
 
   def self.runmode(mode=nil)
     if mode then
-      @@runmode = mode
+      @runmode = mode
     else
-      return @@runmode || :development
+      return @runmode || :development
     end
   end
 
   def self.runmode=(mode)
-    @@runmode = mode
+    @runmode = mode
   end
 
   # Returns current session object, which is an instance 

@@ -33,7 +33,11 @@ class Lang
     end
     plugin_name = plugin_name.downcase.to_sym
     @@language_packs[plugin_name] = {}
+    Aurita.log { "Searching for plugin language packs in #{yaml_path}" }
     Dir.glob(yaml_path + '*.yaml').each { |f|
+
+      Aurita.log { "Adding plugin language pack #{f}" }
+
       lang = f.split('/').at(-1).gsub('.yaml','').to_sym
       pack = (YAML::load(File::open(f)))
       @@language_packs[plugin_name][lang] = pack unless @@language_packs[plugin_name][lang]
@@ -46,6 +50,9 @@ class Lang
     plugin_name = plugin_name.downcase.to_sym
     @@language_packs[plugin_name] = {} unless @@language_packs[plugin_name]
     Dir.glob(yaml_path + '*.yaml').each { |f|
+
+      Aurita.log { "Adding project language pack #{f}" }
+
       lang = f.split('/').at(-1).gsub('.yaml','').to_sym
       pack = (YAML::load(File::open(f)))
       if @@language_packs[plugin_name][lang]

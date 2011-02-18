@@ -1,6 +1,10 @@
 
 module Aurita
 
+  def self.runmode
+    # predef
+  end
+
   class Configuration_Store < Hash
 
     def method_missing(meth, *args)

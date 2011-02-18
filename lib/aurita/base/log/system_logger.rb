@@ -52,11 +52,11 @@ module Log
     
     public
     def initialize(name)
-      @logger = ::Logger.new(Aurita::App_Configuration.sys_log_path)
+      @logger       = ::Logger.new(Aurita::App_Configuration.sys_log_path)
       @logger.level = ::Logger::DEBUG
-      @scope  = 'aurita'
+      @scope        = 'aurita'
       if Aurita::App_Configuration.sys_log_path then
-        @name = name.to_s
+        @name     = name.to_s
         @disabled = false
       else
         @disabled = true
@@ -84,11 +84,11 @@ module Aurita
 
   def self.log(message=nil, &block)
     return if @@system_logger.disabled? 
+    message ||= yield
     return @@system_logger unless message
 
     project_name = Aurita.project.project_name.to_s if Aurita.project_loaded?
     project_name ||= 'core'
-    message ||= yield
     @@system_logger.log { "[#{project_name}] " << message } 
   end
 

@@ -12,8 +12,17 @@ module Aurita
     projects_base_path '/usr/share/gitwc/aurita_projects/'
     plugins_path  '/usr/share/gitwc/aurita-plugins/'
 
-    sys_log_path '/usr/share/gitwc/log/aurita/sys.log'
-    run_log_path '/usr/share/gitwc/log/aurita/sys.log'
+    sys_log(:production => '/usr/share/gitwc/log/aurita/sys.log', 
+            :debug      => STDERR) 
+    run_log(:production => '/usr/share/gitwc/log/aurita/sys.log', 
+            :debug      => STDERR) 
+
+    def self.sys_log_path
+      sys_log[Aurita.runmode] || STDERR
+    end
+    def self.run_log_path
+      run_log[Aurita.runmode] || STDERR
+    end
 
   end
 

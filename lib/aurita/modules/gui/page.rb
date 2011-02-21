@@ -45,7 +45,11 @@ module GUI
       head   = tools + head if tools && tools.length > 0
       head ||= []
 
-      HTML.div.section_header(:id => @params[:id]) { 
+      classes   = @params[:class].to_a
+      classes ||= []
+      classes  << :section_header
+
+      HTML.div(:class => classes, :id => @params[:id]) { 
         head + 
         HTML.div(:style => 'clear: both;') +
         HTML.div.section_content(:id => "#{@params[:id]}_content") { @content + HTML.div(:style => 'clear: both;') if @content } 

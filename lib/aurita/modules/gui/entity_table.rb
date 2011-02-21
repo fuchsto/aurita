@@ -105,9 +105,15 @@ module GUI
     end
 
     def cells()
-      row_data = []
-      @parent.attributes.each { |a|
-        row_data << @entity.__send__(a.to_sym)
+      row_data     = []
+      value        = false # predef
+      decorators   = parent.decorators if parent && parent.decorators
+      decorators ||= false
+
+      @parent.attributes.each_with_index { |a,column|
+        value = @entity.__send__(a.to_sym)
+        value = decorators[column].call(value) if decorators && decorators[column]
+        row_data << value
       }
       row_data
     end

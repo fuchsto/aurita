@@ -1,5 +1,6 @@
 
 require('aurita-gui/widget')
+require('json')
 Aurita.import_module :gui, :icon
 Aurita.import_module :gui, :link_helpers
 

@@ -53,6 +53,13 @@ class String
     self.to_s.gsub(/\s/,'') != ''
   end
 
+  def to_date
+    Date.parse(self)
+  end
+  def to_datetime
+    Date.parse(self)
+  end
+
   def html!
   #  converted = []
   #  self.split(//).collect { |c| converted << ( c[0] > 127 ? "&##{c[0]};" : c ) }

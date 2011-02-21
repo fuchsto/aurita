@@ -87,6 +87,7 @@ class Aurita::Dispatcher
         if element.is_a?(Aurita::GUI::XML::Document) then
           # Don't use default decorator for XML documents: 
           response[:mode] = :none if (!response[:mode] || response[:mode] == :default)
+          response[:html] = element.string 
         elsif element.respond_to?(:string) then
           # Response is an instance of Aurita::GUI::Element
           response[:html]    = element.string 

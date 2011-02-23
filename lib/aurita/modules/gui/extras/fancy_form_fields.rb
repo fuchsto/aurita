@@ -53,6 +53,14 @@ module GUI
     end
   end
 
+  class Multi_File_Flash_Field < Aurita::GUI::File_Field
+    def decorated_element
+      Decobox.new(:class => :form_field) { 
+        element()
+      }
+    end
+  end
+
   class Multi_File_Field < Aurita::GUI::File_Field
     def decorated_element
       Decobox.new(:class => :form_field) { 

@@ -95,8 +95,8 @@ module GUI
     attr_accessor :from, :to
 
     def initialize(params={}, &block)
-      @from = params[:value][0]
-      @to   = params[:value][1]
+      @from = params[:value][0] if params[:value]
+      @to   = params[:value][1] if params[:value]
       @minute_range = params[:minute_range]
       @minute_range ||= [0, 15, 30, 45]
       params.delete(:value)
@@ -105,19 +105,60 @@ module GUI
       super(params, &block)
     end
 
+    def decorated_element
+      Decobox.new(:class => :form_field) { 
+        element
+      }
+    end
+
     def element
       name      = @attrib[:name]
-      from_name = "#{name}_begin"
-      to_name   = "#{name}_end"
+      from_name = "#{name}_from"
+      to_name   = "#{name}_to"
 
-      Decobox.new(:class => :form_field) { 
-        Time_Field.new(:name => from_name, :value => @from, :class => [ :timespan, :from ], :time_format => 'hm', :minute_range => @minute_range) + 
-        HTML.div(:class => :timespan_delimiter) { tl(:timespan_to) } + 
-        Time_Field.new(:name => to_name, :value => @to, :class => [ :timespan, :to ], :time_format => 'hm', :minute_range => @minute_range) + 
-        HTML.div(:style => 'clear: both;') { ' '}
-      }
-
+      HTML.input(:type => :hidden, 
+                 :name => from_name, 
+                 :id   => from_name) + 
+      Time_Field.new(:name         => "#{from_name}_select", 
+                     :id           => "#{from_name}_select", 
+                     :value        => @from, 
+                     :class        => [ :timespan, :from ], 
+                     :time_format  => 'hm', 
+                     :minute_range => @minute_range) + 
+      HTML.div(:class  => :timespan_delimiter) { tl(:timespan_to) } + 
+      HTML.input(:type => :hidden, 
+                 :name => to_name, 
+                 :id   => to_name) + 
+      Time_Field.new(:name         => "#{to_name}_select", 
+                     :id           => "#{to_name}_select", 
+                     :value        => @to, 
+                     :class        => [ :timespan, :to ], 
+                     :time_format  => 'hm', 
+                     :minute_range => @minute_range) 
     end
+
+    def js_initialize
+      from_select = "#{@attrib[:name]}_from_select"
+      to_select   = "#{@attrib[:name]}_to_select"
+      from_field  = "#{@attrib[:name]}_from"
+      to_field    = "#{@attrib[:name]}_to"
+
+      code = <<JS
+        $('#{from_select}_hour').observe('change', function(evt) { 
+          $('#{from_field}').value = $('#{from_select}_hour').value + ':' + $('#{from_select}_minute').value;
+        });
+        $('#{from_select}_minute').observe('change', function(evt) { 
+          $('#{from_field}').value = $('#{from_select}_hour').value + ':' + $('#{from_select}_minute').value;
+        });
+        $('#{to_select}_hour').observe('change', function(evt) { 
+          $('#{to_field}').value = $('#{to_select}_hour').value + ':' + $('#{to_select}_minute').value;
+        });
+        $('#{to_select}_minute').observe('change', function(evt) { 
+          $('#{to_field}').value = $('#{to_select}_hour').value + ':' + $('#{to_select}_minute').value;
+        });
+JS
+    end
+
   end
 
 end

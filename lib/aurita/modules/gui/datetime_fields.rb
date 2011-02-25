@@ -95,11 +95,15 @@ module GUI
     attr_accessor :from, :to
 
     def initialize(params={}, &block)
-      @from = params[:value][0] if params[:value]
-      @to   = params[:value][1] if params[:value]
+      @from = params[:value][0] if params[:value].is_a?(Array)
+      @to   = params[:value][1] if params[:value].is_a?(Array)
+      @from = params[:value][:from] if params[:value].is_a?(Hash)
+      @to   = params[:value][:to] if params[:value].is_a?(Hash)
       @minute_range = params[:minute_range]
       @minute_range ||= [0, 15, 30, 45]
       params.delete(:value)
+      params.delete(:from)
+      params.delete(:to)
       params.delete(:minute_range)
       params.delete(:time_format)
       super(params, &block)

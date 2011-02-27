@@ -89,6 +89,50 @@ module GUI
 
   end
 
+  # Redefines Aurita::GUI::Timefield from aurita-gui
+  #
+  class Time_Field < Form_Field
+  include Aurita::GUI::I18N_Helpers
+
+    attr_accessor :from, :to
+
+    def element
+      name          = @attrib[:name]
+      select_fields = []
+      @time_format.to_s.split('').each { |c|
+        case c
+        when 'h' then
+          select_fields << hour_element() 
+        when 'm' then
+          select_fields << minute_element() 
+        when 's' then
+          select_fields << second_element() 
+        end
+      }
+      HTML.div(@attrib) { 
+        HTML.input(:type  => :hidden, 
+                   :name  => name, 
+                   :value => "00:00", 
+                   :id    => "#{name}_target") + 
+        select_fields
+      }
+    end
+
+    def js_initialize
+      base_name = @attrib[:name]
+      
+      code = <<JS
+        $('#{base_name}_hour').observe('change', function(evt) { 
+          $('#{base_name}_target').value = $('#{base_name}_hour').value + ':' + $('#{base_name}_minute').value;
+        });
+        $('#{base_name}_minute').observe('change', function(evt) { 
+          $('#{base_name}_target').value = $('#{base_name}_hour').value + ':' + $('#{base_name}_minute').value;
+        });
+JS
+    end
+
+  end
+
   class Timespan_Field < Form_Field
   include Aurita::GUI::I18N_Helpers
 
@@ -120,47 +164,21 @@ module GUI
       from_name = "#{name}_from"
       to_name   = "#{name}_to"
 
-      HTML.input(:type => :hidden, 
-                 :name => from_name, 
-                 :id   => from_name) + 
-      Time_Field.new(:name         => "#{from_name}_select", 
-                     :id           => "#{from_name}_select", 
+      Time_Field.new(:name         => "#{from_name}", 
+                     :id           => "#{from_name}", 
                      :value        => @from, 
+                     :parent       => self, 
                      :class        => [ :timespan, :from ], 
                      :time_format  => 'hm', 
                      :minute_range => @minute_range) + 
       HTML.div(:class  => :timespan_delimiter) { tl(:timespan_to) } + 
-      HTML.input(:type => :hidden, 
-                 :name => to_name, 
-                 :id   => to_name) + 
-      Time_Field.new(:name         => "#{to_name}_select", 
-                     :id           => "#{to_name}_select", 
+      Time_Field.new(:name         => "#{to_name}", 
+                     :id           => "#{to_name}", 
                      :value        => @to, 
+                     :parent       => self, 
                      :class        => [ :timespan, :to ], 
                      :time_format  => 'hm', 
                      :minute_range => @minute_range) 
-    end
-
-    def js_initialize
-      from_select = "#{@attrib[:name]}_from_select"
-      to_select   = "#{@attrib[:name]}_to_select"
-      from_field  = "#{@attrib[:name]}_from"
-      to_field    = "#{@attrib[:name]}_to"
-
-      code = <<JS
-        $('#{from_select}_hour').observe('change', function(evt) { 
-          $('#{from_field}').value = $('#{from_select}_hour').value + ':' + $('#{from_select}_minute').value;
-        });
-        $('#{from_select}_minute').observe('change', function(evt) { 
-          $('#{from_field}').value = $('#{from_select}_hour').value + ':' + $('#{from_select}_minute').value;
-        });
-        $('#{to_select}_hour').observe('change', function(evt) { 
-          $('#{to_field}').value = $('#{to_select}_hour').value + ':' + $('#{to_select}_minute').value;
-        });
-        $('#{to_select}_minute').observe('change', function(evt) { 
-          $('#{to_field}').value = $('#{to_select}_hour').value + ':' + $('#{to_select}_minute').value;
-        });
-JS
     end
 
   end

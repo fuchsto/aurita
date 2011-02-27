@@ -21,6 +21,14 @@ module GUI
   end
 =end
 
+  class Time_Field < Aurita::GUI::Form_Field
+    def decorated_element
+      Decobox.new(:class => :form_field) { 
+        element()
+      }
+    end
+  end
+
   class Hierarchy_Node_Select_Field < Form_Field
     def decorated_element
       Decobox.new(:class => :form_field) { element() } 

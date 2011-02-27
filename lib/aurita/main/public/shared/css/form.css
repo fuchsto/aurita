@@ -37,6 +37,13 @@ ul.form_fields select, .form_field select {
 ul.form_fields textarea { 
   width: 291px; 
 }
+
+.decobox ul.form_fields select, 
+.decobox .form_field select {
+  padding: 2px 0px 0px 0px; 
+}
+
+
 table.mceLayout { 
   width: 100% !important; 
 }
@@ -830,9 +837,10 @@ div.timespan {
 }
 div.timespan_delimiter { 
   float: left; 
-  padding: 4px; 
-  padding-left: 10px; 
-  padding-right: 10px; 
+  padding: 0px; 
+  padding-left: 56px; 
+  padding-right: 61px; 
+  line-height: 18px; 
 }
 
 #autocomplete_tags_choices { 

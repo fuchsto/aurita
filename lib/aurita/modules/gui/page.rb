@@ -45,7 +45,7 @@ module GUI
       head   = tools + head if tools && tools.length > 0
       head ||= []
 
-      classes   = @params[:class].to_a
+      classes   = [ @params[:class] ].flatten
       classes ||= []
       classes  << :section_header
 

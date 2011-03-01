@@ -12,16 +12,16 @@ module GUI
       HTML.div.left { HTML.div.right { HTML.div.center { element() } } } 
     end
   end
-
-=begin
-  class File_Field < Form_Field
-    def element
-      HTML.div.left { HTML.div.right { HTML.div.center { HTML.input(@attrib) } } } 
+  
+  class Time_Field < Aurita::GUI::Form_Field
+    def decorated_element
+      Decobox.new(:class => :form_field) { 
+        element()
+      }
     end
   end
-=end
 
-  class Time_Field < Aurita::GUI::Form_Field
+  class Timespan_Field < Form_Field
     def decorated_element
       Decobox.new(:class => :form_field) { 
         element()
@@ -31,7 +31,9 @@ module GUI
 
   class Hierarchy_Node_Select_Field < Form_Field
     def decorated_element
-      Decobox.new(:class => :form_field) { element() } 
+      Decobox.new(:class => :form_field) { 
+        element() 
+      } 
     end
   end
 

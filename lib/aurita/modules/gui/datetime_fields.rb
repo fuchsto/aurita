@@ -118,17 +118,27 @@ module GUI
       }
     end
 
+    def readonly_element
+      HTML.div(@attrib) { 
+        @value[:hour] + ':' + @value[:minute]
+      }
+    end
+
     def js_initialize
-      base_name = @attrib[:name]
+      base_name       = @attrib[:name]
+      attr_name       = @attrib[:name].split('.')[-1]
       
       code = <<JS
+      try {
         $('#{base_name}_hour').observe('change', function(evt) { 
           $('#{base_name}_target').value = $('#{base_name}_hour').value + ':' + $('#{base_name}_minute').value;
         });
         $('#{base_name}_minute').observe('change', function(evt) { 
           $('#{base_name}_target').value = $('#{base_name}_hour').value + ':' + $('#{base_name}_minute').value;
         });
+      } catch(e) { }
 JS
+      return code
     end
 
   end
@@ -153,14 +163,7 @@ JS
       super(params, &block)
     end
 
-    def decorated_element
-      Decobox.new(:class => :form_field) { 
-        element
-      }
-    end
-
     def element
-      name      = @attrib[:name]
       from_name = "#{name}_from"
       to_name   = "#{name}_to"
 

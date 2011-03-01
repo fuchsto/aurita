@@ -298,6 +298,7 @@ a.button, span.button, div.button {
 
 /* generic icon button, default state */
 
+.form_field.focussed .button .center, .form_field.focussed .icon_button .center, 
 .button .center, .icon_button .center { 
   background: url('/aurita/images/icons/button_bg.png');
 }
@@ -318,9 +319,11 @@ a.button, span.button, div.button {
   background-position: 14px 4px; 
   background-color: transparent; 
 }
+.form_field.focussed .button .left, .form_field.focussed .icon_button .left, 
 .button .left, .icon_button .left { 
   background: url('/aurita/images/icons/button_l.png') no-repeat scroll 0 0 transparent;
 }
+.form_field.focussed .button .right, .form_field.focussed .icon_button .right, 
 .button .right, .icon_button .right { 
   background: url('/aurita/images/icons/button_r.png') no-repeat scroll 100% 0 transparent;
 }

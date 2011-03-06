@@ -2,6 +2,8 @@ main_role_fieldset : Allgemein
 plugin_name : Plattform
 
 
+time_suffix : Uhr
+
 ok : ok
 cancel : abbrechen
 
@@ -17,6 +19,8 @@ manage_users : Benutzerverwaltung
 
 user_profile : Benutzerprofil
 edit_user_profile : Profil bearbeiten
+delete_user : Benutzer l&ouml;schen
+delete_user_info : Inhalte dieses Benutzers bleiben erhalten und sind weiterhin diesem Benutzer zugeordnet. 
 
 readonly_permission : Nur Lesen
 read_permission : Lesen

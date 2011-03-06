@@ -17,6 +17,10 @@ ul.form_fields {
   width: 540px; 
 }
 
+.form_width { 
+  width: 326px; 
+}
+
 ul.form_fields input, ul.form_fields textarea, ul.form_fields select, 
 .form_field input, .form_field textarea, .form_field select {
   color: #000000;

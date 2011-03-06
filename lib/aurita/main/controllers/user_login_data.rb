@@ -25,7 +25,9 @@ module Main
     end
     
     def update
-      user = User_Profile.load(:user_group_id => param(:user_group_id))
+      uid   = param(:user_group_id)
+      uid ||= param(:id)
+      user  = User_Profile.load(:user_group_id => uid)
        
       form = view_string(:admin_edit_user, 
                          :user_categories => User_Category_Controller.category_list(user.user_group_id),
@@ -91,10 +93,15 @@ module Main
     end
 
     def delete
-      puts HTML.h2.critical { tl(:delete_user) }
       form = delete_form
       form.fields = [ User_Group.user_group_name ]
-      render_form(form)
+
+      Page.new(:header => tl(:delete_user), :id => :delete_user_view) {
+        HTML.div(:class => [ :hint_box, :form_width ]) { 
+          tl(:delete_user_info)
+        } + 
+        decorate_form(form)
+      }
     end
     
     def perform_delete

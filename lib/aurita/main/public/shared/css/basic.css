@@ -187,7 +187,7 @@ div.warning_box, div.message_box.confirmation {
 div.hint_box { 
   background-color: #FFFFCC; 
   border-color: #DDDB54; 
-  color: #000000; 
+  color: #565656; 
 }
 div.message_box { 
   background-color: #9BCF7B; 

@@ -57,7 +57,7 @@ module GUI
       @form.method      = 'POST'
       @form.onsubmit    = 'Aurita.submit_form(this); return false;' unless form.onsubmit
       @onclick_ok       = params[:onclick_ok] 
-      @onclick_ok     ||= Javascript.Aurita.submit_form(@form.dom_id.to_s, { :hide_on_submit => @form.hide_on_submit }) 
+      @onclick_ok     ||= Javascript.Aurita.submit_form(@form.dom_id.to_s, { :hide_on_submit => (@form.hide_on_submit || false) }) 
       @onclick_cancel   = params[:onclick_cancel] 
       @onclick_cancel ||= Javascript.Aurita.cancel_form(@form.dom_id.to_s) 
       @label_ok         = tl(:ok)

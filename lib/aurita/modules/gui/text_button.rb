@@ -33,7 +33,8 @@ module GUI
       params.delete(:action)
 
       params[:href] = params[:link] if params[:link]
-      params[:href] = "/aurita/#{@action}" if @action
+#     params[:href] = "/aurita/#{@action}" if @action
+      params[:href] = resource_url_for(link_params) if @action
 
       super(params)
 

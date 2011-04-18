@@ -41,7 +41,7 @@ module GUI
         cat_label = ''
         level.times { cat_label << '&nbsp;&nbsp;' }
         cat_label << cat.category_name
-
+        
         if cat.is_private then 
           if cat.category_id.to_s != own_category_id.to_s then
             private_category_names << (tl(:user) + ': ' << cat.category_name)
@@ -66,7 +66,7 @@ module GUI
       rescue ::Exception => e
         raise ::Exception.new("Failed arrayfields values: #{option_values.inspect}")
       end
-      
+        
       params.delete(:user)
       params.delete(:content)
       params[:value] = selected_category_ids

@@ -37,6 +37,9 @@ $core_scripts_after = [
 ]
 
 $core_frontend_scripts = [ 
+  'jscalendar/calendar', 
+  'jscalendar/lang/calendar-de', 
+  'jscalendar/calendar-setup', 
   :log, 
   :math, 
   :helpers, 

@@ -36,6 +36,8 @@ module GUI
     # See Aurita::Main::Default_Decorator for additional info on 
     # asynchronous response handling. 
     #
+    # TODO: Rename to notify_validation_failure
+    #
     def notify_invalid_params(validation_failure)
     # {{{
       script = 'Aurita.handle_form_error('
@@ -52,6 +54,25 @@ module GUI
       script << ');'
       exec_error_js(script)
     end # }}}
+
+    def notify_invalid_form_values(invalid_fields={})
+    # {{{
+      script        = 'Aurita.handle_form_error('
+      error_details = [] 
+      invalid_fields.each_pair { |field_name, details|
+        reason          = details[:reason]
+        value           = details[:value]
+        message         = tl("#{field_name}--#{reason}".to_sym)
+        form_element_id = field_name
+        error_details << "{ field: '#{form_element_id}', " +
+                           "reason: '#{reason.to_s}', " +
+                           "value: '#{value}', " +
+                           "message: '#{message}}' }"
+      }
+      script << error_details.join(',')
+      script << ');'
+      exec_error_js(script)
+    end
 
     # Validate a param manually using a block. 
     # Note that usually the model is responsible for handling validation

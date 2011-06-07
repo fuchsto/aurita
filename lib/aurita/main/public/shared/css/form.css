@@ -16,6 +16,9 @@ ul.form_fields {
   padding: 0px; 
   width: 540px; 
 }
+fieldset ul.form_fields { 
+  width: 297px; 
+}
 
 .form_width { 
   width: 326px; 
@@ -647,9 +650,16 @@ li.comment_wrap {
   width: 310px;
 }
 ul.form_fields textarea.comment { 
-  width: 297px; 
+  width: 281px; 
   border: 1px solid #cccccc; 
   height: 45px; 
+}
+#content_comment_box_body a.button {
+  width: 120px; 
+  margin-left: 3px; 
+}
+#content_comment_box_body a.button .icon {
+  display: none; 
 }
 
 input.datepick { 

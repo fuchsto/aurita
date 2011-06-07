@@ -91,7 +91,7 @@ class Aurita::Dispatcher
         elsif element.respond_to?(:string) then
           # Response is an instance of Aurita::GUI::Element
           response[:html]    = element.string 
-          response[:script] << element.script if element.respond_to?(:script)
+          response[:script] << element.script if element.respond_to?(:script) && element.script
         elsif element.is_a?(Array) then
           element.each { |e|
             response[:html] << e.to_s
